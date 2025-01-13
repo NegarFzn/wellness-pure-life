@@ -1,0 +1,53 @@
+.header {
+  display: flex;
+  gap: 3rem;
+  margin: 3rem auto;
+  width: 90%;
+  max-width: 75rem;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: "Montserrat", sans-serif;
+  background: #51449e;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+
+.slideshow {
+  width: 30rem;
+  height: 14rem;
+}
+
+.slideshow a {
+  text-decoration: none;
+  color: black;
+}
+
+.description {
+  font-size: medium;
+}
+
+.ad {
+  margin: 20px 0;
+}
+
+.subscribe {
+  display: flex;
+  justify-content: center;
+}
+
+.subscribe a {
+  display: inline-block;
+  margin-top: 10rem;
+  padding: 0.7rem 6rem;
+  border-radius: 1rem;
+  background: linear-gradient(90deg, #51449e, #938eb2);
+  color: #ffffff;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: medium;
+}

@@ -1,0 +1,82 @@
+import path from "path";
+import fs from "fs/promises";
+import Head from "next/head";
+import Image from "next/image";
+import mindfulnessHeader from "./../../public/images/mindfulness_header.jpg";
+import classes from "./index.module.css";
+import MindfulnessList from "../../components/mindfulness/mindfulness-list";
+
+function mindfulnessPage(props) {
+  const categories = [
+    { key: "featured", title: "FEATURED", items: props.featured },
+    { key: "meditation", title: "MEDITATION", items: props.meditation },
+    {
+      key: "stressReduction",
+      title: "STRESS REDUCTION",
+      items: props.stressReduction,
+    },
+    {
+      key: "productivityAndFocus",
+      title: "PRODUCTIVITY AND FOCUS",
+      items: props.productivityAndFocus,
+    },
+    {
+      key: "mentalWellness",
+      title: "MENTAL WELLNESS",
+      items: props.mentalWellness,
+    },
+  ];
+
+  return (
+    <>
+      <Head>
+        <title>Mindfulness</title>
+        <meta
+          name="description"
+          content="Discover mindfulness practices to reduce stress, improve focus, and enhance emotional well-being. Explore meditation techniques, stress management tips, and strategies for living in the moment."
+        />
+      </Head>
+      <header className={classes.header}>
+        <nav>
+          <Image
+            src={mindfulnessHeader}
+            alt="mindfulness header"
+            fill
+            priority
+          />
+        </nav>
+      </header>
+      <main className={classes["main-content"]}>
+        {categories.map((category) => (
+          <div key={category.key}>
+            {" "}
+            <h2 className={classes["left-align"]}>{category.title}</h2>
+            <hr />
+            <div className={classes["mindfulness-container"]}>
+              <MindfulnessList items={category.items} />
+            </div>
+          </div>
+        ))}
+      </main>
+    </>
+  );
+}
+
+export async function getStaticProps(context) {
+  const filePath = path.join(process.cwd(), "data", "mindfulness.json");
+  const jsonData = await fs.readFile(filePath);
+  const data = JSON.parse(jsonData);
+
+  return {
+    props: {
+      featured: data.featured,
+      meditation: data.meditation,
+      stressReduction: data.stressReduction,
+      productivityAndFocus: data.productivityAndFocus,
+      mentalWellness: data.mentalWellness,
+    },
+    revalidate: 60,
+  };
+}
+
+export default mindfulnessPage;

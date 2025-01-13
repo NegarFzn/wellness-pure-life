@@ -1,0 +1,7 @@
+.mindfulness-list-container{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48%, 1fr)); /* Adjust the width as needed */
+  gap: 10px; /* Add gap between items */
+  list-style: none;
+}
+

@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Poppins:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Proxima+Nova:wght@400;700&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Open Sans", sans-serif;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(180deg, #ffffff, #ffffff);
+  padding-top: 60px;
+}
+
+main {
+  
+  margin: 5rem auto;
+}
+
+h1 {
+  margin: 3rem auto;
+  color: #000000;
+  font-family: "Poppins", sans-serif;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+p {
+  font-size: 1rem;
+}
+
+p a {
+  color: #f4c33d;
+  text-decoration: none;
+  padding-bottom: 0.05rem;
+  border-bottom: 2px solid #f4c33d;
+}
+
+p a:hover,
+p a:active {
+  color: #bd3df4;
+  border-color: #bd3df4;
+}
+
+.colorful { color: red; }
+
+.larger {
+  font-size: larger; 
+}
+
+.smaller {
+  font-size: 0.8em; /* Make text 80% of the size of its container */
+}
+
