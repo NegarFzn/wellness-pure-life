@@ -1,22 +1,50 @@
-/* news.module.css */
+/* General Page Styles */
 .newsPage {
   padding: 20px;
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
 }
 
+/* Header (H1) Styles */
 .newsHeader {
+  font-size: 2.5rem;
+  font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
-  font-size: 2rem;
-  color: #333;
+  animation: fadeIn 1.5s ease-in-out;
 }
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Layout & Containers */
+.newsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* News List (Left Side) */
 .newsList {
   list-style: none;
-  padding: 0;
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+/* News List Items */
 .newsList li {
   margin-bottom: 20px;
   padding: 15px;
@@ -46,4 +74,73 @@
 
 .newsList li a:hover {
   text-decoration: underline;
+}
+
+/* News Item Box */
+.newsItem {
+  width: 100%;
+  max-width: 600px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* News Image Styling */
+.newsImage {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* "No News Available" Message */
+.noNews {
+  text-align: center;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 500px;
+}
+
+.noNews h2 {
+  font-size: 22px;
+  color: #333;
+}
+
+.noNews p {
+  font-size: 16px;
+  color: #666;
+}
+
+.noNewsImage {
+  width: 120px;
+  margin-bottom: 15px;
+  opacity: 0.8;
+}
+
+/* Sidebar Ad (Right Side) */
+.sidebarAd {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .sidebarAd {
+    display: block;
+    width: 300px;
+    position: sticky;
+    top: 20px;
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .newsItem {
+    width: 90%;
+    max-width: 400px;
+  }
 }

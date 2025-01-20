@@ -14,6 +14,12 @@
   z-index: 1000;
 }
 
+.weatherMenu {
+  display: flex;
+  align-items: center;
+  gap: 1px; /* 🟢 Reduced gap between "Weather" and weather info */
+}
+
 @media (min-width: 768px) {
   .header {
     padding: 2rem 10%;
@@ -33,7 +39,6 @@
 .nav a {
   color: #ffff;
 }
-
 
 .logo {
   display: flex;
@@ -55,4 +60,21 @@
   filter: drop-shadow(0 0 0.5rem rgba(146, 145, 148, 0.5));
 }
 
+.weatherWidget {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  margin-left: -4px;
+  font-size: 0.9rem;
+}
 
+.weatherWidget img {
+  width: 20px;
+  height: 20px;
+}
+
+.weatherWidget span {
+  font-size: 1.2rem;
+  color: #fff;
+  font-weight: bold;
+}
