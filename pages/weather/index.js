@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import classes from './weather.module.css';
+import { fetchWeather } from "../../utils/fetch"; // Import fetch function
+import classes from "./weather.module.css";
 
 export default function Weather() {
   const [weather, setWeather] = useState(null);
@@ -7,44 +8,33 @@ export default function Weather() {
   const [currentTime, setCurrentTime] = useState("");
 
   useEffect(() => {
-    async function fetchWeather() {
-      try {
-        // Fetch New York weather
-        const response = await fetch("/api/weather?city=New York");
-        const data = await response.json();
-
-        if (!data || data.error) {
-          throw new Error(data.error?.message || "Invalid API response");
-        }
-
-        setWeather(data);
-      } catch (error) {
-        console.error("Error fetching weather:", error.message);
-      } finally {
-        setLoading(false);
-      }
+    async function getWeather() {
+      const data = await fetchWeather("New York"); // Fetch from local API
+      setWeather(data);
+      setLoading(false);
     }
 
-    fetchWeather();
+    getWeather();
 
-    // Update the time every second
+    // Update time every second
     const interval = setInterval(() => {
-      const newYorkTime = new Intl.DateTimeFormat("en-US", {
-        timeZone: "America/New_York",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true, // Show AM/PM
-      }).format(new Date());
-
-      setCurrentTime(newYorkTime);
+      setCurrentTime(
+        new Intl.DateTimeFormat("en-US", {
+          timeZone: "America/New_York",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        }).format(new Date())
+      );
     }, 1000);
 
-    return () => clearInterval(interval); // Cleanup on unmount
+    return () => clearInterval(interval); // Cleanup
   }, []);
 
-  if (loading) return <p>Loading weather...</p>;
-  if (!weather || !weather.location) return <p>Error loading weather data</p>;
+  if (loading) return <p className={classes.weatherDetails}>⏳ Loading...</p>;
+  if (!weather || !weather.location)
+    return <p className={classes.weatherDetails}>⚠️ Error loading weather</p>;
 
   return (
     <div className={classes.weatherPage}>
@@ -54,11 +44,9 @@ export default function Weather() {
       <h2 className={classes.weatherTime}>🕰️ Current Time: {currentTime}</h2>
 
       <div className={classes.weatherInfo}>
+        <p className={classes.weatherDetails}>🌡️ {weather.current.temp_c}°C</p>
         <p className={classes.weatherDetails}>
-          🌡️ Temperature: {weather.current.temp_c}°C
-        </p>
-        <p className={classes.weatherDetails}>
-          🌥️ Condition: {weather.current.condition.text}
+          🌥️ {weather.current.condition.text}
         </p>
         <img
           className={classes.weatherIcon}

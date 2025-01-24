@@ -16,32 +16,32 @@ export default function Header({ weather }) {
             <li>
               <NavLink href="/news">News</NavLink>
             </li>
-            <li>
-              <NavLink href="/weather">Weather</NavLink>
-            </li>
             <div className={classes.weatherWidget}>
-              {weather ? (
-                <div className={classes.weatherInfo}>
-                  <img
-                    src={weather.current.condition.icon}
-                    alt="Weather icon"
-                  />
-                  <span>{weather.current.temp_c}°C</span>
-                </div>
-              ) : (
-                <span
-                  style={{
-                    fontSize: "1rem",
-                    color: "#ccc",
-                    fontWeight: "normal",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  Loading...
-                </span>
-              )}
+              <li>
+                <NavLink href="/weather">Weather</NavLink>
+                {weather ? (
+                  <div className={classes.weatherInfo}>
+                    <img
+                      src={weather.current.condition.icon}
+                      alt="Weather icon"
+                    />
+                    <span>{weather.current.temp_c}°C</span>
+                  </div>
+                ) : (
+                  <span
+                    style={{
+                      fontSize: "1rem",
+                      color: "#ccc",
+                      fontWeight: "normal",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    Loading...
+                  </span>
+                )}
+              </li>
             </div>
           </ul>
         </nav>

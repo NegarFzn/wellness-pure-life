@@ -3,7 +3,7 @@
   text-align: center;
   padding: 20px;
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+
 }
 
 /* Weather Title */
@@ -38,9 +38,11 @@
 
 /* Temperature and Condition */
 .weatherDetails {
-  font-size: 1.2rem;
-  color: #555;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: rgb(1, 1, 1);
   margin: 10px 0;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1); 
 }
 
 /* Weather Icon */
