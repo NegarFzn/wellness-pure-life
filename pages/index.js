@@ -1,59 +1,84 @@
-import Link from "next/link";
 import Head from "next/head";
-import BodySlideshow from "../components/images/body-slideshow";
-import MindSlideshow from "../components/images/mind-slideshow";
-import FoodSlideshow from "../components/images/food-slideshow";
+import Link from "next/link";
+import Image from "next/image";
 import classes from "./index.module.css";
 
 export default function Home() {
   return (
     <>
       <Head>
-        <title>Healthy Life</title>
+        <title>Healthy Living - Mind & Body Wellness</title>
         <meta
           name="description"
-          content="A healthy lifestyle is a balanced blend of good nutrition, regular exercise, and stress management, aimed at sustaining both body and mind."
+          content="Achieve a balanced and healthier life with fitness, mindfulness, and nourishing food tips."
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="UTF-8" />
       </Head>
-      <div className={classes.title}>
-        <h1>Nurturing Mind and Body for a Healthier You</h1>
-      </div>
-      <header className={classes.header}>
-        <div className={classes.slideshow}>
-          <BodySlideshow />
-          <Link href="/fitness">
-            <h3>Fitness Awaits</h3>
-            <p className={classes.description}>
-              Energize your day with a swift workout! Unleash vitality, sculpt
-              your body, and feel the difference. Ready to move? Let&apos;s go!
+
+      <main className={classes.container}>
+        <h1 className={classes.title}>
+          Nurturing <span className={classes.highlight}>Mind</span> and{" "}
+          <span className={classes.highlight}>Body</span> for a Healthier You
+        </h1>
+
+        <div className={classes.grid}>
+          {/* Fitness Section */}
+          <Link href="/fitness" className={classes.card}>
+            <Image
+              src="/images/fitness.jpg"
+              alt="People exercising"
+              width={400}
+              height={250}
+              className={classes.image}
+              priority
+            />
+            <h2>Fitness Awaits</h2>
+            <p>
+              Energize your day with a swift workout. Sculpt your body, feel the
+              change. Let’s get moving!
+            </p>
+          </Link>
+
+          {/* Mindfulness Section */}
+          <Link href="/mindfulness" className={classes.card}>
+            <Image
+              src="/images/mindfulness.jpg"
+              alt="Person meditating on grass"
+              width={400}
+              height={250}
+              className={classes.image}
+            />
+            <h2>Click for Mindful Bliss</h2>
+            <p>
+              Find peace through mindfulness. Boost energy, reduce stress, and
+              embrace challenges for an energized life.
+            </p>
+          </Link>
+
+          {/* Nourish Section */}
+          <Link href="/nourish" className={classes.card}>
+            <Image
+              src="/images/nourish.jpg"
+              alt="Healthy food on a table"
+              width={400}
+              height={250}
+              className={classes.image}
+            />
+            <h2>Nourish Your Journey</h2>
+            <p>
+              Fuel your life with nourishing food. Embrace vitality, make
+              healthier choices, and feel your best.
             </p>
           </Link>
         </div>
-        <div className={classes.slideshow}>
-          <MindSlideshow />
-          <Link href="/mindfulness">
-            <h3>Click for Mindful Bliss</h3>
-            <p className={classes.description}>
-              Energize your day with mindfulness! Boost energy, reduce stress,
-              and conquer challenges. Dive in for an energized life.
-            </p>
+
+        <div className={classes.center}>
+          <Link href="/signup" className={classes.button}>
+            Sign Up
           </Link>
         </div>
-        <div className={classes.slideshow}>
-          <FoodSlideshow />
-          <Link href="/nutrition">
-            <h3>Nourish Your Journey</h3>
-            <p className={classes.description}>
-              Fuel your life with wholesome nutrition. Embrace vitality, make
-              healthier choices, and live your best.
-            </p>
-          </Link>
-        </div>
-      </header>
-      <div className={classes.subscribe}>
-        <Link href="">Sign Up</Link>
-      </div>
-      <main></main>
+      </main>
     </>
   );
 }

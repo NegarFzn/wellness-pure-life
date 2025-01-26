@@ -26,34 +26,41 @@ function mindfulnessDetailsPage(props) {
 }
 
 async function getData() {
-  const filePath = path.join(process.cwd(), "data", "mindfulness.json");
-  const jsonData = await fs.readFile(filePath);
-  const data = JSON.parse(jsonData);
-  return data;
+  try {
+    const filePath = path.join(process.cwd(), "data", "mindfulness.json");
+    const jsonData = await fs.readFile(filePath, "utf8");
+    return JSON.parse(jsonData);
+  } catch (error) {
+    console.error("❌ Error reading mindfulness data:", error.message);
+    return null; // ✅ Returns `null` to prevent crashes
+  }
 }
 
 export async function getStaticProps(context) {
-  const { params } = context;
-  const mindfulnessId = params.mind[0];
+  try {
+    const { params } = context;
+    const mindfulnessId = params.mind[0];
 
-  const data = await getData();
+    const data = await getData();
+    if (!data) {
+      return { notFound: true };
+    }
 
-  let allItems = [];
-  Object.values(data).forEach((category) => {
-    allItems = [...allItems, ...category];
-  });
+    const allItems = Object.values(data).flat();
+    const item = allItems.find((item) => item.id === mindfulnessId);
 
-  const item = allItems.find((item) => item.id === mindfulnessId);
+    if (!item) {
+      return { notFound: true };
+    }
 
-  if (!item) {
+    return {
+      props: { mindData: item },
+      revalidate: 60,
+    };
+  } catch (error) {
+    console.error("❌ Error fetching mindfulness data:", error.message);
     return { notFound: true };
   }
-
-  return {
-    props: {
-      mindData: item,
-    },
-  };
 }
 
 export async function getStaticPaths() {

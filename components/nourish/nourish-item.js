@@ -8,9 +8,9 @@ export default function NourishItem(props) {
 
   return (
     <li className={classes.item}>
-      <Image src={`/images/${image}`} alt={title} width={200} height={200} />
+      <Image src={image ? `/images/${image}` : "/images/placeholderNourish.jpg"} alt={title} width={200} height={200} />
       <div>
-        <Link href={`/nutrition/${id}`} className={classes.link}>
+        <Link href={`/nourish/${id}`} className={classes.link}>
           <h3>{title}</h3>
           <p>{formattedSummary}</p>
         </Link>

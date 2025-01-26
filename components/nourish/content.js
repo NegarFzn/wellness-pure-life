@@ -33,12 +33,25 @@ const Content = (props) => {
   return (
     <>
       <Head>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_CLIENT_ID"
-          crossOrigin="anonymous"
-        ></script>
+        <title>{title ? `${title} - Nourish Guide` : "Nourish Guide"}</title>
+        <meta
+          name="description"
+          content={
+            intro ||
+            "Discover nutrition insights, healthy eating tips, and nourishing recipes to enhance your well-being."
+          }
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="UTF-8" />
+
+        {/* ✅ Google AdSense Script (Replace with Your Client ID) */}
       </Head>
+      <script
+        async
+        strategy="afterInteractive"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_CLIENT_ID"
+        crossOrigin="anonymous"
+      ></script>
       <div className={classes["ad-top"]}>{/* Ad at the top */}</div>
       <div className={classes["nourish-container"]}>
         <div className={classes["nourish-content"]}>

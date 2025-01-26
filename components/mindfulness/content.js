@@ -33,12 +33,25 @@ const Content = (props) => {
   return (
     <>
       <Head>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_CLIENT_ID"
-          crossOrigin="anonymous"
-        ></script>
+        {/* ✅ SEO Metadata for Better Search Ranking */}
+        <title>
+          {title ? `${title} - Mindfulness Guide` : "Mindfulness Guide"}
+        </title>
+        <meta
+          name="description"
+          content={intro || "Learn about mindfulness techniques and exercises."}
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="UTF-8" />
+
+        {/* ✅ Google AdSense Script (Ensure YOUR_ADSENSE_CLIENT_ID is replaced) */}
       </Head>
+      <script
+        async
+        strategy="afterInteractive"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_CLIENT_ID"
+        crossOrigin="anonymous"
+      ></script>
       <div className={classes["ad-top"]}>{/* Ad at the top */}</div>
       <div className={classes["mindfulness-container"]}>
         <div className={classes["mindfulness-content"]}>

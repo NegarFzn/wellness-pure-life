@@ -1,53 +1,75 @@
-.header {
-  display: flex;
-  gap: 3rem;
-  margin: 3rem auto;
-  width: 90%;
-  max-width: 75rem;
-}
-
-.title {
-  font-size: 1rem;
-  font-weight: bold;
-  font-family: "Montserrat", sans-serif;
-  background: #51449e;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* General Styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
   text-align: center;
 }
 
-.slideshow {
-  width: 30rem;
-  height: 14rem;
+/* Title */
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2c2c54;
+  margin-bottom: 20px;
 }
 
-.slideshow a {
-  text-decoration: none;
-  color: black;
+.highlight {
+  color: #6c5ce7;
 }
 
-.description {
-  font-size: medium;
-}
-
-.ad {
-  margin: 20px 0;
-}
-
-.subscribe {
-  display: flex;
+/* Grid Layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
   justify-content: center;
+  margin-top: 40px;
 }
 
-.subscribe a {
+/* Cards */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Images */
+.image {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button */
+.center {
+  margin-top: 30px;
+}
+
+.button {
   display: inline-block;
-  margin-top: 10rem;
-  padding: 0.7rem 6rem;
-  border-radius: 1rem;
-  background: linear-gradient(90deg, #51449e, #938eb2);
-  color: #ffffff;
+  background: #6c5ce7;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
   font-weight: bold;
   text-decoration: none;
-  font-size: medium;
+  transition: background 0.3s ease-in-out;
+}
+
+.button:hover {
+  background: #4834d4;
 }

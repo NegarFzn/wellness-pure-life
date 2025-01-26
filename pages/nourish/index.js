@@ -62,20 +62,41 @@ function nourishPage(props) {
 }
 
 export async function getStaticProps(context) {
-  const filePath = path.join(process.cwd(), "data", "nourish.json");
-  const jsonData = await fs.readFile(filePath);
-  const data = JSON.parse(jsonData);
+  try {
+    const filePath = path.join(process.cwd(), "data", "nourish.json");
 
-  return {
-    props: {
-      featured: data.featured,
-      superfoodSecrets: data.superfoodSecrets,
-      nutrientEssentials: data.nutrientEssentials,
-      mindfulMeals: data.mindfulMeals,
-      dailySupplements: data.dailySupplements,
-    },
-    revalidate: 60,
-  };
+    // ✅ Read the JSON file
+    const jsonData = await fs.readFile(filePath, "utf8");
+    const data = JSON.parse(jsonData);
+
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid or missing nourish.json data.");
+    }
+
+    return {
+      props: {
+        featured: data.featured || [],
+        superfoodSecrets: data.superfoodSecrets || [],
+        nutrientEssentials: data.nutrientEssentials || [],
+        mindfulMeals: data.mindfulMeals || [],
+        dailySupplements: data.dailySupplements || [],
+      },
+      revalidate: 60, // ✅ Refresh data every 60 seconds
+    };
+  } catch (error) {
+    console.error("❌ Error fetching nourish data:", error.message);
+
+    // ✅ Provide default empty arrays to prevent crashes
+    return {
+      props: {
+        featured: [],
+        superfoodSecrets: [],
+        nutrientEssentials: [],
+        mindfulMeals: [],
+        dailySupplements: [],
+      },
+    };
+  }
 }
 
 export default nourishPage;

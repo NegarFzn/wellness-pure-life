@@ -26,34 +26,45 @@ function nourishDetailsPage(props) {
 }
 
 async function getData() {
-  const filePath = path.join(process.cwd(), "data", "nourish.json");
-  const jsonData = await fs.readFile(filePath);
-  const data = JSON.parse(jsonData);
-  return data;
+  try {
+    const filePath = path.join(process.cwd(), "data", "nourish.json");
+    const jsonData = await fs.readFile(filePath, "utf8");
+    return JSON.parse(jsonData);
+  } catch (error) {
+    console.error("❌ Error reading nourish data:", error.message);
+    return null;
+  }
 }
 
 export async function getStaticProps(context) {
-  const { params } = context;
-  const nourishId = params.nourish[0];
+  try {
+    if (!context || !context.params) {
+      throw new Error("Invalid context: params missing.");
+    }
 
-  const data = await getData();
+    const { params } = context;
+    if (!params.nourish || params.nourish.length === 0) {
+      throw new Error("Invalid URL: Nourish ID is missing.");
+    }
 
-  let allItems = [];
-  Object.values(data).forEach((category) => {
-    allItems = [...allItems, ...category];
-  });
+    const nourishId = params.nourish[0];
+    const data = await getData();
 
-  const item = allItems.find((item) => item.id === nourishId);
+    if (!data) return { notFound: true };
 
-  if (!item) {
+    const allItems = Object.values(data).flat();
+    const item = allItems.find((item) => item.id === nourishId);
+
+    if (!item) return { notFound: true };
+
+    return {
+      props: { nourishData: item },
+      revalidate: 60,
+    };
+  } catch (error) {
+    console.error("❌ Error fetching nourish data:", error.message);
     return { notFound: true };
   }
-
-  return {
-    props: {
-      nourishData: item,
-    },
-  };
 }
 
 export async function getStaticPaths() {

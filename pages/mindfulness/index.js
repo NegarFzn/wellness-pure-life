@@ -63,20 +63,37 @@ function mindfulnessPage(props) {
 }
 
 export async function getStaticProps(context) {
-  const filePath = path.join(process.cwd(), "data", "mindfulness.json");
-  const jsonData = await fs.readFile(filePath);
-  const data = JSON.parse(jsonData);
+  try {
+    const filePath = path.join(process.cwd(), "data", "mindfulness.json");
+    const jsonData = await fs.readFile(filePath, "utf8");
+    const data = JSON.parse(jsonData);
 
-  return {
-    props: {
-      featured: data.featured,
-      meditation: data.meditation,
-      stressReduction: data.stressReduction,
-      productivityAndFocus: data.productivityAndFocus,
-      mentalWellness: data.mentalWellness,
-    },
-    revalidate: 60,
-  };
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid or missing mindfulness.json data.");
+    }
+
+    return {
+      props: {
+        featured: data.featured || [],
+        meditation: data.meditation || [],
+        stressReduction: data.stressReduction || [],
+        productivityAndFocus: data.productivityAndFocus || [],
+        mentalWellness: data.mentalWellness || [],
+      },
+      revalidate: 60, // ✅ Fetch fresh data every 60 seconds
+    };
+  } catch (error) {
+    console.error("Error reading mindfulness data:", error.message);
+    return {
+      props: {
+        featured: [],
+        meditation: [],
+        stressReduction: [],
+        productivityAndFocus: [],
+        mentalWellness: [],
+      },
+    };
+  }
 }
 
 export default mindfulnessPage;

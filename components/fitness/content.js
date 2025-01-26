@@ -4,9 +4,9 @@ import classes from "./content.module.css";
 import FitnessList from "./fitness-list";
 
 function formatText(text) {
-  if (typeof text !== 'string') {
-    console.error('Invalid input: text must be a string');
-    return '';
+  if (typeof text !== "string") {
+    console.error("Invalid input: text must be a string");
+    return "";
   }
 
   // Bold marked with **
@@ -23,7 +23,6 @@ function formatText(text) {
 
   // Convert newline characters to <br />
   return text.replace(/\n/g, "<br />");
-  
 }
 
 const Content = (props) => {
@@ -31,16 +30,26 @@ const Content = (props) => {
     items: { title, intro, sections, additionalSections, image },
   } = props;
 
-
   return (
     <>
       <Head>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_CLIENT_ID"
-          crossOrigin="anonymous"
-        ></script>
+        {/* ✅ SEO Metadata for Better Search Ranking */}
+        <title>{title ? `${title} - Fitness Guide` : "Fitness Guide"}</title>
+        <meta
+          name="description"
+          content={intro || "Learn about fitness techniques and exercises."}
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="UTF-8" />
+
+        {/* ✅ Google AdSense Script (Ensure YOUR_ADSENSE_CLIENT_ID is replaced) */}
       </Head>
+      <script
+        async
+        strategy="afterInteractive"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_CLIENT_ID"
+        crossOrigin="anonymous"
+      ></script>
       <div className={classes["ad-top"]}>{/* Ad at the top */}</div>
       <div className={classes["fitness-container"]}>
         <div className={classes["fitness-content"]}>

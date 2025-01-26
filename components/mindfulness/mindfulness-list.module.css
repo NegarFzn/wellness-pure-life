@@ -1,7 +1,15 @@
-.mindfulness-list-container{
+.mindfulness-list-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(48%, 1fr)); /* Adjust the width as needed */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(48%, 1fr)
+  ); /* Adjust the width as needed */
   gap: 10px; /* Add gap between items */
   list-style: none;
 }
 
+@media (max-width: 768px) {
+  .mindfulness-list-container {
+    grid-template-columns: 1fr; /* ✅ Full width for mobile */
+  }
+}

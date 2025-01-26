@@ -3,12 +3,14 @@ import fs from "fs/promises";
 import path from "path";
 import Content from "../../components/fitness/content";
 
-
 function fitnessDetailsPage(props) {
   const { fitData } = props;
 
-  const maxLength = 15; 
-  const conciseTitle = fitData.title.length > maxLength ? `${fitData.title.slice(0, maxLength-3)}...` : fitData.title;
+  const maxLength = 15;
+  const conciseTitle =
+    fitData.title.length > maxLength
+      ? `${fitData.title.slice(0, maxLength - 3)}...`
+      : fitData.title;
 
   const pageTitle = `${conciseTitle} | Fitness`;
 
@@ -24,34 +26,53 @@ function fitnessDetailsPage(props) {
 }
 
 async function getData() {
-  const filePath = path.join(process.cwd(), "data", "fitness.json");
-  const jsonData = await fs.readFile(filePath);
-  const data = JSON.parse(jsonData);
-  return data;
+  try {
+    const filePath = path.join(process.cwd(), "data", "fitness.json");
+    const jsonData = await fs.readFile(filePath);
+    const data = JSON.parse(jsonData);
+    return data;
+  } catch (error) {
+    console.error("❌ Error fetching fitness data:", error.message);
+    return null; // ✅ Return `null` instead of crashing the app
+  }
 }
 
 export async function getStaticProps(context) {
-  const { params } = context;
-  const fitnessId = params.fit[0];
+  try {
+    if (!context || !context.params) {
+      throw new Error("Invalid context object: params missing.");
+    }
 
-  const data = await getData();
+    const { params } = context;
+    if (!params.fit || params.fit.length === 0) {
+      throw new Error("Invalid URL: Fitness ID is missing.");
+    }
 
-  let allItems = [];
-  Object.values(data).forEach((category) => {
-    allItems = [...allItems, ...category];
-  });
+    const fitnessId = params.fit[0];
 
-  const item = allItems.find((item) => item.id === fitnessId);
+    const data = await getData();
+    if (!data) {
+      return { notFound: true };
+    }
 
-  if (!item) {
+    // ✅ Merge all fitness categories into a single array
+    const allItems = Object.values(data).flat();
+
+    // ✅ Find the requested fitness item
+    const item = allItems.find((item) => item.id === fitnessId);
+
+    if (!item) {
+      return { notFound: true };
+    }
+
+    return {
+      props: { fitData: item },
+      revalidate: 60, // ✅ Revalidates data every 60 seconds
+    };
+  } catch (error) {
+    console.error("❌ Error fetching fitness data:", error.message);
     return { notFound: true };
   }
-
-  return {
-    props: {
-      fitData: item,
-    },
-  };
 }
 
 export async function getStaticPaths() {

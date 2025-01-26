@@ -8,7 +8,13 @@ export default function FitnessItem(props) {
 
   return (
     <li className={classes.item}>
-      <Image src={`/images/${image}`} alt={title} width={200} height={200} />
+      <Image
+        src={image ? `/images/${image}` : "/images/placeholderFit.jpg"}
+        alt={title}
+        width={200}
+        height={200}
+        priority={true}
+      />
       <div>
         <Link href={`/fitness/${id}`} className={classes.link}>
           <h3>{title}</h3>

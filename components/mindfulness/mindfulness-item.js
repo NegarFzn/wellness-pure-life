@@ -8,7 +8,7 @@ export default function MindfulnessItem(props) {
 
   return (
     <li className={classes.item}>
-      <Image src={`/images/${image}`} alt={title} width={200} height={200} />
+      <Image src={image ? `/images/${image}` : "/images/placeholderMind.jpg"} alt={title} width={200} height={200} />
       <div>
         <Link href={`/mindfulness/${id}`} className={classes.link}>
           <h3>{title}</h3>

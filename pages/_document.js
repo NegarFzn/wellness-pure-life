@@ -5,8 +5,8 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head />
-        <div id='overlays' />
         <body>
+          <div id="overlays" />
           <Main />
           <NextScript />
         </body>
