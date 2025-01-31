@@ -13,6 +13,12 @@
   font-size: 1.4rem;
 }
 
+.fitness-content p {
+  font-size: 1.2rem; /* ✅ Slightly increased for better readability */
+  line-height: 1.6; /* ✅ Improved spacing for clarity */
+  margin-bottom: 15px;
+}
+
 .fitness-content img {
   width: 100%;
   max-width: 600px;
