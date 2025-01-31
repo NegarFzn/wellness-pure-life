@@ -30,7 +30,7 @@ function mindfulnessPage(props) {
   return (
     <>
       <Head>
-        <title>Mindfulness</title>
+        <title>Mindfulness | Meditation, Stress Relief & Wellness</title>
         <meta
           name="description"
           content="Discover mindfulness practices to reduce stress, improve focus, and enhance emotional well-being. Explore meditation techniques, stress management tips, and strategies for living in the moment."
@@ -50,11 +50,13 @@ function mindfulnessPage(props) {
         {categories.map((category) => (
           <div key={category.key}>
             {" "}
-            <h2 className={classes["left-align"]}>{category.title}</h2>
-            <hr />
-            <div className={classes["mindfulness-container"]}>
-              <MindfulnessList items={category.items} />
-            </div>
+            <section key={category.key} className={classes.section}>
+              <h2 className={classes["left-align"]}>{category.title}</h2>
+              <hr />
+              <div className={classes["mindfulness-container"]}>
+                <MindfulnessList items={category.items} />
+              </div>
+            </section>
           </div>
         ))}
       </main>

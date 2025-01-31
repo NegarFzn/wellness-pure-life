@@ -18,8 +18,9 @@ export default function Home() {
 
       <main className={classes.container}>
         <h1 className={classes.title}>
-          Nurturing <span className={classes.highlight}>Mind</span> and{" "}
-          <span className={classes.highlight}>Body</span> for a Healthier You
+          Elevate Your <span className={classes.highlight}>Mind</span> &{" "}
+          <span className={classes.highlight}>Body</span> <br />
+          with a Healthier Lifestyle
         </h1>
 
         <div className={classes.grid}>

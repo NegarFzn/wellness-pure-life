@@ -1,7 +1,13 @@
-.nourish-list-container{
+.nourish-list-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(48%, 1fr)); /* Adjust the width as needed */
-  gap: 10px; /* Add gap between items */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
   list-style: none;
+  padding: 0;
 }
 
+@media (max-width: 768px) {
+  .nourish-list-container {
+    grid-template-columns: 1fr; /* ✅ Full width for mobile */
+  }
+}

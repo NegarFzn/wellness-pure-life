@@ -3,6 +3,7 @@ import path from "path";
 
 const NEWS_FILE_PATH = path.join(process.cwd(), "data", "news.json");
 const API_URL = `https://gnews.io/api/v4/top-headlines?topic=health&lang=en&token=${process.env.GNEWS_API_KEY}`;
+const CACHE_DURATION = 24 * 60 * 60 * 1000;
 
 async function fetchNewsFromAPI() {
   try {
@@ -21,6 +22,11 @@ async function fetchNewsFromAPI() {
       image: item.image || "https://via.placeholder.com/150",
     }));
 
+    const newsData = {
+      lastUpdated: Date.now(),
+      articles,
+    };
+
     // Store data
     fs.writeFileSync(NEWS_FILE_PATH, JSON.stringify(articles, null, 2));
 
@@ -37,9 +43,11 @@ export default async function handler(req, res) {
       // Check if the file exists and has valid JSON data
       if (fs.existsSync(NEWS_FILE_PATH)) {
         const fileData = fs.readFileSync(NEWS_FILE_PATH, "utf8");
-        const articles = JSON.parse(fileData);
+        const { lastUpdated, articles } = JSON.parse(fileData);
 
-        if (articles.length > 0) {
+        const isCacheValid = Date.now() - lastUpdated < CACHE_DURATION;
+
+        if (isCacheValid && articles.length > 0) {
           return res.status(200).json(articles);
         }
       }

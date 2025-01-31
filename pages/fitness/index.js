@@ -26,11 +26,13 @@ function fitnessPage(props) {
   return (
     <>
       <Head>
-        <title>Fitness</title>
+        <title>Fitness | Workouts, Nutrition, and Recovery</title>
         <meta
           name="description"
-          content="Discover workouts, nutrition tips, and expert advice. Join our fitness community for a healthier, stronger you."
+          content="Find expert workouts, resistance training, yoga, and recovery tips. Join our fitness community and improve your health."
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="UTF-8" />
       </Head>
       <header className={classes.header}>
         <nav>
@@ -41,11 +43,13 @@ function fitnessPage(props) {
         {categories.map((category) => (
           <div key={category.key}>
             {" "}
-            <h2 className={classes["left-align"]}>{category.title}</h2>
-            <hr />
-            <div className={classes["fitness-container"]}>
-              <FitnessList items={category.items} />
-            </div>
+            <section key={category.key} className={classes.section}>
+              <h2 className={classes["left-align"]}>{category.title}</h2>
+              <hr />
+              <div className={classes["fitness-container"]}>
+                <FitnessList items={category.items} />
+              </div>
+            </section>
           </div>
         ))}
       </main>

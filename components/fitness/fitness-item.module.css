@@ -1,23 +1,27 @@
 .item {
   display: flex;
-  flex-direction: row;
+  flex-direction: column; /* ✅ Stack elements on small screens */
   align-items: center;
-  flex-grow: 1;
   text-align: center;
-  margin-right: 10px;
-  margin-bottom: 5px;
-  padding: 1rem;
+  margin: 10px 0;
+  padding: 1.5rem;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
 }
 
 .item img {
-  margin-right: 5px; /* Add spacing between image and paragraph */
+  width: 100%;
+  max-width: 200px;
   height: auto;
+  border-radius: 10px;
 }
 
 .item p {
-  margin: 0;
-  text-align: left;
-  padding-left: 10px;
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-top: 10px;
 }
 
 .link {
@@ -26,9 +30,6 @@
 }
 
 .link h3 {
-  text-align: left;
-  padding-left: 10px;
+  font-size: 1.2rem;
   margin-top: 0;
 }
-
-

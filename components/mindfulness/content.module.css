@@ -1,85 +1,48 @@
 .mindfulness-container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
 }
 
 .mindfulness-content {
-  font-family: "Arial", sans-serif;
-  color: #333;
   max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  flex: 1;
-}
-
-.mindfulness-content h2 {
-  color: #231f20;
-  margin-bottom: 16px;
-  font-weight: bold;
-  direction: ltr;
-}
-
-.mindfulness-content h3 {
-  color: #231f20;
-  margin-top: 24px;
-  margin-bottom: 8px;
-  font-weight: bold;
-  direction: ltr;
-}
-
-.mindfulness-content p {
-  line-height: 1.6;
-  margin: 24px 0;
-  font-size: 20px;
-  font-family: "Proxima Nova";
-  direction: ltr;
+  text-align: left;
+  font-size: 1.4rem;
 }
 
 .mindfulness-content img {
-  max-width: 100%;
-  margin-bottom: 30px;
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 10px;
 }
 
 @media (max-width: 768px) {
   .mindfulness-content {
     padding: 10px;
+    font-size: 1.2rem;
   }
-  .mindfulness-content h2,
-  .mindfulness-content h3 {
-    margin-left: 10px;
+
+  .mindfulness-container {
+    padding: 10px;
   }
 }
 
 .ad-sidebar {
-  top: 100px; /* Adjust based on your header's height */
-  right: 0;
-  width: 300px; /* Common width for sidebar ads */
-  height: 600px; /* Common height for sidebar ads */
-  z-index: 100; /* Ensure it's above other content */
+  display: none; /* ✅ Hide sidebar ads on mobile */
 }
 
 .ad-top {
-  display: block;
-
-  text-align: left;
+  text-align: center;
+  max-width: 728px;
+  height: 90px;
 }
 
-.h3Class {
-  text-align: left;
-  margin-top: 20px;
-  margin-left: 50px;
-}
-
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .ad-top {
-    max-width: 728px; /* Standard leaderboard width */
-    height: 90px; /* Standard leaderboard height */
-  }
-}
-
-@media (max-width: 767px) {
-  .ad-top {
-    max-width: 320px; /* Standard mobile banner width */
-    height: 50px; /* Standard mobile banner height */
+    max-width: 320px;
+    height: 50px;
   }
 }

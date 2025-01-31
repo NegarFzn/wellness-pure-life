@@ -34,10 +34,10 @@ function nourishPage(props) {
   return (
     <>
       <Head>
-        <title>Nourish</title>
+        <title>Nourish | Healthy Eating & Wellness</title>
         <meta
           name="description"
-          content="Discover expert tips, healthy recipes, and nutrition insights in the Nourish section. Learn how balanced meals and mindful eating can transform your well-being."
+          content="Discover healthy eating tips, nutrition insights, and balanced meal plans. Explore superfoods and mindful eating strategies for better well-being."
         />
       </Head>
       <header className={classes.header}>
@@ -49,11 +49,13 @@ function nourishPage(props) {
         {categories.map((category) => (
           <div key={category.key}>
             {" "}
-            <h2 className={classes["left-align"]}>{category.title}</h2>
-            <hr />
-            <div className={classes["nourish-container"]}>
-              <NourishList items={category.items} />
-            </div>
+            <section key={category.key} className={classes.section}>
+              <h2 className={classes["left-align"]}>{category.title}</h2>
+              <hr />
+              <div className={classes["nourish-container"]}>
+                <NourishList items={category.items} />
+              </div>
+            </section>
           </div>
         ))}
       </main>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import classes from "./Footer.module.css";
+import { FaInstagram, FaLinkedin, FaEnvelope, FaPhone } from "react-icons/fa"; // ✅ Added icons
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -7,12 +8,19 @@ const Footer = () => {
   return (
     <footer className={classes.footer}>
       <div className={classes.footerContent}>
-        <div>
+        {/* Contact Info */}
+        <div className={classes.footerSection}>
           <h3>Contact Us</h3>
-          <p>Email: example@example.com</p>
-          <p>Phone: 123-456-7890</p>
+          <p>
+            <FaEnvelope className={classes.icon} /> example@example.com
+          </p>
+          <p>
+            <FaPhone className={classes.icon} /> 123-456-7890
+          </p>
         </div>
-        <div>
+
+        {/* Quick Links */}
+        <div className={classes.footerSection}>
           <h3>Quick Links</h3>
           <ul className={classes.listContainer}>
             <li>
@@ -32,7 +40,9 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-        <div>
+
+        {/* Social Media */}
+        <div className={classes.footerSection}>
           <h3>Follow Us</h3>
           <ul className={classes.listContainer}>
             <li>
@@ -42,7 +52,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className={classes.link}
               >
-                Instagram
+                <FaInstagram className={classes.icon} /> Instagram
               </Link>
             </li>
             <li>
@@ -52,12 +62,14 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className={classes.link}
               >
-                LinkedIn
+                <FaLinkedin className={classes.icon} /> LinkedIn
               </Link>
             </li>
           </ul>
         </div>
       </div>
+
+      {/* Footer Bottom */}
       <div className={classes.footerBottom}>
         <p>&copy; {currentYear} Your Website Name. All rights reserved.</p>
       </div>

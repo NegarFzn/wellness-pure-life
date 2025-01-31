@@ -1,14 +1,20 @@
+/* General Page Styling */
 .page-wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  align-items: center;
 }
 
+/* Header Section */
 .header {
   position: relative;
   width: 100%;
   height: 300px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .header nav {
@@ -19,21 +25,23 @@
   height: 100%;
 }
 
+/* Main Content */
 .main-content {
   margin-top: 10px;
   width: 90%;
   min-height: 100vh;
 }
 
+/* Content Grid for Responsive Layout */
 .container {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   width: 100%;
-  height: 70%;
   margin: 1rem auto;
 }
 
+/* Sidebar Ads */
 .ads-container {
   display: flex;
   flex-direction: column;
@@ -44,23 +52,47 @@
 }
 
 .ads-container img {
-  width: 500px; /* Adjust the width to make the image smaller */
-  height: auto; /* Maintain aspect ratio */
+  width: 100%;
+  height: auto;
 }
 
+/* Nourish Section */
 .nourish-container {
   flex: 1;
+  padding: 20px;
 }
 
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
-}
-
+/* Left-Aligned Titles */
 .left-align {
   text-align: left;
   font-size: 1.5rem;
   font-weight: bold;
   padding-top: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .ads-container {
+    display: none; /* Hide sidebar ads on mobile */
+  }
+
+  .nourish-container {
+    width: 100%;
+  }
+
+  .header {
+    height: 200px;
+  }
+
+  .left-align {
+    font-size: 1.3rem;
+  }
+}
+.section {
+  width: 90%;
+  max-width: 800px;
 }
