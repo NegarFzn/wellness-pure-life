@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Head from "next/head";
+import Script from "next/script";
 import classes from "./content.module.css";
 import FitnessList from "./fitness-list";
 
@@ -90,7 +91,22 @@ const Content = (props) => {
               </div>
             ))}
         </div>
-        <div className={classes["ad-sidebar"]}>{/* Ad code here */}</div>
+        <div className={classes["ad-sidebar"]}>
+          <Script
+            async
+            strategy="afterInteractive"
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_CLIENT_ID"
+            crossOrigin="anonymous"
+          />
+          <ins
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client="YOUR_ADSENSE_CLIENT_ID"
+            data-ad-slot="XXXXXXX"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+        </div>
       </div>
       <h3 className={classes.h3Class}>RELATED POSTS</h3>
       <FitnessList items={additionalSections} />

@@ -1,13 +1,15 @@
 .fitness-container {
   display: flex;
-  flex-direction: column; /* ✅ Ensure stacking on mobile */
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
   padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .fitness-content {
   max-width: 800px;
+  width: 65%;
   margin: 0 auto;
   text-align: left;
   font-size: 1.4rem;
@@ -27,6 +29,15 @@
 }
 
 @media (max-width: 768px) {
+  .fitness-container {
+    flex-direction: column; /* Ensures ads go below content on mobile */
+  }
+  .ad-sidebar {
+    display: none; /* Hides sidebar ads on mobile */
+  }
+}
+
+@media (max-width: 768px) {
   .fitness-content {
     padding: 15px;
     font-size: 1.2rem;
@@ -34,7 +45,10 @@
 }
 
 .ad-sidebar {
-  display: none; /* ✅ Hide sidebar ads on mobile */
+  display: block;
+  width: 25%;
+  text-align: right;
+  margin-left: 30px;
 }
 
 .ad-top {

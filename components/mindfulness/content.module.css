@@ -1,9 +1,10 @@
 .mindfulness-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
   padding: 20px;
-  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .mindfulness-content {
@@ -26,6 +27,15 @@
 }
 
 @media (max-width: 768px) {
+  .mindfulness-container {
+    flex-direction: column; /* Ensures ads go below content on mobile */
+  }
+  .ad-sidebar {
+    display: none; /* Hides sidebar ads on mobile */
+  }
+}
+
+@media (max-width: 768px) {
   .mindfulness-content {
     padding: 10px;
     font-size: 1.2rem;
@@ -37,7 +47,10 @@
 }
 
 .ad-sidebar {
-  display: none; /* ✅ Hide sidebar ads on mobile */
+  display: block;
+  width: 25%;
+  text-align: right;
+  margin-left: 30px;
 }
 
 .ad-top {
