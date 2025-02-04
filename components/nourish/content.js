@@ -110,8 +110,12 @@ const Content = (props) => {
           ></ins>
         </div>
       </div>
-      <h3 className={classes.h3Class}>RELATED POSTS</h3>
-      <NourishList items={additionalSections} />
+      <div className={classes["related-posts-wrapper"]}>
+        <h3 className={classes["related-posts-title"]}>RELATED POSTS</h3>
+        <div className={classes["related-posts-container"]}>
+          <NourishList items={additionalSections} />
+        </div>
+      </div>
       <div className={classes["ad-bottom"]}>{/* Ad at the bottom */}</div>
     </>
   );

@@ -65,3 +65,55 @@
     height: 50px;
   }
 }
+
+.related-posts-wrapper {
+  width: 65%; /* ✅ Matches content width */
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ✅ Aligns the whole section with content */
+}
+
+.related-posts-title {
+  text-align: left;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.related-posts-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* ✅ Ensures left alignment */
+  gap: 20px;
+  width: 100%;
+}
+
+.related-posts-container .post-item {
+  flex: 1 1 300px;
+  max-width: 320px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* ✅ Mobile Fix */
+@media (max-width: 768px) {
+  .related-posts-wrapper {
+    width: 100%; /* ✅ Full width on small screens */
+    align-items: center;
+  }
+  .related-posts-title {
+    text-align: center; /* ✅ Center title on mobile */
+  }
+  .related-posts-container {
+    justify-content: center;
+  }
+  .related-posts-container .post-item {
+    max-width: 100%;
+  }
+}
+
+
