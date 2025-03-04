@@ -34,7 +34,7 @@ export default function Home() {
               className={classes.image}
               priority
             />
-            <h2>Fitness Awaits</h2>
+            <h2>Fitness</h2>
             <p>
               Energize your day with a swift workout. Sculpt your body, feel the
               change. Let’s get moving!
@@ -50,7 +50,7 @@ export default function Home() {
               height={250}
               className={classes.image}
             />
-            <h2>Click for Mindful Bliss</h2>
+            <h2>Mindfulness</h2>
             <p>
               Find peace through mindfulness. Boost energy, reduce stress, and
               embrace challenges for an energized life.
@@ -66,7 +66,7 @@ export default function Home() {
               height={250}
               className={classes.image}
             />
-            <h2>Nourish Your Journey</h2>
+            <h2>Nourish</h2>
             <p>
               Fuel your life with nourishing food. Embrace vitality, make
               healthier choices, and feel your best.

@@ -19,7 +19,9 @@ async function fetchNewsFromAPI() {
       title: item.title,
       summary: item.description,
       link: item.url,
-      image: item.image || "https://via.placeholder.com/150",
+      image: item.image && item.image.trim().startsWith("http") 
+      ? item.image 
+      : "/images/defaultNews.jpg",
     }));
 
     const newsData = {

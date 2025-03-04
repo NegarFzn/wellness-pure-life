@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchNews } from "../../utils/fetch"; // ✅ Import fetch function
-import classes from "./news.module.css";
+import classes from "./index.module.css";
 
 export default function News() {
   const [articles, setArticles] = useState([]);
@@ -27,9 +27,13 @@ export default function News() {
           {articles.map((article) => (
             <li key={article.id} className={classes.newsItem}>
               <img
-                src={article.image}
+                src={article.image && article.image.trim() ? article.image : "/images/defaultNews.jpg"}
                 alt={article.title}
                 className={classes.newsImage}
+                onError={(e) => {
+                  console.log("Broken Image URL:", e.target.src); // Debugging missing images
+                  e.target.src = "/images/defaultNews.jpg"; // ✅ Ensure fallback works
+                }}
               />
               <h2>{article.title}</h2>
               <p>{article.summary}</p>

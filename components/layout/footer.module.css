@@ -2,7 +2,7 @@
 .footer {
   background-color: #222;
   color: #fff;
-  padding: 40px 20px;
+  padding: 20px 15px;
   text-align: center;
 }
 
@@ -14,7 +14,7 @@
   flex-wrap: wrap;
   max-width: 1200px;
   margin: 0 auto;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -27,9 +27,9 @@
 }
 
 .footerSection h3 {
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   margin-bottom: 10px;
-  color: #a29bfe;
+  color: #fbfbfc;
 }
 
 /* List Styling */
@@ -42,30 +42,34 @@
   margin-bottom: 8px;
 }
 
+/* ✅ Default Link Styling */
 .listContainer li a {
+  color: white !important; /* Ensure the default color is white */
   text-decoration: none;
-  color: #a29bfe;
-  transition: color 0.3s;
+  transition: color 0.3s ease-in-out;
+  display: inline-block; /* Ensure the link has a proper display */
 }
 
+/* Apply hover effect */
 .listContainer li a:hover {
-  color: #fff;
+  color: #767678 !important; /* Ensure hover color applies */
 }
 
-/* Social Media & Icons */
+/* ✅ Ensures visited links also stay white */
+.listContainer li a:visited {
+  color: #767678;
+}
+
+/* ✅ Default Styling for FaEnvelope Icon */
 .icon {
-  margin-right: 8px;
-  color: #a29bfe;
-  transition: color 0.3s;
+  color: #a29bfe; /* Light purple color */
+  font-size: 1.2rem; /* Adjust the icon size */
+  margin-right: 8px; /* Add spacing between the icon and text */
+  transition: color 0.3s ease-in-out; /* Smooth transition */
 }
 
-.icon:hover {
-  color: white;
-}
-
-/* Footer Bottom */
 .footerBottom {
-  margin-top: 20px;
+  margin-top: 10px; /* Decreased space at the bottom */
   font-size: 0.9rem;
   opacity: 0.8;
 }

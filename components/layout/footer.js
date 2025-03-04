@@ -8,70 +8,56 @@ const Footer = () => {
   return (
     <footer className={classes.footer}>
       <div className={classes.footerContent}>
-        {/* Contact Info */}
+        {/* ✅ Contact Info Section */}
         <div className={classes.footerSection}>
           <h3>Contact Us</h3>
-          <p>
-            <FaEnvelope className={classes.icon} /> example@example.com
-          </p>
-          <p>
-            <FaPhone className={classes.icon} /> 123-456-7890
-          </p>
-        </div>
-
-        {/* Quick Links */}
-        <div className={classes.footerSection}>
-          <h3>Quick Links</h3>
           <ul className={classes.listContainer}>
             <li>
-              <Link href="/" className={classes.link}>
-                Home
+              <FaEnvelope className={classes.icon} />
+              <Link href="mailto:info@wellnesspurelife.com">
+                info@wellnesspurelife.com
               </Link>
             </li>
             <li>
-              <Link href="/services" className={classes.link}>
-                Services
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className={classes.link}>
-                Contact
-              </Link>
+              <Link href="/contact">Contact Us</Link>
             </li>
           </ul>
         </div>
 
-        {/* Social Media */}
+        {/* ✅ Quick Links Section */}
         <div className={classes.footerSection}>
-          <h3>Follow Us</h3>
+          <h3>Quick Links</h3>
           <ul className={classes.listContainer}>
             <li>
-              <Link
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={classes.link}
-              >
-                <FaInstagram className={classes.icon} /> Instagram
+              <Link href="/" legacyBehavior>
+                <a className={classes.link}>Home</a>
               </Link>
             </li>
             <li>
-              <Link
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={classes.link}
-              >
-                <FaLinkedin className={classes.icon} /> LinkedIn
+              <Link href="/mindfulness" legacyBehavior>
+                <a className={classes.link}>Mindfulness</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/nourish" legacyBehavior>
+                <a className={classes.link}>Nourishment</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/fitness" legacyBehavior>
+                <a className={classes.link}>Body Health</a>
               </Link>
             </li>
           </ul>
         </div>
       </div>
 
-      {/* Footer Bottom */}
+      {/* ✅ Footer Bottom Section */}
       <div className={classes.footerBottom}>
-        <p>&copy; {currentYear} Your Website Name. All rights reserved.</p>
+        <p>
+          &copy; {new Date().getFullYear()} WellnessPureLife. All rights
+          reserved.
+        </p>
       </div>
     </footer>
   );
