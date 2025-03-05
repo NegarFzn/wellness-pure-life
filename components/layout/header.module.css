@@ -91,3 +91,25 @@
 .weatherInfo span {
   font-size: 15px;
 }
+
+.brandName {
+  font-size: 1.8rem; /* Adjust size to fit navbar */
+  font-weight: bold; /* Make it bold */
+  color: white; /* Default color */
+  text-decoration: none; /* Remove underline */
+  font-family: "Poppins", sans-serif; /* Modern, clean font */
+  transition: color 0.3s ease, transform 0.2s ease; /* Smooth effects */
+}
+
+.brandName:hover {
+  color: white; /* Light purple on hover */
+  transform: scale(1.05);
+}
+
+.brandName:active {
+  color: white; /* Slightly darker purple when clicked */
+}
+
+.brandName:visited {
+  color: white; /* Ensures link stays white after clicking */
+}

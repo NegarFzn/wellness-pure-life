@@ -18,9 +18,8 @@ export default function Home() {
 
       <main className={classes.container}>
         <h1 className={classes.title}>
-          Elevate Your <span className={classes.highlight}>Mind</span> &{" "}
-          <span className={classes.highlight}>Body</span> <br />
-          with a Healthier Lifestyle
+          Elevate Your <span className="highlight">Mind & Body</span> <br />
+          With a Healthier Lifestyle
         </h1>
 
         <div className={classes.grid}>
@@ -75,8 +74,8 @@ export default function Home() {
         </div>
 
         <div className={classes.center}>
-          <Link href="/signup" className={classes.button}>
-            Sign Up
+          <Link href="/" className={classes.navButton}>
+            Get Started
           </Link>
         </div>
       </main>
