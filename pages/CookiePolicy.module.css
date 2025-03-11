@@ -1,0 +1,54 @@
+.container {
+  padding: 40px;
+  max-width: 900px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.heading {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  color: #222;
+  margin-bottom: 20px;
+}
+
+.updatedDate {
+  font-size: 14px;
+  color: #777;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.text {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.sectionTitle {
+  font-size: 22px;
+  font-weight: bold;
+  color: #444;
+  margin-top: 20px;
+}
+
+.list {
+  margin-left: 20px;
+  font-size: 16px;
+}
+
+.list li {
+  margin-bottom: 10px;
+}
+
+/* ✅ Fix: Use a local class instead of a global selector */
+.link {
+  color: #6c5ce7;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

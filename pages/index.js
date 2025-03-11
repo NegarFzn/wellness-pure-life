@@ -1,9 +1,25 @@
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+import Modal from "../components/UI/Modal"; // Ensure the correct import path
 import classes from "./index.module.css";
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const hasVisited = localStorage.getItem("hasVisited");
+    if (!hasVisited) {
+      setShowModal(true);
+      localStorage.setItem("hasVisited", "true");
+    }
+  }, []);
+
+  const closeModalHandler = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       <Head>
@@ -16,9 +32,26 @@ export default function Home() {
         <meta charSet="UTF-8" />
       </Head>
 
+      {/* Modal - Only Shows on First Visit */}
+      {showModal && (
+        <Modal onClose={closeModalHandler}>
+          <div className={classes.modalContent}>
+            <h1 className={classes.modalTitle}>
+              Elevate Your{" "}
+              <span className={classes.highlight}>Mind & Body</span> <br />
+              With a Healthier Lifestyle
+            </h1>
+            <button className={classes.startButton} onClick={closeModalHandler}>
+              Get Started
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Home Page Content */}
       <main className={classes.container}>
         <h1 className={classes.title}>
-          Elevate Your <span className="highlight">Mind & Body</span> <br />
+          Elevate Your <span className={classes.highlight}>Mind & Body</span>{" "}
           With a Healthier Lifestyle
         </h1>
 
@@ -70,12 +103,6 @@ export default function Home() {
               Fuel your life with nourishing food. Embrace vitality, make
               healthier choices, and feel your best.
             </p>
-          </Link>
-        </div>
-
-        <div className={classes.center}>
-          <Link href="/" className={classes.navButton}>
-            Get Started
           </Link>
         </div>
       </main>

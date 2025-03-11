@@ -1,75 +1,49 @@
-/* General Footer Styling */
 .footer {
-  background-color: #222;
+  background-color: #222; /* Dark background for contrast */
   color: #fff;
-  padding: 20px 15px;
+  padding: 40px 20px;
+}
+
+.footerContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footerSection {
   text-align: center;
 }
 
-/* Footer Content */
-.footerContent {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+.footerTitle {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #ffffff;
 }
 
-/* Footer Sections */
-.footerSection {
-  flex: 1;
-  margin: 10px;
-  min-width: 250px;
-  text-align: left;
-}
-
-.footerSection h3 {
-  font-size: 1.6rem;
-  margin-bottom: 10px;
-  color: #fbfbfc;
-}
-
-/* List Styling */
 .listContainer {
   list-style: none;
   padding: 0;
 }
 
 .listContainer li {
-  margin-bottom: 8px;
+  margin: 12px 0; /* Better spacing between links */
 }
 
-/* ✅ Default Link Styling */
-.listContainer li a {
-  color: white !important; /* Ensure the default color is white */
+.link {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  color: #ddd;
   text-decoration: none;
-  transition: color 0.3s ease-in-out;
-  display: inline-block; /* Ensure the link has a proper display */
+  transition: color 0.3s ease;
 }
 
-/* Apply hover effect */
-.listContainer li a:hover {
-  color: #767678 !important; /* Ensure hover color applies */
+.link:hover {
+  color: #6c5ce7; /* Purple hover effect */
 }
 
-/* ✅ Ensures visited links also stay white */
-.listContainer li a:visited {
-  color: #767678;
-}
-
-/* ✅ Default Styling for FaEnvelope Icon */
 .icon {
-  color: #a29bfe; /* Light purple color */
-  font-size: 1.2rem; /* Adjust the icon size */
-  margin-right: 8px; /* Add spacing between the icon and text */
-  transition: color 0.3s ease-in-out; /* Smooth transition */
-}
-
-.footerBottom {
-  margin-top: 10px; /* Decreased space at the bottom */
-  font-size: 0.9rem;
-  opacity: 0.8;
+  margin-right: 10px;
+  font-size: 20px; /* Adjust icon size */
 }

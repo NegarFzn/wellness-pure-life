@@ -2,18 +2,22 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 0 20px;
   text-align: center;
+  
 }
 
 /* Title */
 .title {
+  font-family: sans-serif;
   font-size: 2.5rem;
   font-weight: bold;
   text-align: center;
-  color: #2c2c54;
   line-height: 1.4;
+  margin-top: 0;
 }
+
+
 
 .highlight {
   color: #6c5ce7;
@@ -23,9 +27,10 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 30px;
+  gap: 100px;
   justify-content: center;
-  margin-top: 40px;
+  align-items: center;
+  margin-top: 0px;
 }
 
 /* Cards */
@@ -33,13 +38,30 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 400px; /* Increased width */
+  height: 500px;
   background: white;
-  border-radius: 12px;
+  border-radius: 15px;
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
   color: inherit;
+}
+
+.card h2 {
+  font-family: Raleway, sans-serif;
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 34px;
+}
+
+.card p {
+  font-family: Inter, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  margin-bottom: 10px; 
 }
 
 .card:hover {
@@ -50,7 +72,7 @@
 /* Images */
 .image {
   width: 100%;
-  height: 200px;
+  height: 320px;
   border-radius: 8px;
   object-fit: cover;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -75,4 +97,68 @@
 
 .navButton:hover {
   background-color: #4834d4;
+}
+
+.startButton {
+  background-color: #6a5acd;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+}
+
+.startButton:hover {
+  background-color: #5a4acd;
+  transform: scale(1.05);
+}
+
+.modalContent .highlight {
+  color: #6a5acd; /* Purple accent color */
+}
+
+.modalContent {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    padding: 30px;
+    max-width: 90%;
+  }
+
+  .modalContent h1 {
+    font-size: 1.8rem;
+  }
+
+  .startButton {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+
+  /* ✅ Ensure grid layout adapts well */
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 40px; /* Keeps mobile spacing optimized */
+  }
+
+  .card {
+    width: 90%;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .image {
+    height: 250px;
+  }
 }

@@ -1,32 +1,25 @@
-import { Fragment } from "react";
-import ReactDom from "react-dom";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import classes from "./Modal.module.css";
 
-const Backdrop = (props) => {
-  return <div className={classes.backdrop} onClick={props.onClose} />;
-};
-const ModalOverlay = (props) => {
-  return (
-    <div className={classes.modal}>
-      <div className={classes.content}>{props.children}</div>
-    </div>
-  );
-};
+const Modal = ({ onClose, children }) => {
+  const [portalElement, setPortalElement] = useState(null);
 
-const portalElement = document.getElementById("overlays");
+  useEffect(() => {
+    setPortalElement(document.getElementById("overlays"));
+  }, []);
 
-const Modal = (props) => {
-  return (
-    <Fragment>
-      {ReactDom.createPortal(
-        <Backdrop onClose={props.onClose} />,
-        portalElement
-      )}
-      {ReactDom.createPortal(
-        <ModalOverlay>{props.children}</ModalOverlay>,
-        portalElement
-      )}
-    </Fragment>
+  if (!portalElement) {
+    return null; // Prevents rendering until the portal is available
+  }
+
+  return createPortal(
+    <div className={classes.backdrop} onClick={onClose}>
+      <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>,
+    portalElement
   );
 };
 
