@@ -1,35 +1,37 @@
 import Link from "next/link";
-import classes from "./Footer.module.css";
+import classes from "./footer.module.css";
 import {
+  FaInstagram,
+  FaLinkedin,
+  FaEnvelope,
+  FaPhone,
   FaHome,
   FaBrain,
   FaAppleAlt,
   FaDumbbell,
   FaLock,
   FaCookieBite,
-  FaEnvelope,
 } from "react-icons/fa";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
   return (
     <footer className={classes.footer}>
       <div className={classes.footerContent}>
-        {/* ✅ Contact Info Section */}
+        {/* ✅ Contact Section */}
         <div className={classes.footerSection}>
           <h3>Contact Us</h3>
-          <ul className={classes.listContainer}>
-            <li>
-              <FaEnvelope className={classes.icon} />
-              <Link href="mailto:info@wellnesspurelife.com">
-                info@wellnesspurelife.com
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact">Contact Us</Link>
-            </li>
-          </ul>
+          <div className={classes.contactInfo}>
+            <FaEnvelope className={classes.icon} />
+            <Link
+              href="mailto:info@wellnesspurelife.com"
+              className={classes.link}
+            >
+              info@wellnesspurelife.com
+            </Link>
+          </div>
+          <Link href="/contact" className={classes.link}>
+            Contact Us
+          </Link>
         </div>
 
         {/* ✅ Quick Links Section */}
@@ -37,34 +39,28 @@ const Footer = () => {
           <h3>Quick Links</h3>
           <ul className={classes.listContainer}>
             <li>
-              <Link href="/" className={classes.link}>
-                <FaHome className={classes.icon} /> Home
-              </Link>
+              <FaHome className={classes.icon} />
+              <Link href="/">Home</Link>
             </li>
             <li>
-              <Link href="/mindfulness" className={classes.link}>
-                <FaBrain className={classes.icon} /> Mind & Calm
-              </Link>
+              <FaBrain className={classes.icon} />
+              <Link href="/mindfulness">Mind & Calm</Link>
             </li>
             <li>
-              <Link href="/nourish" className={classes.link}>
-                <FaAppleAlt className={classes.icon} /> Healthy Eating
-              </Link>
+              <FaAppleAlt className={classes.icon} />
+              <Link href="/nourish">Healthy Eating</Link>
             </li>
             <li>
-              <Link href="/fitness" className={classes.link}>
-                <FaDumbbell className={classes.icon} /> Fitness & Wellness
-              </Link>
+              <FaDumbbell className={classes.icon} />
+              <Link href="/fitness">Fitness & Wellness</Link>
             </li>
             <li>
-              <Link href="/privacy-policy" className={classes.link}>
-                <FaLock className={classes.icon} /> Privacy Policy
-              </Link>
+              <FaLock className={classes.icon} />
+              <Link href="/privacy-policy">Privacy Policy</Link>
             </li>
             <li>
-              <Link href="/cookie-policy" className={classes.link}>
-                <FaCookieBite className={classes.icon} /> Cookie Policy
-              </Link>
+              <FaCookieBite className={classes.icon} />
+              <Link href="/cookie-policy">Cookie Policy</Link>
             </li>
           </ul>
         </div>
@@ -73,8 +69,7 @@ const Footer = () => {
       {/* ✅ Footer Bottom Section */}
       <div className={classes.footerBottom}>
         <p>
-          &copy; {new Date().getFullYear()} WellnessPureLife. All rights
-          reserved.
+          © {new Date().getFullYear()} WellnessPureLife. All rights reserved.
         </p>
       </div>
     </footer>
