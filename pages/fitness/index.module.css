@@ -19,6 +19,14 @@
   height: 100%;
 }
 
+.left-align {
+  font-family: "Poppins", sans-serif;
+  text-align: left;
+  font-size: 1.8rem;
+  font-weight: bold;
+  padding-top: 30px;
+}
+
 .main-content {
   margin-top: 10px;
   width: 90%;

@@ -36,7 +36,7 @@ function fitnessPage(props) {
       </Head>
       <header className={classes.header}>
         <nav>
-          <Image src={fitnessHeader} alt="fitness header" fill priority />
+          <Image src={fitnessHeader} alt="fitness header"  fill priority />
         </nav>
       </header>
       <main className={classes["main-content"]}>

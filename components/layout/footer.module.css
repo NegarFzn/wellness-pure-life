@@ -39,7 +39,7 @@
 
 .link:hover {
   color: #6c5ce7;  /* Purple hover effect */
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 

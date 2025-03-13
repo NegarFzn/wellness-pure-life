@@ -64,8 +64,9 @@
 
 /* Left-Aligned Titles */
 .left-align {
+  font-family: "Poppins", sans-serif;
   text-align: left;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
   padding-top: 30px;
 }

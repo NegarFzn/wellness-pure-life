@@ -47,34 +47,59 @@ export default function Contact() {
     <>
       <Head>
         <title>Contact Us - YourAppName</title>
-        <meta name="description" content="Get in touch with us for any inquiries or support." />
+        <meta
+          name="description"
+          content="Get in touch with us for any inquiries or support."
+        />
       </Head>
-
       <div className={classes.contactContainer}>
         <h1 className={classes.contactTitle}>Contact Us</h1>
-        <p className={classes.contactSubtitle}>Have a question? Feel free to reach out!</p>
-
+        <p className={classes.contactSubtitle}>
+          Have a question? Feel free to reach out!
+        </p>
         <form onSubmit={handleSubmit} className={classes.contactForm}>
           <div className={classes.formGroup}>
             <label className={classes.formLabel}>Name</label>
-            <input type="text" name="name" value={formData.name} onChange={handleChange} required className={classes.formInput} />
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className={classes.formInput}
+            />
           </div>
-
           <div className={classes.formGroup}>
             <label className={classes.formLabel}>Email</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} required className={classes.formInput} />
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className={classes.formInput}
+            />
           </div>
-
           <div className={classes.formGroup}>
             <label className={classes.formLabel}>Message</label>
-            <textarea name="message" value={formData.message} onChange={handleChange} required className={classes.formTextarea} />
+            <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              required
+              className={classes.formTextarea}
+            />
           </div>
-
-          <button type="submit" className={classes.submitButton} disabled={loading}>
+          <button
+            type="submit"
+            className={classes.submitButton}
+            disabled={loading}
+          >
             {loading ? "Sending..." : "Send Message"}
           </button>
-
-          {responseMessage && <p className={classes.responseMessage}>{responseMessage}</p>}
+          {responseMessage && (
+            <p className={classes.responseMessage}>{responseMessage}</p>
+          )}
         </form>
       </div>
     </>

@@ -1,40 +1,86 @@
 .contactContainer {
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px 20px;
   text-align: center;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.contactTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.contactSubtitle {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 20px;
 }
 
 .contactForm {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
+  gap: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.contactForm label {
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.formLabel {
   font-weight: bold;
+  margin-bottom: 5px;
+  color: #444;
 }
 
-.contactForm input,
-.contactForm textarea {
+.formInput, .formTextarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
 }
 
-.contactForm button {
+.formInput:focus, .formTextarea:focus {
+  border-color: #5cb85c;
+  outline: none;
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.submitButton {
   background-color: #5cb85c;
   color: white;
-  padding: 10px 15px;
+  padding: 12px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 1.2rem;
+  transition: background-color 0.3s;
 }
 
-.contactForm button:hover {
+.submitButton:hover {
   background-color: #4cae4c;
+}
+
+.responseMessage {
+  margin-top: 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #444;
 }
 
 .contactInfo {
@@ -44,6 +90,8 @@
 
 .contactInfo p {
   margin: 5px 0;
+  color: #555;
+  font-size: 1rem;
 }
 
 .socialLinks {
@@ -51,12 +99,13 @@
 }
 
 .socialLinks a {
-  display: block;
-  margin: 5px 0;
+  display: inline-block;
+  margin: 0 10px;
   color: #007bff;
-  text-decoration: none;
+  font-size: 1.2rem;
+  transition: color 0.3s;
 }
 
 .socialLinks a:hover {
-  text-decoration: underline;
+  color: #0056b3;
 }

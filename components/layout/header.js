@@ -10,18 +10,28 @@ export default function Header({ weather }) {
 
   // ✅ Define visible links based on the active page
   const getNavLinks = () => {
-    if (router.pathname === "/fitness") {
+    if (router.pathname.startsWith("/fitness")) {
       return [
         { href: "/mindfulness", label: "Mindfulness" },
         { href: "/nourish", label: "Nourish" },
       ];
-    } else if (router.pathname === "/mindfulness") {
+    } else if (router.pathname.startsWith("/mindfulness")) {
       return [
         { href: "/fitness", label: "Fitness" },
         { href: "/nourish", label: "Nourish" },
       ];
-    } else if (router.pathname === "/nourish") {
+    } else if (router.pathname.startsWith("/nourish")) {
       return [
+        { href: "/mindfulness", label: "Mindfulness" },
+        { href: "/fitness", label: "Fitness" },
+      ];
+    } else if (
+      router.pathname.startsWith("/news") ||
+      router.pathname.startsWith("/contact") ||
+      router.pathname.startsWith("/weather")
+    ) {
+      return [
+        { href: "/nourish", label: "Nourish" },
         { href: "/mindfulness", label: "Mindfulness" },
         { href: "/fitness", label: "Fitness" },
       ];

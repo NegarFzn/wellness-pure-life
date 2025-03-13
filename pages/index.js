@@ -54,7 +54,6 @@ export default function Home() {
           Elevate Your <span className={classes.highlight}>Mind & Body</span>{" "}
           With a Healthier Lifestyle
         </h1>
-
         <div className={classes.grid}>
           {/* Fitness Section */}
           <Link href="/fitness" className={classes.card}>
