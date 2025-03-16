@@ -3,10 +3,10 @@ import fs from "fs/promises";
 import path from "path";
 import Content from "../../components/nourish/content";
 
-function nourishDetailsPage(props) {
+function NourishDetailPage(props) {
   const { nourishData } = props;
 
-  const maxLength = 15;
+  const maxLength = 20;
   const conciseTitle =
     nourishData.title.length > maxLength
       ? `${nourishData.title.slice(0, maxLength - 3)}...`
@@ -18,7 +18,7 @@ function nourishDetailsPage(props) {
     <div>
       <Head>
         <title>{pageTitle}</title>
-        <meta name="description" content={nourishData.description} />
+        <meta name="description" content={nourishData.summary} />
       </Head>
       <Content items={nourishData} />
     </div>
@@ -80,4 +80,4 @@ export async function getStaticPaths() {
   return { paths, fallback: true };
 }
 
-export default nourishDetailsPage;
+export default NourishDetailPage;

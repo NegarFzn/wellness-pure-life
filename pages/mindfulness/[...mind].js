@@ -3,10 +3,10 @@ import fs from "fs/promises";
 import path from "path";
 import Content from "../../components/mindfulness/content";
 
-function mindfulnessDetailsPage(props) {
+function MindfulnessDetailPage(props) {
   const { mindData } = props;
 
-  const maxLength = 15;
+  const maxLength = 20;
   const conciseTitle =
     mindData.title.length > maxLength
       ? `${mindData.title.slice(0, maxLength - 3)}...`
@@ -18,7 +18,7 @@ function mindfulnessDetailsPage(props) {
     <div>
       <Head>
         <title>{pageTitle}</title>
-        <meta name="description" content={mindData.description} />
+        <meta name="description" content={mindData.summary} />
       </Head>
       <Content items={mindData} />
     </div>
@@ -32,7 +32,7 @@ async function getData() {
     return JSON.parse(jsonData);
   } catch (error) {
     console.error("❌ Error reading mindfulness data:", error.message);
-    return null; // ✅ Returns `null` to prevent crashes
+    return null;
   }
 }
 
@@ -76,4 +76,4 @@ export async function getStaticPaths() {
   return { paths, fallback: true };
 }
 
-export default mindfulnessDetailsPage;
+export default MindfulnessDetailPage;

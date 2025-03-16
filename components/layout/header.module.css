@@ -27,16 +27,11 @@
   gap: 1px;
 }
 
-@media (min-width: 768px) {
-  .header {
-    padding: 2rem 10%;
-  }
-}
 
 .nav ul {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 6rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,6 +48,7 @@
   display: flex;
   align-items: center;
   margin-right: auto;
+  padding: 0 6rem;
   gap: 1rem;
   color: #594e9c;
   text-decoration: none;
@@ -112,4 +108,37 @@
 
 .brandName:visited {
   color: white; /* Ensures link stays white after clicking */
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 30px;
+    height: auto;
+  }
+
+  .navbarContainer {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .logo {
+    justify-content: center;
+  }
+
+  .brandName {
+    font-size: 1.2rem;
+  }
+
+  .nav ul {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+  }
+
+  .weatherWidget {
+    display: none; /* ✅ Hide in mobile for more space */
+  }
 }
