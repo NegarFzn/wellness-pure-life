@@ -68,14 +68,15 @@
 .weatherWidget {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1px;
   margin-left: -4px;
   font-size: 0.9rem;
 }
 
 .weatherWidget img {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
 }
 
 .weatherWidget span {

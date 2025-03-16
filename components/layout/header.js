@@ -48,49 +48,47 @@ export default function Header({ weather }) {
         </Link>
         <nav className={classes.nav}>
           <ul>
-            {/* ✅ "News" Link - Always Visible */}
             <li>
               <NavLink href="/news">News</NavLink>
             </li>
-
+            <li>
+              <NavLink href="/contact">Contact</NavLink>
+            </li>
             {/* ✅ "Weather" Link - Always Visible */}
             <div className={classes.weatherWidget}>
               <li>
-                <NavLink href="/weather">Weather</NavLink>
-                {weather ? (
-                  <div className={classes.weatherInfo}>
-                    <img
-                      src={weather.current.condition.icon}
-                      alt="Weather icon"
-                    />
-                    <span>{weather.current.temp_c}°C</span>
-                  </div>
-                ) : (
-                  <span
-                    style={{
-                      fontSize: "1rem",
-                      color: "#ccc",
-                      fontWeight: "normal",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    Loading...
-                  </span>
-                )}
+                <NavLink href="/weather">
+                  {weather ? (
+                    <div className={classes.weatherInfo}>
+                      <img
+                        src={weather.current.condition.icon}
+                        alt="Weather icon"
+                      />
+                      <span>{weather.current.temp_c}°C (NY)</span>
+                    </div>
+                  ) : (
+                    <span
+                      style={{
+                        fontSize: "1rem",
+                        color: "#ccc",
+                        fontWeight: "normal",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      Loading...
+                    </span>
+                  )}
+                </NavLink>
               </li>
             </div>
-
             {/* ✅ Show Relevant Links Based on Active Page */}
             {getNavLinks().map((link) => (
               <li key={link.href}>
                 <NavLink href={link.href}>{link.label}</NavLink>
               </li>
             ))}
-            <li>
-              <NavLink href="/contact">Contact</NavLink>
-            </li>
           </ul>
         </nav>
       </header>
