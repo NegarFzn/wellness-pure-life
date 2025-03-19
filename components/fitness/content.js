@@ -52,15 +52,16 @@ const Content = (props) => {
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_CLIENT_ID"
         crossOrigin="anonymous"
       ></script>
-      {/* ✅ Added Back Button at the Top */}
-      <div className={classes.topSection}>
-        <Link href="/fitness" legacyBehavior>
-          <a className={classes.backButton}>← Back to Fitness & Exercise Guide</a>
-        </Link>
-      </div>
       <div className={classes["ad-top"]}>{/* Ad at the top */}</div>
       <div className={classes["fitness-container"]}>
         <div className={classes["fitness-content"]}>
+          <div className={classes.backButtonWrapper}>
+            <Link href="/fitness" legacyBehavior>
+              <a className={classes.backButton}>
+                ← Back to Fitness & Exercise Guide
+              </a>
+            </Link>
+          </div>
           <h1 dangerouslySetInnerHTML={{ __html: formatText(title) }}></h1>
           <p dangerouslySetInnerHTML={{ __html: formatText(intro) }}></p>
           <Image

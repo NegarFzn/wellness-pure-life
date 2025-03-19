@@ -27,7 +27,6 @@
   gap: 1px;
 }
 
-
 .nav ul {
   list-style: none;
   margin: 0;
@@ -72,6 +71,13 @@
   gap: 1px;
   margin-left: -4px;
   font-size: 0.9rem;
+}
+
+.weatherWidget:hover {
+  background: linear-gradient(90deg, #fedf93, #f8e4b3);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .weatherWidget img {
