@@ -70,6 +70,7 @@ const Content = (props) => {
             alt={title}
             width={700}
             height={500}
+            loading="lazy"
           />
           {sections &&
             sections.map((section, index) => (

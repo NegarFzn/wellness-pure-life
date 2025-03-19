@@ -8,8 +8,13 @@ export default function NourishItem(props) {
 
   return (
     <li className={classes.item}>
-      <Image src={image ? `/images/${image}` : "/images/placeholderNourish.jpg"} alt={title} width={200} height={200} />
-      <div>
+      <Image
+        src={image ? `/images/${image}` : "/images/placeholderNourish.jpg"}
+        alt={title}
+        width={200}
+        height={200}
+      />
+      <div className={classes.textContainer}>
         <Link href={`/nourish/${id}`} className={classes.link}>
           <h3>{title}</h3>
           <p>{formattedSummary}</p>

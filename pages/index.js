@@ -80,6 +80,7 @@ export default function Home() {
               width={400}
               height={250}
               className={classes.image}
+              priority
             />
             <h2>Mindfulness</h2>
             <p>
@@ -96,6 +97,7 @@ export default function Home() {
               width={400}
               height={250}
               className={classes.image}
+              priority
             />
             <h2>Nourish</h2>
             <p>

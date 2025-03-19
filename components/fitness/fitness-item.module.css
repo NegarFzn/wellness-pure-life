@@ -11,6 +11,11 @@
   transition: transform 0.3s ease-in-out;
 }
 
+.textContainer {
+  margin-top: 15px; /* ✅ Adjust as needed */
+}
+
+
 .item img {
   width: 100%;
   max-width: 200px;

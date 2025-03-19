@@ -15,7 +15,7 @@ export default function FitnessItem(props) {
         height={200}
         priority={true}
       />
-      <div>
+      <div className={classes.textContainer}>
         <Link href={`/fitness/${id}`} className={classes.link}>
           <h3>{title}</h3>
           <p>{formattedSummary}</p>
