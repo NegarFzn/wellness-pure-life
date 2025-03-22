@@ -1,0 +1,71 @@
+.latestArticles {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.latestArticles h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.articlesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+.articleCard {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  text-align: left;
+}
+
+.articleCard:hover {
+  transform: translateY(-5px);
+}
+
+.articleCard img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.articleCard h3 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.articleCard p {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.articleCard a {
+  display: inline-block;
+  text-decoration: none;
+  color: #0070f3;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: color 0.3s;
+}
+
+.articleCard a:hover {
+  color: #0056b3;
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 768px) {
+  .articlesGrid {
+    grid-template-columns: 1fr;
+  }
+}

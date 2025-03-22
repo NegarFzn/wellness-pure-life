@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { fetchNews } from "../utils/fetch";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,6 +8,16 @@ import classes from "./index.module.css";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
+  const [newsArticles, setNewsArticles] = useState([]);
+
+  useEffect(() => {
+    const getNews = async () => {
+      const news = await fetchNews();
+      setNewsArticles(news.slice(0, 2)); // get only 2 articles
+    };
+
+    getNews();
+  }, []);
 
   useEffect(() => {
     const hasVisited = localStorage.getItem("hasVisited");
@@ -32,28 +43,46 @@ export default function Home() {
         <meta charSet="UTF-8" />
       </Head>
 
-      {/* Modal - Only Shows on First Visit */}
-      {showModal && (
-        <Modal onClose={closeModalHandler}>
-          <div className={classes.modalContent}>
-            <h1 className={classes.modalTitle}>
-              Elevate Your{" "}
-              <span className={classes.highlight}>Mind & Body</span> <br />
-              With a Healthier Lifestyle
-            </h1>
-            <button className={classes.startButton} onClick={closeModalHandler}>
-              Get Started
-            </button>
-          </div>
-        </Modal>
-      )}
-
       {/* Home Page Content */}
       <main className={classes.container}>
-        <h1 className={classes.title}>
-          Elevate Your <span className={classes.highlight}>Mind & Body</span>{" "}
-          With a Healthier Lifestyle
-        </h1>
+        {newsArticles.length > 0 && (
+          <section className={classes.latestNewsSection}>
+            <div className={classes.newsGrid}>
+              {newsArticles.map((item) => (
+                <div key={item.id} className={classes.newsCard}>
+                  <img
+                    src={
+                      item.image && item.image.trim()
+                        ? item.image
+                        : "/images/defaultNews.jpg"
+                    }
+                    alt={item.title || "News image"}
+                    className={classes.image}
+                    width="400"
+                    height="250"
+                    loading="lazy"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/defaultNews.jpg";
+                    }}
+                  />
+                  <h3>{item.title}</h3>
+                  <p>{item.summary}</p>
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={classes.readMore}
+                  >
+                    Read More →
+                  </a>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+        <h1 className={classes.title}>EXPLORE BY</h1>
+        <br />
         <div className={classes.grid}>
           {/* Fitness Section */}
           <Link href="/fitness" className={classes.card}>
@@ -65,13 +94,8 @@ export default function Home() {
               className={classes.image}
               priority
             />
-            <h2>Fitness</h2>
-            <p>
-              Energize your day with a swift workout. Sculpt your body, feel the
-              change. Let’s get moving!
-            </p>
+            <h2>Fitness & Exercise</h2>
           </Link>
-
           {/* Mindfulness Section */}
           <Link href="/mindfulness" className={classes.card}>
             <Image
@@ -82,13 +106,8 @@ export default function Home() {
               className={classes.image}
               priority
             />
-            <h2>Mindfulness</h2>
-            <p>
-              Find peace through mindfulness. Boost energy, reduce stress, and
-              embrace challenges for an energized life.
-            </p>
+            <h2>Mindfulness & calm</h2>
           </Link>
-
           {/* Nourish Section */}
           <Link href="/nourish" className={classes.card}>
             <Image
@@ -99,11 +118,7 @@ export default function Home() {
               className={classes.image}
               priority
             />
-            <h2>Nourish</h2>
-            <p>
-              Fuel your life with nourishing food. Embrace vitality, make
-              healthier choices, and feel your best.
-            </p>
+            <h2>Healthy eating</h2>
           </Link>
         </div>
       </main>
