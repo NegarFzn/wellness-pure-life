@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs/promises";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import nourishHeader from "./../../public/images/nourish_header.jpg";
@@ -7,6 +8,8 @@ import classes from "./index.module.css";
 import NourishList from "../../components/nourish/nourish-list";
 
 function nourishPage(props) {
+  const [showButton, setShowButton] = useState(false);
+
   const categories = [
     { key: "featured", title: "FEATURED", items: props.featured },
     {
@@ -30,6 +33,18 @@ function nourishPage(props) {
       items: props.dailySupplements,
     },
   ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowButton(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <>
@@ -58,6 +73,11 @@ function nourishPage(props) {
             </section>
           </div>
         ))}
+        {showButton && (
+          <button onClick={scrollToTop} className={classes.backToTop}>
+            ↑
+          </button>
+        )}
       </main>
     </>
   );

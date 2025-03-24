@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs/promises";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import mindfulnessHeader from "./../../public/images/mindfulness_header.jpg";
@@ -7,6 +8,8 @@ import classes from "./index.module.css";
 import MindfulnessList from "../../components/mindfulness/mindfulness-list";
 
 function mindfulnessPage(props) {
+  const [showButton, setShowButton] = useState(false);
+
   const categories = [
     { key: "featured", title: "FEATURED", items: props.featured },
     { key: "meditation", title: "MEDITATION", items: props.meditation },
@@ -26,6 +29,18 @@ function mindfulnessPage(props) {
       items: props.mentalWellness,
     },
   ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowButton(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <>
@@ -59,6 +74,11 @@ function mindfulnessPage(props) {
             </section>
           </div>
         ))}
+        {showButton && (
+          <button onClick={scrollToTop} className={classes.backToTop}>
+            ↑
+          </button>
+        )}
       </main>
     </>
   );

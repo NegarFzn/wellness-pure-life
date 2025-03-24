@@ -41,6 +41,27 @@
   width: 100%;
 }
 
+.backToTop {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #6c5ce7;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 0.75rem 1rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+.backToTop:hover {
+  background-color: #4834d4;
+}
+
+
 @media (max-width: 768px) {
   .fitness-container {
     grid-template-columns: 1fr; /* ✅ Switch to single column on mobile */

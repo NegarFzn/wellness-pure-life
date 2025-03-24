@@ -3,12 +3,13 @@ import { fetchNews } from "../utils/fetch";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import Modal from "../components/UI/Modal"; // Ensure the correct import path
+import Newsletter from "../components/Newsletter/Newsletter";
+import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
 import classes from "./index.module.css";
 
 export default function Home() {
-  const [showModal, setShowModal] = useState(false);
   const [newsArticles, setNewsArticles] = useState([]);
+  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
     const getNews = async () => {
@@ -20,15 +21,15 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const hasVisited = localStorage.getItem("hasVisited");
-    if (!hasVisited) {
-      setShowModal(true);
-      localStorage.setItem("hasVisited", "true");
-    }
+    const handleScroll = () => {
+      setShowButton(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const closeModalHandler = () => {
-    setShowModal(false);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -42,7 +43,6 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
       </Head>
-
       {/* Home Page Content */}
       <main className={classes.container}>
         {newsArticles.length > 0 && (
@@ -81,46 +81,13 @@ export default function Home() {
             </div>
           </section>
         )}
-        <h1 className={classes.title}>EXPLORE BY</h1>
-        <br />
-        <div className={classes.grid}>
-          {/* Fitness Section */}
-          <Link href="/fitness" className={classes.card}>
-            <Image
-              src="/images/fitness.jpg"
-              alt="People exercising"
-              width={400}
-              height={250}
-              className={classes.image}
-              priority
-            />
-            <h2>Fitness & Exercise</h2>
-          </Link>
-          {/* Mindfulness Section */}
-          <Link href="/mindfulness" className={classes.card}>
-            <Image
-              src="/images/mindfulness.jpg"
-              alt="Person meditating on grass"
-              width={400}
-              height={250}
-              className={classes.image}
-              priority
-            />
-            <h2>Mindfulness & calm</h2>
-          </Link>
-          {/* Nourish Section */}
-          <Link href="/nourish" className={classes.card}>
-            <Image
-              src="/images/nourish.jpg"
-              alt="Healthy food on a table"
-              width={400}
-              height={250}
-              className={classes.image}
-              priority
-            />
-            <h2>Healthy eating</h2>
-          </Link>
-        </div>
+        <KeyFeatures />
+        <Newsletter />
+        {showButton && (
+          <button onClick={scrollToTop} className={classes.backToTop}>
+            ↑
+          </button>
+        )}
       </main>
     </>
   );

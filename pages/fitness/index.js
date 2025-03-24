@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs/promises";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import fitnessHeader from "./../../public/images/fitness_header.jpg";
@@ -7,6 +8,8 @@ import classes from "./index.module.css";
 import FitnessList from "../../components/fitness/fitness-list";
 
 function fitnessPage(props) {
+  const [showButton, setShowButton] = useState(false);
+
   const categories = [
     { key: "featured", title: "FEATURED", items: props.featured },
     { key: "cardio", title: "CARDIO", items: props.cardio },
@@ -23,6 +26,18 @@ function fitnessPage(props) {
     { key: "yoga", title: "YOGA", items: props.yoga },
   ];
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowButton(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <>
       <Head>
@@ -36,7 +51,7 @@ function fitnessPage(props) {
       </Head>
       <header className={classes.header}>
         <nav>
-          <Image src={fitnessHeader} alt="fitness header"  fill priority />
+          <Image src={fitnessHeader} alt="fitness header" fill priority />
         </nav>
       </header>
       <main className={classes["main-content"]}>
@@ -52,6 +67,11 @@ function fitnessPage(props) {
             </section>
           </div>
         ))}
+        {showButton && (
+          <button onClick={scrollToTop} className={classes.backToTop}>
+            ↑
+          </button>
+        )}
       </main>
     </>
   );
