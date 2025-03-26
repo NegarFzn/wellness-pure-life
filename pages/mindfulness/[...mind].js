@@ -2,9 +2,12 @@ import Head from "next/head";
 import fs from "fs/promises";
 import path from "path";
 import Content from "../../components/mindfulness/content";
+import { useState, useEffect } from "react";
+import classes from "./index.module.css";
 
 function MindfulnessDetailPage(props) {
   const { mindData } = props;
+  const [showButton, setShowButton] = useState(false);
 
   const maxLength = 20;
   const conciseTitle =
@@ -14,6 +17,18 @@ function MindfulnessDetailPage(props) {
 
   const pageTitle = `${conciseTitle} | Mindfulness`;
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowButton(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div>
       <Head>
@@ -21,6 +36,11 @@ function MindfulnessDetailPage(props) {
         <meta name="description" content={mindData.summary} />
       </Head>
       <Content items={mindData} />
+      {showButton && (
+        <button onClick={scrollToTop} className={classes.backToTop}>
+          ↑
+        </button>
+      )}
     </div>
   );
 }

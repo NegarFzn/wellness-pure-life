@@ -1,10 +1,13 @@
 import Head from "next/head";
 import fs from "fs/promises";
 import path from "path";
+import { useState, useEffect } from "react";
 import Content from "../../components/fitness/content";
+import classes from "./index.module.css";
 
 function fitnessDetailsPage(props) {
   const { fitData } = props;
+  const [showButton, setShowButton] = useState(false);
 
   const maxLength = 15;
   const conciseTitle =
@@ -14,6 +17,18 @@ function fitnessDetailsPage(props) {
 
   const pageTitle = `${conciseTitle} | Fitness`;
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowButton(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div>
       <Head>
@@ -21,6 +36,11 @@ function fitnessDetailsPage(props) {
         <meta name="description" content={fitData.description} />
       </Head>
       <Content items={fitData} />
+      {showButton && (
+        <button onClick={scrollToTop} className={classes.backToTop}>
+          ↑
+        </button>
+      )}
     </div>
   );
 }

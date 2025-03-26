@@ -6,7 +6,7 @@ import classes from "./KeyFeatures.module.css";
 export default function KeyFeatures() {
   return (
     <section className={classes.featuresSection}>
-      <h2 className={classes.heading}>Why Choose Us?</h2>
+      <h2 className={classes.heading}>Guiding You to a Healthier Life</h2>
       <div className={classes.featureGrid}>
         <Link href="/fitness" className={classes.featureCard}>
           <Image
@@ -17,10 +17,11 @@ export default function KeyFeatures() {
             className={classes.icon}
             priority
           />
-          <h3>Science-Based Guidance</h3>
+          <h3>💪 Strong Body, Stronger You</h3>
           <p>
-            All content is reviewed by experts to ensure accuracy and safety for
-            your body and mind.
+            From guided workouts to expert-backed fitness tips, we help you
+            build strength, boost energy, and feel unstoppable—one rep at a
+            time.
           </p>
         </Link>
         <Link href="/mindfulness" className={classes.featureCard}>
@@ -32,10 +33,11 @@ export default function KeyFeatures() {
             className={classes.icon}
             priority
           />
-          <h3>Holistic Wellness</h3>
+          <h3>🧘‍♀️ Calm Your Mind</h3>
           <p>
-            We cover everything from workouts and nutrition to mental clarity
-            and emotional balance.
+            Breathe in clarity, breathe out stress. Discover simple, proven
+            techniques to quiet your mind and stay grounded—even when life gets
+            overwhelming.
           </p>
         </Link>
         <Link href="/nourish" className={classes.featureCard}>
@@ -47,10 +49,10 @@ export default function KeyFeatures() {
             className={classes.icon}
             priority
           />
-          <h3>Holistic Wellness</h3>
+          <h3>🌿 Fuel Your Life with Nourishment</h3>
           <p>
-            We cover everything from workouts and nutrition to mental clarity
-            and emotional balance.
+            Fuel up with balanced meals and superfoods that energize, heal, and
+            uplift—naturally.
           </p>
         </Link>
       </div>
