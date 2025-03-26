@@ -35,7 +35,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Healthy Living - Mind & Body Wellness</title>
+        <title>Healthy Living - Mind & Body Wellness.</title>
         <meta
           name="description"
           content="Achieve a balanced and healthier life with fitness, mindfulness, and nourishing food tips."
