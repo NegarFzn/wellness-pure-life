@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const getNews = async () => {
       const news = await fetchNews();
-      setNewsArticles(news.slice(0, 2)); // get only 2 articles 
+      setNewsArticles(news.slice(0, 2)); // get only 2 articles
     };
 
     getNews();

@@ -1,72 +1,72 @@
 [
   {
     "id": 0,
+    "title": "New guidelines recommend 2 hours of weekly exercise for postpartum women",
+    "summary": "New mums should be strongly encouraged to begin clocking up at least two hours of moderate to vigorous intensity physical activity such as brisk walking and muscle strengthening exercises each week in the first three months after birth, when physically able, to improve health and well-being, say experts in a new guideline published by the British Journal of Sports Medicine.",
+    "link": "https://www.news-medical.net/news/20250326/New-guidelines-recommend-2-hours-of-weekly-exercise-for-postpartum-women.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/87802400-620x480.jpg"
+  },
+  {
+    "id": 1,
+    "title": "Report shows alarming measles resurgence in Europe and US",
+    "summary": "A recent report shows cases of measles across the World Health Organization's European Region, which includes the UK, are the highest they've been for more than 25 years. At the same time, large outbreaks of measles in the US have led to the first measles deaths there since 2015.",
+    "link": "https://www.news-medical.net/news/20250326/Report-shows-alarming-measles-resurgence-in-Europe-and-US.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Measles-620x480.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Global analysis of antimicrobial resistance in campylobacter",
+    "summary": "Announcing a new article publication for Zoonoses journal. The zoonotic pathogen Campylobacter is a major foodborne bacterial species worldwide. The distribution and drivers of antimicrobial resistance (AMR) in global Campylobacter strains remain largely unknown. Therefore, a comprehensive analysis of longitudinal trends and driving factors of AMR in Campylobacter is necessary at a global level.",
+    "link": "https://www.news-medical.net/news/20250326/Global-analysis-of-antimicrobial-resistance-in-campylobacter.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Campylobacter-620x480.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Genetic and environmental factors in schizophrenia",
+    "summary": "Schizophrenia affects millions worldwide, yet its causes remain one of the greatest medical mysteries. In an exclusive Genomic Press Interview, Dr. Consuelo Walss-Bass, a pioneering researcher in psychiatric genetics, shares how both genetic predisposition and environmental factors contribute to severe mental health disorders.",
+    "link": "https://www.news-medical.net/news/20250326/Genetic-and-environmental-factors-in-schizophrenia.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2015/10/shutterstock_186886337_312c5408c21548f8aac48bbe3c985f8e-620x480.jpg"
+  },
+  {
+    "id": 4,
+    "title": "TikTok fuels ADHD self-diagnosis with misleading content, study shows",
+    "summary": "Psychologists find most TikTok videos about ADHD to be misleading, often overgeneralizing normal behaviors as symptoms. These videos shape young adults’ perceptions and contribute to rising self-diagnosis trends.",
+    "link": "https://www.news-medical.net/news/20250325/TikTok-fuels-ADHD-self-diagnosis-with-misleading-content-study-shows.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_805760_17429524025397207.jpg"
+  },
+  {
+    "id": 5,
     "title": "Study shows red wine biomarkers in urine can predict inflammation levels",
     "summary": "Researchers found that specific metabolites of resveratrol in urine accurately reflect red wine consumption. These biomarkers were linked to reduced inflammation in older adults at cardiovascular risk, unlike traditional food surveys.",
     "link": "https://www.news-medical.net/news/20250325/Study-shows-red-wine-biomarkers-in-urine-can-predict-inflammation-levels.aspx",
     "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_805764_17429606411507860.jpg"
   },
   {
-    "id": 1,
+    "id": 6,
+    "title": "INTEGRA Biosciences details the evolution and future of serological pipetting",
+    "summary": "INTEGRA Biosciences has played a pivotal role in advancing the field of serological pipetting over the last 40 years, and has just created a fascinating article covering the fast-paced history of serological pipet controller development.",
+    "link": "https://www.news-medical.net/news/20250325/INTEGRA-Biosciences-details-the-evolution-and-future-of-serological-pipetting.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2017/1/Research_-_maxuser_277becd3c39c433e98b633eaebf66b0e-620x480.jpg"
+  },
+  {
+    "id": 7,
     "title": "Spinach Benefits, Nutrition Facts and Recipes to Try",
     "summary": "Can eating spinach regularly improve your health? Learn the health benefits of spinach, its nutrition facts and ways to enjoy this leafy green.",
     "link": "https://www.eatingwell.com/spinach-benefits-11703396",
     "image": "https://www.eatingwell.com/thmb/JqBSSrc1SIbifFBDZg_mDHXp4Bs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/What-Happens-to-Your-Body-When-You-Eat-Spinach-Regularly-e290a220f459493093d09a550550136c.jpg"
   },
   {
-    "id": 2,
+    "id": 8,
+    "title": "Measles alert for Sydney Airport and western NSW after infected traveller returns from Asia",
+    "summary": "N﻿SW Health has issued a measles alert after an infectious person visited multiple locations at Sydney Airp...",
+    "link": "https://www.9news.com.au/national/measles-alert-for-sydney-airport-and-western-nsw-after-infected-traveller-returns-from-asia/4bf58c71-901e-4005-b21f-7c5c2c4c98f1",
+    "image": "https://imageresizer.static9.net.au/No93yMlDpjo0qEYcuSLQ-T7B7dA=/1200x628/smart/https%3A%2F%2Fprod.static9.net.au%2Ffs%2F3e5d5ca6-d136-4c1d-923c-f6e325fc3385"
+  },
+  {
+    "id": 9,
     "title": "AI can help doctors give intravenous nutrition to preemies",
     "summary": "An algorithm that learned from tens of thousands of nutrition prescriptions for premature babies could reduce medical errors and better identify what nutrients the smallest patients need.",
     "link": "https://www.sciencedaily.com/releases/2025/03/250325115436.htm",
     "image": "https://www.sciencedaily.com/images/scidaily-icon.png"
-  },
-  {
-    "id": 3,
-    "title": "Epigenetic scores offer new insights into cardiometabolic disease prevention",
-    "summary": "A new study explores how epigenetic markers-chemical modifications that influence gene activity-can help predict the risk of developing cardiometabolic diseases and guide personalized prevention strategies.",
-    "link": "https://www.news-medical.net/news/20250325/Epigenetic-scores-offer-new-insights-into-cardiometabolic-disease-prevention.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Body_Mass_Index-620x480.jpg"
-  },
-  {
-    "id": 4,
-    "title": "Study reveals distinct infection strategies of Zika and dengue viruses",
-    "summary": "Zika virus and dengue virus are very close relatives. Both are mosquito-borne flaviviruses, and both specialize in infecting a host's dendritic cells.",
-    "link": "https://www.news-medical.net/news/20250325/Study-reveals-distinct-infection-strategies-of-Zika-and-dengue-viruses.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2016/2/Zika_viruses_affecting_neuron%2c_brain_cell-Kateryna_Kon-1000_1b45c814c27642ad9b3ae8a837f83263-620x480.jpg"
-  },
-  {
-    "id": 5,
-    "title": "Why Mānuka isn't the only healing honey from New Zealand anymore",
-    "summary": "New research from Auckland University of Technology reveals that eight native New Zealand honeys, beyond mānuka, possess unique antioxidant, antibacterial, and bioactive properties. Thyme and beech honeydew stood out for their vitamin C and polyphenol content.",
-    "link": "https://www.news-medical.net/news/20250325/Why-Manuka-isnt-the-only-healing-honey-from-New-Zealand-anymore.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_805763_17429568179336492.jpg"
-  },
-  {
-    "id": 6,
-    "title": "Oklahoma researcher uses technology to combat alcohol use disorder in primary care",
-    "summary": "According to the Centers for Disease Control and Prevention, 1 in 7 adults in the United States will experience a substance use disorder during their lifetime. University of Oklahoma College of Medicine faculty member Brandi Fink, Ph.D., is working with primary care clinics and health care systems to identify people with an alcohol use disorder and intervene early before the problem worsens.",
-    "link": "https://www.news-medical.net/news/20250325/Oklahoma-researcher-uses-technology-to-combat-alcohol-use-disorder-in-primary-care.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2018/7/Selection_of_alcoholic_drinks_on_rustic_wood_background_-_Oleksandra_Naumenko_A1_fe979bdaef3943969b200bceaf42b174-620x480.jpg"
-  },
-  {
-    "id": 7,
-    "title": "Who was Katie Donnell? Heart attack kills Florida ‘workout queen' at 28, and her mom blames energy drinks",
-    "summary": "Katie Donnell, 28, was committed to a healthy lifestyle but often drank three energy drinks a day, and “was drinking a lot of coffee,” according to her mother.",
-    "link": "https://www.hindustantimes.com/world-news/us-news/who-was-katie-donnell-heart-attack-kills-florida-workout-queen-at-28-and-her-mom-blames-energy-drinks-101742954746932.html",
-    "image": "https://www.hindustantimes.com/ht-img/img/2025/03/26/1600x900/Florida_1742955849819_1742955850021.jpg"
-  },
-  {
-    "id": 8,
-    "title": "Stanford study reveals glucose's surprising role in cell differentiation",
-    "summary": "The sugar glucose, which is the main source of energy in almost every living cell, has been revealed in a Stanford Medicine study to also be a master regulator of tissue differentiation - the process by which stem cells give rise to specialized cells that make up all the body's tissues.",
-    "link": "https://www.news-medical.net/news/20250325/Stanford-study-reveals-glucoses-surprising-role-in-cell-differentiation.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Blood_glucose-620x480.jpg"
-  },
-  {
-    "id": 9,
-    "title": "Researchers unlock key process for regenerating intestinal cells after injury",
-    "summary": "Researchers from the University of Colorado Cancer Center have solved a cellular mystery that may lead to better therapies for colorectal and other types of cancer.",
-    "link": "https://www.news-medical.net/news/20250325/Researchers-unlock-key-process-for-regenerating-intestinal-cells-after-injury.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/174318220-620x480.jpg"
   }
 ]
