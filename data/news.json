@@ -1,72 +1,72 @@
 [
   {
     "id": 0,
+    "title": "Study shows red wine biomarkers in urine can predict inflammation levels",
+    "summary": "Researchers found that specific metabolites of resveratrol in urine accurately reflect red wine consumption. These biomarkers were linked to reduced inflammation in older adults at cardiovascular risk, unlike traditional food surveys.",
+    "link": "https://www.news-medical.net/news/20250325/Study-shows-red-wine-biomarkers-in-urine-can-predict-inflammation-levels.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_805764_17429606411507860.jpg"
+  },
+  {
+    "id": 1,
+    "title": "Spinach Benefits, Nutrition Facts and Recipes to Try",
+    "summary": "Can eating spinach regularly improve your health? Learn the health benefits of spinach, its nutrition facts and ways to enjoy this leafy green.",
+    "link": "https://www.eatingwell.com/spinach-benefits-11703396",
+    "image": "https://www.eatingwell.com/thmb/JqBSSrc1SIbifFBDZg_mDHXp4Bs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/What-Happens-to-Your-Body-When-You-Eat-Spinach-Regularly-e290a220f459493093d09a550550136c.jpg"
+  },
+  {
+    "id": 2,
+    "title": "AI can help doctors give intravenous nutrition to preemies",
+    "summary": "An algorithm that learned from tens of thousands of nutrition prescriptions for premature babies could reduce medical errors and better identify what nutrients the smallest patients need.",
+    "link": "https://www.sciencedaily.com/releases/2025/03/250325115436.htm",
+    "image": "https://www.sciencedaily.com/images/scidaily-icon.png"
+  },
+  {
+    "id": 3,
+    "title": "Epigenetic scores offer new insights into cardiometabolic disease prevention",
+    "summary": "A new study explores how epigenetic markers-chemical modifications that influence gene activity-can help predict the risk of developing cardiometabolic diseases and guide personalized prevention strategies.",
+    "link": "https://www.news-medical.net/news/20250325/Epigenetic-scores-offer-new-insights-into-cardiometabolic-disease-prevention.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Body_Mass_Index-620x480.jpg"
+  },
+  {
+    "id": 4,
     "title": "Study reveals distinct infection strategies of Zika and dengue viruses",
     "summary": "Zika virus and dengue virus are very close relatives. Both are mosquito-borne flaviviruses, and both specialize in infecting a host's dendritic cells.",
     "link": "https://www.news-medical.net/news/20250325/Study-reveals-distinct-infection-strategies-of-Zika-and-dengue-viruses.aspx",
     "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2016/2/Zika_viruses_affecting_neuron%2c_brain_cell-Kateryna_Kon-1000_1b45c814c27642ad9b3ae8a837f83263-620x480.jpg"
   },
   {
-    "id": 1,
+    "id": 5,
     "title": "Why Mānuka isn't the only healing honey from New Zealand anymore",
     "summary": "New research from Auckland University of Technology reveals that eight native New Zealand honeys, beyond mānuka, possess unique antioxidant, antibacterial, and bioactive properties. Thyme and beech honeydew stood out for their vitamin C and polyphenol content.",
     "link": "https://www.news-medical.net/news/20250325/Why-Manuka-isnt-the-only-healing-honey-from-New-Zealand-anymore.aspx",
     "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_805763_17429568179336492.jpg"
   },
   {
-    "id": 2,
+    "id": 6,
+    "title": "Oklahoma researcher uses technology to combat alcohol use disorder in primary care",
+    "summary": "According to the Centers for Disease Control and Prevention, 1 in 7 adults in the United States will experience a substance use disorder during their lifetime. University of Oklahoma College of Medicine faculty member Brandi Fink, Ph.D., is working with primary care clinics and health care systems to identify people with an alcohol use disorder and intervene early before the problem worsens.",
+    "link": "https://www.news-medical.net/news/20250325/Oklahoma-researcher-uses-technology-to-combat-alcohol-use-disorder-in-primary-care.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2018/7/Selection_of_alcoholic_drinks_on_rustic_wood_background_-_Oleksandra_Naumenko_A1_fe979bdaef3943969b200bceaf42b174-620x480.jpg"
+  },
+  {
+    "id": 7,
     "title": "Who was Katie Donnell? Heart attack kills Florida ‘workout queen' at 28, and her mom blames energy drinks",
     "summary": "Katie Donnell, 28, was committed to a healthy lifestyle but often drank three energy drinks a day, and “was drinking a lot of coffee,” according to her mother.",
     "link": "https://www.hindustantimes.com/world-news/us-news/who-was-katie-donnell-heart-attack-kills-florida-workout-queen-at-28-and-her-mom-blames-energy-drinks-101742954746932.html",
     "image": "https://www.hindustantimes.com/ht-img/img/2025/03/26/1600x900/Florida_1742955849819_1742955850021.jpg"
   },
   {
-    "id": 3,
+    "id": 8,
     "title": "Stanford study reveals glucose's surprising role in cell differentiation",
     "summary": "The sugar glucose, which is the main source of energy in almost every living cell, has been revealed in a Stanford Medicine study to also be a master regulator of tissue differentiation - the process by which stem cells give rise to specialized cells that make up all the body's tissues.",
     "link": "https://www.news-medical.net/news/20250325/Stanford-study-reveals-glucoses-surprising-role-in-cell-differentiation.aspx",
     "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Blood_glucose-620x480.jpg"
   },
   {
-    "id": 4,
+    "id": 9,
     "title": "Researchers unlock key process for regenerating intestinal cells after injury",
     "summary": "Researchers from the University of Colorado Cancer Center have solved a cellular mystery that may lead to better therapies for colorectal and other types of cancer.",
     "link": "https://www.news-medical.net/news/20250325/Researchers-unlock-key-process-for-regenerating-intestinal-cells-after-injury.aspx",
     "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/174318220-620x480.jpg"
-  },
-  {
-    "id": 5,
-    "title": "Yale study unlocks potential of lupus-related antibody to target cold tumors",
-    "summary": "Yale scientists have discovered a promising way to trigger immune responses against certain tumors, using a lupus-related antibody that can slip, undetected, into \"cold\" tumors and flip on an immune response that has been turned off by cancer.",
-    "link": "https://www.news-medical.net/news/20250325/Yale-study-unlocks-potential-of-lupus-related-antibody-to-target-cold-tumors.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Antibody-620x480.jpg"
-  },
-  {
-    "id": 6,
-    "title": "Ministry of Health proposes allowing tissue donation for individuals aged 16 and older",
-    "summary": "Individuals aged 16 and older may donate their tissues while alive, but only with written consent from their legal representative or guardian.",
-    "link": "https://vietnamnews.vn/society/1694568/ministry-of-health-proposes-allowing-tissue-donation-for-individuals-aged-16-and-older.html",
-    "image": "https://image.vietnamnews.vn/uploadvnnews/Article/2025/3/25/412694_vna_potal_thua_thien_-_hue_hanh_trinh_nhan_dao_trao_nhan_yeu_thuong_7358603.jpg"
-  },
-  {
-    "id": 7,
-    "title": "Postpartum females show shift in temperature preferences due to brain changes",
-    "summary": "Mothers experience major metabolic adaptations during pregnancy and lactation to support the development and growth of the new life.",
-    "link": "https://www.news-medical.net/news/20250325/Postpartum-females-show-shift-in-temperature-preferences-due-to-brain-changes.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2016/3/Artificially_Colored_MRI_Scan_Of_Human_Brain-Daisy_Daisy_a8c5d8bbbf824bc8932308e30187510f-620x480.jpg"
-  },
-  {
-    "id": 8,
-    "title": "NUS researchers develop microneedle technology to accelerate diabetic wound healing",
-    "summary": "Diabetic wounds often lead to severe complications that can result in amputations. These chronic and non-healing wounds are marked by persistent inflammation, affecting more than six per cent of the global population. In Singapore, there are about four lower limb amputations daily due to non-healing diabetic wounds. A study focusing on diabetic ...",
-    "link": "https://news.nus.edu.sg/microneedle-technology-accelerate-diabetic-wound-healing/",
-    "image": "https://content.presspage.com/uploads/2580/9f921569-52d6-4809-80de-b6d72fdb9799/1920_croppedphoto1.jpg?10000"
-  },
-  {
-    "id": 9,
-    "title": "The Weight Loss Paradox: Shedding Significant Pounds Can Be Deadly For Some",
-    "summary": "One of the lasting memories from my teenage years is what I now recognise as an obsession with weight control.",
-    "link": "https://www.sciencealert.com/the-weight-loss-paradox-shedding-significant-pounds-can-be-deadly-for-some",
-    "image": "https://www.sciencealert.com/images/2021-04/processed/010-weight-gain_1024.jpg"
   }
 ]
