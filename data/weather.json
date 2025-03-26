@@ -6,19 +6,19 @@
     "lat": 40.7142,
     "lon": -74.0064,
     "tz_id": "America/New_York",
-    "localtime_epoch": 1742958815,
-    "localtime": "2025-03-25 23:13"
+    "localtime_epoch": 1742958964,
+    "localtime": "2025-03-25 23:16"
   },
   "current": {
-    "last_updated_epoch": 1742958000,
-    "last_updated": "2025-03-25 23:00",
+    "last_updated_epoch": 1742958900,
+    "last_updated": "2025-03-25 23:15",
     "temp_c": 12.2,
     "temp_f": 54,
     "is_day": 0,
     "condition": {
-      "text": "Partly cloudy",
-      "icon": "//cdn.weatherapi.com/weather/64x64/night/116.png",
-      "code": 1003
+      "text": "Overcast",
+      "icon": "//cdn.weatherapi.com/weather/64x64/night/122.png",
+      "code": 1009
     },
     "wind_mph": 7.4,
     "wind_kph": 11.9,
@@ -29,7 +29,7 @@
     "precip_mm": 0,
     "precip_in": 0,
     "humidity": 21,
-    "cloud": 50,
+    "cloud": 100,
     "feelslike_c": 11,
     "feelslike_f": 51.8,
     "windchill_c": 8.1,
