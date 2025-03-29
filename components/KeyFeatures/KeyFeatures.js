@@ -6,7 +6,7 @@ import classes from "./KeyFeatures.module.css";
 export default function KeyFeatures() {
   return (
     <section className={classes.featuresSection}>
-      <h2 className={classes.heading}>Guiding You to a Healthier Life</h2>
+      <h2 className={classes.heading}>Guiding You to a Healthier Lifes</h2>
       <div className={classes.featureGrid}>
         <Link href="/fitness" className={classes.featureCard}>
           <Image
