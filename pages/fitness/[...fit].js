@@ -10,7 +10,7 @@ function fitnessDetailsPage(props) {
   const [showButton, setShowButton] = useState(false);
 
   if (!fitData) {
-    return <p style={{ textAlign: "center" }}>Fitness content not found.</p>;
+    return <p style={{ textAlign: "center" }}>Fitness content not found</p>;
   }
 
   const maxLength = 15;
