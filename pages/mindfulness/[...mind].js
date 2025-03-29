@@ -9,6 +9,12 @@ function MindfulnessDetailPage(props) {
   const { mindData } = props;
   const [showButton, setShowButton] = useState(false);
 
+  if (!mindData) {
+    return (
+      <p style={{ textAlign: "center" }}>Mindfulness content not found.</p>
+    );
+  }
+
   const maxLength = 20;
   const conciseTitle =
     mindData.title.length > maxLength

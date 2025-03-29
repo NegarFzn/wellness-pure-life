@@ -9,6 +9,10 @@ function NourishDetailPage(props) {
   const { nourishData } = props;
   const [showButton, setShowButton] = useState(false);
 
+  if (!nourishData) {
+    return <p style={{ textAlign: "center" }}>Nourish content not found.</p>;
+  }
+
   const maxLength = 20;
   const conciseTitle =
     nourishData.title.length > maxLength
