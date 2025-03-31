@@ -18,11 +18,8 @@ body {
 }
 
 main {
-  
   margin: 5rem auto;
 }
-
-
 
 h2 {
   font-size: 2rem;
@@ -46,14 +43,14 @@ p a:active {
   border-color: #bd3df4;
 }
 
-.colorful { color: red; }
+.colorful {
+  color: red;
+}
 
 .larger {
-  font-size: larger; 
+  font-size: larger;
 }
 
 .smaller {
   font-size: 0.8em; /* Make text 80% of the size of its container */
 }
-
-
