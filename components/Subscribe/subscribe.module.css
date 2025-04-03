@@ -28,6 +28,23 @@
   align-items: center;
 }
 
+.newsletterForm input,
+.newsletterForm select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  background-color: white;
+  transition: border 0.2s ease;
+}
+
+.newsletterForm input:focus,
+.newsletterForm select:focus {
+  border-color: #6c5ce7;
+}
+
 .subscribeButton {
   background-color: white;
   color: #1e1b2e;
@@ -46,9 +63,6 @@
   background-color: #f1f1f1;
 }
 
-.newsletterInput {
-  display: none; /* hide input to match attached image (text only + button) */
-}
 
 /* Mobile Optimization */
 @media (max-width: 768px) {

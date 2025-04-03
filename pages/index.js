@@ -3,7 +3,7 @@ import { fetchNews } from "../utils/fetch";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import Newsletter from "../components/Newsletter/Newsletter";
+import Subscribe from "../components/Subscribe/subscribe";
 import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
 import classes from "./index.module.css";
 
@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const getNews = async () => {
       const news = await fetchNews();
-      setNewsArticles(news.slice(0, 2)); // get only 2 articles 
+      setNewsArticles(news.slice(0, 2)); // get only 2 articles
     };
 
     getNews();
@@ -82,7 +82,7 @@ export default function Home() {
           </section>
         )}
         <KeyFeatures />
-        <Newsletter />
+        <Subscribe />
         {showButton && (
           <button onClick={scrollToTop} className={classes.backToTop}>
             ↑
