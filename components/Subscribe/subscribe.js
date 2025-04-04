@@ -30,11 +30,11 @@ export default function Subscribe() {
       const data = await res.json();
 
       if (res.status === 201) {
-        alert("Thank you for subscribing!");
         setEmail("");
         setName("");
         setSubscribed(true); // ✅ Mark as subscribed
         setShowForm(false); // ✅ Hide form
+        setMessage("✅ Thank you for subscribing!");
       } else {
         setMessage(data.message || "Something went wrong.");
       }
@@ -46,8 +46,11 @@ export default function Subscribe() {
   return (
     <section className={classes.newsletter}>
       <h2>Stay Inspired, Stay Healthy</h2>
-      {!subscribed && <p>Get weekly wellness tips and updates — straight to your inbox!</p>}
-      
+      {!subscribed && (
+        <p>Get weekly wellness tips and updates — straight to your inbox!</p>
+      )}
+      {subscribed && <p>✅ Thank you for subscribing!</p>}
+
       {/* Show Subscribe Button (before click) */}
       {!showForm && !subscribed && (
         <button
@@ -84,9 +87,16 @@ export default function Subscribe() {
       )}
       {/* Show Subscribed Button (after success) */}
       {subscribed && !showForm && (
-        <button className={`${classes.subscribeButton} ${subscribed ? classes.subscribed : ""}`} disabled>
-          Subscribed
-        </button>
+        <div className={classes.subscribedContainer}>
+          <button
+            className={`${classes.subscribeButton} ${
+              subscribed ? classes.subscribed : ""
+            }`}
+            disabled
+          >
+            Subscribed
+          </button>
+        </div>
       )}
     </section>
   );
