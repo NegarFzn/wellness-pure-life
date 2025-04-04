@@ -1,72 +1,72 @@
 [
   {
     "id": 0,
+    "title": "Is a glass of wine good for you? Doctor reveals the truth",
+    "summary": "Love binge drinking? Doctor warns against consuming large amounts of alcohol in a short period, often during social gatherings or celebrations. | Health",
+    "link": "https://www.hindustantimes.com/lifestyle/health/is-a-glass-of-wine-good-for-you-doctor-reveals-truth-red-wine-effects-heart-health-101743739873416.html",
+    "image": "https://www.hindustantimes.com/ht-img/img/2025/04/04/1600x900/65880_1743740070908_1743740103248.jpg"
+  },
+  {
+    "id": 1,
+    "title": "India turns to AI in fight against glaucoma, boost early detection of disease",
+    "summary": "AI tools can help analyse retinal images to detect signs of glaucoma, and warn people about impending health risks for related diseases, experts say.",
+    "link": "https://www.scmp.com/week-asia/health-environment/article/3305095/india-turns-ai-fight-against-glaucoma-boost-early-detection-disease",
+    "image": "https://cdn.i-scmp.com/sites/default/files/styles/og_image_scmp_generic/public/d8/images/canvas/2025/04/03/e7cf098d-f4fb-4c27-af4f-3dc23f1f0a4d_c1f2433e.jpg?itok=uErU-mPD&v=1743674545"
+  },
+  {
+    "id": 2,
+    "title": "Woman reveals developing osteoporosis a year after using Ozempic",
+    "summary": "Avery, 30, revealed her shocking diagnosis of osteopenia and osteoporosis after using Ozempic for a year. She admitted to obtaining the medication wit",
+    "link": "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/woman-reveals-developing-osteoporosis-a-year-after-using-ozempic/articleshow/119953641.cms",
+    "image": "https://static.toiimg.com/thumb/msid-119953644,width-1070,height-580,imgsize-26814,resizemode-75,overlay-toi_sw,pt-32,y_pad-40/photo.jpg"
+  },
+  {
+    "id": 3,
     "title": "Reusing same toothbrush after a cold? Doctor warns it could be dangerous: Here's how to reduce reinfection risk",
     "summary": "According to a doctor, after suffering from a cold, it's time for a new toothbrush if you wish to maintain good oral health and prevent the spread of germs. | Health",
     "link": "https://www.hindustantimes.com/lifestyle/health/reusing-same-toothbrush-after-a-cold-doctor-warns-it-could-be-dangerous-heres-how-to-reduce-reinfection-risk-101743736117057.html",
     "image": "https://www.hindustantimes.com/ht-img/img/2025/04/04/1600x900/brushing_with_same_toothbrush_after_cold_dangerous_1743736451836_1743736452148.jpg"
   },
   {
-    "id": 1,
+    "id": 4,
+    "title": "Free flu vaccines to help WA community keep well during winter",
+    "summary": "The Cook Government is encouraging Western Australians to get a free flu vaccination during May and June to protect themselves during the peak influenza period.",
+    "link": "https://www.wa.gov.au/government/media-statements/Cook%20Labor%20Government/Free-flu-vaccines-to-help-WA-community-keep-well-during-winter-20250404",
+    "image": "https://www.wa.gov.au/themes/custom/wagov/images/gov-wa-logo.png"
+  },
+  {
+    "id": 5,
     "title": "A risky jab and HIV threat put Kerala’s Valanchery in alert mode",
     "summary": "HIV outbreak in Kerala sparks fear and stigma among injecting drug users, prompting urgent response from health authorities.",
     "link": "https://www.thehindu.com/news/national/kerala/a-risky-jab-and-hiv-threat-put-keralas-valanchery-in-alert-mode/article69407445.ece",
     "image": "https://th-i.thgim.com/public/todays-paper/tp-miscellaneous/tp-others/qmo8da/article69410518.ece/alternates/LANDSCAPE_1200/The-risky-jab_GGPUE7002J.7.jpg.jpg"
   },
   {
-    "id": 2,
+    "id": 6,
     "title": "Study identifies 17 modifiable risk factors shared between stroke, dementia, and depression",
     "summary": "Age-related brain diseases such as stroke, dementia, and late-life depression are a debilitating part of growing older, but people can lower their risk of these diseases through behavioral and lifestyle changes.",
     "link": "https://www.news-medical.net/news/20250403/Study-identifies-17-modifiable-risk-factors-shared-between-stroke-dementia-and-depression.aspx",
     "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/depression-620x480.jpg"
   },
   {
-    "id": 3,
+    "id": 7,
     "title": "Study reveals complex patterns of substance use in U.S. adults",
     "summary": "A study from researchers at the University of Colorado Anschutz Medical Campus reveals that nearly one in five U.S. adults have used multiple drugs in the past year, showing that substance use is fairly common and more complex than just using one drug at a time.",
     "link": "https://www.news-medical.net/news/20250403/Study-reveals-complex-patterns-of-substance-use-in-US-adults.aspx",
     "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Cannabis-620x480.jpg"
   },
   {
-    "id": 4,
+    "id": 8,
     "title": "Central team visits Narasaraopeta to probe death due to H5N1 virus",
     "summary": "Central team investigates H5N1 case in Narasaopeta, Palnadu district, recommends testing for antibodies among medical staff and patients.",
     "link": "https://www.thehindu.com/news/national/andhra-pradesh/central-team-visits-narasaraopeta-to-probe-death-due-to-h5n1-virus/article69409665.ece",
     "image": "https://www.thehindu.com/theme/images/og-image.png"
   },
   {
-    "id": 5,
-    "title": "Elevated FGF-23 predicts reduced LAAev and stroke risk in patients with atrial fibrillation",
-    "summary": "Announcing a new article publication for Cardiovascular Innovations and Applications journal. Current AF management guidelines have introduced the CARE treatment model to strengthen management strategies; in this acronym, the \"A\" indicates anticoagulation therapy.",
-    "link": "https://www.news-medical.net/news/20250403/Elevated-FGF-23-predicts-reduced-LAAev-and-stroke-risk-in-patients-with-atrial-fibrillation.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Stroke-620x480.jpg"
-  },
-  {
-    "id": 6,
-    "title": "One Simple Strategy For Weight Loss Outperforms Daily Dieting, Study Says",
-    "summary": "When it comes to weight loss dieting, the number of options can be overwhelming.",
-    "link": "https://www.sciencealert.com/one-simple-strategy-for-weight-loss-outperforms-daily-dieting-study-says",
-    "image": "https://www.sciencealert.com/images/2024/09/LowCarbDiets.jpg"
-  },
-  {
-    "id": 7,
-    "title": "Pedometers can effectively measure health and fitness",
-    "summary": "A basic pedometer can prove suffice for measuring health-promoting physical activity, according to a study comparing pedometers with more complex devices.",
-    "link": "https://www.news-medical.net/news/20250403/Pedometers-can-effectively-measure-health-and-fitness.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Physical_Activity-620x480.jpg"
-  },
-  {
-    "id": 8,
-    "title": "Heroin found in cocaine and ‘ice’, and snorting a line can be lethal",
-    "summary": "Accidentally taking heroin when you thought it was cocaine or methamphetamine can be deadly, new research confirms. Here’s what to watch out for.",
-    "link": "https://theconversation.com/heroin-found-in-cocaine-and-ice-and-snorting-a-line-can-be-lethal-253348",
-    "image": "https://images.theconversation.com/files/659499/original/file-20250403-62-s967j5.jpg?ixlib=rb-4.1.0&rect=0%2C0%2C1000%2C498&q=45&auto=format&w=1356&h=668&fit=crop"
-  },
-  {
     "id": 9,
-    "title": "Tiruchi Corporation to conduct special drive to give anti-rabies booster dose to stray dogs",
-    "summary": "Tiruchi Corporation launches special drive to administer anti-rabies vaccine booster shots to stray dogs for rabies prevention.",
-    "link": "https://www.thehindu.com/news/cities/Tiruchirapalli/tiruchi-corporation-to-conduct-special-drive-to-give-anti-rabies-booster-dose-to-stray-dogs/article69408643.ece",
-    "image": "https://www.thehindu.com/theme/images/og-image.png"
+    "title": "Andhra Pradesh govt. notifies bird flu outbreak in six districts",
+    "summary": "The Andhra Pradesh government on April 4, 2025 issued an order notifying outbreak of bird flu in the districts of West Godavari, East Godavari, Kurnool, Eluru, NTR and Kakinada as infected zones",
+    "link": "https://www.thehindu.com/news/national/andhra-pradesh/andhra-pradesh-govt-notifies-bird-flu-outbreak-in-six-districts/article69409307.ece",
+    "image": "https://th-i.thgim.com/public/incoming/y6z6dl/article69409539.ece/alternates/LANDSCAPE_1200/vjkvg-red%203.JPG"
   }
 ]
