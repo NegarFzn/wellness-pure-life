@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { fetchNews } from "../utils/fetch";
 import Head from "next/head";
-import Link from "next/link";
-import Image from "next/image";
 import Subscribe from "../components/Subscribe/subscribe";
 import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
+import DailyList from "../components/DailyList/DailyList";
 import classes from "./index.module.css";
 
 export default function Home() {
@@ -45,6 +44,7 @@ export default function Home() {
       </Head>
       {/* Home Page Content */}
       <main className={classes.container}>
+        <KeyFeatures />
         {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
             <div className={classes.newsGrid}>
@@ -76,12 +76,14 @@ export default function Home() {
                   >
                     Read More →
                   </a>
+                  
                 </div>
               ))}
+             
             </div>
+            <DailyList />
           </section>
         )}
-        <KeyFeatures />
         <Subscribe />
         {showButton && (
           <button onClick={scrollToTop} className={classes.backToTop}>
