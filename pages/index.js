@@ -44,6 +44,7 @@ export default function Home() {
       </Head>
       {/* Home Page Content */}
       <main className={classes.container}>
+      <DailyList />
         <KeyFeatures />
         {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
@@ -80,7 +81,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <DailyList />
+            
           </section>
         )}
         <Subscribe />
