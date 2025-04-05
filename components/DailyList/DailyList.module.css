@@ -1,0 +1,18 @@
+/* components/DailyList/DailyList.module.css */
+.dailyContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.cardWrapper {
+  width: 100%;
+  max-width: 700px;
+  flex: 1 1 45%;
+}
+
+.cardWrapper:hover {
+  transform: scale(1.02);
+}

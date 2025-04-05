@@ -79,7 +79,6 @@ export default function Home() {
                   
                 </div>
               ))}
-             
             </div>
             <DailyList />
           </section>
