@@ -39,12 +39,7 @@ export default async function handler(req, res) {
     existing.push(newEntry);
     fs.writeFileSync(filePath, JSON.stringify(existing, null, 2));
 
-    if (process.env.NODE_ENV === "production") {
-      // 📨 This will only run on deployed/live server
-      await sendEmail(email, name);
-    }
     
-
     return res.status(201).json({ message: "Subscription successful" });
   } catch (err) {
     // ✅ Debug log
