@@ -44,8 +44,9 @@ export default function Home() {
       </Head>
       {/* Home Page Content */}
       <main className={classes.container}>
-      <DailyList />
+        <DailyList />
         <KeyFeatures />
+        <Subscribe />
         {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
             <div className={classes.newsGrid}>
@@ -77,14 +78,12 @@ export default function Home() {
                   >
                     Read More →
                   </a>
-                  
                 </div>
               ))}
             </div>
-            
           </section>
         )}
-        <Subscribe />
+
         {showButton && (
           <button onClick={scrollToTop} className={classes.backToTop}>
             ↑
