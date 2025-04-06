@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "name": "test",
+    "email": "test@test.com",
+    "subscribedAt": "2025-04-06T03:01:48.170Z"
+  },
+  {
+    "name": "test2",
+    "email": "test2@test2.com",
+    "subscribedAt": "2025-04-06T03:04:26.639Z"
+  },
+  {
+    "name": "lemon",
+    "email": "l@l.com",
+    "subscribedAt": "2025-04-06T03:05:03.812Z"
+  }
+]
