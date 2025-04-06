@@ -3,18 +3,31 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  align-items: stretch;
+  align-items: stretch; /* Ensures equal height alignment */
   gap: 2rem;
   margin-top: 2rem;
 }
 
 .cardWrapper {
-  width: 100%;
-  max-width: 700px;
-  height: 100%;
   flex: 1 1 45%;
+  max-width: 700px;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
 }
 
 .cardWrapper:hover {
   transform: scale(1.02);
 }
+
+.cardWrapper div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
+  -webkit-box-orient: vertical;
+}
+
+

@@ -20,17 +20,39 @@
 
 .featureCard {
   background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  padding: 40px; /* ⬆ increased from 30px */
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease-in-out;
   text-decoration: none;
   color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;          /* Full width of container */
+  max-width: 600px;     /* ⬆ Increase from default (likely 300px or less) */
 }
 
 .featureCard img {
   border-radius: 8px;
 }
+
+.featureCard h3 {
+  font-size: 1.3rem; /* ⬆ increased for emphasis */
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+
+.featureCard p {
+  max-width: 300px; /* Adjust width to suit your design */
+  margin: 1rem auto; /* Centers horizontally */
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+  color: #2c2c2c;
+}
+
 
 .featureCard:hover {
   transform: translateY(-5px);
@@ -38,5 +60,8 @@
 }
 
 .icon {
-  margin-bottom: 20px;
+  width: 240px !important;
+  height: 200px !important;
+  object-fit: cover;
+  border-radius: 12px;
 }

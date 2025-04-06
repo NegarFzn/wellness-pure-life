@@ -918,35 +918,5 @@
         }
       ]
     }
-  ],
-  "powerfulPlates": [
-    {
-      "title": "Powerful Plates: Build Balanced Meals for a Stronger You",
-      "id": "20",
-      "image": "nourish_20.jpg",
-      "summary": "Discover how to create nutrient-packed plates that fuel your body and mind. Learn the art of balancing proteins, carbs, and healthy fats for sustained energy and wellness.",
-      "intro": ""
-    },
-    {
-      "title": "The Ultimate Guide to Crafting Healthy and Delicious Plates",
-      "id": "21",
-      "image": "nourish_21.jpg",
-      "summary": "From vibrant vegetables to lean proteins, explore how to design meals that are as satisfying as they are nourishing. Perfect for a healthy and balanced lifestyle.",
-      "intro": ""
-    },
-    {
-      "title": "Fuel Your Day: Easy and Nutritious Meals to Keep You Going",
-      "id": "22",
-      "image": "nourish_22.jpg",
-      "summary": "Explore simple yet powerful meal ideas designed to keep you energized throughout the day. Learn how to incorporate wholesome ingredients into your daily routine with ease.",
-      "intro": ""
-    },
-    {
-      "title": "Balanced Eating Made Simple: Plates That Power Your Life",
-      "id": "23",
-      "image": "nourish_23.jpg",
-      "summary": "Master the art of creating balanced meals that promote long-term health. Learn how to portion your plate to include the right mix of nutrients for optimal performance and vitality.",
-      "intro": ""
-    }
   ]
 }
