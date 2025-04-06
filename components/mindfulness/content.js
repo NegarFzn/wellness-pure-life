@@ -48,14 +48,16 @@ const Content = (props) => {
 
         {/* ✅ Google AdSense Script (Ensure YOUR_ADSENSE_CLIENT_ID is replaced) */}
       </Head>
-      <script
-        async
-        strategy="afterInteractive"
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_CLIENT_ID"
-        crossOrigin="anonymous"
-      ></script>
-
-      <div className={classes["ad-top"]}>{/* Ad at the top */}</div>
+      <div className={classes["ad-top"]}>
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-6324625824043093"
+          data-ad-slot="YOUR_AD_SLOT_TOP"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+      </div>
       <div className={classes["mindfulness-container"]}>
         <div className={classes["mindfulness-content"]}>
           <div className={classes.backButtonWrapper}>
@@ -102,17 +104,11 @@ const Content = (props) => {
             ))}
         </div>
         <div className={classes["ad-sidebar"]}>
-          <Script
-            async
-            strategy="afterInteractive"
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_CLIENT_ID"
-            crossOrigin="anonymous"
-          />
           <ins
             className="adsbygoogle"
             style={{ display: "block" }}
-            data-ad-client="YOUR_ADSENSE_CLIENT_ID"
-            data-ad-slot="XXXXXXX"
+            data-ad-client="ca-pub-6324625824043093"
+            data-ad-slot="YOUR_AD_SLOT_TOP"
             data-ad-format="auto"
             data-full-width-responsive="true"
           ></ins>
@@ -124,7 +120,17 @@ const Content = (props) => {
           <MindfulnessList items={additionalSections} />
         </div>
       </div>
-      <div className={classes["ad-bottom"]}>{/* Ad at the bottom */}</div>
+      <div className={classes["ad-bottom"]}>
+        {" "}
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-6324625824043093"
+          data-ad-slot="YOUR_AD_SLOT_TOP"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+      </div>
     </>
   );
 };

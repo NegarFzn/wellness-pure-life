@@ -19,7 +19,6 @@ export default function News() {
   return (
     <div className={classes.newsPage}>
       <h1 className={classes.newsHeader}>Latest Health & Wellness News</h1>
-
       {loading ? (
         <p>Loading news...</p>
       ) : articles.length > 0 ? (

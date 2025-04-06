@@ -82,7 +82,7 @@ export default function Subscribe() {
           <button type="submit" className={classes.subscribeButton}>
             Subscribe
           </button>
-          {message && <p>{message}</p>}
+          {message && <p className={classes.errorMessage}>🚫 {message}</p>}
         </form>
       )}
       {/* Show Subscribed Button (after success) */}
