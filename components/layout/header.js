@@ -44,7 +44,7 @@ export default function Header({ weather }) {
       <header className={classes.header}>
         <Link href="/" className={classes.logo}>
           <Image src={logoImg} alt="Wellness Pure Life" priority/>
-          <span className={classes.brandName}>Healthy Body & Mind</span>
+          <span className={classes.brandName}>Healthy Body & Mindddddddd</span>
         </Link>
         <nav className={classes.nav}>
           <ul>
