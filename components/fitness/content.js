@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
-import Script from "next/script";
 import classes from "./content.module.css";
 import FitnessList from "./fitness-list";
 
@@ -23,13 +22,22 @@ function formatText(text) {
   // Decrease size marked with ^^ for smaller text
   text = text.replace(/\^\^(.*?)\^\^/g, '<span class="smaller">$1</span>');
 
+  text = text.replace(/\[\[mind:(\d+)\]\]/g, (_, id) => {
+    return `<a href="/mindfulness/${id}" class="internal-link">Explore mindfulness ${id}</a>`;
+  });
+
+  text = text.replace(/\[\[nourish:(\d+)\]\]/g, (_, id) => {
+    return `<a href="/nourish/${id}" class="internal-link">Explore nutrition ${id}</a>`;
+  });
+
   // Convert newline characters to <br />
   return text.replace(/\n/g, "<br />");
+  
 }
 
 const Content = (props) => {
   const {
-    items: { title, intro, sections, additionalSections, image },
+    items: { title, intro, sections, additionalSections, image }
   } = props;
 
   return (

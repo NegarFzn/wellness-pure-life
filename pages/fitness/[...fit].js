@@ -10,7 +10,7 @@ function fitnessDetailsPage(props) {
   const [showButton, setShowButton] = useState(false);
 
   if (!fitData) {
-    return <p style={{ textAlign: "center" }}>Fitness content not found</p>;
+    return <p style={{ textAlign: "center" }}>Fitness content not found.</p>;
   }
 
   const maxLength = 15;
@@ -68,6 +68,7 @@ export async function getStaticProps(context) {
     }
 
     const { params } = context;
+    
     if (!params.fit || params.fit.length === 0) {
       throw new Error("Invalid URL: Fitness ID is missing.");
     }
