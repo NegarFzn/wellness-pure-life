@@ -17,7 +17,7 @@ export default function KeyFeatures() {
             className={classes.icon}
             priority
           />
-          <h3>Strong Body, Stronger You</h3>
+          <h3>Stronger Body</h3>
           <p>
             💪 Discover guided workouts and expert tips to help you move better,
             build lasting strength, and feel your best.
@@ -47,7 +47,7 @@ export default function KeyFeatures() {
             className={classes.icon}
             priority
           />
-          <h3>Fuel Your Life with Nourishment</h3>
+          <h3>Nourishment</h3>
           <p>
             🌿 Fuel up with balanced meals and superfoods that energize, heal,
             and uplift—naturally.

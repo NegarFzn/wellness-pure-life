@@ -1,72 +1,72 @@
 [
   {
     "id": 0,
+    "title": "For rare mitochondrial disease, a small molecule shows promise",
+    "summary": "In a Phase 2b trial, Khondrion’s sonlicromanol led to significant health benefits for patients with mitochondrial disease linked to a common mutation.",
+    "link": "https://www.drugdiscoverynews.com/for-rare-mitochondrial-disease-a-small-molecule-shows-promise-16309",
+    "image": "https://cdn.drugdiscoverynews.com/assets/image/3636/79057-header-image-for-rare-mitochondrial-disease-a-small-molecule-shows-promise-kr2-m.jpg"
+  },
+  {
+    "id": 1,
+    "title": "Can nature-based therapies heal people and the planet? Study investigates holistic solutions",
+    "summary": "Researchers at Swansea University have developed a protocol for a scoping review to explore how nature-based interventions influence individual, collective, and planetary well-being.",
+    "link": "https://www.news-medical.net/news/20250409/Can-nature-based-therapies-heal-people-and-the-planet-Study-investigates-holistic-solutions.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_806937_17441715023831407.jpg"
+  },
+  {
+    "id": 2,
+    "title": "IL-12 cytokine factory demonstrates success in targeting hard-to-treat cancers",
+    "summary": "A team of researchers from the Rice Biotech Launch Pad at Rice University has developed an implantable \"cytokine factory\" that safely triggers potent immune responses against hard-to-treat cancers, including metastatic melanoma, pancreatic and colorectal tumors.",
+    "link": "https://www.news-medical.net/news/20250408/IL-12-cytokine-factory-demonstrates-success-in-targeting-hard-to-treat-cancers.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Melanoma-620x480.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Study highlights pulmonary artery denervation as a key intervention for pulmonary hypertension",
+    "summary": "A recent publication in the International Journal of Cardiology, Pulmonary artery denervation in pulmonary hypertension: A comprehensive meta-analysis, has shed light on the potential of pulmonary artery denervation (PADN) as an innovative intervention for pulmonary hypertension (PH), a condition that places patients at risk for right heart failure and death.",
+    "link": "https://www.news-medical.net/news/20250408/Study-highlights-pulmonary-artery-denervation-as-a-key-intervention-for-pulmonary-hypertension.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/heart-620x480.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Food-as-medicine could save billions in healthcare costs-here’s what’s standing in its way",
+    "summary": "Researchers review how Food-as-Medicine (FAM) interventions can improve health, reduce healthcare costs, and reshape food production systems. They emphasize the urgent need for clinical validation before scaling individualized nutrition solutions.",
+    "link": "https://www.news-medical.net/news/20250408/Food-as-medicine-could-save-billions-in-healthcare-costse28094heree28099s-whate28099s-standing-in-its-way.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_806935_17441677934689791.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Queensland melioidosis death toll climbs after floods spread soil-borne bacteria",
+    "summary": "Melioidosis claims the life of another Queensland Health patient in the Townsville region as a microbiologist warns floodwater is pushing dangerous bacteria to the soil's surface.",
+    "link": "https://www.abc.net.au/news/2025-04-09/melioidosis-death-toll-rises-queensland-wet-season/105155546",
+    "image": "https://live-production.wcms.abc-cdn.net.au/fe76ccb9f01ffe027220cd29fc402a08?impolicy=wcms_watermark_news&cropH=2916&cropW=5184&xPos=0&yPos=2&width=862&height=485&imformat=generic"
+  },
+  {
+    "id": 6,
+    "title": "New discovery promises to revolutionize liver organoid development",
+    "summary": "Organoids are small-scale models that mimic human organs. These models could help scientists understand diseases and test treatments, and potentially aid in regenerative therapeutic methods.",
+    "link": "https://www.news-medical.net/news/20250408/New-discovery-promises-to-revolutionize-liver-organoid-development.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2019/5/shutterstock_499282837_f18bafe030744de991560feceed98d20-620x480.jpg"
+  },
+  {
+    "id": 7,
+    "title": "Statins Could Reduce Dementia Risk Even in People With Low Cholesterol",
+    "summary": "A new study has found a link between 'bad' cholesterol and the risk of dementia.",
+    "link": "https://www.sciencealert.com/statins-could-reduce-dementia-risk-even-in-people-with-low-cholesterol",
+    "image": "https://www.sciencealert.com/images/2025/04/StatinsBrainHealth.jpg"
+  },
+  {
+    "id": 8,
     "title": "Anxiety fuels emotional eating and weight gain, study finds",
     "summary": "Emotional eating and body dissatisfaction mediate links between BMI changes and mental health.\nThese psychosocial factors explain how anxiety, depression, and weight gain interrelate over time.",
     "link": "https://www.news-medical.net/news/20250408/Anxiety-fuels-emotional-eating-and-weight-gain-study-finds.aspx",
     "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_806934_1744164908457459.jpg"
   },
   {
-    "id": 1,
-    "title": "Cutting carbs, not calories, may be key to better metabolic health",
-    "summary": "The intermittent fasting diet, which involves periods of severe calorie restriction, may be on the way out, as new research from the University of Surrey is suggesting that rather than drastically reducing calories, people can achieve similar metabolic benefits by cutting back on carbs.",
-    "link": "https://www.news-medical.net/news/20250408/Cutting-carbs-not-calories-may-be-key-to-better-metabolic-health.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Heart_Disease-620x480.jpg"
-  },
-  {
-    "id": 2,
-    "title": "Daytime eating could mitigate health risks of night shift work",
-    "summary": "A study led by researchers at Mass General Brigham suggests that, when it comes to cardiovascular health, food timing could be a bigger risk factor than sleep timing.",
-    "link": "https://www.news-medical.net/news/20250408/Daytime-eating-could-mitigate-health-risks-of-night-shift-work.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2017/1/Anatomy_of_Human_Heart.-Liya_Graphics_5ac9d64765b747899bc4a9ef77468432-620x480.jpg"
-  },
-  {
-    "id": 3,
-    "title": "Experts warn of rising HIV deaths with planned aid cuts",
-    "summary": "Global deaths from HIV/AIDS and new infections could soar to levels unseen since the start of the century if planned funding cuts to foreign aid are sustained, undermining years of progress, experts warn.",
-    "link": "https://www.news-medical.net/news/20250408/Experts-warn-of-rising-HIV-deaths-with-planned-aid-cuts.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/HIV-620x480.jpg"
-  },
-  {
-    "id": 4,
-    "title": "Cannabis extract can improve behavior of children and teens with autism spectrum disorder",
-    "summary": "New research presented at the 2025 European Congress of Psychiatry reveals that the use of cannabidiol (CBD) cannabis extract can lead to meaningful benefits and improve the behavior of children and adolescents with autism spectrum disorder (ASD).",
-    "link": "https://www.news-medical.net/news/20250408/Cannabis-extract-can-improve-behavior-of-children-and-teens-with-autism-spectrum-disorder.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2016/3/Children_playing_sunset_-_Zurijeta_8c5bdac77e44431bb1bfec67b9c87208-620x480.jpg"
-  },
-  {
-    "id": 5,
-    "title": "RFK Jr. ‘never said anything’ about the vaccine, says the father of the Texas child who died of measles",
-    "summary": "Robert F. Kennedy Jr. visits families of children who died from measles, emphasizes vaccine efficacy, and sparks controversy among supporters over his changing views on vaccination.",
-    "link": "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/rfk-jr-never-said-anything-about-the-vaccine-says-the-father-of-the-texas-child-who-died-of-measles/articleshow/120109963.cms",
-    "image": "https://static.toiimg.com/thumb/msid-120109963,width-1070,height-580,imgsize-153256,resizemode-75,overlay-toi_sw,pt-32,y_pad-40/photo.jpg"
-  },
-  {
-    "id": 6,
-    "title": "Semaglutide linked to higher risk of vision problems, FDA data analysis shows",
-    "summary": "Researchers from the University of Bern analyzed over 300,000 FDA reports and found semaglutide use was linked to a higher reporting rate of vision impairment. The findings call for further study into the ocular risks of this widely prescribed diabetes and weight loss drug.",
-    "link": "https://www.news-medical.net/news/20250408/Semaglutide-linked-to-higher-risk-of-vision-problems-FDA-data-analysis-shows.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_806931_17441599652683109.jpg"
-  },
-  {
-    "id": 7,
-    "title": "Why now is the best time to get your flu shot",
-    "summary": "We’re fast approaching winter – also known as runny nose, chesty cough and sick leave season.",
-    "link": "https://westernweekender.com.au/2025/04/why-now-is-the-best-time-to-get-your-flu-shot/",
-    "image": "https://westernweekender.com.au/wp-content/uploads/flushot2.jpg"
-  },
-  {
-    "id": 8,
-    "title": "Quantifying the unseen: Menopause and its impact in the APAC workplace",
-    "summary": "Ignoring menopause in the workplace risks losing experienced female leaders, disrupting knowledge transfer, and weakening innovation—jeopardising long-term organisational resilience.",
-    "link": "https://hrmasia.com/quantifying-the-unseen-menopause-and-its-impact-in-the-apac-workplace/",
-    "image": "https://hrmasia.com/wp-content/uploads/2024/11/cropped-hrmasia-favicon-32x32.png"
-  },
-  {
     "id": 9,
-    "title": "What happens to your body when you eat 100 grams of protein a day?",
-    "summary": "Consistently consuming 100 grams of protein daily can support muscle growth and repair, boost metabolism, and preserve muscle mass while losing fat, according to health news platform Eat This, Not That. - VnExpress International",
-    "link": "https://e.vnexpress.net/news/life/wellness/what-happens-to-your-body-when-you-eat-100-grams-of-protein-a-day-4871559.html",
-    "image": "https://vcdn1-english.vnecdn.net/2025/04/09/pexels-roman-odintsov-5150202-1545-5073-1744152636.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=nYPu4VLvrMwJrU9cw33OKQ"
+    "title": "‘My blood sugar went up despite diet and exercise. Was I drinking coconut water and watermelon juice all wrong?’",
+    "summary": "Here’s a guide on how to have home-blended fruit juices safely",
+    "link": "https://indianexpress.com/article/health-wellness/blood-sugar-diet-exercise-juice-summer-9933269/",
+    "image": "https://images.indianexpress.com/2025/04/juice.jpg"
   }
 ]
