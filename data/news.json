@@ -1,72 +1,72 @@
 [
   {
     "id": 0,
+    "title": "Our Crucial Role in Preventing Avoidable Deaths",
+    "summary": "We must continue to safeguard our patients and educate their families to ensure that they have the opportunity to lead a full and productive life.",
+    "link": "https://www.medscape.com/viewarticle/us-immunization-program-our-crucial-role-preventing-2025a10007ax",
+    "image": "https://img.medscapestatic.com/vim/live/professional_assets/medscape/images/thumbnail_library/dt_220307_child_vaccine_800x450.jpg"
+  },
+  {
+    "id": 1,
+    "title": "Insights from Dr.",
+    "summary": "New York, April 09, 2025 (GLOBE NEWSWIRE) -- Amid the ongoing pressures of daily life – from financial strain and health concerns to global uncertainly –...",
+    "link": "https://www.globenewswire.com/news-release/2025/04/09/3058529/0/en/Managing-Stress-During-Challenging-Times-Insights-from-Dr-Jeffrey-Borenstein-Brain-Behavior-Research-Foundation.html",
+    "image": "https://ml.globenewswire.com/Resource/Download/f1d68db7-8adc-4ecd-b6fe-67797b1cf711"
+  },
+  {
+    "id": 2,
+    "title": "Low Awareness of Heart Attack Symptoms Puts Women in Danger",
+    "summary": "Little Black Book, Weber Shandwick offices in Switzerland, the UK and Germany launch the campaign highlighting how women are unaware that heart attack warning signs may differ from men's",
+    "link": "https://lbbonline.com/news/low-awareness-of-heart-attack-symptoms-puts-women-in-danger",
+    "image": "https://d3q27bh1u24u2o.cloudfront.net/news/2025-04/Her-Final-Search.URyKx_dU.png"
+  },
+  {
+    "id": 3,
+    "title": "Nigeria struggles to rein in a widespread meningitis outbreak that has killed at least 150",
+    "summary": "Nigerian health authorities are struggling to contain a rapidly spreading meningitis outbreak that has so far killed 151 people across the west African nation, mostly in remote parts of the northern region with children affected the most",
+    "link": "https://abcnews.go.com/International/wireStory/nigeria-struggles-rein-widespread-meningitis-outbreak-killed-150-120633888",
+    "image": "https://s.abcnews.com/images/US/abc_news_default_2000x2000_update_16x9_992.jpg"
+  },
+  {
+    "id": 4,
+    "title": "'Fingerprints of cancer' found after scientists flash infrared light pulses at blood samples",
+    "summary": "A new, AI-powered test can detect the molecular \"fingerprints\" of cancer in a patient's blood using flashes of infrared light.",
+    "link": "https://www.livescience.com/health/cancer/fingerprints-of-cancer-found-after-scientists-flash-infrared-light-pulses-at-blood-samples",
+    "image": "https://cdn.mos.cms.futurecdn.net/7FmVQ4qpxC26ZivwGKv3FN-1200-80.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Experts Push Back on RFK Jr’s Infection Comments",
+    "summary": "The new Secretary of Health and Human Services has made claims about measles and other communicable diseases that could lead to sickness, and even death, his critics claim.",
+    "link": "https://www.medscape.com/viewarticle/experts-push-back-rfk-jrs-infection-comments-2025a10008h4",
+    "image": "https://img.medscapestatic.com/vim/live/professional_assets/medscape/images/thumbnail_library/gty_250407_robert_kennedy_jr_800x450.jpg"
+  },
+  {
+    "id": 6,
+    "title": "Oral health emerges as key factor in women's pain disorders",
+    "summary": "New research from the University of Sydney has revealed poor oral health is significantly associated with higher instances of migraines, abdominal and body pain in women.",
+    "link": "https://www.news-medical.net/news/20250409/Oral-health-emerges-as-key-factor-in-womens-pain-disorders.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/92036744-620x480.jpg"
+  },
+  {
+    "id": 7,
     "title": "NeuroVoices: Chitra Venkatasubramanian, MBBS, MD, MSc, FNCS, on Debating Optimal Blood Pressure Targets After Intracerebral Hemorrhage",
     "summary": "The clinical professor of stroke neurology at Stanford University discussed the clinical rationale and evidence supporting early, intensive blood pressure lowering in patients with intracerebral hemorrhage.",
     "link": "https://www.neurologylive.com/view/neurovoices-chitra-venkatasubramanian-debating-optimal-blood-pressure-targets-after-ich",
     "image": "https://cdn.sanity.io/images/0vv8moc6/neurolive/ec07777d7ff8eb7666d62bae6f8ee856af706491-1251x1251.webp?fit=crop&auto=format"
   },
   {
-    "id": 1,
+    "id": 8,
     "title": "Neural organoids offer insight into mechanisms of dementia",
     "summary": "Researchers at The Ohio State University Wexner Medical Center and College of Medicine have discovered a new way that neurons act in neurodegeneration by using human neural organoids – also known as \"mini-brain\" models – from patients with frontotemporal lobar degeneration (FTLD).",
     "link": "https://www.news-medical.net/news/20250409/Neural-organoids-offer-insight-into-mechanisms-of-dementia.aspx",
     "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2016/2/Alzheimers_amyloid_plaque_-_Juan_Gaertner_9638f1223d534b518a192c8478871d65-620x480.jpg"
   },
   {
-    "id": 2,
+    "id": 9,
     "title": "Rising Skin Cancer Rates: Epidemic or Overdiagnosis?",
     "summary": "While skin cancer rates are growing in many parts of the world, experts disagree on whether this represents a true epidemic or overdiagnosis is a contributing factor.",
     "link": "https://www.medscape.com/viewarticle/rising-skin-cancer-rates-epidemic-or-overdiagnosis-2025a10008hm",
     "image": "https://img.medscapestatic.com/vim/live/professional_assets/medscape/images/thumbnail_library/dt_250408_sunglasses_sunscreen_hat_800x450.jpg"
-  },
-  {
-    "id": 3,
-    "title": "Critically ill patients in African hospitals aren’t getting the care they need: new survey",
-    "summary": "A study found 69% of critically ill patients in African countries were treated in general hospital wards.",
-    "link": "https://theconversation.com/critically-ill-patients-in-african-hospitals-arent-getting-the-care-they-need-new-survey-253355",
-    "image": "https://images.theconversation.com/files/659800/original/file-20250404-56-4u6l64.jpg?ixlib=rb-4.1.0&rect=0%2C535%2C6500%2C3250&q=45&auto=format&w=1356&h=668&fit=crop"
-  },
-  {
-    "id": 4,
-    "title": "Magnetic Brain Stimulation Shows Promise in Alzheimer's Care",
-    "summary": "Personalised magnetic stimulation of the precuneus over 52 weeks slows cognitive and functional decline compared with sham in mild to moderate Alzheimer's, a trial shows.",
-    "link": "https://www.medscape.com/viewarticle/magnetic-brain-stimulation-shows-promise-alzheimers-care-2025a10008ce",
-    "image": "https://img.medscapestatic.com/vim/live/professional_assets/medscape/images/thumbnail_library/dt_250407_woman_with_alzheimer_800x450.jpg"
-  },
-  {
-    "id": 5,
-    "title": "Chemotherapy linked to changes in brain connectivity in breast cancer patients",
-    "summary": "New research published in the Journal of Magnetic Resonance Imaging has uncovered changes in brain connectivity during chemotherapy in patients with breast cancer.",
-    "link": "https://www.news-medical.net/news/20250409/Chemotherapy-linked-to-changes-in-brain-connectivity-in-breast-cancer-patients.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/174318220-620x480.jpg"
-  },
-  {
-    "id": 6,
-    "title": "Continuous Ketone Monitoring: Essential or Optional?",
-    "summary": "Two endocrinologists who live with type 1 diabetes debated this issue at the Advanced Technologies & Treatments for Diabetes (ATTD) 2025 meeting.",
-    "link": "https://www.medscape.com/viewarticle/continuous-ketone-monitoring-essential-or-optional-2025a10008h7",
-    "image": "https://img.medscapestatic.com/vim/live/professional_assets/medscape/images/thumbnail_library/dt_240319_diabetic_ketoacidosis_800x450.jpg"
-  },
-  {
-    "id": 7,
-    "title": "Primary Care Primer for Headache Management, with Morris Levin, MD",
-    "summary": "ACP 2025. The director of the UCSF Headache Center built an evidence-based framework for diagnosing and treating headache disorders seen in primary care.",
-    "link": "https://www.patientcareonline.com/view/primary-care-primer-for-headache-management-with-morris-levin-md",
-    "image": "https://cdn.sanity.io/images/0vv8moc6/patientcare/c20575e5f4de3b3ad0d2cd2267cc9847aa45f790-280x398.jpg?fit=crop&auto=format"
-  },
-  {
-    "id": 8,
-    "title": "Chemotherapy has a hidden impact on the brain we did not know about",
-    "summary": "Chemotherapy appears to rapidly destabilise brain function, potentially explaining the 'chemo brain' phenomenon, the study researchers said.",
-    "link": "https://www.indiatoday.in/health/story/chemotherapy-has-a-hidden-impact-on-the-brain-we-did-not-know-about-2706463-2025-04-09",
-    "image": "https://akm-img-a-in.tosshub.com/indiatoday/images/story/202504/computer-with-mr-scan-of-human-brain-092437324-16x9_0.jpg?VersionId=L_FvJaS.dIYfkcxwaalrm0YuKsslGj45"
-  },
-  {
-    "id": 9,
-    "title": "Modest Effects of Valacyclovir in Herpes Zoster Eye Disease",
-    "summary": "Administration of low-dose valacyclovir over a year does not significantly reduce the occurrence of herpes zoster ophthalmicus but shows potential benefits over time.",
-    "link": "https://www.medscape.com/viewarticle/low-dose-valacyclovir-shows-modest-benefits-patients-herpes-2025a10008h8",
-    "image": "https://img.medscapestatic.com/vim/live/professional_assets/medscape/images/thumbnail_library/dt_250409_herpes_zoster_infection_800x450.jpg"
   }
 ]
