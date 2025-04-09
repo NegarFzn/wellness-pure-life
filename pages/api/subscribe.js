@@ -11,14 +11,14 @@ export default async function handler(req, res) {
 
   const { email, name } = req.body;
 
-  // ✅ Validate user input
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   if (!isValidEmail || !name?.trim()) {
-    return res.status(422).json({ message: "Please provide valid name, email, and interest." });
+    return res
+      .status(422)
+      .json({ message: "Please provide valid name and email." });
   }
 
   try {
-    // ✅ Prepare file path
     const filePath = path.join(process.cwd(), "data", "subscribe.json");
 
     let existing = [];
@@ -27,13 +27,34 @@ export default async function handler(req, res) {
       existing = fileData ? JSON.parse(fileData) : [];
     }
 
-    // ✅ Check for duplicate email
+    // 🔁 If already subscribed, send welcome again
     if (existing.some((entry) => entry.email === email)) {
-      await sendWelcomeEmail(name, email);
-      return res.status(409).json({ message: "Email already subscribed." });
+      console.log("🔁 User already subscribed:", email);
+
+      const transporter = nodemailer.createTransport({
+        host: "mail.robotscapital.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: "info@wellnesspurelife.com",
+          pass: "mK3CmVABnzWmWk",
+        },
+      });
+
+      const { subject, body } = generateEmailContent();
+      const mailOptions = {
+        from: '"Wellness Pure Life" <info@wellnesspurelife.com>',
+        to: email,
+        subject: "Welcome back to Wellness Pure Life 🌿",
+        html: emailTemplate(name, body),
+      };
+
+      await transporter.sendMail(mailOptions);
+
+      return res.status(409).json({ message: "already" });
     }
 
-    // ✅ Push new subscriber
+    // ✅ New subscriber
     const newEntry = {
       name: name.trim(),
       email: email.trim().toLowerCase(),
@@ -67,6 +88,8 @@ export default async function handler(req, res) {
     return res.status(201).json({ message: "Subscription successful" });
   } catch (err) {
     console.error("🔥 Error during subscribe or email:", err);
-    return res.status(500).json({ message: "Server error. Please try again later." });
+    return res
+      .status(500)
+      .json({ message: "Server error. Please try again later." });
   }
 }
