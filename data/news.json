@@ -1,72 +1,72 @@
 [
   {
     "id": 0,
+    "title": "Study finds connection between hearing impairment and heart failure risk",
+    "summary": "Hearing loss is linked to a heightened risk of developing heart failure, with the psychological distress caused by the impairment taking a key role in the observed association, finds a large long term study, published online in the journal Heart.",
+    "link": "https://www.news-medical.net/news/20250409/Study-finds-connection-between-hearing-impairment-and-heart-failure-risk.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Hearing_Loss-620x480.jpg"
+  },
+  {
+    "id": 1,
+    "title": "New award to recognize contributions linking neuroscience to psychiatric diagnosis and treatment",
+    "summary": "Mental health is in crisis worldwide. While the neurosciences are advancing rapidly, psychiatry still struggles to diagnose and effectively treat many disorders. The Synapsy Center for Neuroscience and Mental Health Research at the University of Geneva, Switzerland, is launching a new international prize to reward those who bring these two worlds closer together.",
+    "link": "https://www.news-medical.net/news/20250409/New-award-to-recognize-contributions-linking-neuroscience-to-psychiatric-diagnosis-and-treatment.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Neuroscience-620x480.jpg"
+  },
+  {
+    "id": 2,
+    "title": "QRICH1 protein discovery opens new avenues for cancer and autoimmune therapies",
+    "summary": "In a study of the immune systems of mice, scientists at Johns Hopkins Medicine say they have found a new role for a protein, QRICH1, which could become a target for drugs to dial up or down the activation of T cells to fight cancers and autoimmune diseases.",
+    "link": "https://www.news-medical.net/news/20250409/QRICH1-protein-discovery-opens-new-avenues-for-cancer-and-autoimmune-therapies.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/174318220-620x480.jpg"
+  },
+  {
+    "id": 3,
+    "title": "UK first water monitoring centre may help avoid future pandemics",
+    "summary": "The data could be used to alert public health teams of new outbreaks.",
+    "link": "https://www.bbc.com/news/articles/ckgxne2gk5no",
+    "image": "https://ichef.bbci.co.uk/news/1024/branded_news/48f1/live/bc242030-0fa5-11f0-b696-d3bfdfb825fc.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Study reveals how the brain processes active and passive touch differently",
+    "summary": "Though the sense of touch underlies how we and most other animals interact with the world around us, much remains unknown about how this sense is processed in the brain.",
+    "link": "https://www.news-medical.net/news/20250409/Study-reveals-how-the-brain-processes-active-and-passive-touch-differently.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2016/3/Artificially_Colored_MRI_Scan_Of_Human_Brain-Daisy_Daisy_a8c5d8bbbf824bc8932308e30187510f-620x480.jpg"
+  },
+  {
+    "id": 5,
+    "title": "The effect of aprocitentan for reducing blood pressure and",
+    "summary": "Aprocitentan, on top of background therapy, showed clinically meaningful and durable blood pressure (BP) reduction and a decrease in proteinuria in Black...",
+    "link": "https://www.globenewswire.com/news-release/2025/04/09/3058102/0/en/The-effect-of-aprocitentan-for-reducing-blood-pressure-and-proteinuria-in-Black-patients-with-resistant-hypertension-published-in-Hypertension.html",
+    "image": "https://ml-eu.globenewswire.com/Resource/Download/bb724119-468d-4b1d-8206-3c2175d07f2b"
+  },
+  {
+    "id": 6,
+    "title": "Breakthrough nanoparticle delivery method targets brain inflammation for multiple conditions",
+    "summary": "Oregon State University researchers have discovered a way to get anti-inflammatory medicine across the blood-brain barrier, opening the door to potential new therapies for a range of conditions, including Alzheimer's disease, multiple sclerosis, Parkinson's disease and cancer cachexia.",
+    "link": "https://www.news-medical.net/news/20250409/Breakthrough-nanoparticle-delivery-method-targets-brain-inflammation-for-multiple-conditions.aspx",
+    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2016/3/Artificially_Colored_MRI_Scan_Of_Human_Brain-Daisy_Daisy_a8c5d8bbbf824bc8932308e30187510f-620x480.jpg"
+  },
+  {
+    "id": 7,
+    "title": "New mRNA tech could transform lung therapies",
+    "summary": "Combining mRNA with a specialised lipid nanoparticle could reach areas of the lungs previously inaccessible to conventional treatments.",
+    "link": "https://www.hindustantimes.com/health/new-mrna-tech-could-transform-lung-therapies-101744174325686.html",
+    "image": "https://www.hindustantimes.com/ht-img/img/2025/04/09/1600x900/A-researcher-works-inside-a-laboratory-to-develop-_1744174318471.jpg"
+  },
+  {
+    "id": 8,
+    "title": "Want to stay active and independent after 70? Study reveals how to avoid long-term disability in later life",
+    "summary": "Aging doesn’t have to mean losing your independence. A new study reveals how older adults can stay active and avoid long-term disability with simple strategies. | Health",
+    "link": "https://www.hindustantimes.com/lifestyle/health/want-to-stay-active-and-independent-after-70-study-reveals-how-to-avoid-long-term-disability-in-later-life-101744171196606.html",
+    "image": "https://www.hindustantimes.com/ht-img/img/2025/04/09/1600x900/portrait-senior-woman_1684923745021_1744172276643.jpg"
+  },
+  {
+    "id": 9,
     "title": "For rare mitochondrial disease, a small molecule shows promise",
     "summary": "In a Phase 2b trial, Khondrion’s sonlicromanol led to significant health benefits for patients with mitochondrial disease linked to a common mutation.",
     "link": "https://www.drugdiscoverynews.com/for-rare-mitochondrial-disease-a-small-molecule-shows-promise-16309",
     "image": "https://cdn.drugdiscoverynews.com/assets/image/3636/79057-header-image-for-rare-mitochondrial-disease-a-small-molecule-shows-promise-kr2-m.jpg"
-  },
-  {
-    "id": 1,
-    "title": "Can nature-based therapies heal people and the planet? Study investigates holistic solutions",
-    "summary": "Researchers at Swansea University have developed a protocol for a scoping review to explore how nature-based interventions influence individual, collective, and planetary well-being.",
-    "link": "https://www.news-medical.net/news/20250409/Can-nature-based-therapies-heal-people-and-the-planet-Study-investigates-holistic-solutions.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_806937_17441715023831407.jpg"
-  },
-  {
-    "id": 2,
-    "title": "IL-12 cytokine factory demonstrates success in targeting hard-to-treat cancers",
-    "summary": "A team of researchers from the Rice Biotech Launch Pad at Rice University has developed an implantable \"cytokine factory\" that safely triggers potent immune responses against hard-to-treat cancers, including metastatic melanoma, pancreatic and colorectal tumors.",
-    "link": "https://www.news-medical.net/news/20250408/IL-12-cytokine-factory-demonstrates-success-in-targeting-hard-to-treat-cancers.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/Melanoma-620x480.jpg"
-  },
-  {
-    "id": 3,
-    "title": "Study highlights pulmonary artery denervation as a key intervention for pulmonary hypertension",
-    "summary": "A recent publication in the International Journal of Cardiology, Pulmonary artery denervation in pulmonary hypertension: A comprehensive meta-analysis, has shed light on the potential of pulmonary artery denervation (PADN) as an innovative intervention for pulmonary hypertension (PH), a condition that places patients at risk for right heart failure and death.",
-    "link": "https://www.news-medical.net/news/20250408/Study-highlights-pulmonary-artery-denervation-as-a-key-intervention-for-pulmonary-hypertension.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2014/7/heart-620x480.jpg"
-  },
-  {
-    "id": 4,
-    "title": "Food-as-medicine could save billions in healthcare costs-here’s what’s standing in its way",
-    "summary": "Researchers review how Food-as-Medicine (FAM) interventions can improve health, reduce healthcare costs, and reshape food production systems. They emphasize the urgent need for clinical validation before scaling individualized nutrition solutions.",
-    "link": "https://www.news-medical.net/news/20250408/Food-as-medicine-could-save-billions-in-healthcare-costse28094heree28099s-whate28099s-standing-in-its-way.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_806935_17441677934689791.jpg"
-  },
-  {
-    "id": 5,
-    "title": "Queensland melioidosis death toll climbs after floods spread soil-borne bacteria",
-    "summary": "Melioidosis claims the life of another Queensland Health patient in the Townsville region as a microbiologist warns floodwater is pushing dangerous bacteria to the soil's surface.",
-    "link": "https://www.abc.net.au/news/2025-04-09/melioidosis-death-toll-rises-queensland-wet-season/105155546",
-    "image": "https://live-production.wcms.abc-cdn.net.au/fe76ccb9f01ffe027220cd29fc402a08?impolicy=wcms_watermark_news&cropH=2916&cropW=5184&xPos=0&yPos=2&width=862&height=485&imformat=generic"
-  },
-  {
-    "id": 6,
-    "title": "New discovery promises to revolutionize liver organoid development",
-    "summary": "Organoids are small-scale models that mimic human organs. These models could help scientists understand diseases and test treatments, and potentially aid in regenerative therapeutic methods.",
-    "link": "https://www.news-medical.net/news/20250408/New-discovery-promises-to-revolutionize-liver-organoid-development.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/image-handler/picture/2019/5/shutterstock_499282837_f18bafe030744de991560feceed98d20-620x480.jpg"
-  },
-  {
-    "id": 7,
-    "title": "Statins Could Reduce Dementia Risk Even in People With Low Cholesterol",
-    "summary": "A new study has found a link between 'bad' cholesterol and the risk of dementia.",
-    "link": "https://www.sciencealert.com/statins-could-reduce-dementia-risk-even-in-people-with-low-cholesterol",
-    "image": "https://www.sciencealert.com/images/2025/04/StatinsBrainHealth.jpg"
-  },
-  {
-    "id": 8,
-    "title": "Anxiety fuels emotional eating and weight gain, study finds",
-    "summary": "Emotional eating and body dissatisfaction mediate links between BMI changes and mental health.\nThese psychosocial factors explain how anxiety, depression, and weight gain interrelate over time.",
-    "link": "https://www.news-medical.net/news/20250408/Anxiety-fuels-emotional-eating-and-weight-gain-study-finds.aspx",
-    "image": "https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_806934_1744164908457459.jpg"
-  },
-  {
-    "id": 9,
-    "title": "‘My blood sugar went up despite diet and exercise. Was I drinking coconut water and watermelon juice all wrong?’",
-    "summary": "Here’s a guide on how to have home-blended fruit juices safely",
-    "link": "https://indianexpress.com/article/health-wellness/blood-sugar-diet-exercise-juice-summer-9933269/",
-    "image": "https://images.indianexpress.com/2025/04/juice.jpg"
   }
 ]
