@@ -29,6 +29,7 @@ export default async function handler(req, res) {
 
     // ✅ Check for duplicate email
     if (existing.some((entry) => entry.email === email)) {
+      await sendWelcomeEmail(name, email);
       return res.status(409).json({ message: "Email already subscribed." });
     }
 
