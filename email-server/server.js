@@ -84,7 +84,7 @@ function sendNewsletter() {
 }
 
 // ✅ Auto send: Every Tuesday + Friday at 9 AM
-cron.schedule('0 9 * * 2,5', sendNewsletter);
+cron.schedule('0 9 * * 1,3,5', sendNewsletter);
 
 // ✅ Test endpoint
 app.get('/send-test', (req, res) => {

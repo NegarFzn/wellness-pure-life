@@ -20,6 +20,13 @@ export default function Subscribe() {
       return;
     }
 
+    if (!name.trim()) {
+      setMessage("Please enter your name.");
+      return;
+    }
+
+    setMessage("⏳ Subscribing...");
+
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
@@ -35,6 +42,15 @@ export default function Subscribe() {
         setSubscribed(true); // ✅ Mark as subscribed
         setShowForm(false); // ✅ Hide form
         setMessage("✅ Thank you for subscribing!");
+      } else if (res.status === 409) {
+        // Already subscribed
+        setSubscribed(true);
+        setShowForm(false);
+        setEmail("");
+        setName("");
+        setMessage(
+          "✅ You're already on our list! Thanks for staying connected with Wellness Pure Life 💚"
+        );
       } else {
         setMessage(data.message || "Something went wrong.");
       }
@@ -49,7 +65,13 @@ export default function Subscribe() {
       {!subscribed && (
         <p>Get weekly wellness tips and updates — straight to your inbox!</p>
       )}
-      {subscribed && <p>✅ Thank you for subscribing!</p>}
+      {subscribed && (
+        <p>
+          {message.includes("already")
+            ? "✅ You're already on our list!💚"
+            : "✅ Thank you for subscribing!"}
+        </p>
+      )}
 
       {/* Show Subscribe Button (before click) */}
       {!showForm && !subscribed && (
@@ -82,7 +104,7 @@ export default function Subscribe() {
           <button type="submit" className={classes.subscribeButton}>
             Subscribe
           </button>
-          {message && <p className={classes.errorMessage}>🚫 {message}</p>}
+          {message && <p className={classes.errorMessage}>{message}</p>}
         </form>
       )}
       {/* Show Subscribed Button (after success) */}
