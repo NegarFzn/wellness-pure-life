@@ -89,6 +89,7 @@ export default function Home() {
             ↑
           </button>
         )}
+        <DailyList />
       </main>
     </>
   );

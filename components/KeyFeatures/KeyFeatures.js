@@ -17,11 +17,10 @@ export default function KeyFeatures() {
             className={classes.icon}
             priority
           />
-          <h3>💪 Strong Body, Stronger You</h3>
+          <h3>Strong Body, Stronger You</h3>
           <p>
-            From guided workouts to expert-backed fitness tips, we help you
-            build strength, boost energy, and feel unstoppable—one rep at a
-            time.
+            💪 Discover guided workouts and expert tips to help you move better,
+            build lasting strength, and feel your best.
           </p>
         </Link>
         <Link href="/mindfulness" className={classes.featureCard}>
@@ -33,11 +32,10 @@ export default function KeyFeatures() {
             className={classes.icon}
             priority
           />
-          <h3>🧘‍♀️ Calm Your Mind</h3>
+          <h3>Calm Your Mind</h3>
           <p>
-            Breathe in clarity, breathe out stress. Discover simple, proven
-            techniques to quiet your mind and stay grounded—even when life gets
-            overwhelming.
+            🧘‍♀️ Learn to reduce stress, improve focus, and create calm through
+            simple mindfulness practices and breathing.
           </p>
         </Link>
         <Link href="/nourish" className={classes.featureCard}>
@@ -49,10 +47,10 @@ export default function KeyFeatures() {
             className={classes.icon}
             priority
           />
-          <h3>🌿 Fuel Your Life with Nourishment</h3>
+          <h3>Fuel Your Life with Nourishment</h3>
           <p>
-            Fuel up with balanced meals and superfoods that energize, heal, and
-            uplift—naturally.
+            🌿 Fuel up with balanced meals and superfoods that energize, heal,
+            and uplift—naturally.
           </p>
         </Link>
       </div>
