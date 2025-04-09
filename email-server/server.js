@@ -20,14 +20,41 @@ let users = JSON.parse(fs.readFileSync(subscriberPath, 'utf-8'));
 // ✅ Subscribe endpoint
 app.post('/subscribe', (req, res) => {
   const { name, email } = req.body;
-  if (!users.find(u => u.email === email)) {
+  const exists = users.find(u => u.email === email);
+
+  if (!exists) {
     users.push({ name, email });
     fs.writeFileSync(subscriberPath, JSON.stringify(users, null, 2));
+
+    // ✅ Send welcome email
+    const transporter = nodemailer.createTransport({
+      host: 'mail.robotscapital.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'info@wellnesspurelife.com',
+        pass: 'mK3CmVABnzWmWk',
+      },
+    });
+
+    const { subject, body } = generateEmailContent();
+    const mailOptions = {
+      from: '"Wellness Pure Life" <info@wellnesspurelife.com>',
+      to: email,
+      subject: `Welcome to Wellness Pure Life! 🌿`,
+      html: emailTemplate(name, body),
+    };
+
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) console.error('❌ Welcome Email Error:', err);
+      else console.log('✅ Welcome Email Sent:', email);
+    });
   }
+
   res.send({ success: true });
 });
 
-// ✅ Email sender logic
+// ✅ Email sender logic (Weekly Newsletter)
 function sendNewsletter() {
   const content = generateEmailContent();
 

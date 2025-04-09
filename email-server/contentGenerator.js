@@ -1,8 +1,9 @@
 const fs = require("fs");
+const path = require("path");
 
-const fitness = JSON.parse(fs.readFileSync("./fitness.json", "utf-8"));
-const mindfulness = JSON.parse(fs.readFileSync("./mindfulness.json", "utf-8"));
-const nourish = JSON.parse(fs.readFileSync("./nourish.json", "utf-8"));
+const fitness = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "fitness.json"), "utf-8"));
+const mindfulness = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "mindfulness.json"), "utf-8"));
+const nourish = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "nourish.json"), "utf-8"));
 
 function pickRandomEntry(data) {
   const sections = Object.values(data).flat();
