@@ -1,3 +1,4 @@
+
 export async function fetchWeather(city = "New York") {
   try {
     const response = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
@@ -32,3 +33,10 @@ export async function fetchNews() {
     return [];
   }
 }
+
+
+
+
+
+
+

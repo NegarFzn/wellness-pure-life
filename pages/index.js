@@ -4,7 +4,8 @@ import Head from "next/head";
 import Subscribe from "../components/Subscribe/subscribe";
 import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
 import DailyList from "../components/DailyList/DailyList";
-import classes from "./index.module.css"; 
+import WellnessAssistant from "../components/WellnessAssistant/WellnessAssistant";
+import classes from "./index.module.css";
 
 export default function Home() {
   const [newsArticles, setNewsArticles] = useState([]);
@@ -91,6 +92,7 @@ export default function Home() {
         )}
         <DailyList />
       </main>
+      <WellnessAssistant />
     </>
   );
 }

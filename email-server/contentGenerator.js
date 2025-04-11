@@ -30,19 +30,19 @@ function generateEmailContent() {
     <h2 style="color: #111; font-size: 24px; margin-top: 10px;">Your Health Highlights</h2>
     <div style="margin: 24px 0;">
       <p style="margin: 8px 0;">
-        <strong font-size: 19px;">💪 <span style="color: #000;">Fitness:</span></strong><br/>
+        <strong font-size: 19px;"><span style="color: #000;">Fitness:</span></strong><br/>
         ${fit.title} <a href="https://wellnesspurelife.com/fitness/${fit.id}" style="color: #1a73e8; text-decoration: none;">→ Read more</a>
       </p>
       <p style="margin: 8px 0;">
-        <strong font-size: 19px;">🧠 <span style="color: #000;">Mindfulness:</span></strong><br/>
+        <strong font-size: 19px;"><span style="color: #000;">Mindfulness:</span></strong><br/>
         ${mind.title} <a href="https://wellnesspurelife.com/mindfulness/${mind.id}" style="color: #1a73e8; text-decoration: none;">→ Explore</a>
       </p>
       <p style="margin: 8px 0;">
-        <strong font-size: 19px;">🥗 <span style="color: #000;">Nutrition:</span></strong><br/>
+        <strong font-size: 19px;"><span style="color: #000;">Nutrition:</span></strong><br/>
         ${food.title} <a href="https://wellnesspurelife.com/nourish/${food.id}" style="color: #1a73e8; text-decoration: none;">→ Learn more</a>
       </p>
       <p style="margin: 8px 0;">
-        <strong font-size: 19px;">📰 <span style="color: #000;">News:</span></strong><br/>
+        <strong font-size: 19px;"><span style="color: #000;">News:</span></strong><br/>
         ${news.title} <a href="${news.link}" style="color: #1a73e8; text-decoration: none;">→ Read more</a>
       </p>
     </div>

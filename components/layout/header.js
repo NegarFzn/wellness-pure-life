@@ -1,12 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 import { useRouter } from "next/router"; // ✅ Import useRouter for dynamic path check
 import NavLink from "./nav-link";
+import { useAuth } from "../../context/AuthContext";
+import Signup from "../Auth/Signup";
 import logoImg from "../../public/images/logo.jpg";
 import classes from "./header.module.css";
 
 export default function Header({ weather }) {
   const router = useRouter(); // ✅ Get current route
+  const { user } = useAuth();
+  const [showSignup, setShowSignup] = useState(false);
 
   // ✅ Define visible links based on the active page
   const getNavLinks = () => {
@@ -43,7 +48,7 @@ export default function Header({ weather }) {
     <>
       <header className={classes.header}>
         <Link href="/" className={classes.logo}>
-          <Image src={logoImg} alt="Wellness Pure Life" priority/>
+          <Image src={logoImg} alt="Wellness Pure Life" priority />
           <span className={classes.brandName}>Healthy Body & Mind</span>
         </Link>
         <nav className={classes.nav}>
@@ -89,8 +94,28 @@ export default function Header({ weather }) {
                 <NavLink href={link.href}>{link.label}</NavLink>
               </li>
             ))}
+            {user ? (
+              <span className={classes.name}>
+                Welcome, {user.email.split("@")[0]}
+              </span>
+            ) : (
+              <>
+                <li>
+                  <button
+                    onClick={() => setShowSignup(true)}
+                    className={classes.navBtn}
+                  >
+                    Sign Up Free
+                  </button>
+                </li>
+                <Link href="/login">
+                  <button className={classes.navBtn}>Login</button>
+                </Link>
+              </>
+            )}
           </ul>
         </nav>
+        <Signup isOpen={showSignup} onClose={() => setShowSignup(false)} />
       </header>
     </>
   );
