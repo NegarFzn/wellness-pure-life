@@ -13,19 +13,33 @@ export default function WellnessAssistant() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
-
   const { user } = useAuth();
+  const [justSignedUp, setJustSignedUp] = useState(false);
 
-  const scrollToBottom = () => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  // ✅ Only on first load: read from localStorage
+  useEffect(() => {
+    const flag = localStorage.getItem("justSignedUp") === "true";
+    setJustSignedUp(flag);
+  }, []);
+
+  // ✅ If user logs in AND flag is removed => allow AI
+  useEffect(() => {
+    if (user) {
+      const flag = localStorage.getItem("justSignedUp") === "true";
+      if (!flag) {
+        setJustSignedUp(false); // login not after signup => allow AI
+      }
+    }
+  }, [user]);
+
+  const isAuthenticated = !!user && !justSignedUp;
 
   useEffect(() => {
-    scrollToBottom();
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat]);
 
   const sendMessage = async () => {
-    if (!input.trim() || loading) return;
+    if (!input.trim() || loading || !isAuthenticated) return;
 
     const updatedChat = [...chat, { role: "user", content: input }];
     setChat(updatedChat);
@@ -66,6 +80,12 @@ export default function WellnessAssistant() {
       {isOpen ? (
         <div className={classes.box}>
           <h4 className={classes.title}>🌿 Wellness Assistant</h4>
+          {!isAuthenticated && (
+            <p className={classes.notice}>
+              🔒 Please <a href="/login">log in</a> to activate the AI
+              assistant.
+            </p>
+          )}
           <div className={classes.log}>
             {chat.map((msg, i) => (
               <div
@@ -86,9 +106,16 @@ export default function WellnessAssistant() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              placeholder="Ask me anything..."
+              placeholder={
+                isAuthenticated ? "Ask me anything..." : "Login required..."
+              }
+              disabled={!isAuthenticated}
             />
-            <button onClick={sendMessage} className={classes.send}>
+            <button
+              onClick={sendMessage}
+              className={classes.send}
+              disabled={!isAuthenticated || loading}
+            >
               {loading ? "..." : "Send"}
             </button>
           </div>

@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import classes from "./Signup.module.css";
 
-export default function Signup({ isOpen, onClose }) {
+export default function Signup({ isOpen, onClose, onSignupComplete }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,6 +16,9 @@ export default function Signup({ isOpen, onClose }) {
     setError("");
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      localStorage.setItem("justSignedUp", "true");
+
+      if (onSignupComplete) onSignupComplete(); // ✅ notify parent
       onClose();
       setSuccess(true);
     } catch (err) {

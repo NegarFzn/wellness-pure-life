@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { useRouter } from "next/router"; // ✅ Import useRouter for dynamic path check
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import NavLink from "./nav-link";
 import { useAuth } from "../../context/AuthContext";
 import Signup from "../Auth/Signup";
@@ -9,11 +9,40 @@ import logoImg from "../../public/images/logo.jpg";
 import classes from "./header.module.css";
 
 export default function Header({ weather }) {
-  const router = useRouter(); // ✅ Get current route
+  const router = useRouter();
   const { user } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
+  const [justSignedUp, setJustSignedUp] = useState(false);
 
-  // ✅ Define visible links based on the active page
+  useEffect(() => {
+    const checkFlag = () => {
+      if (
+        typeof window !== "undefined" &&
+        localStorage.getItem("justSignedUp") === "true"
+      ) {
+        setJustSignedUp(true);
+      }
+    };
+
+    checkFlag(); // Initial check
+
+    // Listen for changes in localStorage
+    window.addEventListener("storage", checkFlag);
+
+    return () => {
+      window.removeEventListener("storage", checkFlag);
+    };
+  }, []);
+
+
+  // ✅ Reset justSignedUp if user logs out
+  useEffect(() => {
+    if (!user) {
+      localStorage.removeItem("justSignedUp");
+      setJustSignedUp(false);
+    }
+  }, [user]);
+
   const getNavLinks = () => {
     if (router.pathname.startsWith("/fitness")) {
       return [
@@ -44,6 +73,10 @@ export default function Header({ weather }) {
     return [];
   };
 
+  const handleSignupComplete = () => {
+    setJustSignedUp(true);
+  };
+
   return (
     <>
       <header className={classes.header}>
@@ -59,7 +92,6 @@ export default function Header({ weather }) {
             <li>
               <NavLink href="/contact">Contact</NavLink>
             </li>
-            {/* ✅ "Weather" Link - Always Visible */}
             <div className={classes.weatherWidget}>
               <li>
                 <NavLink href="/weather">
@@ -72,33 +104,20 @@ export default function Header({ weather }) {
                       <span>{weather.current.temp_c}°C (NY)</span>
                     </div>
                   ) : (
-                    <span
-                      style={{
-                        fontSize: "1rem",
-                        color: "#ccc",
-                        fontWeight: "normal",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      Loading...
-                    </span>
+                    <span className={classes.loading}>Loading...</span>
                   )}
                 </NavLink>
               </li>
             </div>
-            {/* ✅ Show Relevant Links Based on Active Page */}
+
             {getNavLinks().map((link) => (
               <li key={link.href}>
                 <NavLink href={link.href}>{link.label}</NavLink>
               </li>
             ))}
-            {user ? (
-              <span className={classes.name}>
-                Welcome, {user.email.split("@")[0]}
-              </span>
-            ) : (
+
+            {/* Auth logic */}
+            {!user && !justSignedUp ? (
               <>
                 <li>
                   <button
@@ -108,14 +127,24 @@ export default function Header({ weather }) {
                     Sign Up Free
                   </button>
                 </li>
-                <Link href="/login">
-                  <button className={classes.navBtn}>Login</button>
-                </Link>
+                <li>
+                  <Link href="/login">
+                    <button className={classes.navBtn}>Login</button>
+                  </Link>
+                </li>
               </>
-            )}
+            ) : user ? (
+              <li className={classes.welcome}>
+                <strong>{user.email.split("@")[0]}</strong>
+              </li>
+            ) : null}
           </ul>
         </nav>
-        <Signup isOpen={showSignup} onClose={() => setShowSignup(false)} />
+        <Signup
+          isOpen={showSignup}
+          onClose={() => setShowSignup(false)}
+          onSignupComplete={handleSignupComplete}
+        />
       </header>
     </>
   );
