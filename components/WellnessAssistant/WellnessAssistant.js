@@ -16,11 +16,18 @@ export default function WellnessAssistant() {
   const { user } = useAuth();
   const [justSignedUp, setJustSignedUp] = useState(false);
 
-  // ✅ Only on first load: read from localStorage
   useEffect(() => {
-    const flag = localStorage.getItem("justSignedUp") === "true";
-    setJustSignedUp(flag);
+    const checkFlag = () => {
+      const flag = localStorage.getItem("justSignedUp") === "true";
+      setJustSignedUp(flag);
+    };
+  
+    checkFlag();
+    window.addEventListener("storage", checkFlag);
+  
+    return () => window.removeEventListener("storage", checkFlag);
   }, []);
+  
 
   // ✅ If user logs in AND flag is removed => allow AI
   useEffect(() => {

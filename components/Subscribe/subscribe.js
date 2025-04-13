@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { saveSubscriber } from "../../lib/saveSubscriber";
 import classes from "./subscribe.module.css";
 
 export default function Subscribe() {
@@ -28,22 +29,15 @@ export default function Subscribe() {
     setMessage("⏳ Subscribing...");
 
     try {
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name }),
-      });
+      const result = await saveSubscriber({ email, name });
 
-      const data = await res.json();
-
-      if (res.status === 201) {
+      if (result.success) {
         setEmail("");
         setName("");
-        setSubscribed(true); // ✅ Mark as subscribed
-        setShowForm(false); // ✅ Hide form
+        setSubscribed(true);
+        setShowForm(false);
         setMessage("✅ Thank you for subscribing!");
-      } else if (res.status === 409) {
-        // Already subscribed
+      } else if (result.message.includes("already")) {
         setSubscribed(true);
         setShowForm(false);
         setEmail("");
@@ -52,10 +46,11 @@ export default function Subscribe() {
           "✅ You're already on our list! Thanks for staying connected with Wellness Pure Life 💚"
         );
       } else {
-        setMessage(data.message || "Something went wrong.");
+        setMessage(result.message || "Something went wrong.");
       }
     } catch (err) {
-      setMessage("Error connecting to server.");
+      console.error("Subscription error:", err);
+      setMessage("❌ Error connecting to server.");
     }
   };
 

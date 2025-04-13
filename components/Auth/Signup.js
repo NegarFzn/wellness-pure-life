@@ -17,6 +17,7 @@ export default function Signup({ isOpen, onClose, onSignupComplete }) {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       localStorage.setItem("justSignedUp", "true");
+      window.dispatchEvent(new Event("storage")); // 👈 Trigger updates in other components
 
       if (onSignupComplete) onSignupComplete(); // ✅ notify parent
       onClose();

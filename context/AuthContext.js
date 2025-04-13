@@ -10,18 +10,26 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const router = useRouter();
+  const [justSignedUp, setJustSignedUp] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      const isFresh = localStorage.getItem("justSignedUp") === "true"; // ✅ read here too
+  
       setUser(firebaseUser);
+      setJustSignedUp(isFresh); // ✅ this line matters most
+  
       if (firebaseUser) {
         setToast(`🎉 Welcome, ${firebaseUser.email.split("@")[0]}! 🌿`);
         setTimeout(() => setToast(null), 3000);
       }
+  
       setLoading(false);
     });
+  
     return () => unsubscribe();
   }, []);
+  
 
   useEffect(() => {
     const publicRoutes = [
@@ -45,7 +53,7 @@ export function AuthProvider({ children }) {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
         signOut(auth);
-      }, 1 * 60 * 1000); // 30 mins of inactivity
+      }, 60 * 60 * 1000); // 30 mins of inactivity
     };
 
     window.addEventListener("mousemove", logoutTimer);
@@ -60,7 +68,7 @@ export function AuthProvider({ children }) {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, toast }}>
+    <AuthContext.Provider value={{ user, loading, toast, justSignedUp }}>
       {!loading && (
         <>
           {toast && (
