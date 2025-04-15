@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 
-import {
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import classes from "./Login.module.css";
 
@@ -66,17 +64,25 @@ export default function Login({
 
   const handleResetPassword = async () => {
     setError(null);
+
     if (!email) {
       setError("Please enter your email to reset your password.");
       return;
     }
 
     try {
-      await sendPasswordResetEmail(auth, email);
-      toast.success("📬 Password reset email sent. Check your inbox.");
+      console.log("🔄 Sending reset request for:", email);
+      const res = await axios.post("/api/send-reset", { email });
+
+      console.log("✅ Server responded:", res.data);
+      toast.success(
+        res.data.message || "📬 Reset email sent. Check your inbox."
+      );
     } catch (err) {
+      console.error("❌ Error from API:", err?.response?.data || err.message);
       setError(
-        "Could not send reset email. Please check the address and try again."
+        err?.response?.data?.message ||
+          "Could not send reset email. Please check the address and try again."
       );
     }
   };
