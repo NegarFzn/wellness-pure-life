@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { saveSubscriber } from "../../lib/saveSubscriber";
+import { toast } from "react-hot-toast";
 import classes from "./subscribe.module.css";
 
 export default function Subscribe() {
@@ -37,6 +38,7 @@ export default function Subscribe() {
         setSubscribed(true);
         setShowForm(false);
         setMessage("✅ Thank you for subscribing!");
+        toast.success("Thank you for subscribing!");
       } else if (result.message.includes("already")) {
         setSubscribed(true);
         setShowForm(false);
@@ -45,12 +47,15 @@ export default function Subscribe() {
         setMessage(
           "✅ You're already on our list! Thanks for staying connected with Wellness Pure Life 💚"
         );
+        toast.success("You're already subscribed.");
       } else {
         setMessage(result.message || "Something went wrong.");
+        toast.error(data.message || "Something went wrong.");
       }
     } catch (err) {
       console.error("Subscription error:", err);
       setMessage("❌ Error connecting to server.");
+      toast.error("Error connecting to server.");
     }
   };
 

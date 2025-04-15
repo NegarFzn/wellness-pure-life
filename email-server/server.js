@@ -1,11 +1,16 @@
-const express = require('express');
-const nodemailer = require('nodemailer');
-const cron = require('node-cron');
-const fs = require('fs');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const { generateEmailContent } = require('./contentGenerator');
-const { emailTemplate } = require('./emailTemplate');
+const express = require("express");
+const nodemailer = require("nodemailer");
+const cron = require("node-cron");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const { generateEmailContent } = require("./contentGenerator");
+const { emailTemplate } = require("./emailTemplate");
+const { initializeApp, applicationDefault } = require("firebase-admin/app");
+const { getFirestore } = require("firebase-admin/firestore");
+
+// Initialize Firebase Admin SDK
+initializeApp({ credential: applicationDefault() });
+const db = getFirestore();
 
 const app = express();
 const PORT = 4000;
@@ -13,27 +18,30 @@ const PORT = 4000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// ✅ Use existing subscribe.json in /data folder
-const subscriberPath = '../data/subscribe.json';
-let users = JSON.parse(fs.readFileSync(subscriberPath, 'utf-8'));
-
-// ✅ Subscribe endpoint
-app.post('/subscribe', (req, res) => {
+// ✅ Subscribe endpoint to Firebase
+app.post("/subscribe", async (req, res) => {
   const { name, email } = req.body;
-  const exists = users.find(u => u.email === email);
 
-  if (!exists) {
-    users.push({ name, email });
-    fs.writeFileSync(subscriberPath, JSON.stringify(users, null, 2));
+  try {
+    const docRef = db.collection("subscribers").doc(email);
+    const doc = await docRef.get();
 
-    // ✅ Send welcome email
+    if (doc.exists) {
+      return res.status(409).send({
+        success: true,
+        message: "✅ You're already subscribed.",
+      });
+    }
+
+    await docRef.set({ name, email });
+
     const transporter = nodemailer.createTransport({
-      host: 'mail.robotscapital.com',
+      host: "mail.robotscapital.com",
       port: 465,
       secure: true,
       auth: {
-        user: 'info@wellnesspurelife.com',
-        pass: 'mK3CmVABnzWmWk',
+        user: "info@wellnesspurelife.com",
+        pass: "mK3CmVABnzWmWk",
       },
     });
 
@@ -41,55 +49,86 @@ app.post('/subscribe', (req, res) => {
     const mailOptions = {
       from: '"Wellness Pure Life" <info@wellnesspurelife.com>',
       to: email,
-      subject: `Welcome to Wellness Pure Life! 🌿`,
+      subject: subject || "Welcome to Wellness Pure Life! 🌿",
       html: emailTemplate(name, body),
     };
 
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) console.error('❌ Welcome Email Error:', err);
-      else console.log('✅ Welcome Email Sent:', email);
-    });
-  }
+    transporter.sendMail(mailOptions, (err) => {
+      if (err) {
+        console.error("❌ Welcome Email Error:", err);
+        return res.status(500).send({
+          success: false,
+          message: "Email sending failed.",
+        });
+      }
 
-  res.send({ success: true });
+      console.log("✅ Welcome Email Sent:", email);
+      return res.status(201).send({
+        success: true,
+        message: "✅ Subscribed & email sent!",
+      });
+    });
+  } catch (err) {
+    console.error("❌ Subscription Error:", err);
+    return res.status(500).send({ success: false, message: "Server error." });
+  }
 });
 
-// ✅ Email sender logic (Weekly Newsletter)
-function sendNewsletter() {
-  const content = generateEmailContent();
+// ✅ Send newsletter to all Firebase subscribers
+async function sendNewsletter() {
+  try {
+    const snapshot = await db.collection("subscribers").get();
 
-  const transporter = nodemailer.createTransport({
-    host: 'mail.robotscapital.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: 'info@wellnesspurelife.com',
-      pass: 'mK3CmVABnzWmWk',
-    },
-  });
+    if (snapshot.empty) {
+      console.log("📭 No subscribers found.");
+      return;
+    }
 
-  users.forEach(user => {
-    const mailOptions = {
-      from: '"Wellness Pure Life" <info@wellnesspurelife.com>',
-      to: user.email,
-      subject: content.subject,
-      html: emailTemplate(user.name, content.body),
-    };
+    const { subject, body } = generateEmailContent();
 
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) console.error('❌ Error:', err);
-      else console.log('✅ Sent to:', user.email);
+    const transporter = nodemailer.createTransport({
+      host: "mail.robotscapital.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "info@wellnesspurelife.com",
+        pass: "mK3CmVABnzWmWk",
+      },
     });
-  });
+
+    snapshot.forEach((doc) => {
+      const { name, email } = doc.data();
+
+      const mailOptions = {
+        from: '"Wellness Pure Life" <info@wellnesspurelife.com>',
+        to: email,
+        subject,
+        html: emailTemplate(name, body),
+      };
+
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.error("❌ Email failed for", email, err.message);
+        } else {
+          console.log("✅ Email sent to:", email);
+        }
+      });
+    });
+  } catch (err) {
+    console.error("❌ Newsletter Error:", err);
+  }
 }
 
-// ✅ Auto send: Every Tuesday + Friday at 9 AM
-cron.schedule('0 9 * * 1,3,5', sendNewsletter);
 
-// ✅ Test endpoint
-app.get('/send-test', (req, res) => {
+// Cron schedule: Tuesday, Friday, Sunday at 9 AM
+cron.schedule("0 9 * * 2,5,0", sendNewsletter);
+
+// Test route
+app.get("/send-test", (req, res) => {
   sendNewsletter();
-  res.send('Emails sent!');
+  res.send("✅ Test emails triggered.");
 });
 
-app.listen(PORT, () => console.log(`📡 Email server running at http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`📡 Email server running at http://localhost:${PORT}`)
+);

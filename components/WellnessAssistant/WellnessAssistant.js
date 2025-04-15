@@ -21,13 +21,12 @@ export default function WellnessAssistant() {
       const flag = localStorage.getItem("justSignedUp") === "true";
       setJustSignedUp(flag);
     };
-  
+
     checkFlag();
     window.addEventListener("storage", checkFlag);
-  
+
     return () => window.removeEventListener("storage", checkFlag);
   }, []);
-  
 
   // ✅ If user logs in AND flag is removed => allow AI
   useEffect(() => {
@@ -88,9 +87,15 @@ export default function WellnessAssistant() {
         <div className={classes.box}>
           <h4 className={classes.title}>🌿 Wellness Assistant</h4>
           {!isAuthenticated && (
-            <p className={classes.notice}>
-              🔒 Please <a href="/login">log in</a> to activate the AI
-              assistant.
+            <p className={`${classes.notice} ${classes.loginPrompt}`}>
+              🔐 <span className={classes.loginText}>Premium access —</span>
+              <a href="/login" className={classes.loginLink}>
+                Log in
+              </a>
+              <span className={classes.loginText}>
+                {" "}
+                to chat with your AI guide 🌿
+              </span>
             </p>
           )}
           <div className={classes.log}>

@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import NavLink from "./nav-link";
 import { useAuth } from "../../context/AuthContext";
 import Signup from "../Auth/Signup";
+import Login from "../Auth/Login";
 import logoImg from "../../public/images/logo.jpg";
 import classes from "./header.module.css";
 
@@ -12,6 +13,7 @@ export default function Header({ weather }) {
   const router = useRouter();
   const { user } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
   const [justSignedUp, setJustSignedUp] = useState(false);
 
   useEffect(() => {
@@ -33,7 +35,6 @@ export default function Header({ weather }) {
       window.removeEventListener("storage", checkFlag);
     };
   }, []);
-
 
   // ✅ Reset justSignedUp if user logs out
   useEffect(() => {
@@ -75,6 +76,11 @@ export default function Header({ weather }) {
 
   const handleSignupComplete = () => {
     setJustSignedUp(true);
+  };
+
+  const handleLoginSuccess = () => {
+    setShowLogin(false); // Close modal
+    // Add any other post-login actions here
   };
 
   return (
@@ -128,9 +134,12 @@ export default function Header({ weather }) {
                   </button>
                 </li>
                 <li>
-                  <Link href="/login">
-                    <button className={classes.navBtn}>Login</button>
-                  </Link>
+                  <button
+                    onClick={() => setShowLogin(true)}
+                    className={classes.navBtn}
+                  >
+                    Login
+                  </button>
                 </li>
               </>
             ) : user ? (
@@ -144,6 +153,19 @@ export default function Header({ weather }) {
           isOpen={showSignup}
           onClose={() => setShowSignup(false)}
           onSignupComplete={handleSignupComplete}
+          switchToLogin={() => {
+            setShowSignup(false);
+            setShowLogin(true);
+          }}
+        />
+        <Login
+          isOpen={showLogin}
+          onClose={() => setShowLogin(false)}
+          onLoginSuccess={handleLoginSuccess}
+          switchToSignup={() => {
+            setShowLogin(false);
+            setShowSignup(true);
+          }}
         />
       </header>
     </>

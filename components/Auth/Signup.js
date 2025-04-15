@@ -1,13 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import classes from "./Signup.module.css";
 
-export default function Signup({ isOpen, onClose, onSignupComplete }) {
+export default function Signup({
+  isOpen,
+  onClose,
+  onSignupComplete,
+  switchToLogin,
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setEmail("");
+      setPassword("");
+      setError("");
+      setSuccess(false);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -23,12 +37,35 @@ export default function Signup({ isOpen, onClose, onSignupComplete }) {
       onClose();
       setSuccess(true);
     } catch (err) {
-      setError(err.message);
+      if (err.code === "auth/email-already-in-use") {
+        setError(
+          <>
+            This email is already registered.{" "}
+            <button
+              type="button"
+              className={classes.linkButton}
+              onClick={() => {
+                onClose();
+                if (switchToLogin) switchToLogin();
+              }}
+            >
+              Log in instead
+            </button><br/> or entre new email.
+          </>
+        );
+      } else {
+        setError(err.message);
+      }
     }
   };
 
   return (
-    <div className={classes.overlay}>
+    <div
+      className={classes.overlay}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose(); // 👈 close only if overlay itself is clicked
+      }}
+    >
       <div className={classes.modal}>
         <button className={classes.close} onClick={onClose}>
           &times;

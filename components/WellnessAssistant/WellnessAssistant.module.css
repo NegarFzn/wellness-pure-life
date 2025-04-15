@@ -12,7 +12,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   padding: 18px;
   border: 1px solid #ddd;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   font-size: 15px;
   color: #333;
   transition: all 0.3s ease;
@@ -100,4 +100,32 @@
   font-size: 12px;
   color: #888;
   margin-top: 6px;
+}
+
+.notice {
+  margin-top: 12px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.loginPrompt {
+  font-weight: 500;
+  color: #333;
+}
+
+.loginText {
+  color: #444;
+  font-weight: 500;
+}
+
+.loginLink {
+  color: #e8b007;
+  font-weight: 600;
+  text-decoration: underline;
+  margin: 0 4px;
+  transition: color 0.2s ease;
+}
+
+.loginLink:hover {
+  color: #ffb400;
 }

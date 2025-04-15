@@ -1,6 +1,9 @@
 import Head from "next/head";
 import Layout from "../components/layout/layout";
 import { AuthProvider } from "../context/AuthContext";
+import { Toaster } from "react-hot-toast";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // ✅ important!
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
@@ -16,6 +19,11 @@ function MyApp({ Component, pageProps }) {
             width="device-width"
           />
         </Head>
+        {/* ✅ react-toastify container */}
+        <ToastContainer position="top-center" autoClose={3000} />
+
+        {/* Optional: Keep react-hot-toast too if you use it elsewhere */}
+        <Toaster position="top-right" reverseOrder={false} />
         <Component {...pageProps} />
       </Layout>
     </AuthProvider>
