@@ -1,15 +1,15 @@
 import nodemailer from "nodemailer";
-import { emailTemplate } from "./emailTemplate"; // adjust path if needed
-import { generateEmailContent } from "./generateEmailContent.js";
+import { emailTemplate } from "../email-server/emailTemplate.js"; // adjust path if needed
+import { generateEmailContent } from "../email-server/contentGenerator.js";
 
 export async function sendWelcomeEmail(name, email) {
   const transporter = nodemailer.createTransport({
-    host: "mail.robotscapital.com",
-    port: 465,
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
     secure: true,
     auth: {
-      user: "info@wellnesspurelife.com",
-      pass: "mK3CmVABnzWmWk",
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
   });
 

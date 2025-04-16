@@ -16,26 +16,32 @@ export default async function handler(req, res) {
   console.log("📧 Generating reset link for:", email);
 
   try {
+    // Save token to Firestore
     console.log("📝 Saving token to Firestore...");
-    await db.collection("resetTokens").doc(token).set({
-      email,
-      expiresAt: Date.now() + 3600000,
-    });
+    await db
+      .collection("resetTokens")
+      .doc(token)
+      .set({
+        email,
+        expiresAt: Date.now() + 3600000, // 1 hour
+      });
 
+    // Setup mailer
     console.log("📨 Setting up mail transporter...");
     const transporter = nodemailer.createTransport({
-      host: "mail.robotscapital.com",
-      port: 465,
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
       secure: true,
       auth: {
-        user: "info@wellnesspurelife.com",
-        pass: "mK3CmVABnzWmWk", // ✅ Make sure this is valid
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
+    // Send email
     console.log("🚀 Sending reset email to:", email);
     await transporter.sendMail({
-      from: '"Wellness Pure Life" <info@wellnesspurelife.com>',
+      from: `"Wellness Pure Life" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Reset your password",
       html: `
@@ -47,12 +53,19 @@ export default async function handler(req, res) {
     });
 
     console.log("✅ Email sent successfully!");
-    return res.status(200).json({ message: "Reset email sent! Check your inbox." });
-
-  } catch (error) {
-    console.error("❌ Error occurred in reset flow:", error);
     return res
-      .status(500)
-      .json({ message: "Could not send reset email. Please check the address and try again." });
+      .status(200)
+      .json({ message: "Reset email sent! Check your inbox." });
+  } catch (error) {
+    console.error(
+      "❌ Error occurred in reset flow:",
+      error.message,
+      error.stack
+    );
+    return res.status(500).json({
+      message:
+        "Could not send reset email. Please check the address and try again.",
+      error: error.message,
+    });
   }
 }

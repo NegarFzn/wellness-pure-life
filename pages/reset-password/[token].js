@@ -12,6 +12,10 @@ export default function ResetPasswordPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  if (!router.isReady || !token) {
+    return <p className={classes.message}>Loading reset form...</p>;
+  }
+
   const handleReset = async (e) => {
     e.preventDefault();
     setMessage("");
