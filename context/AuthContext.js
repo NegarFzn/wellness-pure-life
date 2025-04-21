@@ -1,7 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signOut,
+  setPersistence,
+  browserLocalPersistence,
+} from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { useRouter } from "next/router";
+import { useUI } from "./UIContext"; // ✅ Modal control from UIContext
 
 const AuthContext = createContext();
 
@@ -11,54 +17,90 @@ export function AuthProvider({ children }) {
   const [toast, setToast] = useState(null);
   const router = useRouter();
   const [justSignedUp, setJustSignedUp] = useState(false);
+  const { openLogin } = useUI(); // ✅ control modal
 
+  useEffect(() => {
+    console.log("🧠 AuthContext:", { user, loading });
+  }, [user, loading]);
+
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        // ✅ Ensure persistence is set before any auth check
+        await setPersistence(auth, browserLocalPersistence);
+
+        // ✅ Listen for auth changes
+        onAuthStateChanged(auth, (firebaseUser) => {
+          setUser(firebaseUser);
+          setLoading(false);
+        });
+      } catch (error) {
+        console.error("🔥 Auth init error:", error.message);
+        setLoading(false);
+      }
+    };
+
+    initializeAuth();
+  }, []);
+
+  // 🔁 Listen for auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       const isFresh = localStorage.getItem("justSignedUp") === "true"; // ✅ read here too
-  
+      console.log("👤 Auth state changed:", firebaseUser);
       setUser(firebaseUser);
       setJustSignedUp(isFresh); // ✅ this line matters most
-  
+
       if (firebaseUser) {
         setToast(`🎉 Welcome, ${firebaseUser.email.split("@")[0]}! 🌿`);
         setTimeout(() => setToast(null), 3000);
       }
-  
+
       setLoading(false);
     });
-  
+
     return () => unsubscribe();
   }, []);
-  
 
+  // 🚫 Redirect to login if trying to access a protected route
   useEffect(() => {
-    const publicRoutes = [
+    if (loading) return;
+
+    const isPublic = [
       "/",
       "/login",
       "/signup",
-      "/contact",
-      "/weather",
       "/news",
-    ];
-    if (!loading && !user && !publicRoutes.includes(router.pathname)) {
-      router.push("/login");
+      "/contact",
+      "/reset-password",
+    ].some((path) => router.pathname.startsWith(path));
+
+    if (!user && !isPublic) {
+      openLogin(); // ✅ Trigger modal
+      router.push("/"); // ✅ Safe fallback
     }
   }, [user, loading, router.pathname]);
 
+  // 🕒 Auto logout after 60 minutes of inactivity
   useEffect(() => {
     if (!user) return;
 
     let timeout;
     const logoutTimer = () => {
       clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        signOut(auth);
-      }, 60 * 60 * 1000); // 30 mins of inactivity
+      timeout = setTimeout(async () => {
+        try {
+          await signOut(auth);
+          console.log("⏳ Auto-logout due to inactivity");
+        } catch (err) {
+          console.error("Auto logout failed:", err);
+        }
+      }, 60 * 60 * 1000); // 1 hour
     };
 
     window.addEventListener("mousemove", logoutTimer);
     window.addEventListener("keydown", logoutTimer);
-    logoutTimer(); // start the timer
+    logoutTimer();
 
     return () => {
       clearTimeout(timeout);

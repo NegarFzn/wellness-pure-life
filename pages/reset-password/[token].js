@@ -1,29 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import classes from "./index.module.css";
 
+
 export default function ResetPasswordPage() {
   const router = useRouter();
   const { token } = router.query;
+  console.log(token);
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [valid, setValid] = useState(false);
+  const [checking, setChecking] = useState(true);
 
-  if (!router.isReady || !token) {
-    return <p className={classes.message}>Loading reset form...</p>;
-  }
+  useEffect(() => {
+    console.log("🔍 ROUTER READY:", router.isReady);
+    console.log("🔑 TOKEN:", token);
+  }, [router.isReady, token]);
+  
+
+  useEffect(() => {
+    if (!router.isReady || !token) return;
+
+    const validateToken = async () => {
+      try {
+        const res = await axios.get(`/api/validate-reset-token?token=${token}`);
+        setValid(res.data.valid);
+      } catch {
+        setValid(false);
+      } finally {
+        setChecking(false);
+      }
+    };
+
+    validateToken();
+  }, [router.isReady, token]);
 
   const handleReset = async (e) => {
     e.preventDefault();
     setMessage("");
-    if (!token) {
-      setError("Token missing or invalid. Please request a new reset link.");
-      return;
-    }
-
     setError("");
 
     if (!password || password.length < 6) {
@@ -43,7 +61,7 @@ export default function ResetPasswordPage() {
       });
 
       setMessage(res.data.message || "✅ Password reset successful.");
-      setTimeout(() => router.push("/"), 2000); // redirect to home
+      setTimeout(() => router.push("/login"), 2000);
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -51,6 +69,13 @@ export default function ResetPasswordPage() {
       );
     }
   };
+
+  if (checking)
+    return <p className={classes.message}>🔄 Verifying reset token...</p>;
+  if (!valid)
+    return (
+      <p className={classes.error}>❌ This reset link is invalid or expired.</p>
+    );
 
   return (
     <div className={classes.container}>
@@ -77,3 +102,5 @@ export default function ResetPasswordPage() {
     </div>
   );
 }
+
+

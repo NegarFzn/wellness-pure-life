@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import NavLink from "./nav-link";
 import { useAuth } from "../../context/AuthContext";
+import { useUI } from "../../context/UIContext";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import logoImg from "../../public/images/logo.jpg";
@@ -11,10 +12,20 @@ import classes from "./header.module.css";
 
 export default function Header({ weather }) {
   const router = useRouter();
-  const { user } = useAuth();
-  const [showSignup, setShowSignup] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
+  const { user, loading } = useAuth();
+  const {
+    openLogin,
+    openSignup,
+    showLogin,
+    showSignup,
+    closeLogin,
+    closeSignup,
+  } = useUI();
   const [justSignedUp, setJustSignedUp] = useState(false);
+
+  useEffect(() => {
+    console.log("🔥 FINAL CHECK", { user, loading, pathname: router.pathname });
+  }, [user, loading, router.pathname]);
 
   useEffect(() => {
     const checkFlag = () => {
@@ -79,8 +90,7 @@ export default function Header({ weather }) {
   };
 
   const handleLoginSuccess = () => {
-    setShowLogin(false); // Close modal
-    // Add any other post-login actions here
+    closeLogin(); // ✅ from useUI()
   };
 
   return (
@@ -98,23 +108,21 @@ export default function Header({ weather }) {
             <li>
               <NavLink href="/contact">Contact</NavLink>
             </li>
-            <div className={classes.weatherWidget}>
-              <li>
-                <NavLink href="/weather">
-                  {weather ? (
-                    <div className={classes.weatherInfo}>
-                      <img
-                        src={weather.current.condition.icon}
-                        alt="Weather icon"
-                      />
-                      <span>{weather.current.temp_c}°C (NY)</span>
-                    </div>
-                  ) : (
-                    <span className={classes.loading}>Loading...</span>
-                  )}
-                </NavLink>
-              </li>
-            </div>
+            <li className={classes.weatherWidget}>
+              <NavLink href="/weather">
+                {weather ? (
+                  <div className={classes.weatherInfo}>
+                    <img
+                      src={weather.current.condition.icon}
+                      alt="Weather icon"
+                    />
+                    <span>{weather.current.temp_c}°C (NY)</span>
+                  </div>
+                ) : (
+                  <span className={classes.loading}>Loading...</span>
+                )}
+              </NavLink>
+            </li>
 
             {getNavLinks().map((link) => (
               <li key={link.href}>
@@ -126,45 +134,43 @@ export default function Header({ weather }) {
             {!user && !justSignedUp ? (
               <>
                 <li>
-                  <button
-                    onClick={() => setShowSignup(true)}
-                    className={classes.navBtn}
-                  >
+                  <button onClick={openSignup} className={classes.navBtn}>
                     Sign Up Free
                   </button>
                 </li>
                 <li>
-                  <button
-                    onClick={() => setShowLogin(true)}
-                    className={classes.navBtn}
-                  >
+                  <button onClick={openLogin} className={classes.navBtn}>
                     Login
                   </button>
                 </li>
               </>
             ) : user ? (
               <li className={classes.welcome}>
-                <strong>{user.email.split("@")[0]}</strong>
+                <NavLink href="/dashboard">
+                  <strong style={{ cursor: "pointer" }}>
+                    👤 {user.displayName || user.email.split("@")[0]}
+                  </strong>
+                </NavLink>
               </li>
             ) : null}
           </ul>
         </nav>
         <Signup
           isOpen={showSignup}
-          onClose={() => setShowSignup(false)}
+          onClose={closeSignup}
           onSignupComplete={handleSignupComplete}
           switchToLogin={() => {
-            setShowSignup(false);
-            setShowLogin(true);
+            closeSignup();
+            openLogin();
           }}
         />
         <Login
           isOpen={showLogin}
-          onClose={() => setShowLogin(false)}
+          onClose={closeLogin}
           onLoginSuccess={handleLoginSuccess}
           switchToSignup={() => {
-            setShowLogin(false);
-            setShowSignup(true);
+            closeLogin();
+            openSignup();
           }}
         />
       </header>

@@ -1,4 +1,4 @@
-import { db, adminAuth } from "../../lib/firebaseAdmin";
+import { db, auth } from "../../lib/firebaseAdmin";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
@@ -16,10 +16,10 @@ export default async function handler(req, res) {
     if (Date.now() > expiresAt) throw new Error("Reset token has expired.");
 
     // Lookup user by email
-    const user = await adminAuth.getUserByEmail(email);
+    const user = await auth.getUserByEmail(email);
 
     // Update the password via Firebase Admin
-    await adminAuth.updateUser(user.uid, {
+    await auth.updateUser(user.uid, {
       password,
     });
 

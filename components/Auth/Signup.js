@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import classes from "./Signup.module.css";
 
@@ -9,15 +9,19 @@ export default function Signup({
   onSignupComplete,
   switchToLogin,
 }) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
+      setName("");
       setEmail("");
       setPassword("");
+      setConfirmPassword("");
       setError("");
       setSuccess(false);
     }
@@ -28,14 +32,33 @@ export default function Signup({
   const handleSignup = async (e) => {
     e.preventDefault();
     setError("");
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      localStorage.setItem("justSignedUp", "true");
-      window.dispatchEvent(new Event("storage")); // 👈 Trigger updates in other components
+    setSuccess(false);
 
-      if (onSignupComplete) onSignupComplete(); // ✅ notify parent
-      onClose();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      await updateProfile(userCredential.user, {
+        displayName: name,
+      });
+
+      localStorage.setItem("justSignedUp", "true");
+      window.dispatchEvent(new Event("storage"));
+
+      if (onSignupComplete) onSignupComplete();
       setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+        onClose();
+      }, 1500);
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
         setError(
@@ -50,7 +73,8 @@ export default function Signup({
               }}
             >
               Log in instead
-            </button><br/> or entre new email.
+            </button>{" "}
+            or enter a new email.
           </>
         );
       } else {
@@ -63,7 +87,7 @@ export default function Signup({
     <div
       className={classes.overlay}
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose(); // 👈 close only if overlay itself is clicked
+        if (e.target === e.currentTarget) onClose();
       }}
     >
       <div className={classes.modal}>
@@ -75,6 +99,14 @@ export default function Signup({
           Get free access to our weekly wellness tips 🌿
         </p>
         <form onSubmit={handleSignup} className={classes.form}>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className={classes.input}
+          />
           <input
             type="email"
             placeholder="Your Email"
@@ -88,6 +120,14 @@ export default function Signup({
             placeholder="Create Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
+            className={classes.input}
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
             className={classes.input}
           />

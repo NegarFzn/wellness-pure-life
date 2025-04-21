@@ -12,7 +12,13 @@ export default async function handler(req, res) {
   }
 
   const token = uuidv4();
-  const resetUrl = `https://wellnesspurelife.com/reset-password/${token}`;
+  const baseUrl =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://wellnesspurelife.com";
+
+  const resetUrl = `${baseUrl}/reset-password/${token}`;
+
   console.log("📧 Generating reset link for:", email);
 
   try {

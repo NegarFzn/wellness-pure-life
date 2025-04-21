@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
-
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import classes from "./Login.module.css";
@@ -41,6 +40,7 @@ export default function Login({
       onClose(); // ✅ close modal on success
       setTimeout(() => {
         setSuccess(false); // hide message
+        onClose();
         router.push("/");
       }, 100);
     } catch (err) {
