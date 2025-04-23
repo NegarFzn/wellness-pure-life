@@ -8,6 +8,8 @@ import {
 import { auth } from "../lib/firebase";
 import { useRouter } from "next/router";
 import { useUI } from "./UIContext"; // ✅ Modal control from UIContext
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
 const AuthContext = createContext();
 
@@ -15,6 +17,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
+  const [isPremium, setIsPremium] = useState(false);
   const router = useRouter();
   const [justSignedUp, setJustSignedUp] = useState(false);
   const { openLogin } = useUI(); // ✅ control modal
@@ -23,65 +26,83 @@ export function AuthProvider({ children }) {
     console.log("🧠 AuthContext:", { user, loading });
   }, [user, loading]);
 
+  // Initialize auth with persistence
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        // ✅ Ensure persistence is set before any auth check
         await setPersistence(auth, browserLocalPersistence);
-
-        // ✅ Listen for auth changes
-        onAuthStateChanged(auth, (firebaseUser) => {
-          setUser(firebaseUser);
-          setLoading(false);
-        });
       } catch (error) {
-        console.error("🔥 Auth init error:", error.message);
-        setLoading(false);
+        console.error("🔥 Persistence error:", error.message);
       }
+
+      const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        setUser(firebaseUser);
+        setLoading(false);
+
+        if (firebaseUser) {
+          try {
+            const docRef = doc(db, "users", firebaseUser.uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+              setIsPremium(docSnap.data().isPremium || false);
+            } else {
+              console.warn("⚠️ User document not found in Firestore.");
+              setIsPremium(false);
+            }
+          } catch (err) {
+            console.error("❌ Failed to fetch user data:", err.message);
+            setIsPremium(false);
+          }
+        } else {
+          setIsPremium(false);
+        }
+      });
+
+      return () => unsubscribe();
     };
 
     initializeAuth();
   }, []);
 
-  // 🔁 Listen for auth state changes
+  // Handle auth-based UI changes
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      const isFresh = localStorage.getItem("justSignedUp") === "true"; // ✅ read here too
-      console.log("👤 Auth state changed:", firebaseUser);
-      setUser(firebaseUser);
-      setJustSignedUp(isFresh); // ✅ this line matters most
+    const isFresh = localStorage.getItem("justSignedUp") === "true";
+    if (user) {
+      setToast(
+        `🎉 Welcome, ${user.displayName || user.email.split("@")[0]}! 🌿`
+      );
+      setJustSignedUp(isFresh);
+      setTimeout(() => setToast(null), 3000);
+    } else {
+      localStorage.removeItem("justSignedUp");
+      setJustSignedUp(false);
+    }
+  }, [user]);
 
-      if (firebaseUser) {
-        setToast(`🎉 Welcome, ${firebaseUser.email.split("@")[0]}! 🌿`);
-        setTimeout(() => setToast(null), 3000);
-      }
-
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  // 🚫 Redirect to login if trying to access a protected route
+  // Route protection logic
   useEffect(() => {
     if (loading) return;
 
-    const isPublic = [
-      "/",
-      "/login",
-      "/signup",
-      "/news",
-      "/contact",
-      "/reset-password",
-    ].some((path) => router.pathname.startsWith(path));
+    const isPublic = ["/", "/signup", "/news", "/contact", "/reset-password"];
+    const isPublicRoute = isPublic.some((path) =>
+      router.pathname.startsWith(path)
+    );
 
-    if (!user && !isPublic) {
-      openLogin(); // ✅ Trigger modal
-      router.push("/"); // ✅ Safe fallback
+    if (user && router.pathname === "/login") {
+      router.replace("/dashboard");
+      return;
+    }
+
+    if (!user && !isPublicRoute) {
+      openLogin();
+      if (router.pathname !== "/") {
+        router.replace("/");
+      }
     }
   }, [user, loading, router.pathname]);
 
-  // 🕒 Auto logout after 60 minutes of inactivity
+  // Auto logout after 60 minutes
   useEffect(() => {
     if (!user) return;
 
@@ -95,7 +116,7 @@ export function AuthProvider({ children }) {
         } catch (err) {
           console.error("Auto logout failed:", err);
         }
-      }, 60 * 60 * 1000); // 1 hour
+      }, 60 * 60 * 1000);
     };
 
     window.addEventListener("mousemove", logoutTimer);
@@ -110,7 +131,9 @@ export function AuthProvider({ children }) {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, toast, justSignedUp }}>
+    <AuthContext.Provider
+      value={{ user, loading, toast, justSignedUp, isPremium }}
+    >
       {!loading && (
         <>
           {toast && (

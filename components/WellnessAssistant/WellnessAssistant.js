@@ -1,103 +1,71 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useUI } from "../../context/UIContext";
 import classes from "./WellnessAssistant.module.css";
 
 export default function WellnessAssistant() {
+  const { user } = useAuth();
+  const { openLogin } = useUI();
+  const isAuthenticated = !!user;
+  const isPremium = user?.isPremium;
   const [isOpen, setIsOpen] = useState(false);
-  const [chat, setChat] = useState([
-    {
-      role: "assistant",
-      content: "Hi! I'm your wellness guide 🌿 How can I help you today?",
-    },
-  ]);
+  const [chat, setChat] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
-  const { user } = useAuth();
-  const [justSignedUp, setJustSignedUp] = useState(false);
-
-  useEffect(() => {
-    const checkFlag = () => {
-      const flag = localStorage.getItem("justSignedUp") === "true";
-      setJustSignedUp(flag);
-    };
-
-    checkFlag();
-    window.addEventListener("storage", checkFlag);
-
-    return () => window.removeEventListener("storage", checkFlag);
-  }, []);
-
-  // ✅ If user logs in AND flag is removed => allow AI
-  useEffect(() => {
-    if (user) {
-      const flag = localStorage.getItem("justSignedUp") === "true";
-      if (!flag) {
-        setJustSignedUp(false); // login not after signup => allow AI
-      }
-    }
-  }, [user]);
-
-  const isAuthenticated = !!user && !justSignedUp;
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chat]);
 
   const sendMessage = async () => {
-    if (!input.trim() || loading || !isAuthenticated) return;
+    if (!input.trim()) return;
 
-    const updatedChat = [...chat, { role: "user", content: input }];
-    setChat(updatedChat);
+    const userMessage = { role: "user", content: input };
+    setChat((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
 
-    try {
-      const res = await fetch("/api/ai-chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: updatedChat,
-          email: user?.email || "guest@demo.com",
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message || "Something went wrong");
-
-      setChat([...updatedChat, { role: "assistant", content: data.reply }]);
-    } catch (err) {
-      setChat([
-        ...updatedChat,
-        {
-          role: "assistant",
-          content: "⚠️ Sorry, I'm having trouble responding right now.",
-        },
-      ]);
-      console.error("AI fetch error:", err);
-    } finally {
+    // Simulate AI response (replace with API call if needed)
+    setTimeout(() => {
+      const response = {
+        role: "assistant",
+        content:
+          "🌿 Here’s a wellness tip: Stay hydrated and take deep breaths!",
+      };
+      setChat((prev) => [...prev, response]);
       setLoading(false);
-    }
+    }, 1000);
   };
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chat]);
 
   return (
     <div className={classes.launcher}>
       {isOpen ? (
         <div className={classes.box}>
           <h4 className={classes.title}>🌿 Wellness Assistant</h4>
+
           {!isAuthenticated && (
             <p className={`${classes.notice} ${classes.loginPrompt}`}>
-              🔐 <span className={classes.loginText}>Premium access —</span>
-              <a href="/login" className={classes.loginLink}>
-                Log in
-              </a>
-              <span className={classes.loginText}>
-                {" "}
-                to chat with your AI guide 🌿
-              </span>
+              🔐 Please{" "}
+              <button className={classes.loginLink} onClick={openLogin}>
+                log in
+              </button>{" "}
+              to access this feature.
             </p>
           )}
+
+          {isAuthenticated && !isPremium && (
+            <p className={`${classes.notice} ${classes.loginPrompt}`}>
+              💎 This is a premium feature.{" "}
+              <a href="/premium-confirmed" className={classes.loginLink}>
+                Upgrade to Premium
+              </a>{" "}
+              to unlock.
+            </p>
+          )}
+
           <div className={classes.log}>
             {chat.map((msg, i) => (
               <div
@@ -111,6 +79,7 @@ export default function WellnessAssistant() {
             ))}
             <div ref={chatEndRef} />
           </div>
+
           <div className={classes.inputRow}>
             <input
               type="text"
@@ -119,18 +88,23 @@ export default function WellnessAssistant() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               placeholder={
-                isAuthenticated ? "Ask me anything..." : "Login required..."
+                !isAuthenticated
+                  ? "Login required..."
+                  : !isPremium
+                  ? "Upgrade to use..."
+                  : "Ask me anything..."
               }
-              disabled={!isAuthenticated}
+              disabled={!isAuthenticated || !isPremium}
             />
             <button
               onClick={sendMessage}
               className={classes.send}
-              disabled={!isAuthenticated || loading}
+              disabled={!isAuthenticated || !isPremium || loading}
             >
               {loading ? "..." : "Send"}
             </button>
           </div>
+
           {loading && <p className={classes.loading}>Thinking...</p>}
         </div>
       ) : (

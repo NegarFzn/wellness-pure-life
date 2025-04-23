@@ -146,11 +146,24 @@ export default function Header({ weather }) {
               </>
             ) : user ? (
               <li className={classes.welcome}>
-                <NavLink href="/dashboard">
-                  <strong style={{ cursor: "pointer" }}>
-                    👤 {user.displayName || user.email.split("@")[0]}
-                  </strong>
-                </NavLink>
+                <button
+                  onClick={() => {
+                    if (user) {
+                      console.log("Navigating to dashboard");
+                      router.push("/dashboard");
+                    } else {
+                      openLogin(); // fallback protection
+                    }
+                  }}
+                  className={classes.navBtn}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  👤 {user.displayName || user.email.split("@")[0]}
+                </button>
               </li>
             ) : null}
           </ul>

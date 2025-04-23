@@ -109,7 +109,7 @@
 }
 
 .loginPrompt {
-  font-weight: 500;
+  font-weight: 700;
   color: #333;
 }
 
@@ -119,11 +119,14 @@
 }
 
 .loginLink {
-  color: #e8b007;
-  font-weight: 600;
+  color: #d61fa5;
+  font-weight: 800;
   text-decoration: underline;
   margin: 0 4px;
   transition: color 0.2s ease;
+  border: none;
+  font-size: 17px;
+  cursor: pointer;
 }
 
 .loginLink:hover {
