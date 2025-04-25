@@ -1,17 +1,23 @@
-.premium-btn {
-  background: linear-gradient(to right, #38b2ac, #3182ce); /* teal to blue */
-  color: #fff;
-  padding: 12px 24px;
-  font-size: 1rem;
+.premiumBtn {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: white;
   font-weight: 600;
+  padding: 10px 20px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(0, 114, 255, 0.2);
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-.premium-btn:hover {
+.premiumBtn:hover {
+  background: linear-gradient(135deg, #0072ff, #0052cc);
+  box-shadow: 0 6px 16px rgba(0, 114, 255, 0.4);
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.premiumBtn:active {
+  transform: scale(0.98);
+  box-shadow: 0 3px 8px rgba(0, 114, 255, 0.3);
 }

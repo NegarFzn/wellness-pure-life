@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { useRouter } from "next/router";
+import { createUserDocIfNotExists } from "../utils/createUserDoc"; // ✅ update path
 import { useUI } from "./UIContext"; // ✅ Modal control from UIContext
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
@@ -40,6 +41,7 @@ export function AuthProvider({ children }) {
         setLoading(false);
 
         if (firebaseUser) {
+          await createUserDocIfNotExists(firebaseUser); // 👈 Add this
           try {
             const docRef = doc(db, "users", firebaseUser.uid);
             const docSnap = await getDoc(docRef);

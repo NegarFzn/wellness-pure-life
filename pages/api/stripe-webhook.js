@@ -1,16 +1,16 @@
 import { buffer } from "micro";
 import Stripe from "stripe";
-import { markUserAsPremiumByEmail } from "../../lib/markUserPremiumByEmail"; // Create this function
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2022-11-15",
-});
+import { markUserAsPremiumByEmail } from "../../lib/markUserPremium";
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2022-11-15",
+});
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
       console.log("✅ Checkout completed for:", email);
 
       try {
-        await markUserAsPremiumByEmail(email); // 🔥 Promote the user in DB
+        await markUserAsPremiumByEmail(email);
         console.log("🌟 User upgraded to Premium!");
       } catch (err) {
         console.error("❌ Failed to upgrade user:", err.message);

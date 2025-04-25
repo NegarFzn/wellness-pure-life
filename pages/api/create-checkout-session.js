@@ -4,9 +4,13 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).end();
+  if (req.method !== "POST") {
+    console.log("❌ Invalid method");
+    return res.status(405).end();
+  }
 
   const { email } = req.body;
+  console.log("📨 Creating session for:", email);
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -14,7 +18,7 @@ export default async function handler(req, res) {
       payment_method_types: ["card"],
       line_items: [
         {
-          price: "price_1RGsNpFkW4K3pwedXi2EiUuB", // ✅ Your actual Stripe Price ID
+          price: "price_1RGsNpFkW4K3pwedXi2EiUuB", // <- Check this again too
           quantity: 1,
         },
       ],
@@ -23,10 +27,11 @@ export default async function handler(req, res) {
       cancel_url: `${req.headers.origin}/`,
     });
 
-    // 🔁 Return sessionUrl (or redirect URL)
-    res.status(200).json({ sessionUrl: session.url });
+    console.log("✅ Stripe session created:", session.id);
+
+    res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error("Error creating checkout session:", err);
+    console.error("❌ Stripe Error:", err.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }

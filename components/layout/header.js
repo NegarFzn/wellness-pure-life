@@ -3,6 +3,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import NavLink from "./nav-link";
+import { signOut } from "firebase/auth";
+import { auth } from "../../lib/firebase";
 import { useAuth } from "../../context/AuthContext";
 import { useUI } from "../../context/UIContext";
 import Signup from "../Auth/Signup";
@@ -145,26 +147,40 @@ export default function Header({ weather }) {
                 </li>
               </>
             ) : user ? (
-              <li className={classes.welcome}>
-                <button
-                  onClick={() => {
-                    if (user) {
-                      console.log("Navigating to dashboard");
-                      router.push("/dashboard");
-                    } else {
-                      openLogin(); // fallback protection
-                    }
-                  }}
-                  className={classes.navBtn}
-                  style={{
-                    background: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  👤 {user.displayName || user.email.split("@")[0]}
-                </button>
-              </li>
+              <>
+                <li className={classes.welcome}>
+                  <button
+                    onClick={() => {
+                      if (user) {
+                        console.log("Navigating to dashboard");
+                        router.push("/dashboard");
+                      } else {
+                        openLogin(); // fallback protection
+                      }
+                    }}
+                    className={classes.navBtn}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    👤 {user.displayName || user.email.split("@")[0]}
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={async () => {
+                      await signOut(auth);
+                      console.log("🚪 Logged out");
+                      router.push("/");
+                    }}
+                    className={classes.navBtn}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
             ) : null}
           </ul>
         </nav>

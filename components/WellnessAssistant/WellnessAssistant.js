@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useUI } from "../../context/UIContext";
+import PremiumButton from "../PremiumButton/PremiumButton";
 import classes from "./WellnessAssistant.module.css";
 
 export default function WellnessAssistant() {
-  const { user } = useAuth();
+  const { user, isPremium } = useAuth();
   const { openLogin } = useUI();
   const isAuthenticated = !!user;
-  const isPremium = user?.isPremium;
   const [isOpen, setIsOpen] = useState(false);
   const [chat, setChat] = useState([]);
   const [input, setInput] = useState("");
@@ -58,10 +58,7 @@ export default function WellnessAssistant() {
 
           {isAuthenticated && !isPremium && (
             <p className={`${classes.notice} ${classes.loginPrompt}`}>
-              💎 This is a premium feature.{" "}
-              <a href="/premium-confirmed" className={classes.loginLink}>
-                Upgrade to Premium
-              </a>{" "}
+              💎 This is a premium feature.{" "} <PremiumButton /><br/>
               to unlock.
             </p>
           )}
