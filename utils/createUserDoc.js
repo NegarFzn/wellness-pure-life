@@ -1,18 +1,18 @@
 // utils/createUserDoc.js
-import { setDoc, doc } from "firebase/firestore";
-import { db } from "../lib/firebase"; // adjust if your firebase config is elsewhere
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
 export async function createUserDocIfNotExists(user) {
-  if (!user) return;
+  if (!user?.uid) return;
 
   const userRef = doc(db, "users", user.uid);
-  await setDoc(
-    userRef,
-    {
+  const docSnap = await getDoc(userRef);
+
+  if (!docSnap.exists()) {
+    await setDoc(userRef, {
       email: user.email,
-      isPremium: false,
-      createdAt: new Date().toISOString(),
-    },
-    { merge: true }
-  );
+      isPremium: false, // ❌ Start as not premium
+      createdAt: serverTimestamp(), // ✅ real Firestore server timestamp
+    });
+  }
 }

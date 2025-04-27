@@ -6,10 +6,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     console.log("❌ Invalid method");
-    return res.status(405).end();
+    res.setHeader("Allow", "POST");
+    return res.status(405).end("Method Not Allowed");
   }
 
-  const { email } = req.body;
+  const { uid, email } = req.body; // ✅ Now receiving uid + email
   console.log("📨 Creating session for:", email);
 
   try {
@@ -23,6 +24,9 @@ export default async function handler(req, res) {
         },
       ],
       customer_email: email,
+      metadata: {
+        uid: uid, // ✅ Pass UID here for webhook to find the user
+      },
       success_url: `${req.headers.origin}/premium-confirmed?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.origin}/`,
     });

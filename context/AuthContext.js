@@ -19,6 +19,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const [isPremium, setIsPremium] = useState(false);
+  const [loadingPremium, setLoadingPremium] = useState(true); // ✅ new
   const router = useRouter();
   const [justSignedUp, setJustSignedUp] = useState(false);
   const { openLogin } = useUI(); // ✅ control modal
@@ -56,8 +57,10 @@ export function AuthProvider({ children }) {
             console.error("❌ Failed to fetch user data:", err.message);
             setIsPremium(false);
           }
+          setLoadingPremium(false); // ✅ important: finish checking premium
         } else {
           setIsPremium(false);
+          setLoadingPremium(false); // ✅ also set it false on logout
         }
       });
 
@@ -118,7 +121,7 @@ export function AuthProvider({ children }) {
         } catch (err) {
           console.error("Auto logout failed:", err);
         }
-      }, 60 * 60 * 1000);
+      }, 24 * 60 * 60 * 1000); // 24 hours
     };
 
     window.addEventListener("mousemove", logoutTimer);
@@ -134,7 +137,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, toast, justSignedUp, isPremium }}
+      value={{ user, loading, toast, justSignedUp, isPremium, loadingPremium }}
     >
       {!loading && (
         <>

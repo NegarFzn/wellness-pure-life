@@ -1,6 +1,7 @@
 import { buffer } from "micro";
 import Stripe from "stripe";
-import { markUserAsPremiumByEmail } from "../../lib/markUserPremium";
+import { db } from "../../lib/firebase";
+import { doc, updateDoc } from "firebase/firestore";
 
 export const config = {
   api: {
@@ -32,12 +33,21 @@ export default async function handler(req, res) {
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
-      const email = session.customer_email;
+      const uid = session.metadata.uid; // ✅ get UID from metadata
 
-      console.log("✅ Checkout completed for:", email);
+      console.log("✅ Checkout completed for UID:", uid);
+
+      if (!uid) {
+        console.error("❌ UID missing in session metadata");
+        return res.status(400).send("UID missing in session metadata");
+      }
 
       try {
-        await markUserAsPremiumByEmail(email);
+        const userRef = doc(db, "users", uid);
+        await updateDoc(userRef, {
+          isPremium: true,
+          upgradedAt: new Date().toISOString(),
+        });
         console.log("🌟 User upgraded to Premium!");
       } catch (err) {
         console.error("❌ Failed to upgrade user:", err.message);

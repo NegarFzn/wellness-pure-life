@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "../context/AuthContext";
-import { markUserAsPremium } from "../lib/markUserPremium";
+import { markUserAsPremiumByEmail } from "../lib/markUserPremium";
 import classes from "./premium-confirmed.module.css";
 
 export default function PremiumConfirmed() {
@@ -17,8 +17,12 @@ export default function PremiumConfirmed() {
       if (user && sessionId) {
         setStatus("updating");
         try {
-          await markUserAsPremium(user.uid, user.email);
+          await markUserAsPremiumByEmail(user.uid);
           setStatus("success");
+          // After success, wait 3 seconds, then redirect to homepage
+          setTimeout(() => {
+            router.push("/");
+          }, 3000);
         } catch (err) {
           console.error("🔥 Failed to mark as premium:", err.message);
           setStatus("error");

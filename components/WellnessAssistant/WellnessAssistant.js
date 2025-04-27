@@ -4,8 +4,18 @@ import { useUI } from "../../context/UIContext";
 import PremiumButton from "../PremiumButton/PremiumButton";
 import classes from "./WellnessAssistant.module.css";
 
-export default function WellnessAssistant() {
-  const { user, isPremium } = useAuth();
+export default function WellnessAssistantContent() {
+  const { user, isPremium, loadingPremium } = useAuth();
+
+  // ✅ return early BEFORE calling any other hooks
+  if (typeof loadingPremium !== "boolean" || loadingPremium) {
+    return (
+      <div className={classes.loaderWrapper}>
+        <p className={classes.loading}>🔄 Checking access...</p>
+      </div>
+    );
+  }
+
   const { openLogin } = useUI();
   const isAuthenticated = !!user;
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +23,32 @@ export default function WellnessAssistant() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
+
+  // ✅ Show a nice loader until premium status check is complete
+  if (loadingPremium) {
+    return (
+      <div className={classes.loaderWrapper}>
+        <div className={classes.spinner}></div>
+        <p className={classes.loading}>Checking your access...</p>
+      </div>
+    );
+  }
+
+  // Load saved chat on first render
+  useEffect(() => {
+    const storedChat = localStorage.getItem("wellnessChat");
+    if (storedChat) {
+      setChat(JSON.parse(storedChat));
+    }
+  }, []);
+
+  // Save chat and scroll to bottom when updated
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+    localStorage.setItem("wellnessChat", JSON.stringify(chat));
+  }, [chat]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -40,6 +76,14 @@ export default function WellnessAssistant() {
     }
   }, [chat]);
 
+  // Clear chat after logout
+  useEffect(() => {
+    if (!isAuthenticated) {
+      localStorage.removeItem("wellnessChat");
+      setChat([]); // Clear chat visually too
+    }
+  }, [isAuthenticated]);
+
   return (
     <div className={classes.launcher}>
       {isOpen ? (
@@ -48,17 +92,16 @@ export default function WellnessAssistant() {
 
           {!isAuthenticated && (
             <p className={`${classes.notice} ${classes.loginPrompt}`}>
-              🔐 Please{" "}
-              <button className={classes.loginLink} onClick={openLogin}>
-                log in
-              </button>{" "}
-              to access this feature.
+              💎 This is a premium feature. <PremiumButton />
+              <br />
+              to unlock.
             </p>
           )}
 
           {isAuthenticated && !isPremium && (
             <p className={`${classes.notice} ${classes.loginPrompt}`}>
-              💎 This is a premium feature.{" "} <PremiumButton /><br/>
+              💎 This is a premium feature. <PremiumButton />
+              <br />
               to unlock.
             </p>
           )}
