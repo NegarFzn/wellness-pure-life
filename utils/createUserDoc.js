@@ -9,10 +9,14 @@ export async function createUserDocIfNotExists(user) {
   const docSnap = await getDoc(userRef);
 
   if (!docSnap.exists()) {
-    await setDoc(userRef, {
-      email: user.email,
-      isPremium: false, // ❌ Start as not premium
-      createdAt: serverTimestamp(), // ✅ real Firestore server timestamp
-    });
+    await setDoc(
+      userRef,
+      {
+        email: user.email,
+        isPremium: false, // ❌ Start as not premium
+        createdAt: serverTimestamp(), // ✅ real Firestore server timestamp
+      },
+      { merge: true } // ✅ IMPORTANT: merge means "update or create safely"
+    );
   }
 }

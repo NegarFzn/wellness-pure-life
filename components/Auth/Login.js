@@ -3,7 +3,12 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
+} from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import classes from "./Login.module.css";
 
@@ -15,6 +20,7 @@ export default function Login({
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const router = useRouter();
@@ -29,10 +35,15 @@ export default function Login({
     }
   }, [isOpen]);
 
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     try {
+      await setPersistence(
+        auth,
+        rememberMe ? browserLocalPersistence : browserSessionPersistence
+      );
       await signInWithEmailAndPassword(auth, email, password);
       localStorage.removeItem("justSignedUp");
       setSuccess(true);
@@ -62,6 +73,7 @@ export default function Login({
     }
   };
 
+
   const handleResetPassword = async () => {
     setError(null);
 
@@ -86,6 +98,7 @@ export default function Login({
       );
     }
   };
+
 
   if (!isOpen) return null;
 
@@ -122,6 +135,16 @@ export default function Login({
             required
             className={classes.input}
           />
+          <div className={classes.checkboxRow}>
+            <input
+              type="checkbox"
+              id="rememberMe"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
+            <label htmlFor="rememberMe">Remember Me</label>
+          </div>
+
           <button type="submit" className={classes.button}>
             Login
           </button>

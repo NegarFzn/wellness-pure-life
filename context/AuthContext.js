@@ -41,7 +41,7 @@ export function AuthProvider({ children }) {
         setUser(firebaseUser);
         setLoading(false);
 
-        if (firebaseUser) {
+        if (firebaseUser && firebaseUser.uid) {
           await createUserDocIfNotExists(firebaseUser); // 👈 Add this
           try {
             const docRef = doc(db, "users", firebaseUser.uid);
