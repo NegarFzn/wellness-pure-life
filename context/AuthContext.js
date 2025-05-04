@@ -28,15 +28,19 @@ export function AuthProvider({ children }) {
 
   const refreshUser = async () => {
     try {
-      const currentUser = getAuth().currentUser;
+      const auth = getAuth();
+      const currentUser = auth.currentUser;
+  
       if (currentUser) {
-        await currentUser.reload();
-        setUser(getAuth().currentUser); // Do not spread with {...}
+        await reload(currentUser); // 🔄 force session refresh
+        const updatedUser = auth.currentUser;
+        setUser(updatedUser); // ✅ use fresh user from Firebase
       }
     } catch (error) {
-      console.error("Failed to refresh user:", error);
+      console.error("❌ Failed to refresh user session:", error);
     }
   };
+  
   
 
   useEffect(() => {
