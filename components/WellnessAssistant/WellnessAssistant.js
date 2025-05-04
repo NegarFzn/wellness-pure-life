@@ -84,6 +84,13 @@ export default function WellnessAssistantContent() {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      setChat(prevChat => prevChat.filter(msg => msg.content !== "⚠️ Please login first to upgrade and access the Assistant!"));
+    }
+  }, [isAuthenticated]);
+  
+
   return (
     <div className={classes.launcher}>
       {isOpen ? (
@@ -92,8 +99,24 @@ export default function WellnessAssistantContent() {
 
           {!isAuthenticated && (
             <p className={`${classes.notice} ${classes.loginPrompt}`}>
-              💎 This is a premium feature. <PremiumButton />
-              <br />
+              💎 This is a premium feature.
+              <span
+                type="button"
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    setChat((prev) => [
+                      ...prev,
+                      {
+                        role: "system",
+                        content:
+                          "⚠️ Please login first to upgrade and access the Assistant!",
+                      },
+                    ]);
+                  }
+                }}
+              >
+                <PremiumButton />
+              </span>
               to unlock.
             </p>
           )}

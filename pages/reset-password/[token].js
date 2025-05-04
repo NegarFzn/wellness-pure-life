@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import classes from "./index.module.css";
-
+import classes from "./token.module.css";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -20,7 +19,6 @@ export default function ResetPasswordPage() {
     console.log("🔍 ROUTER READY:", router.isReady);
     console.log("🔑 TOKEN:", token);
   }, [router.isReady, token]);
-  
 
   useEffect(() => {
     if (!router.isReady || !token) return;
@@ -79,12 +77,13 @@ export default function ResetPasswordPage() {
 
   return (
     <div className={classes.container}>
-      <h2>Reset Your Password 🔐</h2>
+      <h2 className={classes.heading}>Reset Your Password 🔐</h2>
       <form onSubmit={handleReset} className={classes.form}>
         <input
           type="password"
           placeholder="New Password"
           value={password}
+          className={classes.input}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
@@ -92,15 +91,16 @@ export default function ResetPasswordPage() {
           type="password"
           placeholder="Confirm Password"
           value={confirm}
+          className={classes.input}
           onChange={(e) => setConfirm(e.target.value)}
           required
         />
-        <button type="submit">Reset Password</button>
+        <button type="submit" className={classes.button}>
+          Reset Password
+        </button>
         {message && <p className={classes.success}>{message}</p>}
         {error && <p className={classes.error}>{error}</p>}
       </form>
     </div>
   );
 }
-
-

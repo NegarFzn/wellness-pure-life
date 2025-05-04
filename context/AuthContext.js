@@ -4,8 +4,9 @@ import {
   signOut,
   setPersistence,
   browserLocalPersistence,
+  getAuth,
+  reload,
 } from "firebase/auth";
-import { auth } from "../lib/firebase";
 import { useRouter } from "next/router";
 import { createUserDocIfNotExists } from "../utils/createUserDoc"; // ✅ update path
 import { useUI } from "./UIContext"; // ✅ Modal control from UIContext
@@ -23,67 +24,92 @@ export function AuthProvider({ children }) {
   const router = useRouter();
   const [justSignedUp, setJustSignedUp] = useState(false);
   const { openLogin } = useUI(); // ✅ control modal
+  const auth = getAuth();
+
+  const refreshUser = async () => {
+    try {
+      const currentUser = getAuth().currentUser;
+      if (currentUser) {
+        await currentUser.reload();
+        setUser(getAuth().currentUser); // Do not spread with {...}
+      }
+    } catch (error) {
+      console.error("Failed to refresh user:", error);
+    }
+  };
+  
 
   useEffect(() => {
     console.log("🧠 AuthContext:", { user, loading });
   }, [user, loading]);
 
   // Initialize auth with persistence
+  // Initialize auth with persistence
   useEffect(() => {
+    let unsubscribe;
+
     const initializeAuth = async () => {
       try {
         await setPersistence(auth, browserLocalPersistence);
+
+        unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+          setUser(firebaseUser);
+          setLoading(false);
+
+          if (firebaseUser && firebaseUser.uid) {
+            await createUserDocIfNotExists(firebaseUser); // 👈 Add this
+            try {
+              const docRef = doc(db, "users", firebaseUser.uid);
+              const docSnap = await getDoc(docRef);
+
+              if (docSnap.exists()) {
+                setIsPremium(docSnap.data().isPremium || false);
+              } else {
+                console.warn("⚠️ User document not found in Firestore.");
+                setIsPremium(false);
+              }
+            } catch (err) {
+              console.error("❌ Failed to fetch user data:", err.message);
+              setIsPremium(false);
+            }
+          } else {
+            setIsPremium(false);
+          }
+
+          setLoadingPremium(false); // ✅ also set it false on logout
+        });
       } catch (error) {
         console.error("🔥 Persistence error:", error.message);
       }
-
-      const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        setUser(firebaseUser);
-        setLoading(false);
-
-        if (firebaseUser && firebaseUser.uid) {
-          await createUserDocIfNotExists(firebaseUser); // 👈 Add this
-          try {
-            const docRef = doc(db, "users", firebaseUser.uid);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-              setIsPremium(docSnap.data().isPremium || false);
-            } else {
-              console.warn("⚠️ User document not found in Firestore.");
-              setIsPremium(false);
-            }
-          } catch (err) {
-            console.error("❌ Failed to fetch user data:", err.message);
-            setIsPremium(false);
-          }
-          setLoadingPremium(false); // ✅ important: finish checking premium
-        } else {
-          setIsPremium(false);
-          setLoadingPremium(false); // ✅ also set it false on logout
-        }
-      });
-
-      return () => unsubscribe();
     };
 
     initializeAuth();
+
+    return () => {
+      if (typeof unsubscribe === "function") {
+        unsubscribe(); // ✅ safe cleanup
+      }
+    };
   }, []);
 
   // Handle auth-based UI changes
   useEffect(() => {
     const isFresh = localStorage.getItem("justSignedUp") === "true";
-    if (user) {
+    if (user && isFresh) {
       setToast(
-        `🎉 Welcome, ${user.displayName || user.email.split("@")[0]}! 🌿`
+        `🎉 Welcome, ${
+          user.displayName || user.email?.split("@")[0] || "friend"
+        }! 🌿`
       );
-      setJustSignedUp(isFresh);
-      setTimeout(() => setToast(null), 3000);
-    } else {
-      localStorage.removeItem("justSignedUp");
-      setJustSignedUp(false);
+      setJustSignedUp(true);
+  
+      setTimeout(() => {
+        setToast(null);
+        localStorage.removeItem("justSignedUp");
+      }, 3000);
     }
   }, [user]);
+  
 
   // Route protection logic
   useEffect(() => {
@@ -137,7 +163,15 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, toast, justSignedUp, isPremium, loadingPremium }}
+      value={{
+        user,
+        loading,
+        toast,
+        justSignedUp,
+        isPremium,
+        loadingPremium,
+        refreshUser,
+      }}
     >
       {!loading && (
         <>

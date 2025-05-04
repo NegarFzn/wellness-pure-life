@@ -114,3 +114,10 @@
   gap: 8px;
   margin-bottom: 10px;
 }
+
+.switchText {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}

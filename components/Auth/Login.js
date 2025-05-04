@@ -35,7 +35,6 @@ export default function Login({
     }
   }, [isOpen]);
 
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -45,9 +44,11 @@ export default function Login({
         rememberMe ? browserLocalPersistence : browserSessionPersistence
       );
       await signInWithEmailAndPassword(auth, email, password);
-      localStorage.removeItem("justSignedUp");
+      await refreshUser(); // ✅ force latest auth state after login
+      localStorage.removeItem("justSignedUp", "true");
       setSuccess(true);
       if (onLoginSuccess) onLoginSuccess(); // ✅ trigger callback
+      router.push("/dashboard"); // ✅ redirect to dashboard
       onClose(); // ✅ close modal on success
       setTimeout(() => {
         setSuccess(false); // hide message
@@ -73,6 +74,7 @@ export default function Login({
     }
   };
 
+  
 
   const handleResetPassword = async () => {
     setError(null);
@@ -98,7 +100,6 @@ export default function Login({
       );
     }
   };
-
 
   if (!isOpen) return null;
 
@@ -158,6 +159,19 @@ export default function Login({
 
           {error && <p className={classes.error}>{error}</p>}
           {success && <p className={classes.success}>✅ Login successful!</p>}
+          <p className={classes.switchText}>
+            Don't have an account?{" "}
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                if (switchToSignup) switchToSignup();
+              }}
+              className={classes.linkButton}
+            >
+              Sign up here
+            </button>
+          </p>
         </form>
       </div>
     </div>
