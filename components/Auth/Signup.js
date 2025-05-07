@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../../lib/firebase";
+import { signIn } from "next-auth/react";
 import classes from "./Signup.module.css";
 
 export default function Signup({
@@ -40,27 +39,41 @@ export default function Signup({
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-      await updateProfile(userCredential.user, {
-        displayName: name,
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
       });
+
+      const text = await res.text();
+      let data;
+
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        throw new Error("Unexpected server error. Please try again later.");
+      }
+
+      if (!res.ok) throw new Error(data.message || "Signup failed");
+
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (result?.error) {
+        throw new Error("Auto-login failed: " + result.error);
+      }
 
       localStorage.setItem("justSignedUp", "true");
       window.dispatchEvent(new Event("storage"));
 
       if (onSignupComplete) onSignupComplete();
-      setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false);
-        onClose();
-      }, 1500);
+
+      window.location.assign(result.url || "/");
     } catch (err) {
-      if (err.code === "auth/email-already-in-use") {
+      if (err.message.includes("Email already in use")) {
         setError(
           <>
             This email is already registered.{" "}

@@ -1,16 +1,16 @@
 import Head from "next/head";
 import Layout from "../components/layout/layout";
-import { AuthProvider } from "../context/AuthContext";
 import { UIProvider } from "../context/UIContext";
+import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // ✅ important!
+import "react-toastify/dist/ReactToastify.css";
 import "../styles/globals.css";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <UIProvider>
-      <AuthProvider>
+    <SessionProvider session={session}>
+      <UIProvider>
         <Layout>
           <Head>
             <title>Healthy Life</title>
@@ -24,15 +24,12 @@ function MyApp({ Component, pageProps }) {
               width="device-width"
             />
           </Head>
-          {/* ✅ react-toastify container */}
           <ToastContainer position="top-center" autoClose={3000} />
-
-          {/* Optional: Keep react-hot-toast too if you use it elsewhere */}
           <Toaster position="top-right" reverseOrder={false} />
           <Component {...pageProps} />
         </Layout>
-      </AuthProvider>
-    </UIProvider>
+      </UIProvider>
+    </SessionProvider>
   );
 }
 

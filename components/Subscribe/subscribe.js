@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { saveSubscriber } from "../../lib/saveSubscriber";
 import { toast } from "react-hot-toast";
 import classes from "./subscribe.module.css";
 
@@ -30,16 +29,22 @@ export default function Subscribe() {
     setMessage("⏳ Subscribing...");
 
     try {
-      const result = await saveSubscriber({ email, name });
+      const res = await fetch("/api/auth/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name }),
+      });
 
-      if (result.success) {
+      const result = await res.json();
+
+      if (res.status === 201) {
         setEmail("");
         setName("");
         setSubscribed(true);
         setShowForm(false);
         setMessage("✅ Thank you for subscribing!");
         toast.success("Thank you for subscribing!");
-      } else if (result.message.includes("already")) {
+      } else if (res.status === 409) {
         setSubscribed(true);
         setShowForm(false);
         setEmail("");
@@ -50,7 +55,7 @@ export default function Subscribe() {
         toast.success("You're already subscribed.");
       } else {
         setMessage(result.message || "Something went wrong.");
-        toast.error(data.message || "Something went wrong.");
+        toast.error(result.message || "Something went wrong.");
       }
     } catch (err) {
       console.error("Subscription error:", err);
@@ -73,7 +78,6 @@ export default function Subscribe() {
         </p>
       )}
 
-      {/* Show Subscribe Button (before click) */}
       {!showForm && !subscribed && (
         <button
           onClick={handleInitialClick}
@@ -82,7 +86,7 @@ export default function Subscribe() {
           Subscribe
         </button>
       )}
-      {/* Show Form (after click, before subscribed) */}
+
       {showForm && (
         <form className={classes.newsletterForm} onSubmit={handleSubscribe}>
           <input
@@ -107,7 +111,7 @@ export default function Subscribe() {
           {message && <p className={classes.errorMessage}>{message}</p>}
         </form>
       )}
-      {/* Show Subscribed Button (after success) */}
+
       {subscribed && !showForm && (
         <div className={classes.subscribedContainer}>
           <button

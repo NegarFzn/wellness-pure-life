@@ -3,9 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import NavLink from "./nav-link";
-import { signOut } from "firebase/auth";
-import { auth } from "../../lib/firebase";
-import { useAuth } from "../../context/AuthContext";
+import { signOut, useSession } from "next-auth/react";
 import { useUI } from "../../context/UIContext";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
@@ -14,7 +12,10 @@ import classes from "./header.module.css";
 
 export default function Header({ weather }) {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { data: session, status } = useSession();
+  const user = session?.user || null;
+  const loading = status === "loading";
+
   const {
     openLogin,
     openSignup,
@@ -23,6 +24,7 @@ export default function Header({ weather }) {
     closeLogin,
     closeSignup,
   } = useUI();
+
   const [justSignedUp, setJustSignedUp] = useState(false);
 
   useEffect(() => {
@@ -39,17 +41,11 @@ export default function Header({ weather }) {
       }
     };
 
-    checkFlag(); // Initial check
-
-    // Listen for changes in localStorage
+    checkFlag();
     window.addEventListener("storage", checkFlag);
-
-    return () => {
-      window.removeEventListener("storage", checkFlag);
-    };
+    return () => window.removeEventListener("storage", checkFlag);
   }, []);
 
-  // ✅ Reset justSignedUp if user logs out
   useEffect(() => {
     if (!user) {
       localStorage.removeItem("justSignedUp");
@@ -92,7 +88,7 @@ export default function Header({ weather }) {
   };
 
   const handleLoginSuccess = () => {
-    closeLogin(); // ✅ from useUI()
+    closeLogin();
   };
 
   return (
@@ -125,14 +121,12 @@ export default function Header({ weather }) {
                 )}
               </NavLink>
             </li>
-
             {getNavLinks().map((link) => (
               <li key={link.href}>
                 <NavLink href={link.href}>{link.label}</NavLink>
               </li>
             ))}
 
-            {/* Auth logic */}
             {!user && !justSignedUp ? (
               <>
                 <li>
@@ -151,12 +145,7 @@ export default function Header({ weather }) {
                 <li className={classes.welcome}>
                   <button
                     onClick={() => {
-                      if (user) {
-                        console.log("Navigating to dashboard");
-                        router.push("/dashboard");
-                      } else {
-                        openLogin(); // fallback protection
-                      }
+                      router.push("/dashboard");
                     }}
                     className={classes.navBtn}
                     style={{
@@ -165,18 +154,14 @@ export default function Header({ weather }) {
                       cursor: "pointer",
                     }}
                   >
-                    👤{" "}
-                    {user?.displayName ||
-                      user?.email?.split("@")[0] ||
-                      "Account"}
+                    👤 {user?.name || user?.email?.split("@")[0] || "Account"}
                   </button>
                 </li>
                 <li>
                   <button
-                    onClick={async () => {
-                      await signOut(auth);
+                    onClick={() => {
+                      signOut({ callbackUrl: "/" });
                       console.log("🚪 Logged out");
-                      router.push("/");
                     }}
                     className={classes.navBtn}
                   >
@@ -187,6 +172,7 @@ export default function Header({ weather }) {
             ) : null}
           </ul>
         </nav>
+
         <Signup
           isOpen={showSignup}
           onClose={closeSignup}

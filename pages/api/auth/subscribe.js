@@ -1,5 +1,6 @@
-import { db } from "../../../lib/firebaseAdmin"; // using server-side Firestore
-import { sendWelcomeEmail } from "../../../utils/email"; // sends the welcome email
+import { firestore } from "../../../utils/firebaseAdmin"; // Server-side Firestore instance
+import { sendEmail } from "../../../utils/email"; // Universal email sender
+import { createSubscriptionEmail } from "../../../emails/emailCreator"; // Email content builder
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -13,8 +14,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // ✅ Using firebase-admin SDK pattern
-    const docRef = db.collection("subscribers").doc(email);
+    const docRef = firestore.collection("subscribers").doc(email);
     const docSnap = await docRef.get();
 
     if (docSnap.exists) {
@@ -27,7 +27,8 @@ export default async function handler(req, res) {
       createdAt: new Date().toISOString(),
     });
 
-    await sendWelcomeEmail(name, email);
+    const { subject, body } = createSubscriptionEmail(name);
+    await sendEmail(email, subject, body);
 
     return res.status(201).json({ message: "✅ Thank you for subscribing!" });
   } catch (error) {
