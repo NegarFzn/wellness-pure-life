@@ -28,26 +28,25 @@ export default function Header({ weather }) {
   const [justSignedUp, setJustSignedUp] = useState(false);
 
   useEffect(() => {
-    console.log("🔥 FINAL CHECK", { user, loading, pathname: router.pathname });
-  }, [user, loading, router.pathname]);
+    if (
+      typeof window !== "undefined" &&
+      localStorage.getItem("justSignedUp") === "true"
+    ) {
+      setJustSignedUp(true);
+    }
 
-  useEffect(() => {
     const checkFlag = () => {
-      if (
-        typeof window !== "undefined" &&
-        localStorage.getItem("justSignedUp") === "true"
-      ) {
+      if (localStorage.getItem("justSignedUp") === "true") {
         setJustSignedUp(true);
       }
     };
 
-    checkFlag();
     window.addEventListener("storage", checkFlag);
     return () => window.removeEventListener("storage", checkFlag);
   }, []);
 
   useEffect(() => {
-    if (!user) {
+    if (user) {
       localStorage.removeItem("justSignedUp");
       setJustSignedUp(false);
     }
@@ -91,8 +90,16 @@ export default function Header({ weather }) {
     closeLogin();
   };
 
+  const showVerifyPrompt = justSignedUp && !user;
+
   return (
     <>
+      {showVerifyPrompt && (
+        <div className={classes.verifyPromptBanner}>
+          ✅ Thank you for signing up! Please check your email to verify your
+          account.
+        </div>
+      )}
       <header className={classes.header}>
         <Link href="/" className={classes.logo}>
           <Image src={logoImg} alt="Wellness Pure Life" priority />
@@ -127,20 +134,28 @@ export default function Header({ weather }) {
               </li>
             ))}
 
-            {!user && !justSignedUp ? (
-              <>
-                <li>
-                  <button onClick={openSignup} className={classes.navBtn}>
-                    Sign Up Free
-                  </button>
+            {!user ? (
+              justSignedUp ? (
+                <li className={classes.pendingVerify}>
+                  <span className={classes.pendingText}>
+                    📬 Verify your email
+                  </span>
                 </li>
-                <li>
-                  <button onClick={openLogin} className={classes.navBtn}>
-                    Login
-                  </button>
-                </li>
-              </>
-            ) : user ? (
+              ) : (
+                <>
+                  <li>
+                    <button onClick={openSignup} className={classes.navBtn}>
+                      Sign Up Free
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={openLogin} className={classes.navBtn}>
+                      Login
+                    </button>
+                  </li>
+                </>
+              )
+            ) : (
               <>
                 <li className={classes.welcome}>
                   <button
@@ -169,7 +184,7 @@ export default function Header({ weather }) {
                   </button>
                 </li>
               </>
-            ) : null}
+            )}
           </ul>
         </nav>
 

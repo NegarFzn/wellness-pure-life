@@ -14,10 +14,25 @@ export default function Login({
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false); // optional — not used directly
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const router = useRouter();
+
+  // ✅ Show toast if redirected after verification (only once)
+  useEffect(() => {
+    const hasToastFired = sessionStorage.getItem("verifiedToastShown");
+
+    if (router.query.verified === "true" && !hasToastFired) {
+      toast.success("✅ Email verified successfully. Please log in.");
+      sessionStorage.setItem("verifiedToastShown", "true");
+
+      const { verified, ...rest } = router.query;
+      router.replace({ pathname: router.pathname, query: rest }, undefined, {
+        shallow: true,
+      });
+    }
+  }, [router]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -65,21 +80,24 @@ export default function Login({
 
   const handleResetPassword = async () => {
     setError(null);
-    if (!email) {
-      setError("Please enter your email to reset your password.");
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      setError("Please enter a valid email to reset your password.");
       return;
     }
 
     try {
-      const res = await axios.post("/api/send-reset", { email });
-      toast.success(
-        res.data.message || "📬 Reset email sent. Check your inbox."
-      );
+      const res = await axios.post("/api/auth/reset-password", { email });
+      toast.success("📬 Reset email sent. Check your inbox.");
     } catch (err) {
-      setError(
-        err?.response?.data?.message ||
-          "Could not send reset email. Please check the address and try again."
-      );
+      if (err?.response?.status === 404) {
+        setError("This email is not registered. Please sign up first.");
+      } else {
+        setError(
+          err?.response?.data?.message ||
+            "Could not send reset email. Please try again."
+        );
+      }
     }
   };
 

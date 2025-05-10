@@ -1,22 +1,30 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { fetchNews } from "../utils/fetch";
 import Head from "next/head";
 import Subscribe from "../components/Subscribe/subscribe";
 import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
 import DailyList from "../components/DailyList/DailyList";
 import WellnessAssistant from "../components/WellnessAssistant/WellnessAssistant";
+import ResetPassword from "../components/Auth/ResetPassword";
 import classes from "./index.module.css";
 
 export default function Home() {
   const [newsArticles, setNewsArticles] = useState([]);
   const [showButton, setShowButton] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [resendEmail, setResendEmail] = useState("");
+  const [resendResult, setResendResult] = useState(null);
+  const [showResetModal, setShowResetModal] = useState(false);
+
+  const router = useRouter();
+  const { verifyToken, resetToken } = router.query;
 
   useEffect(() => {
     const getNews = async () => {
       const news = await fetchNews();
       setNewsArticles(news.slice(0, 2));
     };
-
     getNews();
   }, []);
 
@@ -27,6 +35,57 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (verifyToken) {
+      const verifyEmail = async () => {
+        setVerifying(true);
+        try {
+          const res = await fetch(
+            `/api/auth/emailverification?token=${verifyToken}`
+          );
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            router.replace("/login?verified=true");
+          } else {
+            alert(data.message || "Verification failed");
+          }
+        } catch {
+          alert("Verification failed unexpectedly.");
+        } finally {
+          setVerifying(false);
+        }
+      };
+      verifyEmail();
+    }
+  }, [verifyToken]);
+
+  useEffect(() => {
+    if (resetToken) {
+      setShowResetModal(true);
+    }
+  }, [resetToken]);
+
+  const handleResend = async (e) => {
+    e.preventDefault();
+    setResendResult(null);
+    try {
+      const res = await fetch("/api/auth/emailverification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: resendEmail }),
+      });
+      const data = await res.json();
+      setResendResult(
+        res.ok
+          ? "✅ A new verification link has been sent."
+          : `❌ ${data.message}`
+      );
+    } catch {
+      setResendResult("❌ Failed to resend verification. Try again.");
+    }
+  };
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -43,11 +102,18 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
       </Head>
-      {/* Home Page Content */}
+
+      {verifying && (
+        <div className={classes.verifyBanner}>
+          🔄 Verifying your email, please wait...
+        </div>
+      )}
+
       <main className={classes.container}>
         <DailyList />
         <KeyFeatures />
         <Subscribe />
+
         {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
             <div className={classes.newsGrid}>
@@ -61,8 +127,6 @@ export default function Home() {
                     }
                     alt={item.title || "News image"}
                     className={classes.image}
-                    width="400"
-                    height="250"
                     loading="lazy"
                     onError={(e) => {
                       e.target.onerror = null;
@@ -90,9 +154,20 @@ export default function Home() {
             ↑
           </button>
         )}
-        <DailyList />
       </main>
+
       <WellnessAssistant />
+
+      {/* Password Reset Modal using custom Auth-style */}
+      {showResetModal && resetToken && (
+        <ResetPassword
+          token={resetToken}
+          onClose={() => {
+            setShowResetModal(false);
+            router.replace("/");
+          }}
+        />
+      )}
     </>
   );
 }

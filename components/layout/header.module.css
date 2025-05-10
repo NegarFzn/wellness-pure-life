@@ -12,8 +12,6 @@
   gap: 0.5rem;
 }
 
-
-
 .logo {
   display: flex;
   align-items: center;
@@ -26,7 +24,6 @@
   font-size: 1.2rem;
 }
 
-
 .logo img {
   height: 40px;
   width: auto;
@@ -37,7 +34,7 @@
 }
 
 .brandName {
-  white-space: nowrap; /* Prevent line breaks */
+  white-space: nowrap;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -48,7 +45,6 @@
   font-family: "Poppins", sans-serif;
   transition: color 0.3s ease, transform 0.2s ease;
 }
-
 
 .brandName:active,
 .brandName:visited,
@@ -66,7 +62,7 @@
 .nav ul {
   list-style: none;
   margin: 0;
-  padding: 0 ;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -113,13 +109,12 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.4rem 0.3rem; /* slightly smaller padding */
+  padding: 0.4rem 0.3rem;
   font-weight: 600;
   color: #ffffff;
   border-radius: 8px;
   transition: background-color 0.2s ease;
 }
-
 
 .welcome a {
   text-decoration: none;
@@ -131,7 +126,6 @@
   cursor: pointer;
 }
 
-/* Weather block styled like nav item */
 .weatherWidget {
   display: flex;
   align-items: center;
@@ -194,4 +188,28 @@
   .weatherWidget {
     display: none;
   }
+}
+
+/* ✅ Email Verification Additions */
+.verifyPromptBanner {
+  background-color: #e6f4ea;
+  color: #22543d;
+  text-align: center;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-bottom: 1px solid #c6dfd1;
+}
+
+.pendingVerify {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pendingText {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  color: #bbbbbb;
+  font-weight: 500;
 }

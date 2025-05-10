@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { signIn } from "next-auth/react";
 import classes from "./Signup.module.css";
 
 export default function Signup({
@@ -15,6 +14,7 @@ export default function Signup({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  // Reset state on modal close
   useEffect(() => {
     if (!isOpen) {
       setName("");
@@ -50,28 +50,16 @@ export default function Signup({
 
       try {
         data = JSON.parse(text);
-      } catch (err) {
+      } catch {
         throw new Error("Unexpected server error. Please try again later.");
       }
 
       if (!res.ok) throw new Error(data.message || "Signup failed");
 
-      const result = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-      });
-
-      if (result?.error) {
-        throw new Error("Auto-login failed: " + result.error);
-      }
-
-      localStorage.setItem("justSignedUp", "true");
-      window.dispatchEvent(new Event("storage"));
+      // ✅ Don't attempt login yet — email verification required
+      setSuccess(true);
 
       if (onSignupComplete) onSignupComplete();
-
-      window.location.assign(result.url || "/");
     } catch (err) {
       if (err.message.includes("Email already in use")) {
         setError(
@@ -149,7 +137,9 @@ export default function Signup({
           </button>
           {error && <p className={classes.error}>{error}</p>}
           {success && (
-            <p className={classes.success}>✅ You're in! Check your inbox.</p>
+            <p className={classes.success}>
+              ✅ You're in! Please check your email to verify your account.
+            </p>
           )}
         </form>
       </div>
