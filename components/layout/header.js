@@ -7,6 +7,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useUI } from "../../context/UIContext";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
+import { toast } from "react-toastify";
 import logoImg from "../../public/images/logo.jpg";
 import classes from "./header.module.css";
 
@@ -14,7 +15,6 @@ export default function Header({ weather }) {
   const router = useRouter();
   const { data: session, status } = useSession();
   const user = session?.user || null;
-  const loading = status === "loading";
 
   const {
     openLogin,
@@ -26,6 +26,7 @@ export default function Header({ weather }) {
   } = useUI();
 
   const [justSignedUp, setJustSignedUp] = useState(false);
+  const [resent, setResent] = useState(false);
 
   useEffect(() => {
     if (
@@ -90,16 +91,8 @@ export default function Header({ weather }) {
     closeLogin();
   };
 
-  const showVerifyPrompt = justSignedUp && !user;
-
   return (
     <>
-      {showVerifyPrompt && (
-        <div className={classes.verifyPromptBanner}>
-          ✅ Thank you for signing up! Please check your email to verify your
-          account.
-        </div>
-      )}
       <header className={classes.header}>
         <Link href="/" className={classes.logo}>
           <Image src={logoImg} alt="Wellness Pure Life" priority />
@@ -134,9 +127,39 @@ export default function Header({ weather }) {
               </li>
             ))}
 
-            {!user ? (
+            {!user && status !== "loading" ? (
               justSignedUp ? (
-                <li className={classes.pendingVerify}>
+                <li
+                  className={`${classes.pendingVerify} ${
+                    resent ? classes.verifiedPendingResent : ""
+                  }`}
+                  onClick={async () => {
+                    const userEmail =
+                      user?.email || localStorage.getItem("justSignedUpEmail");
+
+                    if (!userEmail) {
+                      toast.error("User email not available.");
+                      return;
+                    }
+
+                    try {
+                      const res = await fetch("/api/auth/emailverification", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: userEmail }),
+                      });
+
+                      if (!res.ok) throw new Error("Request failed");
+                      toast.success("✅ Verification email resent.");
+                      setResent(true);
+                    } catch (err) {
+                      console.error("Resend error:", err);
+                      toast.error(
+                        "❌ Failed to resend email. Please try again."
+                      );
+                    }
+                  }}
+                >
                   <span className={classes.pendingText}>
                     📬 Verify your email
                   </span>
@@ -156,34 +179,36 @@ export default function Header({ weather }) {
                 </>
               )
             ) : (
-              <>
-                <li className={classes.welcome}>
-                  <button
-                    onClick={() => {
-                      router.push("/dashboard");
-                    }}
-                    className={classes.navBtn}
-                    style={{
-                      background: "transparent",
-                      border: "none",
-                      cursor: "pointer",
-                    }}
-                  >
-                    👤 {user?.name || user?.email?.split("@")[0] || "Account"}
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => {
-                      signOut({ callbackUrl: "/" });
-                      console.log("🚪 Logged out");
-                    }}
-                    className={classes.navBtn}
-                  >
-                    Logout
-                  </button>
-                </li>
-              </>
+              user && (
+                <>
+                  <li className={classes.welcome}>
+                    <button
+                      onClick={() => {
+                        router.push("/dashboard");
+                      }}
+                      className={classes.navBtn}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      👤 {user?.name || user?.email?.split("@")[0] || "Account"}
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        signOut({ callbackUrl: "/" });
+                        console.log("🚪 Logged out");
+                      }}
+                      className={classes.navBtn}
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </>
+              )
             )}
           </ul>
         </nav>

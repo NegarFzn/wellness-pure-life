@@ -190,26 +190,26 @@
   }
 }
 
-/* ✅ Email Verification Additions */
-.verifyPromptBanner {
-  background-color: #e6f4ea;
-  color: #22543d;
-  text-align: center;
-  padding: 1rem;
-  font-size: 1rem;
-  font-weight: 500;
-  border-bottom: 1px solid #c6dfd1;
-}
-
 .pendingVerify {
+  background-color: #fff3cd; /* Light yellow */
+  border: 1px solid #ffeeba;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  margin-left: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .pendingText {
-  padding: 0.5rem 1rem;
-  font-size: 0.95rem;
-  color: #bbbbbb;
+  color: #856404;
   font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.verifiedPendingResent {
+  background-color: #d4edda !important; /* Light green */
+  border-color: #c3e6cb !important;
+  color: #155724 !important;
 }

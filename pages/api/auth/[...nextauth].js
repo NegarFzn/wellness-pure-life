@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { firestore } from "../../../utils/firebaseAdmin"; // ✅ Corrected: use Admin SDK
+import { firestore } from "../../../utils/firebaseAdmin"; // ✅ Admin SDK
 
 export default NextAuth({
   providers: [
@@ -36,6 +36,7 @@ export default NextAuth({
             email: user.email,
             name: user.name,
             isPremium: user.isPremium || false,
+            isVerified: user.isVerified || false, // ✅ Include verification status
           };
         } catch (err) {
           console.error("❌ Firebase Admin Auth error:", err.message);
@@ -46,10 +47,10 @@ export default NextAuth({
   ],
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60, // ⏱️ 24 hours in seconds
+    maxAge: 24 * 60 * 60,
   },
   jwt: {
-    maxAge: 24 * 60 * 60, // ⏱️ 24 hours in seconds
+    maxAge: 24 * 60 * 60,
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -58,6 +59,7 @@ export default NextAuth({
         token.email = user.email;
         token.name = user.name;
         token.isPremium = user.isPremium;
+        token.emailVerified = user.isVerified || false; // ✅ Set from Firestore
       }
       return token;
     },
@@ -66,6 +68,7 @@ export default NextAuth({
       session.email = token.email;
       session.name = token.name;
       session.isPremium = token.isPremium;
+      session.user.emailVerified = token.emailVerified || false; // ✅ Pass to session.user
       return session;
     },
   },

@@ -1,17 +1,29 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, getSession } from "next-auth/react";
 import { useUI } from "../context/UIContext";
+import { toast } from "react-toastify";
 import classes from "./dashboard.module.css";
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession();
-  const user = session?.user;
+  const { data: initialSession, status } = useSession();
+  const user = initialSession?.user;
   const { openLogin } = useUI();
   const router = useRouter();
 
-  const [emailVerified, setEmailVerified] = useState(false);
-  const [verifying, setVerifying] = useState(false);
+  const [session, setSession] = useState(initialSession);
+  const [resending, setResending] = useState(false);
+
+  useEffect(() => {
+    const refreshSession = async () => {
+      const freshSession = await getSession();
+      setSession(freshSession);
+    };
+
+    if (status === "authenticated") {
+      refreshSession();
+    }
+  }, [status]);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -22,26 +34,29 @@ export default function DashboardPage() {
     }
   }, [status, router]);
 
-  // Email verification placeholder — not handled by NextAuth by default
-  useEffect(() => {
-    if (user?.email && router.query.emailVerified) {
-      setEmailVerified(true); // simulate verification; update as needed if you support it
-    }
-  }, [user, router.query.emailVerified]);
+  const emailVerified = session?.user?.emailVerified || false;
 
-  useEffect(() => {
-    if (router.query.emailVerified) {
-      const { emailVerified, ...rest } = router.query;
-      router.replace(
-        {
-          pathname: router.pathname,
-          query: rest,
-        },
-        undefined,
-        { shallow: true }
-      );
+  const handleResendVerification = async () => {
+    if (!user?.email) return;
+
+    setResending(true);
+    try {
+      const res = await fetch("/api/auth/emailverification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: user.email }),
+      });
+
+      if (!res.ok) throw new Error("Failed to send verification email");
+
+      toast.success("✅ Verification email sent.");
+    } catch (error) {
+      console.error(error);
+      toast.error("❌ Error resending verification email.");
+    } finally {
+      setResending(false);
     }
-  }, [router.query.emailVerified]);
+  };
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/" });
@@ -61,21 +76,20 @@ export default function DashboardPage() {
       <p className={classes.tag}>
         Status: {emailVerified ? "✅ Verified" : "Unverified"}
       </p>
+
       {!emailVerified && (
         <div className={classes.verifyNote}>
           <p>✉️ Please verify your email. Once done, return here.</p>
-          <button className={classes.verifyBtn} disabled>
-            Resend Verification (pending NextAuth integration)
-          </button>
           <button
             className={classes.verifyBtn}
-            onClick={() => setEmailVerified(true)}
-            disabled={verifying}
+            onClick={handleResendVerification}
+            disabled={resending}
           >
-            {verifying ? "Refreshing..." : "Refresh Verification Status"}
+            {resending ? "Resending..." : "Resend Verification Email"}
           </button>
         </div>
       )}
+
       <div className={classes.quickLinks}>
         <button onClick={() => router.push("/mindfulness")}>
           🧘 Mind & Calm
@@ -83,6 +97,7 @@ export default function DashboardPage() {
         <button onClick={() => router.push("/nourish")}>🍎 Nutrition</button>
         <button onClick={() => router.push("/fitness")}>🏋️ Fitness</button>
       </div>
+
       {session?.user?.isPremium && (
         <div className={classes.premiumBox}>
           <h3>🌟 Your Premium Perks</h3>
