@@ -9,6 +9,7 @@ import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import { toast } from "react-toastify";
 import logoImg from "../../public/images/logo.jpg";
+import { FiUser, FiSettings, FiLogOut } from "react-icons/fi";
 import classes from "./header.module.css";
 
 export default function Header({ weather }) {
@@ -27,6 +28,22 @@ export default function Header({ weather }) {
 
   const [justSignedUp, setJustSignedUp] = useState(false);
   const [resent, setResent] = useState(false);
+  const [nyTime, setNyTime] = useState("");
+
+  useEffect(() => {
+    const updateNYTime = () => {
+      const now = new Date().toLocaleString("en-US", {
+        timeZone: "America/New_York",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      setNyTime(now);
+    };
+
+    updateNYTime();
+    const interval = setInterval(updateNYTime, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (
@@ -54,31 +71,26 @@ export default function Header({ weather }) {
   }, [user]);
 
   const getNavLinks = () => {
-    if (router.pathname.startsWith("/fitness")) {
-      return [
-        { href: "/mindfulness", label: "Mindfulness" },
-        { href: "/nourish", label: "Nourish" },
-      ];
+    const coreLinks = [
+      { href: "/fitness", label: "Fitness" },
+      { href: "/mindfulness", label: "Mindfulness" },
+      { href: "/nourish", label: "Nourish" },
+    ];
+
+    if (router.pathname === "/") {
+      return coreLinks;
+    } else if (router.pathname.startsWith("/fitness")) {
+      return coreLinks.filter((link) => link.href !== "/fitness");
     } else if (router.pathname.startsWith("/mindfulness")) {
-      return [
-        { href: "/fitness", label: "Fitness" },
-        { href: "/nourish", label: "Nourish" },
-      ];
+      return coreLinks.filter((link) => link.href !== "/mindfulness");
     } else if (router.pathname.startsWith("/nourish")) {
-      return [
-        { href: "/mindfulness", label: "Mindfulness" },
-        { href: "/fitness", label: "Fitness" },
-      ];
+      return coreLinks.filter((link) => link.href !== "/nourish");
     } else if (
       router.pathname.startsWith("/news") ||
       router.pathname.startsWith("/contact") ||
       router.pathname.startsWith("/weather")
     ) {
-      return [
-        { href: "/nourish", label: "Nourish" },
-        { href: "/mindfulness", label: "Mindfulness" },
-        { href: "/fitness", label: "Fitness" },
-      ];
+      return coreLinks;
     }
     return [];
   };
@@ -96,10 +108,15 @@ export default function Header({ weather }) {
       <header className={classes.header}>
         <Link href="/" className={classes.logo}>
           <Image src={logoImg} alt="Wellness Pure Life" priority />
-          <span className={classes.brandName}>Healthy Body & Mind</span>
+          <span className={classes.brandName}>Wellness Pure Life</span>
         </Link>
         <nav className={classes.nav}>
           <ul>
+            {getNavLinks().map((link) => (
+              <li key={link.href}>
+                <NavLink href={link.href}>{link.label}</NavLink>
+              </li>
+            ))}
             <li>
               <NavLink href="/news">News</NavLink>
             </li>
@@ -113,19 +130,21 @@ export default function Header({ weather }) {
                     <img
                       src={weather.current.condition.icon}
                       alt="Weather icon"
+                      style={{ width: 22, height: 22 }}
                     />
-                    <span>{weather.current.temp_c}°C (NY)</span>
+                    <div>
+                      <span style={{ fontSize: "0.85rem" }}>
+                        {weather.current.temp_c}°C
+                      </span>
+                      <br />
+                      <span style={{ fontSize: "0.7rem" }}>{nyTime} NY</span>
+                    </div>
                   </div>
                 ) : (
                   <span className={classes.loading}>Loading...</span>
                 )}
               </NavLink>
             </li>
-            {getNavLinks().map((link) => (
-              <li key={link.href}>
-                <NavLink href={link.href}>{link.label}</NavLink>
-              </li>
-            ))}
 
             {!user && status !== "loading" ? (
               justSignedUp ? (
@@ -150,7 +169,7 @@ export default function Header({ weather }) {
                       });
 
                       if (!res.ok) throw new Error("Request failed");
-                      toast.success("✅ Verification email resent.");
+                      toast.success("Verification email resent.");
                       setResent(true);
                     } catch (err) {
                       console.error("Resend error:", err);
@@ -161,7 +180,8 @@ export default function Header({ weather }) {
                   }}
                 >
                   <span className={classes.pendingText}>
-                    📬 Verify your email
+                    <span className={classes.pendingTextIcon}>📬</span>
+                    Verify your email
                   </span>
                 </li>
               ) : (
@@ -181,31 +201,28 @@ export default function Header({ weather }) {
             ) : (
               user && (
                 <>
-                  <li className={classes.welcome}>
-                    <button
-                      onClick={() => {
-                        router.push("/dashboard");
-                      }}
-                      className={classes.navBtn}
-                      style={{
-                        background: "transparent",
-                        border: "none",
-                        cursor: "pointer",
-                      }}
-                    >
-                      👤 {user?.name || user?.email?.split("@")[0] || "Account"}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => {
-                        signOut({ callbackUrl: "/" });
-                        console.log("🚪 Logged out");
-                      }}
-                      className={classes.navBtn}
-                    >
-                      Logout
-                    </button>
+                  <li className={classes.profileDropdown}>
+                    <div className={classes.profileWrapper}>
+                      <button className={classes.profileButton}>
+                        <FiUser size={18} />
+                        {(user?.name || "Account").charAt(0).toUpperCase() +
+                          (user?.name || "Account").slice(1)}
+                      </button>
+                      <div className={classes.dropdownContent}>
+                        <Link
+                          href="/dashboard"
+                          className={classes.dropdownLink}
+                        >
+                          <FiUser size={16} /> Profile
+                        </Link>
+                        <button
+                          onClick={() => signOut({ callbackUrl: "/" })}
+                          className={classes.logoutLink}
+                        >
+                          <FiLogOut size={16} /> Logout
+                        </button>
+                      </div>
+                    </div>
                   </li>
                 </>
               )

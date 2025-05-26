@@ -56,26 +56,6 @@
   border-radius: 10px;
 }
 
-@media (max-width: 768px) {
-  .nourish-container {
-    flex-direction: column; /* Ensures ads go below content on mobile */
-  }
-  .ad-sidebar {
-    display: none; /* Hides sidebar ads on mobile */
-  }
-}
-
-@media (max-width: 768px) {
-  .nourish-content {
-    padding: 10px;
-    font-size: 1.2rem;
-  }
-
-  .nourish-container {
-    padding: 10px;
-  }
-}
-
 .ad-sidebar {
   display: block;
   width: 25%;
@@ -87,13 +67,6 @@
   text-align: center;
   max-width: 728px;
   height: 90px;
-}
-
-@media (max-width: 768px) {
-  .ad-top {
-    max-width: 320px;
-    height: 50px;
-  }
 }
 
 .related-posts-wrapper {
@@ -131,17 +104,66 @@
 
 /* ✅ Mobile Fix */
 @media (max-width: 768px) {
+  .nourish-container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .nourish-content {
+    width: 100%;
+    padding: 0 0.75rem;
+    font-size: 1.15rem;
+  }
+
+  .nourish-content p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .nourish-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .ad-sidebar {
+    display: none;
+  }
+
+  .ad-top {
+    max-width: 100%;
+    height: auto;
+    padding: 0.5rem 0;
+  }
+
+  .backButtonWrapper {
+    padding-left: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .backButton {
+    font-size: 1rem;
+    padding: 6px 10px;
+  }
+
   .related-posts-wrapper {
-    width: 100%; /* ✅ Full width on small screens */
+    width: 100%;
+    padding: 0 1rem;
     align-items: center;
   }
+
   .related-posts-title {
-    text-align: center; /* ✅ Center title on mobile */
+    text-align: center;
+    font-size: 1.2rem;
   }
+
   .related-posts-container {
     justify-content: center;
+    gap: 15px;
   }
+
   .related-posts-container .post-item {
+    width: 100%;
     max-width: 100%;
   }
 }

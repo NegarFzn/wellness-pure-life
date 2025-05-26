@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { fetchNews } from "../../utils/fetch"; // ✅ Import fetch function
+import { fetchNews } from "../../utils/fetch";
+import Link from "next/link";
+import ThemeToggle from "../../components/ThemeToggle";
 import classes from "./index.module.css";
 
 export default function News() {
@@ -18,6 +20,7 @@ export default function News() {
 
   return (
     <div className={classes.newsPage}>
+      <ThemeToggle />
       <h1 className={classes.newsHeader}>Latest Health & Wellness News</h1>
       {loading ? (
         <p>Loading news...</p>
@@ -26,19 +29,18 @@ export default function News() {
           {articles.map((article) => (
             <li key={article.id} className={classes.newsItem}>
               <img
-                src={article.image && article.image.trim() ? article.image : "/images/defaultNews.jpg"}
+                src={article.image || "/images/defaultNews.jpg"}
                 alt={article.title}
                 className={classes.newsImage}
                 onError={(e) => {
-                  console.log("Broken Image URL:", e.target.src); // Debugging missing images
-                  e.target.src = "/images/defaultNews.jpg"; // ✅ Ensure fallback works
+                  e.target.src = "/images/defaultNews.jpg";
                 }}
               />
               <h2>{article.title}</h2>
               <p>{article.summary}</p>
-              <a href={article.link} target="_blank" rel="noopener noreferrer">
+              <Link href={`/news/${article.id}`} className={classes.readMore}>
                 Read more
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

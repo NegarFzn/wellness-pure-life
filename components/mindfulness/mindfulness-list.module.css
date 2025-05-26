@@ -8,6 +8,8 @@
 
 @media (max-width: 768px) {
   .mindfulness-list-container {
-    grid-template-columns: 1fr; /* ✅ Full width for mobile */
+    grid-template-columns: 1fr;
+    padding: 0 1rem; /* Add side padding for better spacing */
+    gap: 1.25rem; /* Slightly increase vertical spacing */
   }
 }

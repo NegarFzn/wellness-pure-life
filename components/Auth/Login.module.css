@@ -121,3 +121,48 @@
   font-size: 14px;
   color: #555;
 }
+
+@media (max-width: 768px) {
+  .modal {
+    width: 90%;
+    padding: 1.5rem;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .form {
+    gap: 0.85rem;
+  }
+
+  .input {
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+
+  .button {
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+
+  .linkButton {
+    font-size: 0.9rem;
+  }
+
+  .switchText {
+    font-size: 0.9rem;
+  }
+
+  .checkboxRow {
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+  }
+}

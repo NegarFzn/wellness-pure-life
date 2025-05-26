@@ -41,10 +41,43 @@
 /* Responsive Fix */
 @media (max-width: 768px) {
   .item {
-    width: 90%;
+    width: 100%;
+    padding: 1rem;
+    margin: 0.75rem auto;
   }
 
   .item img {
-    max-width: 150px;
+    max-width: 140px;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .textContainer {
+    margin-top: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  .link h3 {
+    font-size: 1.1rem;
+  }
+
+  .item p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    white-space: pre-line; /* Supports newlines from formattedSummary */
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .item img {
+    max-width: 180px;
+  }
+
+  .link h3 {
+    font-size: 1.15rem;
+  }
+
+  .item p {
+    font-size: 0.95rem;
   }
 }

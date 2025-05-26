@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { fetchNews } from "../utils/fetch";
 import Head from "next/head";
+import Link from "next/link";
 import Subscribe from "../components/Subscribe/subscribe";
 import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
 import DailyList from "../components/DailyList/DailyList";
-import WellnessAssistant from "../components/WellnessAssistant/WellnessAssistant";
 import ResetPassword from "../components/Auth/ResetPassword";
+import ResendVerificationModal from "../components/Auth/ResendVerificationModal";
 import classes from "./index.module.css";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
   const [resendEmail, setResendEmail] = useState("");
   const [resendResult, setResendResult] = useState(null);
   const [showResetModal, setShowResetModal] = useState(false);
+  const [verifyStatus, setVerifyStatus] = useState(null);
 
   const router = useRouter();
   const { verifyToken, resetToken } = router.query;
@@ -39,20 +41,24 @@ export default function Home() {
   useEffect(() => {
     if (verifyToken) {
       const verifyEmail = async () => {
+        console.log("🔍 Verifying email with token:", verifyToken);
+        console.log("before verifying:", verifying);
         setVerifying(true);
+        console.log("after verifying:", verifying);
         try {
           const res = await fetch(
             `/api/auth/emailverification?token=${verifyToken}`
           );
           const data = await res.json();
-
+          console.log("📬 Verification response:", data);
           if (res.ok && data.success) {
             router.replace("/login?verified=true");
           } else {
-            alert(data.message || "Verification failed");
+            setVerifyStatus(data.message || "Verification failed");
           }
-        } catch {
-          alert("Verification failed unexpectedly.");
+        } catch (err) {
+          console.error("Verification error:", err);
+          setVerifyStatus("Unexpected error during verification.");
         } finally {
           setVerifying(false);
         }
@@ -69,6 +75,7 @@ export default function Home() {
 
   const handleResend = async (e) => {
     e.preventDefault();
+    console.log("📨 Resend clicked with email:", resendEmail);
     setResendResult(null);
     try {
       const res = await fetch("/api/auth/emailverification", {
@@ -77,12 +84,15 @@ export default function Home() {
         body: JSON.stringify({ email: resendEmail }),
       });
       const data = await res.json();
+      console.log("🔁 Resend response:", data);
+
       setResendResult(
         res.ok
           ? "✅ A new verification link has been sent."
           : `❌ ${data.message}`
       );
-    } catch {
+    } catch (err) {
+      console.error("❌ Resend error:", err);
       setResendResult("❌ Failed to resend verification. Try again.");
     }
   };
@@ -103,17 +113,34 @@ export default function Home() {
         <meta charSet="UTF-8" />
       </Head>
 
-      {verifying && (
+      {/* Verification banners */}
+
+      {verifyStatus === "success" && (
         <div className={classes.verifyBanner}>
-          🔄 Verifying your email, please wait...
+          ✅ Your email has been verified successfully!
+          <br />
+          <button
+            onClick={() => setVerifyStatus(null)}
+            className={classes.verifyButton}
+          >
+            Continue to Home
+          </button>
         </div>
       )}
-
+      {verifyStatus && verifyStatus !== "success" && (
+        <ResendVerificationModal
+          message={verifyStatus}
+          email={resendEmail}
+          onEmailChange={(e) => setResendEmail(e.target.value)}
+          onSubmit={handleResend}
+          result={resendResult}
+          onClose={() => setVerifyStatus(null)}
+        />
+      )}
       <main className={classes.container}>
         <DailyList />
         <KeyFeatures />
         <Subscribe />
-
         {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
             <div className={classes.newsGrid}>
@@ -135,29 +162,18 @@ export default function Home() {
                   />
                   <h3>{item.title}</h3>
                   <p>{item.summary}</p>
-                  <a
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={classes.readMore}
-                  >
-                    Read More →
-                  </a>
+                  <Link href={`/news/${item.id}`} className={classes.readMore}>Read More →</Link>
                 </div>
               ))}
             </div>
           </section>
         )}
-
         {showButton && (
           <button onClick={scrollToTop} className={classes.backToTop}>
             ↑
           </button>
         )}
       </main>
-
-      <WellnessAssistant />
-
       {/* Password Reset Modal using custom Auth-style */}
       {showResetModal && resetToken && (
         <ResetPassword

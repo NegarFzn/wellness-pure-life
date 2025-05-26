@@ -14,6 +14,7 @@ export default function FitnessItem(props) {
         width={200}
         height={200}
         priority={true}
+        sizes="(max-width: 768px) 100vw, 100vw"
       />
       <div className={classes.textContainer}>
         <Link href={`/fitness/${id}`} className={classes.link}>

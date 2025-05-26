@@ -8,6 +8,9 @@
 
 @media (max-width: 768px) {
   .fitness-list-container {
-    grid-template-columns: 1fr; /* ✅ Switch to single-column layout for mobile */
+    grid-template-columns: 1fr;
+    padding: 0 1rem; /* Add horizontal breathing room */
+    gap: 1.25rem;    /* Slightly increase vertical spacing */
   }
 }
+

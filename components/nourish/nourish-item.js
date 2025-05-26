@@ -4,7 +4,13 @@ import classes from "./nourish-item.module.css";
 
 export default function NourishItem(props) {
   const { title, image, summary, id } = props;
-  const formattedSummary = summary.replace(", ", "\n");
+  const shortenSummary = (text, maxLength = 100) => {
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength).trim() + "...";
+  };
+  
+  const formattedSummary = shortenSummary(summary.replace(", ", "\n"));
+  
 
   return (
     <li className={classes.item}>

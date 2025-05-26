@@ -1,0 +1,118 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modalContent {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.form {
+  margin-top: 1rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+}
+
+.button {
+  margin-top: 1rem;
+  background-color: #2e7d32;
+  color: white;
+  padding: 0.6rem 1.25rem;
+  border: 1px solid #2e7d32;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.button:hover {
+  background-color: #1b5e20;
+  border-color: #1b5e20;
+}
+
+.buttonSuccess {
+  background-color: #43a047;
+  border-color: #43a047;
+  color: #fff;
+}
+
+.buttonSuccess:hover {
+  background-color: #2e7d32;
+  border-color: #2e7d32;
+}
+
+.flexCenter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.result {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Success styles */
+.success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.success:hover {
+  background-color: #c8e6c9;
+  color: #1b5e20;
+}
+
+/* Error styles */
+.error {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.error:hover {
+  background-color: #ffcdd2;
+  color: #b71c1c;
+}

@@ -61,14 +61,55 @@
   background-color: #4834d4;
 }
 
-
-@media (max-width: 768px) {
-  .fitness-container {
-    grid-template-columns: 1fr; /* ✅ Switch to single column on mobile */
-  }
-}
-
 .section {
   width: 90%;
   max-width: 800px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: 140px; /* ✅ Reduce further for better first-view visibility */
+  }
+
+  .left-align {
+    font-size: 1.3rem;
+    padding-top: 15px;
+    text-align: center;
+  }
+
+  .main-content {
+    width: 95%;
+    padding-bottom: 20px;
+  }
+
+  .section {
+    width: 100%;
+    margin-bottom: 30px;
+    padding: 0 10px; /* ✅ Add side padding */
+  }
+
+  .fitness-container {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .backToTop {
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    right: 15px;
+    bottom: 15px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .left-align {
+    font-size: 1.1rem;
+    padding-top: 10px;
+  }
+
+  .backToTop {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+  }
 }

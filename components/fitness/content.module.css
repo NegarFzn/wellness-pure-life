@@ -8,7 +8,7 @@
 
 /* ✅ Back Button Styles */
 .backButton {
-  color: rgb(32,200,140);
+  color: rgb(32, 200, 140);
   font-size: 0.9rem;
   font-weight: bold;
   text-decoration: none;
@@ -24,11 +24,9 @@
 }
 
 .backButton:hover {
- color: rgb(255,102,102);
+  color: rgb(255, 102, 102);
   transition: 0.3s;
 }
-
-
 
 .fitness-container {
   display: flex;
@@ -60,23 +58,6 @@
   border-radius: 10px;
 }
 
-
-@media (max-width: 768px) {
-  .fitness-container {
-    flex-direction: column; /* Ensures ads go below content on mobile */
-  }
-  .ad-sidebar {
-    display: none; /* Hides sidebar ads on mobile */
-  }
-}
-
-@media (max-width: 768px) {
-  .fitness-content {
-    padding: 15px;
-    font-size: 1.2rem;
-  }
-}
-
 .ad-sidebar {
   display: block;
   width: 25%;
@@ -86,13 +67,6 @@
 
 .ad-top {
   text-align: center;
-}
-
-@media (max-width: 768px) {
-  .ad-top {
-    max-width: 320px;
-    height: 50px;
-  }
 }
 
 .related-posts-wrapper {
@@ -130,17 +104,65 @@
 
 /* ✅ Mobile Fix */
 @media (max-width: 768px) {
+  .fitness-container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .fitness-content {
+    width: 100%;
+    padding: 1rem 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .fitness-content p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .fitness-content img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .ad-sidebar {
+    display: none;
+  }
+
+  .ad-top {
+    max-width: 100%;
+    margin: 1rem auto;
+  }
+
+  .backButtonWrapper {
+    padding-left: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .backButton {
+    font-size: 1rem;
+    padding: 6px 10px;
+  }
+
   .related-posts-wrapper {
-    width: 100%; /* ✅ Full width on small screens */
+    width: 100%;
+    padding: 0 1rem;
     align-items: center;
   }
+
   .related-posts-title {
-    text-align: center; /* ✅ Center title on mobile */
+    text-align: center;
+    font-size: 1.2rem;
   }
+
   .related-posts-container {
     justify-content: center;
+    gap: 15px;
   }
+
   .related-posts-container .post-item {
+    width: 100%;
     max-width: 100%;
   }
 }

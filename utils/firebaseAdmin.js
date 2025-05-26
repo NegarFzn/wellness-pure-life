@@ -25,4 +25,4 @@ if (!admin.apps.length) {
 const firestore = admin.firestore();
 const FieldValue = admin.firestore.FieldValue;
 
-export { firestore, FieldValue };
+export { firestore, FieldValue, admin };

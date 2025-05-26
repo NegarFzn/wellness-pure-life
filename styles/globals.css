@@ -54,3 +54,12 @@ p a:active {
 .smaller {
   font-size: 0.8em; /* Make text 80% of the size of its container */
 }
+
+:root {
+  --bg-color: #f9f9f9;
+  --text-color: #000;
+}
+[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #f0f0f0;
+}

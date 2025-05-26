@@ -3,25 +3,22 @@ import classes from "./PremiumButton.module.css";
 
 export default function PremiumButton() {
   const { data: session } = useSession();
-  const user = session?.user;
+  const email = session?.user?.email;
+  const uid = session?.id;
 
   const handleUpgrade = async () => {
-    if (!user) {
+    if (!email || !uid) {
       console.log("User not logged in");
       return;
     }
 
-    console.log("🔁 Starting checkout session...");
-
     const res = await fetch("/api/create-checkout-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: user.email, uid: user.id }),
+      body: JSON.stringify({ email, uid }),
     });
 
     const data = await res.json();
-    console.log("🎯 Session URL:", data.url);
-
     if (data.url) {
       window.location.href = data.url;
     } else {

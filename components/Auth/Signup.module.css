@@ -86,6 +86,16 @@
   background: linear-gradient(135deg, #45a049, #267b50);
 }
 
+.button:active {
+  background-color: #388e3c;
+}
+
+.button:disabled {
+  background-color: #8ac1af;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
 .error {
   color: crimson;
   font-size: 0.9rem;
@@ -94,8 +104,48 @@
 .success {
   color: seagreen;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 700;
 }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    color: seagreen;
+  }
+  50% {
+    transform: scale(1.05);
+    color: rgb(24, 107, 60);
+  }
+  100% {
+    transform: scale(1);
+    color: seagreen;
+  }
+}
+
+.attention {
+  font-weight: 700;
+  animation: pulse 1.5s ease-in-out 2; /* Pulse twice */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.emailIcon {
+  font-size: 1.5rem;
+  margin-right: -2rem;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 
 .linkButton {
   background: none;
@@ -106,4 +156,46 @@
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .modal {
+    width: 90%;
+    padding: 1.5rem;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .form {
+    gap: 0.85rem;
+  }
+
+  .input {
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+
+  .button {
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+
+  .error,
+  .success {
+    font-size: 0.9rem;
+    padding: 0 0.5rem;
+    word-break: break-word;
+  }
+
+  .linkButton {
+    font-size: 0.9rem;
+  }
 }

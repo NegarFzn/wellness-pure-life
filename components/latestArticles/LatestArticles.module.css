@@ -65,7 +65,36 @@
 
 /* ✅ Responsive Design */
 @media (max-width: 768px) {
+  .latestArticles {
+    padding: 1.5rem 1rem;
+  }
+
   .articlesGrid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .articleCard {
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .articleCard img {
+    width: 100%;
+    height: auto;
+  }
+
+  .articleCard h3 {
+    font-size: 1.1rem;
+    margin: 0.75rem 0;
+  }
+
+  .articleCard p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .articleCard a {
+    font-size: 0.95rem;
   }
 }

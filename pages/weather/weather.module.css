@@ -3,7 +3,6 @@
   text-align: center;
   padding: 20px;
   font-family: Arial, sans-serif;
-
 }
 
 /* Weather Title */
@@ -42,7 +41,7 @@
   font-weight: bold;
   color: rgb(1, 1, 1);
   margin: 10px 0;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1); 
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Weather Icon */
@@ -53,17 +52,32 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
+  .weatherPage {
+    padding: 15px;
+  }
+
   .weatherHeader {
-    font-size: 2rem;
+    font-size: 1.6rem;
+    line-height: 1.2;
   }
 
   .weatherTime {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+  }
+
+  .weatherDetails {
+    font-size: 1.1rem;
+    text-align: center;
   }
 
   .weatherInfo {
-    max-width: 90%;
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .weatherIcon {
+    width: 60px;
   }
 }
 

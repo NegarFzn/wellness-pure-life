@@ -3,15 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "NODE_ENV=development next dev",
+    "build": "NODE_ENV=production next build",
+    "start": "NODE_ENV=production next start"
   },
   "dependencies": {
+    "@azure/core-auth": "^1.9.0",
+    "@azure/openai": "^1.0.0-beta.3",
+    "@headlessui/react": "^2.2.4",
+    "@heroicons/react": "^2.2.0",
     "@stripe/stripe-js": "^7.2.0",
+    "@swc/helpers": "^0.5.17",
     "axios": "^1.8.4",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
+    "cheerio": "^1.0.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "firebase": "^11.6.0",
@@ -26,9 +32,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.5.2",
-    "react-icons": "^5.4.0",
-    "react-markdown": "^9.0.1",
+    "react-icons": "^5.5.0",
+    "react-markdown": "^9.1.0",
     "react-toastify": "^11.0.5",
+    "remark-gfm": "^4.0.1",
     "rss-parser": "^3.13.0",
     "stripe": "^18.0.0",
     "uuid": "^11.1.0"

@@ -1,7 +1,14 @@
 import { buffer } from "micro";
 import Stripe from "stripe";
-import { db } from "../../lib/firebase";
-import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../lib/firebase";
+import {
+  doc,
+  updateDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+} from "firebase/firestore";
 
 export const config = {
   api: {
@@ -14,49 +21,66 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 
 export default async function handler(req, res) {
-  if (req.method === "POST") {
-    const sig = req.headers["stripe-signature"];
-    const buf = await buffer(req);
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).end("Method Not Allowed");
+  }
 
-    let event;
+  const sig = req.headers["stripe-signature"];
+  const buf = await buffer(req);
 
-    try {
-      event = stripe.webhooks.constructEvent(
-        buf,
-        sig,
-        process.env.STRIPE_WEBHOOK_SECRET
-      );
-    } catch (err) {
-      console.error("❌ Webhook Error:", err.message);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
+  let event;
 
-    if (event.type === "checkout.session.completed") {
-      const session = event.data.object;
-      const uid = session.metadata.uid; // ✅ get UID from metadata
+  try {
+    event = stripe.webhooks.constructEvent(
+      buf,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    console.error("❌ Webhook Error:", err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
 
-      console.log("✅ Checkout completed for UID:", uid);
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+    const uid = session.metadata?.uid;
+    const email = session.customer_email;
 
-      if (!uid) {
-        console.error("❌ UID missing in session metadata");
-        return res.status(400).send("UID missing in session metadata");
-      }
-
+    console.log("✅ Checkout complete");
+    if (uid) {
       try {
         const userRef = doc(db, "users", uid);
         await updateDoc(userRef, {
           isPremium: true,
           upgradedAt: new Date().toISOString(),
         });
-        console.log("🌟 User upgraded to Premium!");
+        console.log("🌟 Premium granted via UID.");
       } catch (err) {
-        console.error("❌ Failed to upgrade user:", err.message);
+        console.error("❌ Firestore update via UID failed:", err.message);
       }
+    } else if (email) {
+      try {
+        const q = query(collection(db, "users"), where("email", "==", email));
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+          snapshot.forEach(async (docSnap) => {
+            await updateDoc(doc(db, "users", docSnap.id), {
+              isPremium: true,
+              upgradedAt: new Date().toISOString(),
+            });
+            console.log("🌟 Premium granted via email.");
+          });
+        } else {
+          console.warn("⚠️ No user found with this email:", email);
+        }
+      } catch (err) {
+        console.error("❌ Firestore update via email failed:", err.message);
+      }
+    } else {
+      console.warn("⚠️ No UID or email in session metadata.");
     }
-
-    res.status(200).json({ received: true });
-  } else {
-    res.setHeader("Allow", "POST");
-    res.status(405).end("Method Not Allowed");
   }
+
+  return res.status(200).json({ received: true });
 }

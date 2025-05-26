@@ -42,7 +42,8 @@
   color: #444;
 }
 
-.formInput, .formTextarea {
+.formInput,
+.formTextarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -51,7 +52,8 @@
   transition: border-color 0.3s;
 }
 
-.formInput:focus, .formTextarea:focus {
+.formInput:focus,
+.formTextarea:focus {
   border-color: #5cb85c;
   outline: none;
 }
@@ -108,4 +110,54 @@
 
 .socialLinks a:hover {
   color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .contactContainer {
+    padding: 10px 15px;
+  }
+
+  .contactTitle {
+    font-size: 1.6rem;
+  }
+
+  .contactSubtitle {
+    font-size: 1rem;
+  }
+
+  .formInput,
+  .formTextarea {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .submitButton {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .responseMessage {
+    font-size: 0.95rem;
+  }
+
+  .contactForm {
+    padding: 15px;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contactTitle {
+    font-size: 1.4rem;
+  }
+
+  .submitButton {
+    padding: 8px 12px;
+    font-size: 0.95rem;
+  }
+
+  .formInput,
+  .formTextarea {
+    font-size: 0.9rem;
+  }
 }

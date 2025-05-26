@@ -58,6 +58,10 @@ export default function Signup({
 
       // ✅ Don't attempt login yet — email verification required
       setSuccess(true);
+      setTimeout(() => {
+        const successMsg = document.querySelector(`.${classes.success}`);
+        if (successMsg) successMsg.classList.add(classes.successFlash);
+      }, 10);
 
       if (onSignupComplete) onSignupComplete();
     } catch (err) {
@@ -132,13 +136,20 @@ export default function Signup({
             required
             className={classes.input}
           />
-          <button type="submit" className={classes.button}>
-            Sign Up Free
+          <button
+            type="submit"
+            className={classes.button}
+            disabled={success} // disable after success
+          >
+            {success ? "✅ Signed Up" : "Sign Up Free"}
           </button>
           {error && <p className={classes.error}>{error}</p>}
           {success && (
-            <p className={classes.success}>
-              ✅ You're in! Please check your email to verify your account.
+            <p className={`${classes.success} ${classes.attention}`}>
+              <span role="img" aria-label="email" className={classes.emailIcon}>
+                📩
+              </span>
+              Please check your email to verify your account.
             </p>
           )}
         </form>

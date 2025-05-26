@@ -1,9 +1,10 @@
-import { firestore } from "../../../utils/firebaseAdmin";
+import { firestore, admin } from "../../../utils/firebaseAdmin"; // ensure 'admin' is exported
 import { sendEmail } from "../../../utils/email";
 import { createVerificationEmail } from "../../../emails/emailCreator";
 import crypto from "crypto";
 
-const TOKEN_LIFETIME = 72 * 60 * 60 * 1000; // 72 hours
+// 72 hours in milliseconds
+const TOKEN_LIFETIME = 72 * 60 * 60 * 1000;
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
@@ -24,12 +25,13 @@ export default async function handler(req, res) {
       const userDoc = querySnap.docs[0];
       const user = userDoc.data();
 
-      const expiresAt = new Date(user.verificationExpiresAt).getTime();
-      if (Date.now() > expiresAt) {
+      const expiresAt = user.verificationExpiresAt.toDate().getTime(); // Firestore Timestamp to JS Date
+      const now = Date.now();
+
+      if (now > expiresAt) {
         return res.status(400).json({ message: "Token expired" });
       }
 
-      // ✅ Mark user as verified
       await userDoc.ref.update({
         isVerified: true,
         verificationToken: null,
@@ -72,9 +74,13 @@ export default async function handler(req, res) {
 
       const token = crypto.randomBytes(32).toString("hex");
 
+      const expiresAt = admin.firestore.Timestamp.fromDate(
+        new Date(Date.now() + TOKEN_LIFETIME)
+      );
+
       await userDoc.ref.update({
         verificationToken: token,
-        verificationExpiresAt: new Date(Date.now() + TOKEN_LIFETIME),
+        verificationExpiresAt: expiresAt,
       });
 
       const { subject, body } = createVerificationEmail(user.name, token);

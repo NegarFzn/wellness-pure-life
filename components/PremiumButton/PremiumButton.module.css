@@ -21,3 +21,15 @@
   transform: scale(0.98);
   box-shadow: 0 3px 8px rgba(0, 114, 255, 0.3);
 }
+
+@media (max-width: 768px) {
+  .premiumBtn {
+    width: 100%;
+    max-width: 320px;
+    font-size: 1rem;
+    padding: 12px;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+  }
+}

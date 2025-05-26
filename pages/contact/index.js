@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import classes from "./index.module.css";
 
 export default function Contact() {
@@ -11,6 +12,7 @@ export default function Contact() {
 
   const [loading, setLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
+  const router = useRouter();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,6 +35,10 @@ export default function Contact() {
       if (res.ok) {
         setResponseMessage("Message sent successfully! ✅");
         setFormData({ name: "", email: "", message: "" }); // Clear form
+
+        setTimeout(() => {
+          router.push("/"); // ✅ Redirect after 1.5 seconds
+        }, 1500);
       } else {
         setResponseMessage("Failed to send message. ❌");
       }
@@ -59,14 +65,18 @@ export default function Contact() {
         </p>
         <form onSubmit={handleSubmit} className={classes.contactForm}>
           <div className={classes.formGroup}>
-            <label className={classes.formLabel}>Name</label>
+            <label htmlFor="name" className={classes.formLabel}>
+              Name
+            </label>
             <input
               type="text"
               name="name"
+              id="name"
               value={formData.name}
               onChange={handleChange}
               required
               className={classes.formInput}
+              autoComplete="name"
             />
           </div>
           <div className={classes.formGroup}>
@@ -78,6 +88,7 @@ export default function Contact() {
               onChange={handleChange}
               required
               className={classes.formInput}
+              autoComplete="email"
             />
           </div>
           <div className={classes.formGroup}>

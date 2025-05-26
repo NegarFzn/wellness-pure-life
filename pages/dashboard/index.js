@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSession, signOut, getSession } from "next-auth/react";
-import { useUI } from "../context/UIContext";
+import { useUI } from "../../context/UIContext";
 import { toast } from "react-toastify";
-import classes from "./dashboard.module.css";
+import classes from "./index.module.css";
 
 export default function DashboardPage() {
   const { data: initialSession, status } = useSession();

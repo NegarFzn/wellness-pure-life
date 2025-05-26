@@ -1,72 +1,85 @@
-[
-  {
-    "id": 0,
-    "title": "Successful management of a complicated forearm fracture in a patient w",
-    "summary": "Presenting case of a 1-year-old girl, diagnosed with CIPA complaining of wound discharge and fever from a previously repaired left forearm fracture with nails.",
-    "link": "https://www.dovepress.com/successful-management-of-a-complicated-forearm-fracture-in-a-patient-w-peer-reviewed-fulltext-article-IMCRJ",
-    "image": "https://www.dovepress.com/assets/img/addon/og_logo.png"
-  },
-  {
-    "id": 1,
-    "title": "Thirona, COPD Foundation partner to advance AI-driven phenotyping",
-    "summary": "By leveraging advanced image quantification, the study will help unlock more profound insights into the heterogeneity of COPD.",
-    "link": "https://ioplus.nl/en/posts/thirona-copd-foundation-partner-to-advance-ai-driven-phenotyping",
-    "image": "https://ioplus.nl/api/media/file/brewbart_a_graphical_image_of_lungs_inside_the_human_body_just__e50bb2ab-4c85-46f4-a6d1-63c0032f39d8.png"
-  },
-  {
-    "id": 2,
-    "title": "College Student Had Headaches, Diagnosed With Acute Myeloid Leukemia",
-    "summary": "Breeze Hunter thought she had a lingering cold. When her symptoms got worse, she was diagnosed with a rare form of cancer: acute myeloid leukemia.",
-    "link": "https://www.businessinsider.com/college-student-headache-sinus-infection-acute-myeloid-leukemia-cancer-2025-5",
-    "image": "https://i.insider.com/681bb785a466d2b74ab55198?width=1200&format=jpeg"
-  },
-  {
-    "id": 3,
-    "title": "Brothers share lifelong bond after kidney donation",
-    "summary": "In 1975 Séamus Fitzpatrick donated a kidney to his brother Seán in what was the seventh successful kidney transplant in Ireland. 50 years on, the brothers continue to share a close bond.",
-    "link": "https://www.rte.ie/news/ireland/2025/0510/1512132-organ-donation/",
-    "image": "https://www.rte.ie/images/00227bde-1600.jpg"
-  },
-  {
-    "id": 4,
-    "title": "Diets high in fat and sugar appear to harm cognitive function",
-    "summary": "Consuming a Western-style diet packed with sugar and saturated fats may hurt your brain, not just your waistline. A new study shows poorer performance on spatial memory tasks among people with diets high in processed, unhealthy foods.",
-    "link": "https://www.psypost.org/diets-high-in-fat-and-sugar-appear-to-harm-cognitive-function/",
-    "image": "https://www.psypost.org/wp-content/uploads/2025/05/brain-5.jpg"
-  },
-  {
-    "id": 5,
-    "title": "Solution to 'cocktail party problem' could help people with hearing loss",
-    "summary": "Researchers drew inspiration from the auditory system to design a solution for the \"cocktail party problem.\"",
-    "link": "https://www.livescience.com/health/neuroscience/solution-to-cocktail-party-problem-could-help-people-with-hearing-loss",
-    "image": "https://cdn.mos.cms.futurecdn.net/cX4WcYuhNi6JPUBgYinKxB.jpg"
-  },
-  {
-    "id": 6,
-    "title": "Mpox death toll in Africa surpasses 1,750 since 2024: Africa CDC",
-    "summary": "Mpox death toll in Africa surpasses 1,750 since 2024: Africa CDC-",
-    "link": "https://english.news.cn/20250510/bfd64563f3014ec0bab9e894d89e4ab8/c.html",
-    "image": "https://english.news.cn/20250510/bfd64563f3014ec0bab9e894d89e4ab8/:/:/20250510bfd64563f3014ec0bab9e894d89e4ab8_CnbbeeE007008_20250510_CBMFN0A001.JPG"
-  },
-  {
-    "id": 7,
-    "title": "Autism diagnoses are on the rise - but autism itself may not be",
-    "summary": "Autism is better known and diagnosed than ever before, leading to misconceptions that cases are skyrocketing.",
-    "link": "https://www.bbc.com/future/article/20250509-why-autism-diagnoses-are-on-the-rise",
-    "image": "https://ychef.files.bbci.co.uk/624x351/p0l99h3z.jpg"
-  },
-  {
-    "id": 8,
-    "title": "US approves first at-home cervical cancer screening device",
-    "summary": "The US Food and Drug Administration has approved an at-home cervical cancer screening tool as an alternative to Pap smears by a gynecologist, the company behind the device said Friday.",
-    "link": "https://medicalxpress.com/news/2025-05-home-cervical-cancer-screening-device.html",
-    "image": "https://scx2.b-cdn.net/gfx/news/hires/2024/cervical-cancer.jpg"
-  },
-  {
-    "id": 9,
-    "title": "Nana's favourite broth recipe is having a moment, but what are the benefits?",
-    "summary": "Celebrities like Gwyneth Paltrow, Kylie Jenner and Salma Hayek swear by it. Dr Catherine Conlan asks whether bone broth is worth the hype.",
-    "link": "https://www.echolive.ie/wow/arid-41628991.html",
-    "image": "https://www.echolive.ie/cms_media/module_img/9229/4614736_4_seoimageog_iStock-1133236356.jpg"
-  }
-]
+{
+  "lastUpdated": 1748173839504,
+  "articles": [
+    {
+      "id": 0,
+      "title": "Infant With Incurable Disease is First to Successfully Receive Personalized Gene Therapy Treatment",
+      "summary": "In medical breakthrough, a baby diagnosed with rare genetic disorder is thriving after customized CRISPR gene editing therapy in Philadelphia.",
+      "content": "This article could not be fully loaded. Please visit the original source: https://www.goodnewsnetwork.org/infant-with-incurable-disease-is-first-to-successfully-receive-personalized-gene-therapy-treatment/",
+      "link": "https://www.goodnewsnetwork.org/infant-with-incurable-disease-is-first-to-successfully-receive-personalized-gene-therapy-treatment/",
+      "image": "https://www.goodnewsnetwork.org/wp-content/uploads/2025/05/KJ-with-his-parents-and-siblings-after-first-of-its-kind-personalized-gene-editing-therapy-–Credit-Childrens-Hospital-of-Philadelphia.jpg"
+    },
+    {
+      "id": 1,
+      "title": "Prolific sperm donor passes genetic cancer causing mutation to 10 offsprings",
+      "summary": "Donor fathering 67 babies, carrying an undetected TP53 mutation; 23 of his offspring inherited cancer risk and 10 are diagnosed with leukemia or lymphoma; Israeli legislation to prevent such cases, lacking",
+      "content": "This article could not be fully loaded. Please visit the original source: https://www.ynetnews.com/health_science/article/rkkhmvgfee",
+      "link": "https://www.ynetnews.com/health_science/article/rkkhmvgfee",
+      "image": "https://ynet-pic1.yit.co.il/picserver6/crop_images/2025/02/11/SJu9dXYK1l/SJu9dXYK1l_0_313_3000_1688_0_large.jpg"
+    },
+    {
+      "id": 2,
+      "title": "World Thyroid Day: Fatigue, hair loss, weight gain or anxiety? It could be your thyroid",
+      "summary": "World Thyroid Day: Over 45 million Indians suffer from thyroid disorders, yet symptoms like fatigue & weight gain often go ignored. Dr. Abhijit Bhograj explains early signs, dietary fixes, and why thyroid cancer has one of the highest cure rates. Read how to protect your thyroid health.",
+      "content": "This article could not be fully loaded. Please visit the original source: https://www.firstpost.com/health/world-thyroid-day-fatigue-hair-loss-weight-gain-or-anxiety-it-could-be-your-thyroid-13891505.html",
+      "link": "https://www.firstpost.com/health/world-thyroid-day-fatigue-hair-loss-weight-gain-or-anxiety-it-could-be-your-thyroid-13891505.html",
+      "image": "https://images.firstpost.com/uploads/2025/05/Representational-Image-2025-05-25T160815.535-2025-05-20d7eb74f9d6cd6ff33b723493f13fa1.jpg?im=FitAndFill=(1200,675)"
+    },
+    {
+      "id": 3,
+      "title": "More than a mood disorder: Study reveals depression ages brain faster than normal",
+      "summary": "Your mental health matters as much as physical health. A new study shows major depressive disorder changes brain structure, making it appear older than normal. | Health",
+      "content": "This article could not be fully loaded. Please visit the original source: https://www.hindustantimes.com/lifestyle/health/study-reveals-depression-ages-brain-faster-than-normal-101748164598222.html",
+      "link": "https://www.hindustantimes.com/lifestyle/health/study-reveals-depression-ages-brain-faster-than-normal-101748164598222.html",
+      "image": "https://www.hindustantimes.com/ht-img/img/2025/05/25/1600x900/depressed_man_1745475732027_1748166804414.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Lack of signage relating to Lyme Disease danger highlighted",
+      "summary": "Outdoor enthusiasts need to be made aware of Lyme Disease and what to do if they feel they may have come into contact with the virus spreading tick that carries it.",
+      "content": "This article could not be fully loaded. Please visit the original source: https://www.meathchronicle.ie/2025/05/25/lack-of-signage-relating-to-lyme-disease-danger-highlighted/",
+      "link": "https://www.meathchronicle.ie/2025/05/25/lack-of-signage-relating-to-lyme-disease-danger-highlighted/",
+      "image": "https://imengine.public.prod.cmg.infomaker.io/?uuid=707c5427-db87-57ae-8694-d86bef988e8d&function=cropresize&type=preview&source=false&q=75&crop_w=0.79375&crop_h=0.62742&width=1200&height=675&x=0.055&y=0.14587"
+    },
+    {
+      "id": 5,
+      "title": "World Thyroid Day: Rise in teen thyroid issues - often detected by dermatologists",
+      "summary": "Hypothyroidism — the most common diagnosis among teenagers — can cause dryness, puffiness, brittle nails and sluggishness.",
+      "content": "This article could not be fully loaded. Please visit the original source: https://thesouthfirst.com/health/world-thyroid-day-rise-in-teen-thyroid-issues-often-detected-by-dermatologists/",
+      "link": "https://thesouthfirst.com/health/world-thyroid-day-rise-in-teen-thyroid-issues-often-detected-by-dermatologists/",
+      "image": "https://s3.ap-south-1.amazonaws.com/media.thesouthfirst.com/wp-content/uploads/2025/05/Face-acne.-iStock.jpg"
+    },
+    {
+      "id": 6,
+      "title": "Warning over new Covid strain spreading to US after cases surge in China",
+      "summary": "A new more infectious Covid variant NB.1.8.1 has been detected in the US after cases surged in China, Hong Kong and Taiwan.",
+      "content": "This article could not be fully loaded. Please visit the original source: https://metro.co.uk/2025/05/25/warning-over-new-covid-strain-spreading-to-us-after-cases-surge-in-china-23241656/",
+      "link": "https://metro.co.uk/2025/05/25/warning-over-new-covid-strain-spreading-to-us-after-cases-surge-in-china-23241656/",
+      "image": "https://metro.co.uk/wp-content/uploads/2025/05/PRI_222622461-3d7e_1748164853.jpg?quality=90&strip=all&w=1200&h=630&crop=1"
+    },
+    {
+      "id": 7,
+      "title": "HSE tenders for €50m national electronic prescription service to reduce medication errors",
+      "summary": "The HSE said the new prescription service will be secure, efficient and a fully integrated digital service to transmit and store electronic prescriptions and dispensations for patients",
+      "content": "This article could not be fully loaded. Please visit the original source: https://www.irishexaminer.com/news/arid-41637862.html",
+      "link": "https://www.irishexaminer.com/news/arid-41637862.html",
+      "image": "https://www.irishexaminer.com/cms_media/module_img/9266/4633147_6_seoimageog_iStock-842852832.jpg"
+    },
+    {
+      "id": 8,
+      "title": "I'm a dementia specialist - here's the early warning signs that hit the under 50s... and have NOTHING to do with memory",
+      "summary": "Known as young-onset dementia, the condition has risen by a shocking 69 per cent in the last decade-with more than 70,000 people affected.",
+      "content": "This article could not be fully loaded. Please visit the original source: https://www.dailymail.co.uk/health/article-14743575/dementia-specialist-five-surprising-signs-need-look-for.html",
+      "link": "https://www.dailymail.co.uk/health/article-14743575/dementia-specialist-five-surprising-signs-need-look-for.html",
+      "image": "https://i.dailymail.co.uk/1s/2025/05/23/16/97867839-0-Changes_in_language_and_vision_disturbances_can_be_some_of_the_e-a-8_1748014887453.jpg"
+    },
+    {
+      "id": 9,
+      "title": "Almost 2,000 dengue cases in Singapore so far in 2025, 74% drop from 2024",
+      "summary": "There were two deaths due to local dengue infection as of May 15. Read more at straitstimes.com.",
+      "content": "This article could not be fully loaded. Please visit the original source: https://www.straitstimes.com/singapore/health/almost-2000-dengue-cases-in-singapore-so-far-in-2025-74-drop-from-2024",
+      "link": "https://www.straitstimes.com/singapore/health/almost-2000-dengue-cases-in-singapore-so-far-in-2025-74-drop-from-2024",
+      "image": "https://cassette.sphdigital.com.sg/image/straitstimes/28b4afbfd68c0398176cdd5dead8476ea87c97633582a882affe1ef8726e0731"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 .newsletter {
   background: linear-gradient(90deg, #ff5fc0, #a177e7, #4ac7f2);
-  padding:  0.8rem 1.8rem;
+  padding: 0.8rem 1.8rem;
   border-radius: 60px;
   max-width: 1000px;
   margin: 4rem auto;
@@ -30,10 +30,9 @@
   font-weight: 700;
 }
 
-
 .newsletterForm {
   display: flex;
-  align-items: center;        
+  align-items: center;
   justify-content: center;
   margin: 2rem auto;
   gap: 1rem;
@@ -44,7 +43,7 @@
   padding: 0.8rem 1.5rem;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 16px; 
+  border-radius: 16px;
   outline: none;
   background-color: white;
   transition: border 0.2s ease;
@@ -113,7 +112,39 @@
 @media (max-width: 768px) {
   .newsletter {
     flex-direction: column;
-    border-radius: 40px;
+    align-items: center;
+    padding: 1.5rem 1rem;
     text-align: center;
+    border-radius: 40px;
+    gap: 1rem;
+  }
+
+  .newsletter h2 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .newsletterForm {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .newsletterForm input {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .subscribeButton {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 12px 0;
+  }
+
+  .subscribeButton.subscribed {
+    margin: 1.5rem auto;
+    width: 90%;
+    font-size: 1.2rem;
   }
 }

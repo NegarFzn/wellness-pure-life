@@ -15,13 +15,13 @@
   margin-top: 15px; /* ✅ Adjust as needed */
 }
 
-
 .item img {
   width: 100%;
   max-width: 200px;
   height: auto;
   border-radius: 10px;
 }
+
 
 .item p {
   font-size: 1rem;
@@ -37,4 +37,44 @@
 .link h3 {
   font-size: 1.2rem;
   margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .item {
+    padding: 1rem;
+    margin: 0.75rem 0;
+  }
+
+  .item img {
+    max-width: 160px;
+    height: auto;
+  }
+
+  .textContainer {
+    margin-top: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  .link h3 {
+    font-size: 1.1rem;
+  }
+
+  .item p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .item img {
+    max-width: 180px;
+  }
+
+  .link h3 {
+    font-size: 1.15rem;
+  }
+
+  .item p {
+    font-size: 0.95rem;
+  }
 }

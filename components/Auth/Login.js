@@ -19,12 +19,12 @@ export default function Login({
   const [success, setSuccess] = useState(false);
   const router = useRouter();
 
-  // ✅ Show toast if redirected after verification (only once)
+  // Show toast if redirected after verification (only once)
   useEffect(() => {
     const hasToastFired = sessionStorage.getItem("verifiedToastShown");
 
     if (router.query.verified === "true" && !hasToastFired) {
-      toast.success("✅ Email verified successfully. Please log in.");
+      toast.success("Email verified successfully. Please log in.");
       sessionStorage.setItem("verifiedToastShown", "true");
 
       const { verified, ...rest } = router.query;

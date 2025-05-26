@@ -62,8 +62,48 @@
 
 .icon {
   width: 240px;
-  height: 200px ;
+  height: 200px;
   object-fit: cover;
   border-radius: 12px;
   flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .featuresSection {
+    padding: 2rem 1rem;
+  }
+
+  .heading {
+    font-size: 1.8rem;
+    line-height: 2.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .featureGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .featureCard {
+    padding: 1.5rem;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .featureCard img {
+    width: 100%;
+    height: auto;
+  }
+
+  .featureCard h3 {
+    font-size: 1.2rem;
+    margin-top: 0.75rem;
+  }
+
+  .featureCard p {
+    font-size: 1rem;
+    margin: 1rem auto 0;
+    line-height: 1.5;
+    max-width: 100%;
+  }
 }

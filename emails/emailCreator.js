@@ -60,3 +60,14 @@ export function createPasswordResetEmail(name, token) {
 
   return { subject, body: emailTemplate(bodyContent) };
 }
+
+export function createContactEmail(name, email, message) {
+  const subject = "New Contact Form Message";
+  const bodyContent = `
+    <h2>New message from ${name}</h2>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Message:</strong></p>
+    <p>${message}</p>
+  `;
+  return { subject, body: emailTemplate(bodyContent) };
+}

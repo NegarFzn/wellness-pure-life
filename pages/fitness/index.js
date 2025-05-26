@@ -51,7 +51,7 @@ function fitnessPage(props) {
       </Head>
       <header className={classes.header}>
         <nav>
-          <Image src={fitnessHeader} alt="fitness header" fill priority />
+          <Image src={fitnessHeader} alt="fitness header" fill priority sizes="(max-width: 768px) 100vw, 100vw" />
         </nav>
       </header>
       <main className={classes["main-content"]}>

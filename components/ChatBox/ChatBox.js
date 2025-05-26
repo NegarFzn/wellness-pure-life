@@ -2,10 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useUI } from "../../context/UIContext";
 import PremiumButton from "../PremiumButton/PremiumButton";
-import classes from "./WellnessAssistant.module.css";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import classes from "./ChatBox.module.css";
 
-export default function WellnessAssistantContent() {
-  const { data: session, status } = useSession();
+export default function ChatBox() {
+  const { data: session, status, update } = useSession();
   const { openLogin } = useUI();
   const user = session?.user;
   const isAuthenticated = !!user;
@@ -17,7 +19,6 @@ export default function WellnessAssistantContent() {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
 
-  // ✅ Always run hooks before early return
   useEffect(() => {
     const storedChat = localStorage.getItem("wellnessChat");
     if (storedChat) {
@@ -33,6 +34,8 @@ export default function WellnessAssistantContent() {
   }, [chat]);
 
   useEffect(() => {
+    if (status !== "authenticated") return;
+
     if (!isAuthenticated) {
       localStorage.removeItem("wellnessChat");
       setChat([]);
@@ -45,9 +48,47 @@ export default function WellnessAssistantContent() {
         )
       );
     }
-  }, [isAuthenticated]);
+  }, [status, isAuthenticated]);
 
-  // ✅ Safe to return after all hooks
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+
+    const userMessage = { role: "user", content: input };
+    const updatedChat = [...chat, userMessage];
+    setChat(updatedChat);
+    setInput("");
+    setLoading(true);
+
+    try {
+      const systemMessage = {
+        role: "system",
+        content:
+          "You are Wellness Assistant, a concise, friendly expert on fitness, nutrition, and mental well-being. Reply clearly, using markdown. Keep responses short and helpful.",
+      };
+
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: [systemMessage, ...updatedChat] }),
+      });
+
+      const data = await res.json();
+
+      setChat((prev) => [
+        ...prev,
+        { role: "assistant", content: data.reply || "No reply." },
+      ]);
+    } catch (error) {
+      console.error("❌ GPT Error:", error);
+      setChat((prev) => [
+        ...prev,
+        { role: "assistant", content: "⚠️ Failed to fetch response." },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (status === "loading") {
     return (
       <div className={classes.loaderWrapper}>
@@ -55,25 +96,6 @@ export default function WellnessAssistantContent() {
       </div>
     );
   }
-
-  const sendMessage = async () => {
-    if (!input.trim()) return;
-
-    const userMessage = { role: "user", content: input };
-    setChat((prev) => [...prev, userMessage]);
-    setInput("");
-    setLoading(true);
-
-    setTimeout(() => {
-      const response = {
-        role: "assistant",
-        content:
-          "🌿 Here’s a wellness tip: Stay hydrated and take deep breaths!",
-      };
-      setChat((prev) => [...prev, response]);
-      setLoading(false);
-    }, 1000);
-  };
 
   return (
     <div className={classes.launcher}>
@@ -84,20 +106,7 @@ export default function WellnessAssistantContent() {
           {!isAuthenticated && (
             <p className={`${classes.notice} ${classes.loginPrompt}`}>
               💎 This is a premium feature.
-              <span
-                type="button"
-                onClick={() => {
-                  setChat((prev) => [
-                    ...prev,
-                    {
-                      role: "system",
-                      content:
-                        "⚠️ Please login first to upgrade and access the Assistant!",
-                    },
-                  ]);
-                  openLogin();
-                }}
-              >
+              <span onClick={openLogin}>
                 <PremiumButton />
               </span>
               to unlock.
@@ -120,7 +129,9 @@ export default function WellnessAssistantContent() {
                   msg.role === "user" ? classes.user : classes.bot
                 }`}
               >
-                {msg.content}
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {msg.content}
+                </ReactMarkdown>
               </div>
             ))}
             <div ref={chatEndRef} />

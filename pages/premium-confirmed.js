@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useAuth } from "../context/AuthContext";
-import { markUserAsPremiumByEmail } from "../lib/markUserPremium";
+import { useSession } from "next-auth/react";
 import classes from "./premium-confirmed.module.css";
 
 export default function PremiumConfirmed() {
-  const { user } = useAuth();
+  const { update } = useSession();
   const router = useRouter();
   const [status, setStatus] = useState("loading");
 
@@ -14,24 +13,34 @@ export default function PremiumConfirmed() {
 
     const confirmUpgrade = async () => {
       const sessionId = router.query.session_id;
-      if (user && sessionId) {
-        setStatus("updating");
-        try {
-          await markUserAsPremiumByEmail(user.uid);
-          setStatus("success");
-          // After success, wait 3 seconds, then redirect to homepage
-          setTimeout(() => {
-            router.push("/");
-          }, 3000);
-        } catch (err) {
-          console.error("🔥 Failed to mark as premium:", err.message);
-          setStatus("error");
-        }
+      if (!sessionId) return;
+
+      setStatus("updating");
+
+      try {
+        // Call backend to confirm and update user's premium status
+        const res = await fetch("/api/confirm-premium", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ session_id: sessionId }),
+        });
+
+        if (!res.ok) throw new Error("API confirmation failed");
+
+        await update(); // Refresh the NextAuth session to include isPremium
+        setStatus("success");
+
+        setTimeout(() => {
+          router.push("/dashboard"); // Redirect to premium feature page
+        }, 3000);
+      } catch (err) {
+        console.error("❌ Error upgrading to premium:", err.message);
+        setStatus("error");
       }
     };
 
     confirmUpgrade();
-  }, [router.isReady, user, router.query.session_id]);
+  }, [router.isReady, router.query.session_id]);
 
   const getMessage = () => {
     switch (status) {

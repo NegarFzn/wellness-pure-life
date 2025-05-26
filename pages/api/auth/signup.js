@@ -23,10 +23,7 @@ export default async function handler(req, res) {
   try {
     const usersRef = firestore.collection("users");
 
-    const existingUser = await usersRef
-      .where("email", "==", email)
-      .limit(1)
-      .get();
+    const existingUser = await usersRef.where("email", "==", email).limit(1).get();
     if (!existingUser.empty) {
       return res.status(400).json({ message: "Email already in use" });
     }
@@ -49,9 +46,7 @@ export default async function handler(req, res) {
     const { subject, body } = createVerificationEmail(name, verificationToken);
     await sendEmail(email, subject, body);
 
-    return res
-      .status(201)
-      .json({ message: "✅ Signup successful. Please verify your email." });
+    return res.status(201).json({ message: "✅ Signup successful. Please verify your email." });
   } catch (err) {
     console.error("❌ Signup error:", err.stack || err.message);
     return res.status(500).json({ message: "Internal server error" });
