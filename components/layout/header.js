@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/router";
 import NavLink from "./nav-link";
 import { signOut, useSession } from "next-auth/react";
@@ -9,7 +9,11 @@ import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import { toast } from "react-toastify";
 import logoImg from "../../public/images/logo.jpg";
-import { FiUser, FiSettings, FiLogOut } from "react-icons/fi";
+import { FiUser, FiLogOut } from "react-icons/fi";
+import ChallengeBox from "./ChallengeBox";
+import TopicsColumn from "./TopicsColumn";
+import SpotlightColumn from "./SpotlightColumn";
+
 import classes from "./header.module.css";
 
 export default function Header({ weather }) {
@@ -29,6 +33,9 @@ export default function Header({ weather }) {
   const [justSignedUp, setJustSignedUp] = useState(false);
   const [resent, setResent] = useState(false);
   const [nyTime, setNyTime] = useState("");
+  const [topicsMap, setTopicsMap] = useState({});
+  const [spotlightsMap, setSpotlightsMap] = useState({});
+  const [activeDropdown, setActiveDropdown] = useState(null);
 
   useEffect(() => {
     const updateNYTime = () => {
@@ -70,31 +77,6 @@ export default function Header({ weather }) {
     }
   }, [user]);
 
-  const getNavLinks = () => {
-    const coreLinks = [
-      { href: "/fitness", label: "Fitness" },
-      { href: "/mindfulness", label: "Mindfulness" },
-      { href: "/nourish", label: "Nourish" },
-    ];
-
-    if (router.pathname === "/") {
-      return coreLinks;
-    } else if (router.pathname.startsWith("/fitness")) {
-      return coreLinks.filter((link) => link.href !== "/fitness");
-    } else if (router.pathname.startsWith("/mindfulness")) {
-      return coreLinks.filter((link) => link.href !== "/mindfulness");
-    } else if (router.pathname.startsWith("/nourish")) {
-      return coreLinks.filter((link) => link.href !== "/nourish");
-    } else if (
-      router.pathname.startsWith("/news") ||
-      router.pathname.startsWith("/contact") ||
-      router.pathname.startsWith("/weather")
-    ) {
-      return coreLinks;
-    }
-    return [];
-  };
-
   const handleSignupComplete = () => {
     setJustSignedUp(true);
   };
@@ -102,6 +84,35 @@ export default function Header({ weather }) {
   const handleLoginSuccess = () => {
     closeLogin();
   };
+
+  useEffect(() => {
+    const fetchNavData = async () => {
+      try {
+        const res = await fetch("/api/navdata");
+        const data = await res.json();
+
+        if (!data.fitness || !data.mindfulness || !data.nourish) {
+          console.error("Invalid nav data format", data);
+          return;
+        }
+
+        setTopicsMap({
+          Fitness: data.mixedTopics,
+          Mindfulness: data.mixedTopics,
+          Nourish: data.mixedTopics,
+        });
+
+        setSpotlightsMap({
+          Fitness: data.fitness.spotlights,
+          Mindfulness: data.mindfulness.spotlights,
+          Nourish: data.nourish.spotlights,
+        });
+      } catch (error) {
+        console.error("Failed to fetch nav data:", error);
+      }
+    };
+    fetchNavData();
+  }, []);
 
   return (
     <>
@@ -112,9 +123,42 @@ export default function Header({ weather }) {
         </Link>
         <nav className={classes.nav}>
           <ul>
-            {getNavLinks().map((link) => (
-              <li key={link.href}>
-                <NavLink href={link.href}>{link.label}</NavLink>
+            {["Fitness", "Mindfulness", "Nourish"].map((label) => (
+              <li
+                className={classes.dropdownParent}
+                key={label}
+                onMouseEnter={() => setActiveDropdown(label)}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                <Link
+                  href={`/${label.toLowerCase()}`}
+                  className={classes.dropdownToggle}
+                >
+                  {label}
+                </Link>
+                <div
+                  className={`${classes.megaDropdown} ${
+                    activeDropdown === label ? classes.show : ""
+                  }`}
+                >
+                  <TopicsColumn
+                    label={label}
+                    topicsMap={topicsMap}
+                    onLinkClick={() => setActiveDropdown(null)}
+                  />
+                  <div className={classes.megaRightColumn}>
+                    <SpotlightColumn
+                      label={label}
+                      spotlightsMap={spotlightsMap}
+                      onLinkClick={() => setActiveDropdown(null)}
+                    />
+                    <div className={classes.challengeWrapper}>
+                      <ChallengeBox
+                        onLinkClick={() => setActiveDropdown(null)}
+                      />
+                    </div>
+                  </div>
+                </div>
               </li>
             ))}
             <li>
@@ -155,19 +199,14 @@ export default function Header({ weather }) {
                   onClick={async () => {
                     const userEmail =
                       user?.email || localStorage.getItem("justSignedUpEmail");
-
-                    if (!userEmail) {
-                      toast.error("User email not available.");
-                      return;
-                    }
-
+                    if (!userEmail)
+                      return toast.error("User email not available.");
                     try {
                       const res = await fetch("/api/auth/emailverification", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ email: userEmail }),
                       });
-
                       if (!res.ok) throw new Error("Request failed");
                       toast.success("Verification email resent.");
                       setResent(true);
@@ -200,36 +239,30 @@ export default function Header({ weather }) {
               )
             ) : (
               user && (
-                <>
-                  <li className={classes.profileDropdown}>
-                    <div className={classes.profileWrapper}>
-                      <button className={classes.profileButton}>
-                        <FiUser size={18} />
-                        {(user?.name || "Account").charAt(0).toUpperCase() +
-                          (user?.name || "Account").slice(1)}
+                <li className={classes.profileDropdown}>
+                  <div className={classes.profileWrapper}>
+                    <button className={classes.profileButton}>
+                      <FiUser size={18} style={{ marginRight: "0.4rem" }} />
+                      {(user?.name || "Account").charAt(0).toUpperCase() +
+                        (user?.name || "Account").slice(1)}
+                    </button>
+                    <div className={classes.dropdownContent}>
+                      <Link href="/dashboard" className={classes.dropdownLink}>
+                        <FiUser size={16} /> Profile
+                      </Link>
+                      <button
+                        onClick={() => signOut({ callbackUrl: "/" })}
+                        className={classes.logoutLink}
+                      >
+                        <FiLogOut size={16} /> Logout
                       </button>
-                      <div className={classes.dropdownContent}>
-                        <Link
-                          href="/dashboard"
-                          className={classes.dropdownLink}
-                        >
-                          <FiUser size={16} /> Profile
-                        </Link>
-                        <button
-                          onClick={() => signOut({ callbackUrl: "/" })}
-                          className={classes.logoutLink}
-                        >
-                          <FiLogOut size={16} /> Logout
-                        </button>
-                      </div>
                     </div>
-                  </li>
-                </>
+                  </div>
+                </li>
               )
             )}
           </ul>
         </nav>
-
         <Signup
           isOpen={showSignup}
           onClose={closeSignup}

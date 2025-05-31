@@ -2,7 +2,7 @@
   "featured": [
     {
       "title": "Nourish Focus: Discover the Secrets to Vibrant Living",
-      "id": "01",
+      "id": "nourish-focus-discover-the-secrets-to-vibrant-living",
       "image": "nourish_01.jpg",
       "summary": "Explore tips and superfoods to energize your body and mind. Unlock vibrant health and thrive every day.",
       "intro": "Nourish Focus: Discover the Secrets to Vibrant Living introduces a journey into achieving optimal health through mindful nourishment and balanced choices. See our guide on <a href=\"/fitness/06\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Treadmill vs. Outdoor Running: Weighing the Options</a> for more details. In a world filled with dietary trends and conflicting advice, this guide simplifies the path to vibrant living by exploring proven methods rooted in science and tradition. From the power of superfoods to sustainable eating habits, uncover the strategies that energize your body, sharpen your mind, and elevate your well-being. Whether you're enhancing your daily meals or building a healthier lifestyle, this is your gateway to a more vibrant and fulfilling life.",
@@ -60,22 +60,23 @@
       ],
       "additionalSections": [
         {
-          "id": "02",
+          "id": "top-picks-for-nourishment-curated-guides-and-tips",
           "title": "Top Picks for Nourishment: Curated Guides and Tips",
           "summary": "Discover expert advice and resources to help you achieve your health goals effortlessly.",
           "image": "nourish_02.jpg"
         },
         {
-          "id": "03",
+          "id": "essential-reads-your-foundation-to-healthy-living",
           "title": "Essential Reads: Your Foundation to Healthy Living",
           "summary": "Start your wellness journey with practical tips and insights for a healthier lifestyle.",
           "image": "nourish_03.jpg"
         }
-      ]
+      ],
+      "shortTitle": "Nourish Focus Discover"
     },
     {
       "title": "Top Picks for Nourishment: Curated Guides and Tips",
-      "id": "02",
+      "id": "top-picks-for-nourishment-curated-guides-and-tips",
       "image": "nourish_02.jpg",
       "summary": "Discover expert advice and resources to help you achieve your health goals effortlessly.",
       "intro": "Finding the right path to a healthier lifestyle can often feel overwhelming with the abundance of information available today. See our guide on <a href=\"/fitness/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Workouts for Sculpting Every Inch of Your Body</a> for more details. **Top Picks for Nourishment: Curated Guides and Tips** is here to simplify your journey by providing expert-selected advice, trusted insights, and actionable strategies. From meal planning and balanced recipes to the latest superfood trends, this resource ensures you have everything you need to make nourishing choices that align with your goals. Whether you're a beginner or a seasoned wellness enthusiast, these curated tips are your gateway to a healthier, more vibrant you.",
@@ -130,22 +131,23 @@
       ],
       "additionalSections": [
         {
-          "id": "01",
+          "id": "nourish-focus-discover-the-secrets-to-vibrant-living",
           "title": "Nourish Focus: Discover the Secrets to Vibrant Living",
           "summary": "Explore tips and superfoods to energize your body and mind. Unlock vibrant health and thrive every day.",
           "image": "nourish_01.jpg"
         },
         {
-          "id": "03",
+          "id": "essential-reads-your-foundation-to-healthy-living",
           "title": "Essential Reads: Your Foundation to Healthy Living",
           "summary": "Start your wellness journey with practical tips and insights for a healthier lifestyle.",
           "image": "nourish_03.jpg"
         }
-      ]
+      ],
+      "shortTitle": "Top Picks for"
     },
     {
       "title": "Essential Reads: Your Foundation to Healthy Living",
-      "id": "03",
+      "id": "essential-reads-your-foundation-to-healthy-living",
       "image": "nourish_03.jpg",
       "summary": "Start your wellness journey with practical tips and insights for a healthier lifestyle.",
       "intro": "Embarking on a journey toward a healthier lifestyle begins with the right knowledge. See our guide on <a href=\"/fitness/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Workouts for Sculpting Every Inch of Your Body</a> for more details. **Essential Reads: Your Foundation to Healthy Living** offers a carefully curated selection of resources, tips, and insights to help you build a strong foundation for wellness. From understanding balanced nutrition to adopting practical fitness routines, these guides simplify complex topics and empower you to take meaningful steps toward better health. Whether you\u2019re just starting out or looking to refine your approach, this collection provides everything you need to achieve lasting well-being and vitality.",
@@ -202,24 +204,25 @@
       ],
       "additionalSections": [
         {
-          "id": "01",
+          "id": "nourish-focus-discover-the-secrets-to-vibrant-living",
           "title": "Nourish Focus: Discover the Secrets to Vibrant Living",
           "summary": "Explore tips and superfoods to energize your body and mind. Unlock vibrant health and thrive every day.",
           "image": "nourish_01.jpg"
         },
         {
-          "id": "02",
+          "id": "top-picks-for-nourishment-curated-guides-and-tips",
           "title": "Top Picks for Nourishment: Curated Guides and Tips",
           "summary": "Discover expert advice and resources to help you achieve your health goals effortlessly.",
           "image": "nourish_02.jpg"
         }
-      ]
+      ],
+      "shortTitle": "Essential Reads Your"
     }
   ],
   "superfoodSecrets": [
     {
       "title": "Superfood Benefits",
-      "id": "04",
+      "id": "superfood-benefits",
       "image": "nourish_04.jpg",
       "summary": "Unlock the powerful health advantages of superfoods. Learn how these nutrient-dense foods can boost immunity, improve energy, and support overall wellness.",
       "intro": "Superfoods have gained immense popularity for their incredible ability to pack dense nutrients into every bite. See our guide on <a href=\"/fitness/18\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">The Benefits of Stretching and Its Pleasurable Effects</a> for more details. From boosting energy levels and enhancing immunity to reducing inflammation and supporting overall well-being, these nutritional powerhouses are essential for a healthy lifestyle. **Superfood Benefits** explores the science behind foods like blueberries, kale, chia seeds, and quinoa, revealing how they can elevate your health and vitality. Whether you\u2019re looking to improve digestion, promote heart health, or simply add more nutrients to your meals, this guide will help you unlock the full potential of these extraordinary foods.",
@@ -277,13 +280,13 @@
       ],
       "additionalSections": [
         {
-          "id": "05",
+          "id": "boost-your-diet",
           "title": "Boost Your Diet",
           "summary": "Enhance your nutrition with foods that pack a punch. Explore practical ways to include powerhouse ingredients into your meals for a healthier more vibrant you.",
           "image": "nourish_05.jpg"
         },
         {
-          "id": "06",
+          "id": "powerful-ingredients",
           "title": "Powerful Ingredients",
           "summary": "Transform your meals with ingredients that deliver exceptional health benefits. From leafy greens to wholesome seeds create dishes that truly nourish your body.",
           "image": "nourish_06.jpg"
@@ -292,7 +295,7 @@
     },
     {
       "title": "Boost Your Diet",
-      "id": "05",
+      "id": "boost-your-diet",
       "image": "nourish_05.jpg",
       "summary": "Enhance your nutrition with foods that pack a punch. Explore practical ways to include powerhouse ingredients into your meals for a healthier, more vibrant you.",
       "intro": "A well-rounded diet is the foundation of a healthy life, but sometimes, small changes can make a big difference. See our guide on <a href=\"/fitness/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Workouts for Sculpting Every Inch of Your Body</a> for more details. **Boost Your Diet** offers practical tips, nutrient-packed food suggestions, and proven strategies to elevate your daily nutrition. From incorporating superfoods and hydration hacks to learning portion control and mindful eating techniques, this guide is designed to help you optimize your meals without overhauling your routine. Whether you're looking to improve energy, support weight management, or enhance overall well-being, these actionable insights will empower you to take your diet to the next level.",
@@ -349,13 +352,13 @@
       ],
       "additionalSections": [
         {
-          "id": "04",
+          "id": "superfood-benefits",
           "title": "Superfood Benefits",
           "summary": "Unlock the powerful health advantages of superfoods. Learn how these nutrient-dense foods can boost immunity, improve energy, and support overall wellness.",
           "image": "nourish_04.jpg"
         },
         {
-          "id": "06",
+          "id": "powerful-ingredients",
           "title": "Powerful Ingredients",
           "summary": "Transform your meals with ingredients that deliver exceptional health benefits. From leafy greens to wholesome seeds create dishes that truly nourish your body.",
           "image": "nourish_06.jpg"
@@ -364,7 +367,7 @@
     },
     {
       "title": "Powerful Ingredients",
-      "id": "06",
+      "id": "powerful-ingredients",
       "image": "nourish_06.jpg",
       "summary": "Transform your meals with ingredients that deliver exceptional health benefits. From leafy greens to wholesome seeds, create dishes that truly nourish your body.",
       "intro": "Transform your meals and your health with **Powerful Ingredients**\u2014nature\u2019s most nutrient-packed foods that deliver extraordinary benefits. From boosting immunity and enhancing energy to supporting heart and brain health, these ingredients are the key to unlocking your full potential. Discover the science behind superfoods like turmeric, blueberries, and chia seeds, and learn how to incorporate them into your daily routine. Whether you\u2019re creating vibrant salads, hearty meals, or refreshing beverages, these powerhouse additions will elevate both flavor and nutrition, helping you thrive every day.",
@@ -422,13 +425,13 @@
       ],
       "additionalSections": [
         {
-          "id": "04",
+          "id": "superfood-benefits",
           "title": "Superfood Benefits",
           "summary": "Unlock the powerful health advantages of superfoods. Learn how these nutrient-dense foods can boost immunity, improve energy, and support overall wellness.",
           "image": "nourish_04.jpg"
         },
         {
-          "id": "05",
+          "id": "boost-your-diet",
           "title": "Boost Your Diet",
           "summary": "Enhance your nutrition with foods that pack a punch. Explore practical ways to include powerhouse ingredients into your meals for a healthier more vibrant you.",
           "image": "nourish_05.jpg"
@@ -439,7 +442,7 @@
   "nutrientEssentials": [
     {
       "title": "Vital Nutrients for a Healthy Life",
-      "id": "08",
+      "id": "vital-nutrients-for-a-healthy-life",
       "image": "nourish_08.jpg",
       "summary": "Discover the core nutrients your body needs for optimal health. Learn how to incorporate vitamins, minerals, and other essentials into your diet for lasting well-being.",
       "intro": "Achieving optimal health begins with understanding the importance of **vital nutrients**\u2014the building blocks that fuel your body and support its functions. See our guide on <a href=\"/fitness/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Workouts for Sculpting Every Inch of Your Body</a> for more details. From essential vitamins and minerals to proteins, fats, and carbohydrates, these nutrients are key to maintaining energy, boosting immunity, and promoting overall well-being. **Vital Nutrients for a Healthy Life** explores the role of each nutrient and offers practical advice for incorporating them into your diet through balanced meals and wholesome ingredients. Empower yourself with the knowledge to make informed choices and create a foundation for long-term health and vitality.",
@@ -497,13 +500,13 @@
       ],
       "additionalSections": [
         {
-          "id": "09",
+          "id": "fuel-your-body-with-the-right-nutrition",
           "title": "Fuel Your Body with the Right Nutrition",
           "summary": "Explore how essential nutrients power your daily activities and boost your energy levels. Discover foods that nourish your body and support an active lifestyle.",
           "image": "nourish_09.jpg"
         },
         {
-          "id": "10",
+          "id": "nutrition-101-master-the-basics-of-healthy-eating",
           "title": "Nutrition 101: Master the Basics of Healthy Eating",
           "summary": "A beginner-friendly guide to the basics of nutrition. Understand the roles of carbohydrates proteins, fats, vitamins, and minerals in achieving a healthy diet.",
           "image": "nourish_10.jpg"
@@ -512,7 +515,7 @@
     },
     {
       "title": "Fuel Your Body with the Right Nutrition",
-      "id": "09",
+      "id": "fuel-your-body-with-the-right-nutrition",
       "image": "nourish_09.jpg",
       "summary": "Explore how essential nutrients power your daily activities and boost your energy levels. Discover foods that nourish your body and support an active lifestyle.",
       "intro": "Your body is a powerful engine, and just like any engine, it requires the right fuel to perform at its best. See our guide on <a href=\"/fitness/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Workouts for Sculpting Every Inch of Your Body</a> for more details. **Fuel Your Body with the Right Nutrition** delves into the essential nutrients and food choices that energize your body, enhance mental clarity, and promote overall well-being. From balanced macronutrients to nutrient-dense superfoods, discover how to create meals that provide sustained energy and support your health goals. Whether you\u2019re looking to boost performance, maintain focus, or improve your vitality, this guide empowers you to make smarter nutritional decisions for a healthier, more vibrant life.",
@@ -570,13 +573,13 @@
       ],
       "additionalSections": [
         {
-          "id": "08",
+          "id": "vital-nutrients-for-a-healthy-life",
           "title": "Vital Nutrients for a Healthy Life",
           "summary": "Discover the core nutrients your body needs for optimal health. Learn how to incorporate vitamins minerals, and other essentials into your diet for lasting well-being.",
           "image": "nourish_08.jpg"
         },
         {
-          "id": "10",
+          "id": "nutrition-101-master-the-basics-of-healthy-eating",
           "title": "Nutrition 101: Master the Basics of Healthy Eating",
           "summary": "A beginner-friendly guide to the basics of nutrition. Understand the roles of carbohydrates proteins, fats, vitamins, and minerals in achieving a healthy diet.",
           "image": "nourish_10.jpg"
@@ -585,7 +588,7 @@
     },
     {
       "title": "Nutrition 101: Master the Basics of Healthy Eating",
-      "id": "10",
+      "id": "nutrition-101-master-the-basics-of-healthy-eating",
       "image": "nourish_10.jpg",
       "summary": "A beginner-friendly guide to the basics of nutrition. Understand the roles of carbohydrates, proteins, fats, vitamins, and minerals in achieving a healthy diet.",
       "intro": "Healthy eating begins with a solid understanding of nutrition. See our guide on <a href=\"/fitness/06\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Treadmill vs. Outdoor Running: Weighing the Options</a> for more details. **Nutrition 101: Master the Basics of Healthy Eating** is your ultimate guide to building a balanced and nourishing diet. From understanding macronutrients and micronutrients to choosing whole foods and managing portion sizes, this guide simplifies the essentials of nutrition for beginners and experts alike. Discover how to make smarter food choices, plan balanced meals, and adopt sustainable habits that fuel your body and mind. Whether you're taking your first steps toward healthier eating or looking to refine your knowledge, this resource sets the foundation for long-term wellness.",
@@ -641,13 +644,13 @@
       ],
       "additionalSections": [
         {
-          "id": "08",
+          "id": "vital-nutrients-for-a-healthy-life",
           "title": "Vital Nutrients for a Healthy Life",
           "summary": "Discover the core nutrients your body needs for optimal health. Learn how to incorporate vitamins minerals, and other essentials into your diet for lasting well-being.",
           "image": "nourish_08.jpg"
         },
         {
-          "id": "09",
+          "id": "fuel-your-body-with-the-right-nutrition",
           "title": "Fuel Your Body with the Right Nutrition",
           "summary": "Explore how essential nutrients power your daily activities and boost your energy levels. Discover foods that nourish your body and support an active lifestyle.",
           "image": "nourish_09.jpg"
@@ -658,7 +661,7 @@
   "mindfulMeals": [
     {
       "title": "Eating with Intention: A Guide to Mindful Nourishment",
-      "id": "11",
+      "id": "eating-with-intention-a-guide-to-mindful-nourishment",
       "image": "nourish_11.jpg",
       "summary": "Learn how to cultivate a deeper connection with your food by eating intentionally. Discover practices to savor each bite, improve digestion, and enhance your overall health.",
       "intro": "In today\u2019s fast-paced world, it\u2019s easy to eat on autopilot, often overlooking the connection between food and well-being. See our guide on <a href=\"/fitness/03\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">A Newcomer\u2019s Guide to Building Muscle with Weights</a> for more details. **Eating with Intention: A Guide to Mindful Nourishment** invites you to slow down, savor your meals, and cultivate a deeper awareness of how food fuels your body and mind. By focusing on the quality of your meals, listening to hunger cues, and enjoying each bite, mindful eating transforms the act of eating into a fulfilling and health-enhancing experience. Discover strategies to build a balanced relationship with food, reduce overeating, and align your nutrition with your wellness goals through intentional choices.",
@@ -712,7 +715,7 @@
       ],
       "additionalSections": [
         {
-          "id": "12",
+          "id": "targeted-nutrition-vitamins-and-minerals-for-specific-needs",
           "title": "Targeted Nutrition: Vitamins and Minerals for Specific Needs",
           "summary": "Discover how vitamins and minerals meet specific health needs from boosting energy to supporting bone and heart health.",
           "image": "nourish_12.jpg"
@@ -721,7 +724,7 @@
     },
     {
       "title": "Targeted Nutrition: Vitamins and Minerals for Specific Needs",
-      "id": "12",
+      "id": "targeted-nutrition-vitamins-and-minerals-for-specific-needs",
       "image": "nourish_12.jpg",
       "summary": "Discover how vitamins and minerals meet specific health needs, from boosting energy to supporting bone and heart health.",
       "intro": "Every individual has unique health requirements, and meeting those needs starts with the right nutrients. See our guide on <a href=\"/fitness/08\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Commencing a Running Routine: Hints and Techniques</a> for more details. **Targeted Nutrition: Vitamins and Minerals for Specific Needs** explores how key vitamins and minerals address various health concerns, from boosting immunity and enhancing energy to supporting bone health and mental clarity. Learn how to tailor your nutrition to your lifestyle, age, and health goals by incorporating nutrient-rich foods and understanding supplementation. Whether you\u2019re looking to strengthen your immune system, improve heart health, or enhance overall wellness, this guide offers actionable insights to help you thrive.",
@@ -778,7 +781,7 @@
       ],
       "additionalSections": [
         {
-          "id": "11",
+          "id": "eating-with-intention-a-guide-to-mindful-nourishment",
           "title": "Eating with Intention: A Guide to Mindful Nourishment",
           "summary": "Learn how to cultivate a deeper connection with your food by eating intentionally. Discover practices to savor each bite improve digestion, and enhance your overall health.",
           "image": "nourish_11.jpg"
@@ -789,7 +792,7 @@
   "dailySupplements": [
     {
       "title": "Daily Supplements: Boost Your Health with Essential Nutrients",
-      "id": "13",
+      "id": "daily-supplements-boost-your-health-with-essential-nutrients",
       "image": "nourish_13.jpg",
       "summary": "Discover the key supplements that can fill nutritional gaps, support your immune system, and enhance overall vitality. Learn how to choose the right supplements for your unique needs.",
       "intro": "Balancing a nutritious diet can be difficult in today\u2019s busy world, but supplements offer a reliable way to ensure your body gets the nutrients it needs. See our guide on <a href=\"/fitness/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Workouts for Sculpting Every Inch of Your Body</a> for more details. **Daily Supplements: Boost Your Health with Essential Nutrients** explores how vitamins, minerals, and specialized supplements can fill dietary gaps and support overall wellness. From boosting immunity to enhancing energy and promoting healthy skin and bones, this guide provides insights into the role of supplements in achieving optimal health. Whether you\u2019re addressing specific needs or looking to maintain daily well-being, discover how the right supplements can complement your nutrition journey.",
@@ -847,7 +850,7 @@
       ],
       "additionalSections": [
         {
-          "id": "14",
+          "id": "smart-supplementing-what-you-need-to-know-for-a-balanced-diet",
           "title": "Smart Supplementing: What You Need to Know for a Balanced Diet",
           "summary": "Understand the importance of supplements in complementing your diet. Learn about the best times to take them how to avoid over-supplementation, and how to maximize their benefits.",
           "image": "nourish_14.jpg"
@@ -856,7 +859,7 @@
     },
     {
       "title": "Smart Supplementing: What You Need to Know for a Balanced Diet",
-      "id": "14",
+      "id": "smart-supplementing-what-you-need-to-know-for-a-balanced-diet",
       "image": "nourish_14.jpg",
       "summary": "Understand the importance of supplements in complementing your diet. Learn about the best times to take them, how to avoid over-supplementation, and how to maximize their benefits.",
       "intro": "In the quest for a healthy lifestyle, supplements can play a key role in bridging nutritional gaps and supporting overall well-being. See our guide on <a href=\"/fitness/09\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Synthol Injections: What You Should Be Aware Of</a> for more details. **Smart Supplementing: What You Need to Know for a Balanced Diet** provides a comprehensive guide to choosing the right vitamins, minerals, and specialty supplements tailored to your unique needs. Learn how to enhance your diet without overdoing it, avoid common pitfalls, and make informed choices based on science. Whether you\u2019re a beginner or looking to optimize your routine, this guide empowers you to navigate the supplement world with confidence and balance.",
@@ -911,7 +914,7 @@
       ],
       "additionalSections": [
         {
-          "id": "13",
+          "id": "daily-supplements-boost-your-health-with-essential-nutrients",
           "title": "Daily Supplements: Boost Your Health with Essential Nutrients",
           "summary": "Discover the key supplements that can fill nutritional gaps support your immune system, and enhance overall vitality. Learn how to choose the right supplements for your unique needs.",
           "image": "nourish_14.jpg"

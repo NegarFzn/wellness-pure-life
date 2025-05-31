@@ -2,7 +2,7 @@
   "featured": [
     {
       "title": "Mindful Breathing Techniques for Stress Relief",
-      "id": "01",
+      "id": "mindful-breathing-techniques-for-stress-relief",
       "image": "mindfulness_01.jpg",
       "summary": "Discover simple yet effective breathing techniques to calm your mind and reduce stress quickly.",
       "intro": "In today's fast-paced world, stress has become an inevitable part of life. See our guide on <a href=\"/nourish/02\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Top Picks for Nourishment: Curated Guides and Tips</a> for more details. Mindful breathing offers a simple yet effective way to counter its effects.\nBy focusing on intentional breathing, you can create moments of calm, enhance your emotional resilience, and regain control over anxious thoughts.\nThis practice not only reduces stress but also boosts mental clarity and overall well-being.\nExplore how mindful breathing can become a powerful tool to restore balance and tranquility in your daily routine.",
@@ -79,22 +79,23 @@
       ],
       "additionalSections": [
         {
-          "id": "02",
+          "id": "the-power-of-gratitude-journaling",
           "title": "The Power of Gratitude Journaling",
           "summary": "Learn how gratitude journaling can shift your mindset and improve emotional well-being.",
           "image": "mindfulness_02.jpg"
         },
         {
-          "id": "03",
+          "id": "mindfulness-for-emotional-regulation",
           "title": "Mindfulness for Emotional Regulation",
           "summary": "Learn how to manage your emotions and react more calmly using mindfulness practices.",
           "image": "mindfulness_03.jpg"
         }
-      ]
+      ],
+      "shortTitle": "Mindful Breathing Techniques"
     },
     {
       "title": "The Power of Gratitude Journaling",
-      "id": "02",
+      "id": "the-power-of-gratitude-journaling",
       "image": "mindfulness_02.jpg",
       "summary": "Learn how gratitude journaling can shift your mindset and improve emotional well-being.",
       "intro": "In a world that often feels fast-paced and overwhelming, gratitude journaling offers a simple yet transformative way to shift your mindset. See our guide on <a href=\"/nourish/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Nourish Focus: Discover the Secrets to Vibrant Living</a> for more details. By writing down the things you are thankful for, you can cultivate positivity, reduce stress, and enhance emotional well-being.\nThis practice helps you focus on the good, even in challenging times, and fosters a deeper appreciation for life. Explore how gratitude journaling can become a daily habit that brings more joy and balance to your day.",
@@ -149,22 +150,23 @@
       ],
       "additionalSections": [
         {
-          "id": "additional_01",
+          "id": "mindful-breathing-techniques-for-stress-relief",
           "title": "Mindful Breathing Techniques for Stress Relief",
           "summary": "Discover simple yet effective breathing techniques to calm your mind and reduce stress quickly.",
           "image": "mindfulness_01.jpg"
         },
         {
-          "id": "additional_02",
+          "id": "mindfulness-for-emotional-regulation",
           "title": "Mindfulness for Emotional Regulation",
           "summary": "Learn how to manage your emotions and react more calmly using mindfulness practices.",
           "image": "mindfulness_03.jpg"
         }
-      ]
+      ],
+      "shortTitle": "The Power of"
     },
     {
       "title": "Mindfulness for Emotional Regulation",
-      "id": "03",
+      "id": "mindfulness-for-emotional-regulation",
       "image": "mindfulness_03.jpg",
       "summary": "Learn how to manage your emotions and react more calmly using mindfulness practices.",
       "intro": "Emotions are a natural part of life, but when they feel overwhelming, mindfulness can be a powerful tool to regain balance.\nBy cultivating awareness and staying present, mindfulness helps you identify, process, and respond to emotions more effectively.\nIt empowers you to observe your feelings without judgment and develop healthier ways to manage them.\nExplore how mindfulness can enhance emotional regulation and provide lasting peace and clarity in your daily life. See our guide on <a href=\"/nourish/02\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Top Picks for Nourishment: Curated Guides and Tips</a> for more details.",
@@ -219,24 +221,25 @@
       ],
       "additionalSections": [
         {
-          "id": "additional_01",
+          "id": "mindful-breathing-techniques-for-stress-relief",
           "title": "Mindful Breathing Techniques for Stress Relief",
           "summary": "Discover simple yet effective breathing techniques to calm your mind and reduce stress quickly.",
           "image": "mindfulness_01.jpg"
         },
         {
-          "id": "additional_01",
+          "id": "the-power-of-gratitude-journaling",
           "title": "The Power of Gratitude Journaling",
           "summary": "Learn how gratitude journaling can shift your mindset and improve emotional well-being.",
           "image": "mindfulness_02.jpg"
         }
-      ]
+      ],
+      "shortTitle": "Mindfulness for Emotional"
     }
   ],
   "meditation": [
     {
       "title": "The Beginner\u2019s Guide to Meditation: Calm Your Mind, Transform Your Life",
-      "id": "04",
+      "id": "the-beginners-guide-to-meditation-calm-your-mind-transform-your-life",
       "image": "mindfulness_04.jpg",
       "summary": "Ready to start meditating but don\u2019t know where to begin? Explore easy techniques to calm your mind, improve focus, and find peace in your daily life.",
       "intro": "Meditation is more than just sitting in silence\u2014it\u2019s a transformative practice that can bring calm, clarity, and balance to your life. See our guide on <a href=\"/nourish/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Nourish Focus: Discover the Secrets to Vibrant Living</a> for more details. For beginners, meditation might feel intimidating, but it doesn\u2019t have to be. With the right guidance, you can start small and gradually develop a practice that fits seamlessly into your routine.\nThis guide is designed to demystify meditation and provide you with simple, practical steps to begin your journey. Whether you\u2019re seeking stress relief, improved focus, or emotional balance, meditation offers profound benefits that can positively impact your well-being. Discover how taking just a few minutes each day to meditate can calm your mind and transform your life.",
@@ -290,19 +293,19 @@
       ],
       "additionalSections": [
         {
-          "id": "05",
+          "id": "unlock-the-science-of-meditation-how-it-heals-your-mind-and-body",
           "title": "Unlock the Science of Meditation: How It Heals Your Mind and Body",
           "summary": "Curious about how meditation works? Discover the scientific benefits from reducing stress to enhancing physical health, and see how it can change your life.",
           "image": "mindfulness_05.jpg"
         },
         {
-          "id": "06",
+          "id": "morning-noon-or-night-discover-the-best-time-to-meditate",
           "title": "Morning, Noon, or Night: Discover the Best Time to Meditate",
           "summary": "Not sure when to meditate? Learn how choosing the right time of day can maximize the benefits of your practice and fit seamlessly into your routine.",
           "image": "mindfulness_06.jpg"
         },
         {
-          "id": "07",
+          "id": "from-stress-to-serenity-how-meditation-can-transform-your-day",
           "title": "From Stress to Serenity: How Meditation Can Transform Your Day",
           "summary": "Can meditation really turn a stressful day around? Discover simple practices to bring calm and balance to your daily life.",
           "image": "mindfulness_07.jpg"
@@ -311,7 +314,7 @@
     },
     {
       "title": "Unlock the Science of Meditation: How It Heals Your Mind and Body",
-      "id": "05",
+      "id": "unlock-the-science-of-meditation-how-it-heals-your-mind-and-body",
       "image": "mindfulness_05.jpg",
       "summary": "Curious about how meditation works? Discover the scientific benefits, from reducing stress to enhancing physical health, and see how it can change your life.",
       "intro": "Meditation is no longer just a spiritual practice\u2014it\u2019s a science-backed tool for improving mental and physical health. See our guide on <a href=\"/nourish/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Nourish Focus: Discover the Secrets to Vibrant Living</a> for more details. Research shows that meditation reshapes the brain, reduces stress hormones, and promotes emotional resilience.\nIn this guide, we\u2019ll explore how meditation impacts your mind and body on a deeper level. From reducing anxiety and boosting focus to improving sleep and enhancing overall well-being, discover the transformative power of this ancient practice, supported by cutting-edge scientific findings. Dive in and learn how meditation can unlock a healthier, calmer you.",
@@ -367,19 +370,19 @@
       ],
       "additionalSections": [
         {
-          "id": "04",
+          "id": "the-beginners-guide-to-meditation-calm-your-mind-transform-your-life",
           "title": "The Beginner\u2019s Guide to Meditation: Calm Your Mind, Transform Your Life",
           "summary": "Ready to start meditating but don\u2019t know where to begin? Explore easy techniques to calm your mind improve focus, and find peace in your daily life.",
           "image": "mindfulness_04.jpg"
         },
         {
-          "id": "06",
+          "id": "morning-noon-or-night-discover-the-best-time-to-meditate",
           "title": "Morning, Noon, or Night: Discover the Best Time to Meditate",
           "summary": "Not sure when to meditate? Learn how choosing the right time of day can maximize the benefits of your practice and fit seamlessly into your routine.",
           "image": "mindfulness_06.jpg"
         },
         {
-          "id": "07",
+          "id": "from-stress-to-serenity-how-meditation-can-transform-your-day",
           "title": "From Stress to Serenity: How Meditation Can Transform Your Day",
           "summary": "Can meditation really turn a stressful day around? Discover simple practices to bring calm and balance to your daily life.",
           "image": "mindfulness_07.jpg"
@@ -388,7 +391,7 @@
     },
     {
       "title": "Morning, Noon, or Night: Discover the Best Time to Meditate",
-      "id": "06",
+      "id": "morning-noon-or-night-discover-the-best-time-to-meditate",
       "image": "mindfulness_06.jpg",
       "summary": "Not sure when to meditate? Learn how choosing the right time of day can maximize the benefits of your practice and fit seamlessly into your routine.",
       "intro": "Finding the perfect time to meditate can make all the difference in building a consistent and impactful mindfulness practice. See our guide on <a href=\"/nourish/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Nourish Focus: Discover the Secrets to Vibrant Living</a> for more details. Whether it\u2019s the calm of the early morning, a mindful pause during a busy afternoon, or unwinding at night, the best time to meditate depends on your personal goals and daily routine.\nIn this guide, we\u2019ll explore the unique benefits of meditating at different times of the day. Discover how to align your meditation practice with your energy levels, schedule, and intentions to make mindfulness a powerful and seamless part of your life.",
@@ -440,19 +443,19 @@
       ],
       "additionalSections": [
         {
-          "id": "04",
+          "id": "the-beginners-guide-to-meditation-calm-your-mind-transform-your-life",
           "title": "The Beginner\u2019s Guide to Meditation: Calm Your Mind, Transform Your Life",
           "summary": "Ready to start meditating but don\u2019t know where to begin? Explore easy techniques to calm your mind improve focus, and find peace in your daily life.",
           "image": "mindfulness_04.jpg"
         },
         {
-          "id": "05",
+          "id": "unlock-the-science-of-meditation-how-it-heals-your-mind-and-body",
           "title": "Unlock the Science of Meditation: How It Heals Your Mind and Body",
           "summary": "Curious about how meditation works? Discover the scientific benefits from reducing stress to enhancing physical health, and see how it can change your life.",
           "image": "mindfulness_05.jpg"
         },
         {
-          "id": "07",
+          "id": "from-stress-to-serenity-how-meditation-can-transform-your-day",
           "title": "From Stress to Serenity: How Meditation Can Transform Your Day",
           "summary": "Can meditation really turn a stressful day around? Discover simple practices to bring calm and balance to your daily life.",
           "image": "mindfulness_07.jpg"
@@ -461,7 +464,7 @@
     },
     {
       "title": "From Stress to Serenity: How Meditation Can Transform Your Day",
-      "id": "07",
+      "id": "from-stress-to-serenity-how-meditation-can-transform-your-day",
       "image": "mindfulness_07.jpg",
       "summary": "Can meditation really turn a stressful day around? Discover simple practices to bring calm and balance to your daily life.",
       "intro": "Stress is a common part of modern life, but it doesn\u2019t have to dominate your day. See our guide on <a href=\"/nourish/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Nourish Focus: Discover the Secrets to Vibrant Living</a> for more details. Meditation offers a simple yet powerful way to shift from chaos to calm, helping you regain control and find inner peace.\nThis guide explores how meditation can turn everyday stress into moments of serenity. From calming your mind during a hectic morning to unwinding after a busy day, discover how mindfulness practices can create a sense of balance, focus, and positivity in your daily routine. Let\u2019s embark on a journey to transform your stress into serenity through meditation.",
@@ -518,19 +521,19 @@
       ],
       "additionalSections": [
         {
-          "id": "04",
+          "id": "the-beginners-guide-to-meditation-calm-your-mind-transform-your-life",
           "title": "The Beginner\u2019s Guide to Meditation: Calm Your Mind, Transform Your Life",
           "summary": "Ready to start meditating but don\u2019t know where to begin? Explore easy techniques to calm your mind improve focus, and find peace in your daily life.",
           "image": "mindfulness_04.jpg"
         },
         {
-          "id": "05",
+          "id": "unlock-the-science-of-meditation-how-it-heals-your-mind-and-body",
           "title": "Unlock the Science of Meditation: How It Heals Your Mind and Body",
           "summary": "Curious about how meditation works? Discover the scientific benefits from reducing stress to enhancing physical health, and see how it can change your life.",
           "image": "mindfulness_05.jpg"
         },
         {
-          "id": "06",
+          "id": "morning-noon-or-night-discover-the-best-time-to-meditate",
           "title": "Morning, Noon, or Night: Discover the Best Time to Meditate",
           "summary": "Not sure when to meditate? Learn how choosing the right time of day can maximize the benefits of your practice and fit seamlessly into your routine.",
           "image": "mindfulness_06.jpg"
@@ -541,7 +544,7 @@
   "stressReduction": [
     {
       "title": "Master the Art of Stress Reduction: Simple Techniques for a Calmer Life",
-      "id": "08",
+      "id": "master-the-art-of-stress-reduction-simple-techniques-for-a-calmer-life",
       "image": "mindfulness_08.jpg",
       "summary": "Discover practical and proven stress reduction methods that you can easily incorporate into your daily life. Learn how to take control of stress and create a sense of calm.",
       "intro": "In today\u2019s fast-paced world, stress has become an unavoidable part of life. See our guide on <a href=\"/nourish/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Nourish Focus: Discover the Secrets to Vibrant Living</a> for more details. However, learning how to manage it effectively can lead to a calmer and more balanced existence. Mastering stress reduction doesn\u2019t require drastic lifestyle changes\u2014it\u2019s about incorporating simple, actionable techniques into your daily routine.\nThis guide explores proven strategies to help you navigate life\u2019s challenges with ease. From mindfulness practices and breathing exercises to small habit changes, discover how to regain control, reduce anxiety, and cultivate a sense of peace in your everyday life.",
@@ -598,13 +601,13 @@
       ],
       "additionalSections": [
         {
-          "id": "09",
+          "id": "breathe-away-the-stress-proven-methods-to-relax-and-recharge",
           "title": "Breathe Away the Stress: Proven Methods to Relax and Recharge",
           "summary": "Learn how mindful breathing techniques can help you release tension and recharge your mind. Discover exercises that promote relaxation and instant stress relief.",
           "image": "mindfulness_09.jpg"
         },
         {
-          "id": "10",
+          "id": "from-chaos-to-calm-how-to-manage-stress-like-a-pro",
           "title": "From Chaos to Calm: How to Manage Stress Like a Pro",
           "summary": "Find out how to turn stressful moments into opportunities for calm and focus. Explore expert tips to take charge of your emotions and manage stress effectively.",
           "image": "mindfulness_10.jpg"
@@ -613,7 +616,7 @@
     },
     {
       "title": "Breathe Away the Stress: Proven Methods to Relax and Recharge",
-      "id": "09",
+      "id": "breathe-away-the-stress-proven-methods-to-relax-and-recharge",
       "image": "mindfulness_09.jpg",
       "summary": "Learn how mindful breathing techniques can help you release tension and recharge your mind. Discover exercises that promote relaxation and instant stress relief.",
       "intro": "In a world where stress has become part of everyday life, finding effective ways to relax and recharge is essential for your well-being. See our guide on <a href=\"/nourish/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Nourish Focus: Discover the Secrets to Vibrant Living</a> for more details. Breathing techniques, rooted in both ancient practices and modern science, offer a simple yet powerful solution to calm your mind, release tension, and restore balance.\nThis guide explores proven breathing methods that activate your body's natural relaxation response, helping you reduce anxiety, improve focus, and promote deep relaxation. Whether you're at home, at work, or on the go, discover how intentional breathing can transform the way you manage stress.",
@@ -669,13 +672,13 @@
       ],
       "additionalSections": [
         {
-          "id": "08",
+          "id": "master-the-art-of-stress-reduction-simple-techniques-for-a-calmer-life",
           "title": "Master the Art of Stress Reduction: Simple Techniques for a Calmer Life",
           "summary": "Discover practical and proven stress reduction methods that you can easily incorporate into your daily life. Learn how to take control of stress and create a sense of calm.",
           "image": "mindfulness_08.jpg"
         },
         {
-          "id": "10",
+          "id": "from-chaos-to-calm-how-to-manage-stress-like-a-pro",
           "title": "From Chaos to Calm: How to Manage Stress Like a Pro",
           "summary": "Find out how to turn stressful moments into opportunities for calm and focus. Explore expert tips to take charge of your emotions and manage stress effectively.",
           "image": "mindfulness_10.jpg"
@@ -684,7 +687,7 @@
     },
     {
       "title": "From Chaos to Calm: How to Manage Stress Like a Pro",
-      "id": "10",
+      "id": "from-chaos-to-calm-how-to-manage-stress-like-a-pro",
       "image": "mindfulness_10.jpg",
       "summary": "Find out how to turn stressful moments into opportunities for calm and focus. Explore expert tips to take charge of your emotions and manage stress effectively.",
       "intro": "Stress doesn\u2019t have to control your life. See our guide on <a href=\"/nourish/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Nourish Focus: Discover the Secrets to Vibrant Living</a> for more details. While chaos may seem inevitable in our modern world, mastering stress is about learning to respond rather than react. Managing stress like a pro isn\u2019t about eliminating challenges but developing the tools to face them with calm, clarity, and resilience.\nThis guide explores expert-backed strategies to help you turn overwhelming situations into opportunities for growth. Discover actionable techniques, practical habits, and mindset shifts that empower you to navigate stress effectively and find peace amidst life\u2019s storms.",
@@ -741,13 +744,13 @@
       ],
       "additionalSections": [
         {
-          "id": "08",
+          "id": "master-the-art-of-stress-reduction-simple-techniques-for-a-calmer-life",
           "title": "Master the Art of Stress Reduction: Simple Techniques for a Calmer Life",
           "summary": "Discover practical and proven stress reduction methods that you can easily incorporate into your daily life. Learn how to take control of stress and create a sense of calm.",
           "image": "mindfulness_08.jpg"
         },
         {
-          "id": "09",
+          "id": "breathe-away-the-stress-proven-methods-to-relax-and-recharge",
           "title": "Breathe Away the Stress: Proven Methods to Relax and Recharge",
           "summary": "Learn how mindful breathing techniques can help you release tension and recharge your mind. Discover exercises that promote relaxation and instant stress relief.",
           "image": "mindfulness_09.jpg"
@@ -758,7 +761,7 @@
   "productivityAndFocus": [
     {
       "title": "Unlock Your Potential: Mindfulness Techniques to Boost Productivity",
-      "id": "11",
+      "id": "unlock-your-potential-mindfulness-techniques-to-boost-productivity",
       "image": "mindfulness_11.jpg",
       "summary": "Learn how mindfulness can help you stay focused, reduce procrastination, and achieve your goals with greater efficiency. Discover techniques to unlock your full potential.",
       "intro": "In a world filled with distractions and constant demands, staying focused and productive can feel like an uphill battle. See our guide on <a href=\"/nourish/03\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Essential Reads: Your Foundation to Healthy Living</a> for more details. Mindfulness offers a powerful solution to help you work smarter, not harder.\nBy cultivating awareness and intentionality, mindfulness techniques can sharpen your focus, reduce stress, and increase efficiency. Whether you\u2019re tackling work projects, managing daily tasks, or striving to achieve your goals, incorporating mindfulness into your routine can unlock untapped potential and help you perform at your best. Discover simple yet transformative techniques to improve clarity, focus, and productivity.",
@@ -813,13 +816,13 @@
       ],
       "additionalSections": [
         {
-          "id": "12",
+          "id": "focus-like-never-before-strategies-to-eliminate-distractions",
           "title": "Focus Like Never Before: Strategies to Eliminate Distractions",
           "summary": "Struggling to stay on task? Explore mindfulness-based strategies to minimize distractions sharpen your focus, and get more done with less stress.",
           "image": "mindfulness_12.jpg"
         },
         {
-          "id": "13",
+          "id": "mindful-productivity-work-smarter-not-harder",
           "title": "Mindful Productivity: Work Smarter, Not Harder",
           "summary": "Discover how mindfulness can help you work with clarity and purpose. Learn tips to balance productivity and relaxation for a more fulfilling workday.",
           "image": "mindfulness_13.jpg"
@@ -828,7 +831,7 @@
     },
     {
       "title": "Focus Like Never Before: Strategies to Eliminate Distractions",
-      "id": "12",
+      "id": "focus-like-never-before-strategies-to-eliminate-distractions",
       "image": "mindfulness_12.jpg",
       "summary": "Struggling to stay on task? Explore mindfulness-based strategies to minimize distractions, sharpen your focus, and get more done with less stress.",
       "intro": "In a world filled with constant notifications, endless to-do lists, and overwhelming noise, staying focused has become more challenging than ever. Distractions can sabotage your productivity, leaving you feeling frustrated and behind on your goals.\nThis guide will equip you with powerful, research-backed strategies to eliminate distractions and sharpen your focus. Discover how to create an environment that promotes deep concentration, manage your time effectively, and harness mindfulness techniques to reclaim control over your attention. Unlock the ability to focus like never before and achieve more with less stress.",
@@ -884,13 +887,13 @@
       ],
       "additionalSections": [
         {
-          "id": "11",
+          "id": "unlock-your-potential-mindfulness-techniques-to-boost-productivity",
           "title": "Unlock Your Potential: Mindfulness Techniques to Boost Productivity",
           "summary": "Learn how mindfulness can help you stay focused reduce procrastination, and achieve your goals with greater efficiency. Discover techniques to unlock your full potential.",
           "image": "mindfulness_11.jpg"
         },
         {
-          "id": "13",
+          "id": "mindful-productivity-work-smarter-not-harder",
           "title": "Mindful Productivity: Work Smarter, Not Harder",
           "summary": "Discover how mindfulness can help you work with clarity and purpose. Learn tips to balance productivity and relaxation for a more fulfilling workday.",
           "image": "mindfulness_13.jpg"
@@ -899,7 +902,7 @@
     },
     {
       "title": "Mindful Productivity: Work Smarter, Not Harder",
-      "id": "13",
+      "id": "mindful-productivity-work-smarter-not-harder",
       "image": "mindfulness_13.jpg",
       "summary": "Discover how mindfulness can help you work with clarity and purpose. Learn tips to balance productivity and relaxation for a more fulfilling workday.",
       "intro": "In today\u2019s fast-paced world, productivity often feels like a constant race against the clock. See our guide on <a href=\"/nourish/11\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Eating with Intention: A Guide to Mindful Nourishment</a> for more details. But what if the key to achieving more isn\u2019t working harder but working smarter? **Mindful productivity** shifts the focus from relentless effort to intentional, efficient action.\nBy integrating mindfulness into your daily routine, you can enhance focus, reduce stress, and align your energy with your most meaningful goals. This guide will explore proven strategies to help you prioritize effectively, minimize distractions, and create a balanced approach to productivity. Discover how to transform the way you work by fostering clarity, purpose, and resilience.",
@@ -953,13 +956,13 @@
       ],
       "additionalSections": [
         {
-          "id": "11",
+          "id": "unlock-your-potential-mindfulness-techniques-to-boost-productivity",
           "title": "Unlock Your Potential: Mindfulness Techniques to Boost Productivity",
           "summary": "Learn how mindfulness can help you stay focused reduce procrastination, and achieve your goals with greater efficiency. Discover techniques to unlock your full potential.",
           "image": "mindfulness_11.jpg"
         },
         {
-          "id": "12",
+          "id": "focus-like-never-before-strategies-to-eliminate-distractions",
           "title": "Focus Like Never Before: Strategies to Eliminate Distractions",
           "summary": "Struggling to stay on task? Explore mindfulness-based strategies to minimize distractions sharpen your focus, and get more done with less stress.",
           "image": "mindfulness_12.jpg"
@@ -970,7 +973,7 @@
   "mentalWellness": [
     {
       "title": "Building Emotional Resilience: Tools to Thrive in Any Situation",
-      "id": "14",
+      "id": "building-emotional-resilience-tools-to-thrive-in-any-situation",
       "image": "mindfulness_14.jpg",
       "summary": "Discover mindfulness techniques and practical tools to strengthen your emotional resilience. Learn how to stay grounded and bounce back, no matter the challenges you face.",
       "intro": "Life is filled with challenges, uncertainties, and moments of change. See our guide on <a href=\"/nourish/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Nourish Focus: Discover the Secrets to Vibrant Living</a> for more details. The ability to navigate these situations with strength and adaptability is rooted in **emotional resilience**. This vital skill allows you to bounce back from setbacks, handle stress effectively, and maintain a positive outlook even in tough times.\nBuilding emotional resilience isn\u2019t about avoiding hardships\u2014it\u2019s about developing tools and strategies to thrive despite them. By cultivating mindfulness, self-awareness, and healthy coping mechanisms, you can strengthen your emotional foundation and face life\u2019s ups and downs with greater confidence and composure. Explore how to empower yourself with the tools to thrive in any situation.",
@@ -1025,13 +1028,13 @@
       ],
       "additionalSections": [
         {
-          "id": "15",
+          "id": "healing-from-within-transform-your-emotional-well-being",
           "title": "Healing from Within: Transform Your Emotional Well-Being",
           "summary": "Explore the power of mindfulness to bring balance and harmony to your emotions. Uncover inner healing practices that lead to a healthier and more peaceful mind.",
           "image": "mindfulness_15.jpg"
         },
         {
-          "id": "16",
+          "id": "from-overwhelmed-to-empowered-master-your-emotions-with-mindfulness",
           "title": "From Overwhelmed to Empowered: Master Your Emotions with Mindfulness",
           "summary": "Learn how to transform feelings of overwhelm into confidence and clarity. Discover mindfulness practices that help you take control of your emotions and live more intentionally.",
           "image": "mindfulness_16.jpg"
@@ -1040,7 +1043,7 @@
     },
     {
       "title": "Healing from Within: Transform Your Emotional Well-Being",
-      "id": "15",
+      "id": "healing-from-within-transform-your-emotional-well-being",
       "image": "mindfulness_15.jpg",
       "summary": "Explore the power of mindfulness to bring balance and harmony to your emotions. Uncover inner healing practices that lead to a healthier and more peaceful mind.",
       "intro": "True emotional well-being begins from within. See our guide on <a href=\"/nourish/03\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Essential Reads: Your Foundation to Healthy Living</a> for more details. By nurturing self-awareness, fostering mindfulness, and embracing inner healing practices, you can transform your relationship with your emotions and achieve lasting balance. \nHealing from within is not about avoiding challenges but about developing the tools to respond to them with clarity and calm. Whether it\u2019s through mindfulness meditation, journaling, or building self-compassion, these practices empower you to take control of your emotional health and create a foundation of peace and resilience. Start your journey toward emotional harmony today and unlock the potential for a more fulfilled and centered life.",
@@ -1095,13 +1098,13 @@
       ],
       "additionalSections": [
         {
-          "id": "14",
+          "id": "building-emotional-resilience-tools-to-thrive-in-any-situation",
           "title": "Building Emotional Resilience: Tools to Thrive in Any Situation",
           "summary": "Discover mindfulness techniques and practical tools to strengthen your emotional resilience. Learn how to stay grounded and bounce back no matter the challenges you face.",
           "image": "mindfulness_14.jpg"
         },
         {
-          "id": "16",
+          "id": "from-overwhelmed-to-empowered-master-your-emotions-with-mindfulness",
           "title": "From Overwhelmed to Empowered: Master Your Emotions with Mindfulness",
           "summary": "Learn how to transform feelings of overwhelm into confidence and clarity. Discover mindfulness practices that help you take control of your emotions and live more intentionally.",
           "image": "mindfulness_16.jpg"
@@ -1110,7 +1113,7 @@
     },
     {
       "title": "From Overwhelmed to Empowered: Master Your Emotions with Mindfulness",
-      "id": "16",
+      "id": "from-overwhelmed-to-empowered-master-your-emotions-with-mindfulness",
       "image": "mindfulness_16.jpg",
       "summary": "Learn how to transform feelings of overwhelm into confidence and clarity. Discover mindfulness practices that help you take control of your emotions and live more intentionally.",
       "intro": "Life's challenges often leave us feeling overwhelmed, stressed, and emotionally drained. See our guide on <a href=\"/nourish/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Nourish Focus: Discover the Secrets to Vibrant Living</a> for more details. However, mindfulness offers a powerful pathway to transform these feelings into clarity, confidence, and empowerment.\nBy focusing on the present moment and cultivating self-awareness, mindfulness enables you to better understand your emotions and respond to them with intention, rather than reaction. This approach not only enhances emotional resilience but also fosters a greater sense of control and well-being.\nExplore how mindfulness practices such as meditation, breathwork, and reflective journaling can help you regain balance, overcome emotional turmoil, and live a more intentional and fulfilling life.",
@@ -1167,13 +1170,13 @@
       ],
       "additionalSections": [
         {
-          "id": "14",
+          "id": "building-emotional-resilience-tools-to-thrive-in-any-situation",
           "title": "Building Emotional Resilience: Tools to Thrive in Any Situation",
           "summary": "Discover mindfulness techniques and practical tools to strengthen your emotional resilience. Learn how to stay grounded and bounce back no matter the challenges you face.",
           "image": "mindfulness_14.jpg"
         },
         {
-          "id": "15",
+          "id": "healing-from-within-transform-your-emotional-well-being",
           "title": "Healing from Within: Transform Your Emotional Well-Being",
           "summary": "Explore the power of mindfulness to bring balance and harmony to your emotions. Uncover inner healing practices that lead to a healthier and more peaceful mind.",
           "image": "mindfulness_15.jpg"

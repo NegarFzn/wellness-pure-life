@@ -2,7 +2,7 @@
   "featured": [
     {
       "title": "Workouts for Sculpting Every Inch of Your Body",
-      "id": "01",
+      "id": "workouts-for-sculpting-every-inch-of-your-body",
       "image": "fitness_01.jpg",
       "summary": "Discover the top 10 powerful workouts to tone every part of your body in your daily routine...",
       "intro": "Understanding the importance of regular physical activity for maintaining optimal health is crucial. see our guide on <a href=\"/mindfulness/07\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">From Stress to Serenity: How Meditation Can Transform Your Day</a> for more details. However, the vast array of exercise options and a wealth of information can be daunting. Fear not, for we are here to support you\u2014both in spirit and in physical well-being! \nExplore these 10 exercises designed for peak fitness. When combined into a comprehensive workout, they offer a straightforward yet effective regimen guaranteed to maintain your fitness throughout your lifetime.",
@@ -60,22 +60,23 @@
       ],
       "additionalSections": [
         {
-          "id": "02",
+          "id": "effective-core-exercises-for-fitness-enthusiasts",
           "title": "Effective Core Exercises for Fitness Enthusiasts",
           "summary": "Strengthen your core muscles and provide essential support to your body with these effective workouts...",
           "image": "fitness_02.jpg"
         },
         {
-          "id": "03",
+          "id": "a-newcomers-guide-to-building-muscle-with-weights",
           "title": "A Newcomer\u2019s Guide to Building Muscle with Weights",
           "summary": "Embark on your journey into weight training an excellent method to gain muscle mass and shape your body...",
           "image": "fitness_03.jpg"
         }
-      ]
+      ],
+      "shortTitle": "Workouts for Sculpting"
     },
     {
       "title": "Effective Core Exercises for Fitness Enthusiasts",
-      "id": "02",
+      "id": "effective-core-exercises-for-fitness-enthusiasts",
       "image": "fitness_02.jpg",
       "summary": "Strengthen your core muscles and provide essential support to your body with these effective workouts...",
       "intro": "Core strengthening exercises encompass activities like yoga positions, crunches, planks, and more, engaging not just the abdominal muscles but also utilizing additional muscle groups.\n\nEssential for daily tasks such as pushing a shopping cart or wearing shoes, these exercises influence balance, posture, and overall stability. see our guide on <a href=\"/nourish/13\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Daily Supplements: Boost Your Health with Essential Nutrients</a> for more details. The core is more than just abs; it includes back muscles and those around the pelvis.\n\nStrong core muscles are vital for stabilizing the body, supporting the spine, and enhancing overall fitness, providing optimal moves for all fitness levels.",
@@ -191,22 +192,23 @@
       ],
       "additionalSections": [
         {
-          "id": "01",
+          "id": "workouts-for-sculpting-every-inch-of-your-body",
           "title": "Workouts for Sculpting Every Inch of Your Body",
           "summary": "Discover the top 10 powerful workouts to tone every part of your body in your daily routine...",
           "image": "fitness_01.jpg"
         },
         {
-          "id": "03",
+          "id": "a-newcomers-guide-to-building-muscle-with-weights",
           "title": "A Newcomer\u2019s Guide to Building Muscle with Weights",
           "summary": "Embark on your journey into weight training an excellent method to gain muscle mass and shape your body...",
           "image": "fitness_03.jpg"
         }
-      ]
+      ],
+      "shortTitle": "Effective Core Exercises"
     },
     {
       "title": "A Newcomer\u2019s Guide to Building Muscle with Weights",
-      "id": "03",
+      "id": "a-newcomers-guide-to-building-muscle-with-weights",
       "image": "fitness_03.jpg",
       "summary": "Embark on your journey into weight training, an excellent method to gain muscle mass and shape your body...",
       "intro": "Exercises such as bicep curls and squats are effective for weight training both at home and in the gym. see our guide on <a href=\"/mindfulness/02\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">The Power of Gratitude Journaling</a> for more details. To add resistance, you can utilize free weights or rely on your body weight for certain activities.\n\nAiming to build muscle or tone up? Weight lifting can assist you in achieving these goals. It's a form of exercise that not only enhances muscle strength and bone density but also boosts your metabolism, allowing you to burn more calories at rest.\n\nLifting weights benefits all ages, combating muscle and mobility loss and improving mental health. It's never too late to start, even if you're new to weight training.\n\nMoreover, gym membership isn't mandatory. Exercises can be done using body weight, or with free weights, resistance bands, and home equipment. This guide provides an introduction to weight training, including tips and exercises for beginners.",
@@ -296,24 +298,25 @@
       ],
       "additionalSections": [
         {
-          "id": "01",
+          "id": "workouts-for-sculpting-every-inch-of-your-body",
           "title": "Workouts for Sculpting Every Inch of Your Body",
           "summary": "Discover the top 10 powerful workouts to tone every part of your body in your daily routine...",
           "image": "fitness_01.jpg"
         },
         {
-          "id": "02",
+          "id": "effective-core-exercises-for-fitness-enthusiasts",
           "title": "Effective Core Exercises for Fitness Enthusiasts",
           "summary": "Strengthen your core muscles and provide essential support to your body with these effective workouts...",
           "image": "fitness_02.jpg"
         }
-      ]
+      ],
+      "shortTitle": "A Newcomer\u2019s Guide"
     }
   ],
   "cardio": [
     {
       "title": "Biking vs. Strolling: Selecting Your Ideal Exercise",
-      "id": "04",
+      "id": "biking-vs-strolling-selecting-your-ideal-exercise",
       "image": "fitness_04.jpg",
       "summary": "Explore the benefits of walking and cycling, two low-impact aerobic exercises suitable for everyone...",
       "intro": "Aerobic exercise plays a crucial role in maintaining overall health and energy. see our guide on <a href=\"/mindfulness/10\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">From Chaos to Calm: How to Manage Stress Like a Pro</a> for more details. For those new to exercise, dealing with an injury, or adjusting to a health condition, selecting the right aerobic activity is essential.\n\nCycling and walking stand out as popular aerobic exercises, suitable for beginners or those with health considerations.\n\nBoth offer lower impact alternatives compared to other aerobic exercises like running or jump roping. They can be performed both indoors and outdoors, ensuring accessibility regardless of weather conditions.\n\nHowever, they do vary in terms of expense. Cycling requires investing in a bicycle, whereas walking only necessitates a pair of shoes (optional) and motivation.\n\nYou might be pondering which exercise provides a superior workout and which one benefits your health more.",
@@ -376,25 +379,25 @@
       ],
       "additionalSections": [
         {
-          "id": "05",
+          "id": "jump-rope-vs-jogging-which-is-superior",
           "title": "Jump Rope vs. Jogging: Which is Superior?",
           "summary": "Delve into the debate between jumping rope and jogging to determine which suits you better...",
           "image": "fitness_05.jpg"
         },
         {
-          "id": "06",
+          "id": "treadmill-vs-outdoor-running-weighing-the-options",
           "title": "Treadmill vs. Outdoor Running: Weighing the Options",
           "summary": "Discover the advantages of both treadmill and outdoor running to make an informed decision...",
           "image": "fitness_06.jpg"
         },
         {
-          "id": "07",
+          "id": "swimming-vs-running-finding-your-fitness-match",
           "title": "Swimming vs. Running: Finding Your Fitness Match",
           "summary": "Compare swimming and running two outstanding cardiovascular exercises with distinct benefits...",
           "image": "fitness_07.jpg"
         },
         {
-          "id": "08",
+          "id": "commencing-a-running-routine-hints-and-techniques",
           "title": "Commencing a Running Routine: Hints and Techniques",
           "summary": "Get advice on initiating a running routine at any age and the importance of a gradual approach...",
           "image": "fitness_08.jpg"
@@ -403,7 +406,7 @@
     },
     {
       "title": "Jump Rope  vs. Jogging: Which is Superior?",
-      "id": "05",
+      "id": "jump-rope-vs-jogging-which-is-superior",
       "image": "fitness_05.jpg",
       "summary": "Delve into the debate between jumping rope and jogging to determine which suits you better...",
       "intro": "Jump rope and running are both economical exercises needing minimal gear and space.\nWhile jump rope fits into smaller areas easily, running requires more room unless done on a treadmill, which can affect its low-cost benefit.\nNevertheless, each offers a cost-effective route to fitness improvement, focusing on either endurance or intensity.\nThis leads to the question: which exercise is more beneficial, or should one be prioritized over the other?\nThis piece explores the distinctions between jump rope and running.\n\n see our guide on <a href=\"/mindfulness/04\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">The Beginner\u2019s Guide to Meditation: Calm Your Mind, Transform Your Life</a> for more details.",
@@ -461,25 +464,25 @@
       ],
       "additionalSections": [
         {
-          "id": "04",
+          "id": "biking-vs-strolling-selecting-your-ideal-exercise",
           "title": "Biking vs. Strolling: Selecting Your Ideal Exercise",
           "summary": "Explore the benefits of walking and cycling two low-impact aerobic exercises suitable for everyone...",
           "image": "fitness_04.jpg"
         },
         {
-          "id": "06",
+          "id": "treadmill-vs-outdoor-running-weighing-the-options",
           "title": "Treadmill vs. Outdoor Running: Weighing the Options",
           "summary": "Discover the advantages of both treadmill and outdoor running to make an informed decision...",
           "image": "fitness_06.jpg"
         },
         {
-          "id": "07",
+          "id": "swimming-vs-running-finding-your-fitness-match",
           "title": "Swimming vs. Running: Finding Your Fitness Match",
           "summary": "Compare swimming and running two outstanding cardiovascular exercises with distinct benefits...",
           "image": "fitness_07.jpg"
         },
         {
-          "id": "08",
+          "id": "commencing-a-running-routine-hints-and-techniques",
           "title": "Commencing a Running Routine: Hints and Techniques",
           "summary": "Get advice on initiating a running routine at any age and the importance of a gradual approach...",
           "image": "fitness_08.jpg"
@@ -488,7 +491,7 @@
     },
     {
       "title": "Treadmill vs. Outdoor Running: Weighing the Options",
-      "id": "06",
+      "id": "treadmill-vs-outdoor-running-weighing-the-options",
       "image": "fitness_06.jpg",
       "summary": "Discover the advantages of both treadmill and outdoor running to make an informed decision...",
       "intro": "Outdoor and treadmill running attract distinct followers. see our guide on <a href=\"/mindfulness/07\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">From Stress to Serenity: How Meditation Can Transform Your Day</a> for more details. Many enjoy the liberation of running outdoors, whereas some favor the predictability of a treadmill. But which is more effective? Which burns more calories? We'll delve into the pros and cons of both outdoor and treadmill running to see how each can be advantageous.\n\n",
@@ -549,25 +552,25 @@
       ],
       "additionalSections": [
         {
-          "id": "04",
+          "id": "biking-vs-strolling-selecting-your-ideal-exercise",
           "title": "Biking vs. Strolling: Selecting Your Ideal Exercise",
           "summary": "Explore the benefits of walking and cycling two low-impact aerobic exercises suitable for everyone...",
           "image": "fitness_04.jpg"
         },
         {
-          "id": "05",
+          "id": "jump-rope-vs-jogging-which-is-superior",
           "title": "Jump Rope vs. Jogging: Which is Superior?",
           "summary": "Delve into the debate between jumping rope and jogging to determine which suits you better...",
           "image": "fitness_05.jpg"
         },
         {
-          "id": "07",
+          "id": "swimming-vs-running-finding-your-fitness-match",
           "title": "Swimming vs. Running: Finding Your Fitness Match",
           "summary": "Compare swimming and running two outstanding cardiovascular exercises with distinct benefits...",
           "image": "fitness_07.jpg"
         },
         {
-          "id": "08",
+          "id": "commencing-a-running-routine-hints-and-techniques",
           "title": "Commencing a Running Routine: Hints and Techniques",
           "summary": "Get advice on initiating a running routine at any age and the importance of a gradual approach...",
           "image": "fitness_08.jpg"
@@ -576,7 +579,7 @@
     },
     {
       "title": "Swimming vs. Running: Finding Your Fitness Match",
-      "id": "07",
+      "id": "swimming-vs-running-finding-your-fitness-match",
       "image": "fitness_07.jpg",
       "summary": "Compare swimming and running, two outstanding cardiovascular exercises with distinct benefits...",
       "intro": "Swimming and running stand as pillars of cardiovascular workouts, key components in triathlon races. see our guide on <a href=\"/mindfulness/11\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Unlock Your Potential: Mindfulness Techniques to Boost Productivity</a> for more details. Both activities enhance heart health, burn energy, and contribute to overall fitness.\nSwimming elevates heart rate and engages both upper and lower body muscles for toning, all while minimizing impact stress on the body. It's a robust workout that simultaneously conserves joint health.\nRunning primarily sculpts the lower body, offering significant calorie burn. It's also a weight-bearing activity, serving as a bulwark against bone density loss.\nIf you're weighing the option of taking a swim versus embarking on a run, this article can shed light on their respective health benefits, helping you determine the most suitable choice for your fitness journey.",
@@ -629,25 +632,25 @@
       ],
       "additionalSections": [
         {
-          "id": "04",
+          "id": "biking-vs-strolling-selecting-your-ideal-exercise",
           "title": "Biking vs. Strolling: Selecting Your Ideal Exercise",
           "summary": "Explore the benefits of walking and cycling two low-impact aerobic exercises suitable for everyone...",
           "image": "fitness_04.jpg"
         },
         {
-          "id": "05",
+          "id": "jump-rope-vs-jogging-which-is-superior",
           "title": "Jump Rope vs. Jogging: Which is Superior?",
           "summary": "Delve into the debate between jumping rope and jogging to determine which suits you better...",
           "image": "fitness_05.jpg"
         },
         {
-          "id": "06",
+          "id": "treadmill-vs-outdoor-running-weighing-the-options",
           "title": "Treadmill vs. Outdoor Running: Weighing the Options",
           "summary": "Discover the advantages of both treadmill and outdoor running to make an informed decision...",
           "image": "fitness_06.jpg"
         },
         {
-          "id": "08",
+          "id": "commencing-a-running-routine-hints-and-techniques",
           "title": "Commencing a Running Routine: Hints and Techniques",
           "summary": "Get advice on initiating a running routine at any age and the importance of a gradual approach...",
           "image": "fitness_08.jpg"
@@ -656,7 +659,7 @@
     },
     {
       "title": "Commencing a Running Routine: Hints and Techniques",
-      "id": "08",
+      "id": "commencing-a-running-routine-hints-and-techniques",
       "image": "fitness_08.jpg",
       "summary": "Get advice on initiating a running routine at any age and the importance of a gradual approach...",
       "intro": "Starting a running routine is best kept straightforward.There\u2019s no need to follow an intricate program.\nThe essentials of running are simple\u2014grab a pair of shoes and step outside.However, it\u2019s not quite that simple.\nSure, good running shoes are necessary, but there are other vital items that enhance your training\u2019s effectiveness and enjoyment.\nAfter all, if you enjoy an activity, you\u2019re far more likely to continue it. see our guide on <a href=\"/nourish/09\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Fuel Your Body with the Right Nutrition</a> for more details.",
@@ -713,25 +716,25 @@
       ],
       "additionalSections": [
         {
-          "id": "04",
+          "id": "biking-vs-strolling-selecting-your-ideal-exercise",
           "title": "Biking vs. Strolling: Selecting Your Ideal Exercise",
           "summary": "Explore the benefits of walking and cycling two low-impact aerobic exercises suitable for everyone...",
           "image": "fitness_04.jpg"
         },
         {
-          "id": "05",
+          "id": "jump-rope-vs-jogging-which-is-superior",
           "title": "Jump Rope vs. Jogging: Which is Superior?",
           "summary": "Delve into the debate between jumping rope and jogging to determine which suits you better...",
           "image": "fitness_05.jpg"
         },
         {
-          "id": "06",
+          "id": "treadmill-vs-outdoor-running-weighing-the-options",
           "title": "Treadmill vs. Outdoor Running: Weighing the Options",
           "summary": "Discover the advantages of both treadmill and outdoor running to make an informed decision...",
           "image": "fitness_06.jpg"
         },
         {
-          "id": "07",
+          "id": "swimming-vs-running-finding-your-fitness-match",
           "title": "Swimming vs. Running: Finding Your Fitness Match",
           "summary": "Compare swimming and running two outstanding cardiovascular exercises with distinct benefits...",
           "image": "fitness_07.jpg"
@@ -742,7 +745,7 @@
   "resistanceTraining": [
     {
       "title": "Synthol Injections: What You Should Be Aware Of",
-      "id": "09",
+      "id": "synthol-injections-what-you-should-be-aware-of",
       "image": "fitness_09.jpg",
       "summary": "Uncover the realities of synthol injections and the potential consequences faced by individuals using them...",
       "intro": "Synthol is an injectable enhancement oil used primarily by bodybuilders to increase the size and definition of muscles. see our guide on <a href=\"/mindfulness/16\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">From Overwhelmed to Empowered: Master Your Emotions with Mindfulness</a> for more details. While it provides a quick and dramatic change in appearance, Synthol does not increase muscle strength or mass and carries significant health risks. This guide covers everything you need to know about Synthol, from its composition to the severe side effects it can cause.",
@@ -795,25 +798,25 @@
       ],
       "additionalSections": [
         {
-          "id": "10",
+          "id": "simple-and-challenging-ways-to-shape-your-legs",
           "title": "Simple and Challenging Ways to Shape Your Legs",
           "summary": "Discover exercises for well-toned legs and learn how to achieve sculpted legs with ease...",
           "image": "fitness_10.jpg"
         },
         {
-          "id": "11",
+          "id": "8-alternatives-to-leg-curls",
           "title": "8 Alternatives to Leg Curls",
           "summary": "Need an alternative to leg curls that you can do at home on the go, or anywhere without special equipment...",
           "image": "fitness_11.jpg"
         },
         {
-          "id": "12",
+          "id": "the-best-substitutes-for-the-leg-press-machine",
           "title": "The Best Substitutes for the Leg Press Machine",
           "summary": "Explore five alternatives to the leg press machine that can effectively strengthen your lower body...",
           "image": "fitness_12.jpg"
         },
         {
-          "id": "13",
+          "id": "effective-squats-for-glutes-a-well-rounded-workout",
           "title": "Effective Squats for Glutes: A Well-Rounded Workout",
           "summary": "Squats are an excellent lower body exercise but can they be used to build your glutes? Try these variations...",
           "image": "fitness_13.jpg"
@@ -822,7 +825,7 @@
     },
     {
       "title": "Simple and Challenging Ways to Shape Your Legs",
-      "id": "10",
+      "id": "simple-and-challenging-ways-to-shape-your-legs",
       "image": "fitness_10.jpg",
       "summary": "Discover exercises for well-toned legs and learn how to achieve sculpted legs with ease...",
       "intro": "Shaping your legs doesn\u2019t have to be a one-size-fits-all approach. see our guide on <a href=\"/nourish/04\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Superfood Benefits</a> for more details. Whether you're a beginner looking for easy ways to tone up or an experienced athlete wanting a more intense challenge, there are numerous exercises that cater to all fitness levels. From basic bodyweight exercises like squats and lunges to more advanced movements such as weighted step-ups and Bulgarian split squats, you can build strength, endurance, and definition. The key is finding a balance between consistency, proper form, and increasing difficulty as your muscles adapt. With a mix of simple and challenging routines, your legs will become stronger and more sculpted, providing functional benefits that extend beyond aesthetics. Whether you're working out at home or in the gym, these methods offer effective solutions for achieving your fitness goals.\n\n",
@@ -880,25 +883,25 @@
       ],
       "additionalSections": [
         {
-          "id": "09",
+          "id": "synthol-injections-what-you-should-be-aware-of",
           "title": "Synthol Injections: What You Should Be Aware Of",
           "summary": "Uncover the realities of synthol injections and the potential consequences faced by individuals using them...",
           "image": "fitness_09.jpg"
         },
         {
-          "id": "11",
+          "id": "8-alternatives-to-leg-curls",
           "title": "8 Alternatives to Leg Curls",
           "summary": "Need an alternative to leg curls that you can do at home on the go, or anywhere without special equipment...",
           "image": "fitness_11.jpg"
         },
         {
-          "id": "12",
+          "id": "the-best-substitutes-for-the-leg-press-machine",
           "title": "The Best Substitutes for the Leg Press Machine",
           "summary": "Explore five alternatives to the leg press machine that can effectively strengthen your lower body...",
           "image": "fitness_12.jpg"
         },
         {
-          "id": "13",
+          "id": "effective-squats-for-glutes-a-well-rounded-workout",
           "title": "Effective Squats for Glutes: A Well-Rounded Workout",
           "summary": "Squats are an excellent lower body exercise but can they be used to build your glutes? Try these variations...",
           "image": "fitness_13.jpg"
@@ -907,7 +910,7 @@
     },
     {
       "title": "8 Alternatives to Leg Curls",
-      "id": "11",
+      "id": "8-alternatives-to-leg-curls",
       "image": "fitness_11.jpg",
       "summary": "Need an alternative to leg curls that you can do at home, on the go, or anywhere without special equipment...",
       "intro": "Looking for an alternative to leg curls that you can perform at home or on the go without the need for special equipment? see our guide on <a href=\"/mindfulness/04\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">The Beginner\u2019s Guide to Meditation: Calm Your Mind, Transform Your Life</a> for more details. Fortunately, there are several effective exercises that target your hamstrings and glutes, providing a solid workout wherever you are. Whether you're in your living room, traveling, or outdoors, movements like glute bridges, single-leg Romanian deadlifts, and reverse lunges offer a versatile solution. These exercises not only strengthen your legs but also improve stability and balance, making them great options to replace traditional leg curl machines while ensuring you stay consistent with your fitness goals.",
@@ -990,25 +993,25 @@
       ],
       "additionalSections": [
         {
-          "id": "09",
+          "id": "synthol-injections-what-you-should-be-aware-of",
           "title": "Synthol Injections: What You Should Be Aware Of",
           "summary": "Uncover the realities of synthol injections and the potential consequences faced by individuals using them...",
           "image": "fitness_09.jpg"
         },
         {
-          "id": "10",
+          "id": "simple-and-challenging-ways-to-shape-your-legs",
           "title": "Simple and Challenging Ways to Shape Your Legs",
           "summary": "Discover exercises for well-toned legs and learn how to achieve sculpted legs with ease...",
           "image": "fitness_10.jpg"
         },
         {
-          "id": "12",
+          "id": "the-best-substitutes-for-the-leg-press-machine",
           "title": "The Best Substitutes for the Leg Press Machine",
           "summary": "Explore five alternatives to the leg press machine that can effectively strengthen your lower body...",
           "image": "fitness_12.jpg"
         },
         {
-          "id": "13",
+          "id": "effective-squats-for-glutes-a-well-rounded-workout",
           "title": "Effective Squats for Glutes: A Well-Rounded Workout",
           "summary": "Squats are an excellent lower body exercise but can they be used to build your glutes? Try these variations...",
           "image": "fitness_13.jpg"
@@ -1017,7 +1020,7 @@
     },
     {
       "title": "The Best Substitutes for the Leg Press Machine",
-      "id": "12",
+      "id": "the-best-substitutes-for-the-leg-press-machine",
       "image": "fitness_12.jpg",
       "summary": "Explore five alternatives to the leg press machine that can effectively strengthen your lower body...",
       "intro": "If you're looking for effective alternatives to the leg press machine, you're in luck. see our guide on <a href=\"/mindfulness/06\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Morning, Noon, or Night: Discover the Best Time to Meditate</a> for more details. Several exercises can replicate the benefits of the leg press, targeting the same muscle groups, including the **quads**, **glutes**, **hamstrings**, and **calves**, all while improving overall leg strength and balance. Whether you're at home, in a smaller gym, or simply don't have access to a leg press machine, movements like **squats**, **lunges**, and **step-ups** provide excellent substitutes. These exercises not only strengthen the lower body but also engage stabilizer muscles, improve mobility, and allow for functional movement. Incorporating these substitutes into your routine ensures that you build leg strength effectively without the need for bulky equipment.\n\n",
@@ -1100,25 +1103,25 @@
       ],
       "additionalSections": [
         {
-          "id": "09",
+          "id": "synthol-injections-what-you-should-be-aware-of",
           "title": "Synthol Injections: What You Should Be Aware Of",
           "summary": "Uncover the realities of synthol injections and the potential consequences faced by individuals using them...",
           "image": "fitness_09.jpg"
         },
         {
-          "id": "10",
+          "id": "simple-and-challenging-ways-to-shape-your-legs",
           "title": "Simple and Challenging Ways to Shape Your Legs",
           "summary": "Discover exercises for well-toned legs and learn how to achieve sculpted legs with ease...",
           "image": "fitness_10.jpg"
         },
         {
-          "id": "11",
+          "id": "8-alternatives-to-leg-curls",
           "title": "8 Alternatives to Leg Curls",
           "summary": "Need an alternative to leg curls that you can do at home on the go, or anywhere without special equipment...",
           "image": "fitness_11.jpg"
         },
         {
-          "id": "13",
+          "id": "effective-squats-for-glutes-a-well-rounded-workout",
           "title": "Effective Squats for Glutes: A Well-Rounded Workout",
           "summary": "Squats are an excellent lower body exercise but can they be used to build your glutes? Try these variations...",
           "image": "fitness_13.jpg"
@@ -1127,7 +1130,7 @@
     },
     {
       "title": "Effective Squats for Glutes: A Well-Rounded Workout",
-      "id": "13",
+      "id": "effective-squats-for-glutes-a-well-rounded-workout",
       "image": "fitness_13.jpg",
       "summary": "Squats are an excellent lower body exercise, but can they be used to build your glutes?  Try these variations...",
       "intro": "Squats are one of the best exercises for building and shaping the glutes. see our guide on <a href=\"/mindfulness/14\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Building Emotional Resilience: Tools to Thrive in Any Situation</a> for more details. Not only do they engage the **glutes**, but they also activate the **quads**, **hamstrings**, and **core** for a comprehensive lower body workout. By incorporating different squat variations into your routine, you can maximize glute activation, improve strength, and develop better overall balance and mobility. Whether you're performing traditional squats, **sumo squats**, or **Bulgarian split squats**, these movements are essential for anyone looking to achieve well-rounded glute development and lower body strength.\n\n",
@@ -1210,25 +1213,25 @@
       ],
       "additionalSections": [
         {
-          "id": "09",
+          "id": "synthol-injections-what-you-should-be-aware-of",
           "title": "Synthol Injections: What You Should Be Aware Of",
           "summary": "Uncover the realities of synthol injections and the potential consequences faced by individuals using them...",
           "image": "fitness_09.jpg"
         },
         {
-          "id": "10",
+          "id": "simple-and-challenging-ways-to-shape-your-legs",
           "title": "Simple and Challenging Ways to Shape Your Legs",
           "summary": "Discover exercises for well-toned legs and learn how to achieve sculpted legs with ease...",
           "image": "fitness_10.jpg"
         },
         {
-          "id": "11",
+          "id": "8-alternatives-to-leg-curls",
           "title": "8 Alternatives to Leg Curls",
           "summary": "Need an alternative to leg curls that you can do at home on the go, or anywhere without special equipment...",
           "image": "fitness_11.jpg"
         },
         {
-          "id": "12",
+          "id": "the-best-substitutes-for-the-leg-press-machine",
           "title": "The Best Substitutes for the Leg Press Machine",
           "summary": "Explore five alternatives to the leg press machine that can effectively strengthen your lower body...",
           "image": "fitness_12.jpg"
@@ -1239,7 +1242,7 @@
   "yoga": [
     {
       "title": "Yoga for Digestion: 9 Poses You Need to Know",
-      "id": "14",
+      "id": "yoga-for-digestion-9-poses-you-need-to-know",
       "image": "fitness_14.jpg",
       "summary": "Learn 9 yoga poses to boost digestion, ease bloating, and support gut health naturally.",
       "intro": "Digestive health plays a vital role in overall well-being, influencing energy, immunity, and comfort. see our guide on <a href=\"/mindfulness/07\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">From Stress to Serenity: How Meditation Can Transform Your Day</a> for more details. Yoga offers natural and effective ways to support digestion through specific poses that stimulate internal organs, improve circulation, and relieve tension. By incorporating these poses into your daily routine, you can alleviate bloating, reduce discomfort, and enhance your body\u2019s ability to process food efficiently. This guide explores 9 yoga poses tailored to promote better digestive health, offering a holistic approach to maintaining a balanced and healthy gut.\n\n",
@@ -1322,19 +1325,19 @@
       ],
       "additionalSections": [
         {
-          "id": "15",
+          "id": "mastering-anulom-vilom-breathing-technique",
           "title": "Mastering Anulom Vilom Breathing Technique",
           "summary": "Anulom vilom is a type of alternate nostril breathing used in yoga. Discover its benefits and practice techniques...",
           "image": "fitness_15.jpg"
         },
         {
-          "id": "16",
+          "id": "exploring-the-8-limbs-of-yoga-for-a-holistic-understanding",
           "title": "Exploring the 8 Limbs of Yoga for a Holistic Understanding",
           "summary": "Discover the original 8 limbs of yoga and gain insight into how yoga has been culturally appropriated...",
           "image": "fitness_16.jpg"
         },
         {
-          "id": "17",
+          "id": "utilizing-yoga-to-manage-stress-effectively",
           "title": "Utilizing Yoga to Manage Stress Effectively",
           "summary": "If you're looking to reduce stress through yoga explore various techniques that can help you achieve this goal...",
           "image": "fitness_17.jpg"
@@ -1343,7 +1346,7 @@
     },
     {
       "title": "Mastering Anulom Vilom Breathing Technique",
-      "id": "15",
+      "id": "mastering-anulom-vilom-breathing-technique",
       "image": "fitness_15.jpg",
       "summary": "Anulom vilom is a type of alternate nostril breathing used in yoga.  Discover its benefits and practice techniques...",
       "intro": "Anulom Vilom, also known as alternate nostril breathing, is one of the most popular pranayama techniques in yoga. see our guide on <a href=\"/mindfulness/01\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Mindful Breathing Techniques for Stress Relief</a> for more details. This simple yet powerful practice focuses on balancing the breath, calming the mind, and harmonizing the body\u2019s energy systems. By alternating the flow of breath through each nostril, Anulom Vilom helps clear the nadis (energy channels), promoting physical, mental, and emotional well-being.\nPracticing Anulom Vilom regularly has been shown to reduce stress, improve focus, and support overall health. It is suitable for beginners and advanced practitioners alike, making it an accessible and effective tool for cultivating mindfulness and inner peace. This guide provides step-by-step instructions for mastering Anulom Vilom, along with insights into its many benefits and tips for incorporating it into your daily routine.",
@@ -1414,19 +1417,19 @@
       ],
       "additionalSections": [
         {
-          "id": "14",
+          "id": "yoga-for-digestion-9-poses-you-need-to-know",
           "title": "Yoga for Digestion: 9 Poses You Need to Know",
           "summary": "Learn 9 yoga poses to boost digestion ease bloating, and support gut health naturally.",
           "image": "fitness_14.jpg"
         },
         {
-          "id": "16",
+          "id": "exploring-the-8-limbs-of-yoga-for-a-holistic-understanding",
           "title": "Exploring the 8 Limbs of Yoga for a Holistic Understanding",
           "summary": "Discover the original 8 limbs of yoga and gain insight into how yoga has been culturally appropriated...",
           "image": "fitness_16.jpg"
         },
         {
-          "id": "17",
+          "id": "utilizing-yoga-to-manage-stress-effectively",
           "title": "Utilizing Yoga to Manage Stress Effectively",
           "summary": "If you're looking to reduce stress through yoga explore various techniques that can help you achieve this goal...",
           "image": "fitness_17.jpg"
@@ -1435,7 +1438,7 @@
     },
     {
       "title": "Exploring the 8 Limbs of Yoga for a Holistic Understanding",
-      "id": "16",
+      "id": "exploring-the-8-limbs-of-yoga-for-a-holistic-understanding",
       "image": "fitness_16.jpg",
       "summary": "Discover the original 8 limbs of yoga and gain insight into how yoga has been culturally appropriated...",
       "intro": "The 8 Limbs of Yoga, as outlined in the ancient text of the Yoga Sutras by Patanjali, offer a comprehensive framework for achieving physical, mental, and spiritual harmony. see our guide on <a href=\"/mindfulness/12\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Focus Like Never Before: Strategies to Eliminate Distractions</a> for more details. These eight interconnected steps guide practitioners on a path toward self-discipline, mindfulness, and ultimate enlightenment. Unlike many modern interpretations of yoga that focus primarily on physical postures, the 8 Limbs emphasize a holistic approach to life, encompassing ethical principles, breath control, concentration, and meditation.\n\nThis guide delves into each limb\u2014Yama (ethical disciplines), Niyama (personal observances), Asana (physical postures), Pranayama (breath control), Pratyahara (withdrawal of senses), Dharana (concentration), Dhyana (meditation), and Samadhi (absorption)\u2014to provide a deeper understanding of their significance and practical application. By exploring these limbs, practitioners can cultivate balance and integration in all aspects of life, progressing toward greater self-awareness and fulfillment.",
@@ -1508,19 +1511,19 @@
       ],
       "additionalSections": [
         {
-          "id": "14",
+          "id": "yoga-for-digestion-9-poses-you-need-to-know",
           "title": "Yoga for Digestion: 9 Poses You Need to Know",
           "summary": "Learn 9 yoga poses to boost digestion ease bloating, and support gut health naturally.",
           "image": "fitness_14.jpg"
         },
         {
-          "id": "15",
+          "id": "mastering-anulom-vilom-breathing-technique",
           "title": "Mastering Anulom Vilom Breathing Technique",
           "summary": "Anulom vilom is a type of alternate nostril breathing used in yoga. Discover its benefits and practice techniques...",
           "image": "fitness_15.jpg"
         },
         {
-          "id": "17",
+          "id": "utilizing-yoga-to-manage-stress-effectively",
           "title": "Utilizing Yoga to Manage Stress Effectively",
           "summary": "If you're looking to reduce stress through yoga explore various techniques that can help you achieve this goal...",
           "image": "fitness_17.jpg"
@@ -1529,7 +1532,7 @@
     },
     {
       "title": "Utilizing Yoga to Manage Stress Effectively",
-      "id": "17",
+      "id": "utilizing-yoga-to-manage-stress-effectively",
       "image": "fitness_17.jpg",
       "summary": "If you're looking to reduce stress through yoga, explore various techniques that can help you achieve this goal...",
       "intro": "Stress has become an inevitable part of modern life, affecting mental, emotional, and physical well-being. see our guide on <a href=\"/mindfulness/12\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Focus Like Never Before: Strategies to Eliminate Distractions</a> for more details. Yoga offers a natural and effective way to manage stress, combining movement, breath control, and mindfulness to restore balance and tranquility. Unlike quick-fix solutions, yoga addresses the root causes of stress by calming the nervous system, improving emotional resilience, and promoting relaxation.\n\nThrough practices such as asanas (physical postures), pranayama (breathing exercises), and meditation, yoga helps reduce cortisol levels, enhances mental clarity, and fosters a sense of inner peace. This guide explores how yoga can be utilized to cope with daily stressors, offering techniques and tips for incorporating this ancient practice into a modern lifestyle to cultivate lasting well-being.",
@@ -1607,19 +1610,19 @@
       ],
       "additionalSections": [
         {
-          "id": "14",
+          "id": "yoga-for-digestion-9-poses-you-need-to-know",
           "title": "Yoga for Digestion: 9 Poses You Need to Know",
           "summary": "Learn 9 yoga poses to boost digestion ease bloating, and support gut health naturally.",
           "image": "fitness_14.jpg"
         },
         {
-          "id": "15",
+          "id": "mastering-anulom-vilom-breathing-technique",
           "title": "Mastering Anulom Vilom Breathing Technique",
           "summary": "Anulom vilom is a type of alternate nostril breathing used in yoga. Discover its benefits and practice techniques...",
           "image": "fitness_15.jpg"
         },
         {
-          "id": "16",
+          "id": "exploring-the-8-limbs-of-yoga-for-a-holistic-understanding",
           "title": "Exploring the 8 Limbs of Yoga for a Holistic Understanding",
           "summary": "Discover the original 8 limbs of yoga and gain insight into how yoga has been culturally appropriated...",
           "image": "fitness_16.jpg"
@@ -1630,7 +1633,7 @@
   "restAndRecovery": [
     {
       "title": "The Benefits of Stretching and Its Pleasurable Effects",
-      "id": "18",
+      "id": "the-benefits-of-stretching-and-its-pleasurable-effects",
       "image": "fitness_18.jpg",
       "summary": "Experience the pleasure of stretching as it activates your parasympathetic nervous system, promoting relaxation...",
       "intro": "Stretching is a simple yet powerful activity that offers numerous physical and mental benefits. see our guide on <a href=\"/mindfulness/02\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">The Power of Gratitude Journaling</a> for more details. By lengthening your muscles and improving joint flexibility, regular stretching helps to prevent injuries, relieve muscle tension, and increase overall mobility. But beyond its physical advantages, stretching also brings about a sense of relaxation and pleasure. The act of stretching stimulates blood flow, releases endorphins, and can alleviate stress, leaving you feeling more calm and rejuvenated. Whether done after a workout or as part of a daily routine, stretching provides a pleasurable way to enhance both physical well-being and mental relaxation.\n\n",
@@ -1710,19 +1713,19 @@
       ],
       "additionalSections": [
         {
-          "id": "19",
+          "id": "12-exercises-for-enhancing-your-posture",
           "title": "12 Exercises for Enhancing Your Posture",
           "summary": "Develop and maintain good posture with a combination of muscle strength and joint mobility through these exercises...",
           "image": "fitness_19.jpg"
         },
         {
-          "id": "20",
+          "id": "embracing-flexibility-for-overall-health",
           "title": "Embracing Flexibility for Overall Health",
           "summary": "Stretch your body to achieve greater suppleness and flexibility reaping numerous physical benefits...",
           "image": "fitness_20.jpg"
         },
         {
-          "id": "21",
+          "id": "recognizing-signs-of-overtraining-and-how-to-address-them",
           "title": "Recognizing Signs of Overtraining and How to Address Them",
           "summary": "Learn to identify signs of overtraining and discover strategies to address them ensuring",
           "image": "fitness_21.jpg"
@@ -1731,7 +1734,7 @@
     },
     {
       "title": "12 Exercises for Enhancing Your Posture",
-      "id": "19",
+      "id": "12-exercises-for-enhancing-your-posture",
       "image": "fitness_19.jpg",
       "summary": "Develop and maintain good posture with a combination of muscle strength and joint mobility through these exercises...",
       "intro": "Good posture is the foundation of a healthy body. see our guide on <a href=\"/nourish/02\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Top Picks for Nourishment: Curated Guides and Tips</a> for more details. Whether you\u2019re sitting at a desk, standing in line, or working out, maintaining proper alignment can reduce aches and pains, improve balance, and boost confidence. Poor posture, on the other hand, can lead to discomfort, muscle imbalances, and even long-term health issues. In this guide, we\u2019ll cover 12 effective exercises to enhance your posture. These movements are designed to strengthen the muscles that support your spine, open up tight areas, and promote better alignment. Whether you're a fitness enthusiast or just starting your journey, these exercises are simple, adaptable, and suitable for all levels. Let\u2019s get started on your path to standing taller, feeling better, and moving more efficiently!",
@@ -1814,19 +1817,19 @@
       ],
       "additionalSections": [
         {
-          "id": "18",
+          "id": "the-benefits-of-stretching-and-its-pleasurable-effects",
           "title": "The Benefits of Stretching and Its Pleasurable Effects",
           "summary": "Experience the pleasure of stretching as it activates your parasympathetic nervous system promoting relaxation...",
           "image": "fitness_18.jpg"
         },
         {
-          "id": "20",
+          "id": "embracing-flexibility-for-overall-health",
           "title": "Embracing Flexibility for Overall Health",
           "summary": "Stretch your body to achieve greater suppleness and flexibility reaping numerous physical benefits...",
           "image": "fitness_20.jpg"
         },
         {
-          "id": "21",
+          "id": "recognizing-signs-of-overtraining-and-how-to-address-them",
           "title": "Recognizing Signs of Overtraining and How to Address Them",
           "summary": "Learn to identify signs of overtraining and discover strategies to address them ensuring",
           "image": "fitness_21.jpg"
@@ -1835,7 +1838,7 @@
     },
     {
       "title": "Embracing Flexibility for Overall Health",
-      "id": "20",
+      "id": "embracing-flexibility-for-overall-health",
       "image": "fitness_20.jpg",
       "summary": "Stretch your body to achieve greater suppleness and flexibility, reaping numerous physical benefits...",
       "intro": "Flexibility is more than just being able to touch your toes\u2014it\u2019s a key component of overall health and well-being. see our guide on <a href=\"/nourish/09\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">Fuel Your Body with the Right Nutrition</a> for more details. By improving your range of motion, reducing muscle tension, and promoting better posture, flexibility exercises can have a profound impact on your physical and mental health. \n\nIncorporating flexibility training into your routine helps to prevent injuries, reduce chronic pain, and enhance your performance in daily activities and workouts. It also promotes relaxation, relieves stress, and supports mindfulness. Whether you're an athlete or someone seeking a healthier lifestyle, embracing flexibility can help you feel more balanced, agile, and energized.\n\nThis guide explores how flexibility benefits your body and mind and provides practical tips to help you get started on your journey toward greater mobility and health.",
@@ -1913,19 +1916,19 @@
       ],
       "additionalSections": [
         {
-          "id": "18",
+          "id": "the-benefits-of-stretching-and-its-pleasurable-effects",
           "title": "The Benefits of Stretching and Its Pleasurable Effects",
           "summary": "Experience the pleasure of stretching as it activates your parasympathetic nervous system promoting relaxation...",
           "image": "fitness_18.jpg"
         },
         {
-          "id": "19",
+          "id": "12-exercises-for-enhancing-your-posture",
           "title": "12 Exercises for Enhancing Your Posture",
           "summary": "Develop and maintain good posture with a combination of muscle strength and joint mobility through these exercises...",
           "image": "fitness_19.jpg"
         },
         {
-          "id": "21",
+          "id": "recognizing-signs-of-overtraining-and-how-to-address-them",
           "title": "Recognizing Signs of Overtraining and How to Address Them",
           "summary": "Learn to identify signs of overtraining and discover strategies to address them ensuring",
           "image": "fitness_21.jpg"
@@ -1934,7 +1937,7 @@
     },
     {
       "title": "Recognizing Signs of Overtraining and How to Address Them",
-      "id": "21",
+      "id": "recognizing-signs-of-overtraining-and-how-to-address-them",
       "image": "fitness_21.jpg",
       "summary": "Learn to identify signs of overtraining and discover strategies to address them, ensuring",
       "intro": "Overtraining can happen to anyone who pushes their body too hard without allowing adequate time for rest and recovery. see our guide on <a href=\"/mindfulness/02\" class=\"internal-link\" style=\"text-decoration: none; color: #0073e6;\">The Power of Gratitude Journaling</a> for more details. While regular exercise is essential for a healthy lifestyle, overtraining can lead to fatigue, decreased performance, and even long-term health issues. \nRecognizing the signs of overtraining is crucial to avoid injuries and maintain your physical and mental well-being. Common symptoms include persistent soreness, a decline in strength, sleep disturbances, and a lack of motivation. If left unaddressed, overtraining can impact not only your fitness progress but also your overall quality of life. \nIn this guide, we\u2019ll explore how to identify the symptoms of overtraining and provide actionable strategies to help you recover and strike the right balance between training and rest for optimal health and performance.",
@@ -2011,19 +2014,19 @@
       ],
       "additionalSections": [
         {
-          "id": "18",
+          "id": "the-benefits-of-stretching-and-its-pleasurable-effects",
           "title": "The Benefits of Stretching and Its Pleasurable Effects",
           "summary": "Experience the pleasure of stretching as it activates your parasympathetic nervous system promoting relaxation...",
           "image": "fitness_18.jpg"
         },
         {
-          "id": "19",
+          "id": "12-exercises-for-enhancing-your-posture",
           "title": "12 Exercises for Enhancing Your Posture",
           "summary": "Develop and maintain good posture with a combination of muscle strength and joint mobility through these exercises...",
           "image": "fitness_19.jpg"
         },
         {
-          "id": "20",
+          "id": "embracing-flexibility-for-overall-health",
           "title": "Embracing Flexibility for Overall Health",
           "summary": "Stretch your body to achieve greater suppleness and flexibility reaping numerous physical benefits...",
           "image": "fitness_20.jpg"

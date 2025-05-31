@@ -144,14 +144,12 @@
   transform: translateY(-1px);
 }
 
-
 .profileButton span {
   max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 
 .dropdownContent {
   display: none;
@@ -180,7 +178,7 @@
   text-align: left;
   cursor: pointer;
   font-family: inherit;
-  font-weight: 500; /* not too bold */
+  font-weight: 500;
   transition: background-color 0.2s ease;
 }
 
@@ -192,18 +190,8 @@
 }
 
 .dropdownLink:hover {
-  background-color: #374151;
   color: white;
-}
-
-.dropdownContent > :first-child {
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-}
-
-.dropdownContent > :last-child {
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  border-radius: 6px;
 }
 
 /* === Weather === */
@@ -214,8 +202,8 @@
 }
 
 .weatherWidget img {
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
   margin-right: 6px;
 }
 
@@ -231,7 +219,8 @@
 }
 
 .weatherInfo span {
-  font-size: 15px;
+  font-size: 0.75rem;
+  line-height: 1.2;
 }
 
 /* === Verification Alert === */
@@ -283,12 +272,12 @@
 }
 
 .logoutLink {
-  all: unset; /* reset all inherited button styles */
+  all: unset;
   display: block;
   width: 100%;
   text-align: left;
   padding: 0.75rem 1rem;
-  color: #f9fafb; /* light text */
+  color: #f9fafb;
   font-size: 1rem;
   font-weight: 550;
   border-radius: 0;
@@ -296,18 +285,241 @@
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
+.challengeWrapper {
+  margin-top: auto;
+  align-self: stretch;
+}
+
+
 .logoutLink:hover {
-  background-color: #374151; /* dark hover */
-  transform: translateX(2px); /* subtle motion */
+  background-color: #374151;
+  transform: translateX(2px);
   color: white;
 }
 
 .logoutLink:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+  position: relative;
+}
+
+/* === Dropdown Parent === */
+.dropdownParent {
+  position: relative;
+
+}
+
+.dropdownToggle {
+  padding: 0.4rem 0.8rem;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 10px;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.nav ul li,
+.nav a,
+.dropdownToggle {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+}
+
+.dropdownMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1e293b;
+  flex-direction: column;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  padding: 0.75rem 0;
+  min-width: 240px;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dropdownParent:hover .dropdownMenu {
+  display: flex;
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.dropdownMenu li {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  color: #f9fafb;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.dropdownMenu a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+/* === Mega Dropdown === */
+.megaDropdown {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(-50%) scale(0.98);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  background-color: #ffffff;
+  padding: 2rem;
+  min-width: 800px;
+  min-height: 300px;
+  border-radius: 12px;
+  display: none;
+  gap: 2rem;
+  z-index: 1000;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.megaDropdown.show {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+  display: flex;
 }
 
 
+/* === Columns === */
+.megaRightColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100%;
+  gap: 1rem;
+  padding: 1.5rem;
+align-items: flex-start;
+
+}
+
+
+.megaRightColumn h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937; /* Tailwind’s gray-800 */
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.5rem;
+}
+
+.megaRightColumn h4 a {
+  color: #1f2937;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.megaRightColumn ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.megaRightColumn li {
+  background-color: #ffffff;
+  color: #1a1a1a;
+  padding: 10px 16px;
+  border-radius: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.megaRightColumn ul li a {
+  color: #1f2937;
+  font-weight: 600;
+  opacity: 1;
+  text-decoration: none;
+}
+
+.badge {
+  background-color: #fde68a;
+  color: #92400e;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-left: 0.5rem;
+}
+
+.categoryTag {
+  font-size: 0.65rem;
+  background: #d1fae5;
+  color: #065f46;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-left: 0.4rem;
+}
+
+.readTime {
+  font-size: 0.65rem;
+  color: #6b7280;
+  margin-left: 0.4rem;
+}
+
+.dropdownLinkUnified {
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.dropdownLinkUnified:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+/* === Nav Content Loading State === */
+/* === Nav Content Loading State === */
+.megaColumn ul li em,
+.spotlightItem em {
+  color: #666;
+  font-style: italic;
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+/* === Optional Shimmer === */
+.loadingShimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+  border-radius: 4px;
+  min-height: 1rem;
+  width: 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
 
 /* === Responsive === */
 @media (max-width: 768px) {
@@ -354,9 +566,25 @@
   .weatherWidget {
     display: none;
   }
+
   .logoutLink {
     font-size: 0.95rem;
     padding: 0.6rem 1rem;
+  }
+  .megaDropdown {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .megaColumn {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .challengeBox {
+    align-self: stretch;
+    width: 100%;
+    margin-top: 1rem;
   }
 }
 
@@ -391,6 +619,7 @@
     padding: 0.5rem 1rem;
     font-size: 1rem;
   }
+
   .logoutDesktop {
     display: flex;
     align-items: center;
