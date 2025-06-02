@@ -49,7 +49,7 @@ export default function DashboardPage() {
 
       if (!res.ok) throw new Error("Failed to send verification email");
 
-      toast.success("✅ Verification email sent.");
+      toast.success(" Verification email sent.");
     } catch (error) {
       console.error(error);
       toast.error("❌ Error resending verification email.");
@@ -67,7 +67,10 @@ export default function DashboardPage() {
   return (
     <div className={classes.container}>
       {session?.user?.isPremium && (
-        <div className={classes.premiumBadge}>✨ Premium Member</div>
+        <div className={classes.premiumBadge}>
+          <span className={classes.premiumIcon}>✨</span>
+          <span>Premium Member</span>
+        </div>
       )}
       <h1 className={classes.heading}>
         Welcome, {user?.name || user?.email?.split("@")[0] || "friend"} 👋
@@ -105,6 +108,12 @@ export default function DashboardPage() {
             <li>🧘 Guided meditations</li>
             <li>🥗 Personalized meal plans</li>
             <li>🤖 AI Wellness Assistant access</li>
+            <li>📊 Weekly health progress reports</li>
+            <li>🛌 Sleep improvement tracker</li>
+            <li>💬 1-on-1 coaching sessions</li>
+            <li>📚 Exclusive articles and challenges</li>
+            <li>🎧 Mindfulness audio library(coming soon)</li>
+            <li>💡 Early access to new features</li>
           </ul>
         </div>
       )}

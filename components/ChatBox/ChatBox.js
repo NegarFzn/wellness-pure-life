@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useUI } from "../../context/UIContext";
 import PremiumButton from "../PremiumButton/PremiumButton";
 import ReactMarkdown from "react-markdown";
@@ -12,43 +14,51 @@ export default function ChatBox() {
   const user = session?.user;
   const isAuthenticated = !!user;
   const isPremium = user?.isPremium || false;
-
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [chat, setChat] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
+  const { isChatOpen, openChat, closeChat } = useUI();
 
+  // ✅ Load chat for logged-in user
   useEffect(() => {
-    const storedChat = localStorage.getItem("wellnessChat");
-    if (storedChat) {
-      setChat(JSON.parse(storedChat));
+    if (user?.email) {
+      const storedChat = localStorage.getItem(`wellnessChat-${user.email}`);
+      if (storedChat) {
+        setChat(JSON.parse(storedChat));
+      } else {
+        setChat([]);
+      }
     }
-  }, []);
+  }, [user?.email]);
 
+  // ✅ Save chat per user
+  useEffect(() => {
+    if (user?.email) {
+      localStorage.setItem(`wellnessChat-${user.email}`, JSON.stringify(chat));
+    }
+  }, [chat, user?.email]);
+
+  // ✅ Clear chat on logout
+  useEffect(() => {
+    if (!isAuthenticated && status !== "loading") {
+      Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith("wellnessChat-")) {
+          localStorage.removeItem(key);
+        }
+      });
+      setChat([]);
+    }
+  }, [isAuthenticated, status]);
+
+  // ✅ Auto scroll to latest message
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-    localStorage.setItem("wellnessChat", JSON.stringify(chat));
   }, [chat]);
-
-  useEffect(() => {
-    if (status !== "authenticated") return;
-
-    if (!isAuthenticated) {
-      localStorage.removeItem("wellnessChat");
-      setChat([]);
-    } else {
-      setChat((prevChat) =>
-        prevChat.filter(
-          (msg) =>
-            msg.content !==
-            "⚠️ Please login first to upgrade and access the Assistant!"
-        )
-      );
-    }
-  }, [status, isAuthenticated]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -99,25 +109,36 @@ export default function ChatBox() {
 
   return (
     <div className={classes.launcher}>
-      {isOpen ? (
+      {isChatOpen ? (
         <div className={classes.box}>
+          <button onClick={closeChat} className={classes.closeBtn}>
+            ×
+          </button>
           <h4 className={classes.title}>🌿 Wellness Assistant</h4>
 
           {!isAuthenticated && (
             <p className={`${classes.notice} ${classes.loginPrompt}`}>
               💎 This is a premium feature.
-              <span onClick={openLogin}>
+              {router.pathname === "/upgrade" ? (
                 <PremiumButton />
-              </span>
+              ) : (
+                <Link href="/upgrade">
+                  <PremiumButton />
+                </Link>
+              )}
               to unlock.
             </p>
           )}
 
           {isAuthenticated && !isPremium && (
             <p className={`${classes.notice} ${classes.loginPrompt}`}>
-              💎 This is a premium feature. <PremiumButton />
+              <span className={classes.icon}>💎</span>
+              <strong>This is a premium feature.</strong>
               <br />
-              to unlock.
+              <span className={classes.buttonWrap}>
+                <PremiumButton />
+              </span>
+              <span className={classes.unlockText}> to unlock.</span>
             </p>
           )}
 
@@ -138,8 +159,7 @@ export default function ChatBox() {
           </div>
 
           <div className={classes.inputRow}>
-            <input
-              type="text"
+            <textarea
               className={classes.input}
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -165,7 +185,7 @@ export default function ChatBox() {
           {loading && <p className={classes.loading}>Thinking...</p>}
         </div>
       ) : (
-        <button onClick={() => setIsOpen(true)} className={classes.send}>
+        <button onClick={openChat} className={classes.send}>
           💬 Ask Wellness Assistant
         </button>
       )}

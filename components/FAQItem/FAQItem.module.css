@@ -1,0 +1,45 @@
+.faqItem {
+  background-color: #1e293b; /* slate-800 */
+  color: #e2e8f0; /* slate-200 */
+  padding: 1.5rem 1.75rem;
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.faqItem:hover {
+  background-color: #273449; /* slate-700 hover */
+  transform: translateY(-2px);
+}
+
+.faqQuestion {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f8fafc; /* slate-50 */
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.faqAnswer {
+  font-size: 0.96rem;
+  color: #cbd5e1; /* slate-300 */
+  line-height: 1.6;
+}
+
+/* ✅ Mobile Optimization */
+@media (max-width: 640px) {
+  .faqItem {
+    padding: 1.2rem 1rem;
+    margin-bottom: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .faqQuestion {
+    font-size: 1.05rem;
+  }
+
+  .faqAnswer {
+    font-size: 0.9rem;
+  }
+}

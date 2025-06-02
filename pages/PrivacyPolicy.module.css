@@ -1,54 +1,87 @@
 .container {
-  padding: 40px;
-  max-width: 900px;
-  margin: auto;
-  font-family: Arial, sans-serif;
-  color: #333;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: "Inter", sans-serif;
+  color: #1f2937;
+  line-height: 1.7;
 }
 
 .heading {
-  font-size: 28px;
-  font-weight: bold;
-  text-align: center;
-  color: #222;
-  margin-bottom: 20px;
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #111827;
 }
 
 .updatedDate {
-  font-size: 14px;
-  color: #777;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.text {
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 15px;
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 24px;
 }
 
 .sectionTitle {
-  font-size: 22px;
-  font-weight: bold;
-  color: #444;
-  margin-top: 20px;
+  font-size: 1.25rem;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #374151;
+}
+
+.text {
+  font-size: 1rem;
+  margin-bottom: 16px;
 }
 
 .list {
-  margin-left: 20px;
-  font-size: 16px;
+  padding-left: 20px;
+  margin-bottom: 16px;
 }
 
 .list li {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
-/* ✅ Fix: Use a local class instead of a global selector */
 .link {
-  color: #6c5ce7;
-  text-decoration: none;
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.3s ease;
 }
 
 .link:hover {
-  text-decoration: underline;
+  color: #1e40af;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 24px 16px;
+  }
+
+  .heading {
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+
+  .sectionTitle {
+    font-size: 1.125rem;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  .text,
+  .list li {
+    font-size: 0.95rem;
+  }
+
+  .updatedDate {
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+  }
+
+  .list {
+    padding-left: 16px;
+  }
+
+  .link {
+    font-size: 0.95rem;
+  }
 }

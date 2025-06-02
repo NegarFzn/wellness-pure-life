@@ -1,162 +1,260 @@
-/* ✅ Footer General Styling */
 .footer {
   background-color: #181818;
   color: #ffffff;
-  padding: 40px 20px;
+  padding: 40px 0;
+  font-family: "Inter", sans-serif;
 }
 
-/* ✅ Two-Column Layout */
 .footerContent {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  max-width: 1100px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 2rem;
+  max-width: 1300px;
   margin: 0 auto;
-  flex-wrap: wrap;
+  padding: 0 20px; /* 👈 Add this for left/right spacing inside content */
+  box-sizing: border-box;
 }
 
-/* ✅ Each Section Takes Half Width */
 .footerSection {
-  width: 45%;
   text-align: left;
 }
 
-/* ✅ Contact Info Styling */
-.contactInfo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+.footerSection h3 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #ffffff;
+  font-weight: 600;
 }
 
-/* ✅ Fix Link Color & Remove Underline */
+.subHeading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+  color: #d1d5db;
+}
+
+.description {
+  color: #d1d5db; /* softer than white */
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 280px;
+  margin: 10px 0;
+}
+
+.footerSection h3 {
+  color: #f9fafb;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.contactRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 0.25rem; /* Tighter spacing */
+}
+
 .link {
-  color: #ffffff; /* White color */
-  text-decoration: none; /* Remove underline */
-  font-weight: 500;
-  transition: color 0.3s ease-in-out;
+  color: #e5e5e5;
+  text-decoration: none;
+  font-weight: 400;
+  transition: color 0.3s ease;
+  font-size: 0.85rem;
 }
 
 .link:hover {
-  color: #6c5ce7; /* Purple hover effect */
-  text-decoration: none;
+  color: #60a5fa;
 }
 
 .icon {
   color: #ffffff;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
-/* ✅ Quick Links Styling */
-.listContainer {
+/* ✅ List Styles */
+.linkList {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.listContainer li {
+.linkList li {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 8px;
-  flex-wrap: nowrap;
-  white-space: nowrap;
-}
-
-.listContainer li a {
-  text-decoration: none;
-  color: #ffffff;
-  transition: color 0.3s ease-in-out;
-}
-
-.listContainer li a:hover {
-  color: #6c5ce7;
+  margin-bottom: 10px;
+  line-height: 1.6;
 }
 
 /* ✅ Footer Bottom */
 .footerBottom {
   text-align: center;
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: #cccccc;
+  margin-top: 32px;
+  font-size: 0.85rem;
+  color: #a1a1aa;
+  padding-top: 20px;
+  border-top: 1px solid #333;
 }
 
-/* ✅ Mobile View Fix */
-@media (max-width: 768px) {
-  .footerContent {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 1rem;
-  }
-
-  .footerSection {
-    width: 100%;
-    margin-bottom: 24px;
-    text-align: center;
-  }
-
-  .footerSection h3 {
-    font-size: 1.1rem;
-    margin-bottom: 12px;
-  }
-
-  .contactInfo {
-    flex-direction: column;
-    justify-content: center;
-    gap: 6px;
-    margin-bottom: 10px;
-  }
-
-  .link {
-    display: inline-block;
-    font-size: 1rem;
-    margin: 4px 0;
-  }
-
-  .listContainer li {
-    justify-content: center;
-    gap: 8px;
-    font-size: 1rem;
-  }
-
-  .listContainer li a {
-    font-size: 1rem;
-  }
-
-  .footerBottom {
-    font-size: 0.85rem;
-    padding: 0 1rem;
-  }
+.footerLinkRow {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
 }
 
+.footerLink {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  background: none;
+  border: none;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: font-weight 0.3s ease, color 0.3s ease;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+}
+
+.footerLink:hover {
+  font-weight: 600;
+  color: #85cff4;
+}
+
+.linkText {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
+.caption {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 2px;
+  transition: color 0.3s ease;
+}
+
+.footerLink:hover .caption {
+  color: #3b82f6;
+}
+
+.footerIcon {
+  font-size: 1.3rem;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.cookieReset {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #d1d5db;
+}
+
+.cookieResetButton {
+  background: none;
+  border: none;
+  color: #93c5fd; /* softer blue */
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  transition: color 0.3s ease;
+}
+
+.cookieResetButton:hover {
+  color: #bfdbfe; /* lighter on hover */
+}
+
+/* ✅ Responsive Design */
 @media (max-width: 1024px) {
   .footerContent {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .footerSection {
     text-align: center;
-    padding: 1rem;
+  }
+
+  .footerLinkRow,
+  .linkList li {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .footerContent {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 1.5rem;
   }
 
   .footerSection {
     width: 100%;
-    margin-bottom: 20px;
   }
 
-  .footerSection h3 {
-    font-size: 1.1rem;
-    margin-bottom: 12px;
+  .footerSection h3,
+  .subHeading {
+    text-align: center;
   }
 
-  .listContainer li {
+  .description {
+    font-size: 0.9rem;
+    margin: 0 auto;
+    max-width: 90%;
+  }
+
+  .linkList li {
     justify-content: center;
-    gap: 8px;
-    font-size: 1rem;
+  }
+
+  .footerLink {
+    justify-content: center;
+    text-align: center;
   }
 
   .footerBottom {
-    font-size: 0.85rem;
-    padding: 0 1rem;
+    font-size: 0.8rem;
+    padding-top: 16px;
+  }
+
+  .exploreColumns {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .exploreBlock {
+    text-align: center;
+  }
+
+  .linkText {
+    align-items: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .description {
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: center;
+    max-width: 100%;
+    margin: 12px auto;
+    padding: 0 12px;
+  }
+
+  .footerSection h3 {
+    text-align: center;
+  }
+
+  .contactRow {
+    text-align: center;
+    margin-top: 8px;
   }
 }
 
@@ -165,12 +263,28 @@
     font-size: 1rem;
   }
 
+  .link {
+    font-size: 0.88rem;
+  }
+
   .footerSection h3 {
     font-size: 1rem;
   }
 
-  .link,
-  .listContainer li a {
+  .subHeading {
     font-size: 0.95rem;
+  }
+
+  .caption {
+    font-size: 0.72rem;
+  }
+
+  .footerIcon {
+    font-size: 1.2rem;
+    margin-top: 6px;
+  }
+
+  .footerLink {
+    gap: 8px;
   }
 }

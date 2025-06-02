@@ -166,32 +166,37 @@
   transition: opacity 0.2s ease;
 }
 
-.dropdownLink {
-  color: white;
-  padding: 0.75rem 1rem;
-  text-decoration: none;
-  display: block;
-  font-size: 1rem;
-  background: none;
-  border: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  font-family: inherit;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
-}
-
 .dropdownLink,
 .logoutLink {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: #f3f4f6;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 400;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+  border-radius: 8px;
+  cursor: pointer; /* ✅ moved up to avoid override */
 }
 
-.dropdownLink:hover {
-  color: white;
-  border-radius: 6px;
+.dropdownLink:hover,
+.logoutLink:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  cursor: pointer; /* ✅ ensure it's not lost */
+}
+
+.dropdownLink:active,
+.logoutLink:active {
+  transform: scale(0.97);
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 /* === Weather === */
@@ -271,40 +276,14 @@
   color: #155724 !important;
 }
 
-.logoutLink {
-  all: unset;
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 0.75rem 1rem;
-  color: #f9fafb;
-  font-size: 1rem;
-  font-weight: 550;
-  border-radius: 0;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
 .challengeWrapper {
   margin-top: auto;
   align-self: stretch;
 }
 
-
-.logoutLink:hover {
-  background-color: #374151;
-  transform: translateX(2px);
-  color: white;
-}
-
-.logoutLink:focus {
-  position: relative;
-}
-
 /* === Dropdown Parent === */
 .dropdownParent {
   position: relative;
-
 }
 
 .dropdownToggle {
@@ -394,7 +373,6 @@
   display: flex;
 }
 
-
 /* === Columns === */
 .megaRightColumn {
   flex: 1;
@@ -404,10 +382,8 @@
   min-height: 100%;
   gap: 1rem;
   padding: 1.5rem;
-align-items: flex-start;
-
+  align-items: flex-start;
 }
-
 
 .megaRightColumn h4 {
   font-size: 1.1rem;

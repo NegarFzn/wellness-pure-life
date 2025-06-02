@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "../context/ThemeContext";
 import ChatBox from "../components/ChatBox/ChatBox";
+import CookieConsent from "../components/CookieConsent/CookieConsent";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/globals.css";
 
@@ -31,6 +32,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
             <Toaster position="top-right" reverseOrder={false} />
             <ChatBox />
             <Component {...pageProps} />
+            <CookieConsent />
           </Layout>
         </ThemeProvider>
       </UIProvider>

@@ -1,0 +1,286 @@
+/* styles/UpgradeModal.module.css */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 960px;
+  text-align: left;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.3s ease;
+}
+
+.modalContentSplit {
+  display: flex;
+  flex-direction: row;
+  gap: 2.5rem;
+}
+
+.leftInfo {
+  flex: 1;
+  padding-right: 1.5rem;
+  border-right: 1px solid #e5e7eb;
+  animation: slideInLeft 0.4s ease forwards;
+}
+
+.signupFormRight {
+  flex: 1;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: slideInRight 0.4s ease forwards;
+}
+
+.input {
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.75rem;
+  color: #888;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #222;
+  margin-bottom: 0.2rem;
+}
+
+.description {
+  color: #555;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1f2937;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: #f9fafb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.featureItem:hover {
+  transform: translateX(4px);
+}
+
+.checkIcon {
+  background-color: #10b981;
+  color: white;
+  border-radius: 9999px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-weight: bold;
+  margin-right: 0.75rem;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.subscribeButton {
+  background: linear-gradient(to right, #facc15, #f59e0b);
+  color: #1f2937;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 1.125rem;
+  font-weight: 800;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(251, 191, 36, 0.5);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.subscribeButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
+}
+
+.subscribeButton::after {
+  content: ">>";
+  position: absolute;
+  right: 1.5rem;
+  font-weight: 900;
+  font-size: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #92400e;
+  transition: right 0.3s ease;
+}
+
+.subscribeButton:hover::after {
+  right: 1.25rem;
+}
+
+.errorText {
+  color: #dc2626;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+.modalContentSplit {
+  display: flex;
+  flex-direction: row;
+  gap: 2.5rem;
+}
+
+.leftInfo {
+  flex: 1;
+  padding-right: 1.5rem;
+  border-right: 1px solid #e5e7eb;
+  animation: slideInLeft 0.4s ease forwards;
+}
+
+.signupFormRight {
+  flex: 1;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: slideInRight 0.4s ease forwards;
+  gap: 0.75rem;
+}
+.feeNote {
+  background: linear-gradient(to right, #d1fae5, #a7f3d0);
+  color: #065f46;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
+  text-align: center;
+  margin-bottom: 0.4rem;
+  display: inline-block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feeHighlight {
+  background-color: #facc15;
+  color: #1f2937;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.375rem;
+  font-weight: 800;
+  margin: 0 0.25rem;
+  font-size: 1.05rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .modalContentSplit {
+    flex-direction: column;
+  }
+
+  .leftInfo,
+  .signupFormRight {
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .signupFormRight {
+    margin-top: 1rem;
+  }
+}

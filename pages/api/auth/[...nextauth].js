@@ -55,7 +55,8 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       if (user) {
-        token.id = user.id;
+        token.id = user.id; // Firestore doc ID
+        token.uid = user.id; // 🔥 Add this line
         token.email = user.email;
         token.name = user.name;
       }
@@ -78,7 +79,6 @@ export default NextAuth({
         }
       }
 
-      // ✅ Handle manual session.update({ isPremium: true })
       if (trigger === "update" && session?.isPremium !== undefined) {
         token.isPremium = session.isPremium;
       }
@@ -88,6 +88,7 @@ export default NextAuth({
 
     async session({ session, token }) {
       session.user.id = token.id;
+      session.user.uid = token.uid; // 🔥 Add this line
       session.user.email = token.email;
       session.user.name = token.name;
       session.user.isPremium = token.isPremium;

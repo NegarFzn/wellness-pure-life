@@ -1,0 +1,182 @@
+.banner {
+  max-width: 340px;
+  padding: 20px 24px;
+  background: #fefefe;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #1f2937;
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: "Inter", sans-serif;
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 9999;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.banner p {
+  margin-bottom: 16px;
+}
+
+.link {
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: #1e40af;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.manage,
+.accept {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.manage {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.manage:hover {
+  background-color: #e5e7eb;
+}
+
+.accept {
+  background: linear-gradient(to right, #6366f1, #3b82f6);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
+  border: none;
+}
+
+.accept:hover {
+  background: linear-gradient(to right, #4f46e5, #2563eb);
+}
+
+/* Optional modal styles for future use */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: #ffffff;
+  color: #1f2937;
+  border-radius: 14px;
+  max-width: 400px;
+  width: 90%;
+  padding: 24px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+  font-family: "Inter", "Segoe UI", sans-serif;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.modal h3 {
+  margin-top: 0;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.modal p {
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modalActions button {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 500;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.modalActions button:first-child {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.modalActions button:first-child:hover {
+  background-color: #e5e7eb;
+}
+
+.modalActions .accept {
+  background: linear-gradient(to right, #6366f1, #3b82f6);
+  color: white;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
+}
+
+.modalActions .accept:hover {
+  background: linear-gradient(to right, #4f46e5, #2563eb);
+}
+
+@media (max-width: 640px) {
+  .banner {
+    left: 16px;
+    right: 16px;
+    width: auto;
+    padding: 14px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .banner p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .manage,
+  .accept {
+    width: 100%;
+    font-size: 13px;
+    padding: 10px;
+  }
+}
