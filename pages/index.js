@@ -145,7 +145,7 @@ export default function Home() {
           <section className={classes.latestNewsSection}>
             <div className={classes.newsGrid}>
               {newsArticles.map((item) => (
-                <div key={item.id} className={classes.newsCard}>
+                <div key={item.slug} className={classes.newsCard}>
                   <img
                     src={
                       item.image && item.image.trim()
@@ -162,7 +162,7 @@ export default function Home() {
                   />
                   <h3>{item.title}</h3>
                   <p>{item.summary}</p>
-                  <Link href={`/news/${item.id}`} className={classes.readMore}>Read More →</Link>
+                  <Link href={`/news/${item.slug}`} className={classes.readMore}>Read More →</Link>
                 </div>
               ))}
             </div>

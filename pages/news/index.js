@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchNews } from "../../utils/fetch";
 import Link from "next/link";
-import ThemeToggle from "../../components/ThemeToggle";
 import classes from "./index.module.css";
 
 export default function News() {
@@ -20,7 +19,6 @@ export default function News() {
 
   return (
     <div className={classes.newsPage}>
-      <ThemeToggle />
       <h1 className={classes.newsHeader}>Latest Health & Wellness News</h1>
       {loading ? (
         <p>Loading news...</p>
@@ -38,7 +36,7 @@ export default function News() {
               />
               <h2>{article.title}</h2>
               <p>{article.summary}</p>
-              <Link href={`/news/${article.id}`} className={classes.readMore}>
+              <Link href={`/news/${article.slug}`} className={classes.readMore}>
                 Read more
               </Link>
             </li>
