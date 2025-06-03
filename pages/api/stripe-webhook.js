@@ -1,6 +1,6 @@
 import { buffer } from "micro";
 import Stripe from "stripe";
-import { db } from "../../../lib/firebase";
+import { firestore } from "../../../utils/firebaseAdmin"; // Updated to use admin SDK
 import {
   doc,
   updateDoc,
@@ -50,8 +50,8 @@ export default async function handler(req, res) {
     console.log("✅ Checkout complete");
     if (uid) {
       try {
-        const userRef = doc(db, "users", uid);
-        await updateDoc(userRef, {
+        const userRef = firestore.doc(`users/${uid}`);
+        await userRef.update({
           isPremium: true,
           upgradedAt: new Date().toISOString(),
         });
@@ -61,11 +61,11 @@ export default async function handler(req, res) {
       }
     } else if (email) {
       try {
-        const q = query(collection(db, "users"), where("email", "==", email));
-        const snapshot = await getDocs(q);
+        const q = firestore.collection("users").where("email", "==", email);
+        const snapshot = await q.get();
         if (!snapshot.empty) {
           snapshot.forEach(async (docSnap) => {
-            await updateDoc(doc(db, "users", docSnap.id), {
+            await docSnap.ref.update({
               isPremium: true,
               upgradedAt: new Date().toISOString(),
             });
