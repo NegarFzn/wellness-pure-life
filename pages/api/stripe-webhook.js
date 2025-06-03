@@ -1,6 +1,6 @@
 import { buffer } from "micro";
 import Stripe from "stripe";
-import { firestore } from "../../../utils/firebaseAdmin"; // Updated to use admin SDK
+import { firestore } from "../../utils/firebaseAdmin"; // Updated to use admin SDK
 import {
   doc,
   updateDoc,
