@@ -1,7 +1,7 @@
 // components/Layout/Weather.js
 import { useEffect, useState } from "react";
 import { fetchWeather } from "../../utils/fetch";
-import classes from "./weather.module.css"; // your compact CSS
+import classes from "./Weather.module.css"; // your compact CSS
 
 export default function Weather() {
   const [weather, setWeather] = useState(null);
