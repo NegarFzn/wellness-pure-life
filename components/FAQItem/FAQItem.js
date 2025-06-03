@@ -1,4 +1,4 @@
-import classes from "./faqItem.module.css";
+import classes from "./FAQItem.module.css";
 
 const FAQItem = ({ question, answer }) => {
   return (
