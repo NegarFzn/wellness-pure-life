@@ -409,9 +409,9 @@
   top: 100%;
   left: 50%;
   background-color: #ffffff;
-  padding: 2rem;
+  padding: 1rem;
   min-width: 800px;
-  min-height: 300px;
+  min-height: 100px;
   border-radius: 12px;
   display: none;
   gap: 2rem;
@@ -434,7 +434,7 @@
   justify-content: space-between;
   min-height: 100%;
   gap: 1rem;
-  padding: 1.5rem;
+  padding: 0.04rem;
   align-items: flex-start;
 }
 
