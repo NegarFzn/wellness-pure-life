@@ -90,6 +90,10 @@ export default function UpgradePage() {
             </p>
             <ul className={classes.featureList}>
               <li className={classes.featureItem}>
+                <span className={classes.checkIcon}>✔</span>Exclusive access to
+                AI-powered wellness assistant
+              </li>
+              <li className={classes.featureItem}>
                 <span className={classes.checkIcon}>✔</span>Daily 7-Day
                 Challenges
               </li>

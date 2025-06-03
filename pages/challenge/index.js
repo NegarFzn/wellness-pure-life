@@ -26,41 +26,52 @@ export default function ChallengePage() {
 
   // Handle challenge date, reset if expired, setup completed key
   useEffect(() => {
-    const today = new Date();
-    const storedStart = localStorage.getItem("challengeStartDate");
-    const startDate = storedStart ? new Date(storedStart) : today;
-
-    // Reset challenge after 7 days
-    const diffInDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-    if (diffInDays >= 7) {
-      localStorage.removeItem("challengeStartDate");
-      if (storedStart) {
-        localStorage.removeItem(`completedDays_${storedStart}`);
-      }
-      localStorage.removeItem("dailyChallenge");
-      setCompletedDays([]);
-      setChallenges([]);
-      setLoading(true);
-      setDayNumber(1);
-      location.reload();
-      return;
-    }
-
-    // Normal flow
+    const getLocalMidnight = (date) =>
+      new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  
+    const todayMidnight = getLocalMidnight(new Date());
+  
+    let storedStart = localStorage.getItem("challengeStartDate");
+    let startDateMidnight;
+  
     if (!storedStart) {
-      localStorage.setItem("challengeStartDate", today.toISOString());
+      // First-time user
+      const isoStart = todayMidnight.toISOString();
+      localStorage.setItem("challengeStartDate", isoStart);
+      storedStart = isoStart;
+      startDateMidnight = todayMidnight;
+    } else {
+      // Returning user
+      const parsedStart = new Date(storedStart);
+      startDateMidnight = getLocalMidnight(parsedStart);
     }
-
-    setDayNumber(Math.min(7, diffInDays + 1));
-    const activeStart = storedStart || today.toISOString();
-    const key = `completedDays_${activeStart}`;
-    setCompletedKey(key);
-
-    const storedCompleted = localStorage.getItem(key);
-    if (storedCompleted) {
-      setCompletedDays(JSON.parse(storedCompleted));
+  
+    const diffInDays = Math.floor(
+      (todayMidnight - startDateMidnight) / (1000 * 60 * 60 * 24)
+    );
+  
+    if (diffInDays >= 7) {
+      // Automatic reset
+      const newStart = todayMidnight.toISOString();
+      localStorage.setItem("challengeStartDate", newStart);
+      localStorage.removeItem(`completedDays_${storedStart}`);
+      localStorage.removeItem("dailyChallenge");
+  
+      setCompletedDays([]);
+      setDayNumber(1);
+      setCompletedKey(`completedDays_${newStart}`);
+    } else {
+      setDayNumber(Math.min(7, diffInDays + 1));
+      const key = `completedDays_${storedStart}`;
+      setCompletedKey(key);
+  
+      const storedCompleted = localStorage.getItem(key);
+      if (storedCompleted) {
+        setCompletedDays(JSON.parse(storedCompleted));
+      }
     }
   }, []);
+  
 
   // Load challenges
   useEffect(() => {

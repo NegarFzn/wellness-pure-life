@@ -1,0 +1,38 @@
+.weatherMini {
+  padding: 16px;
+  background-color: #f0f6fb;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 220px;
+  margin: auto;
+  color: black;
+}
+
+.weatherHeader {
+  font-size: 13px;
+
+  margin: 0 0 4px 0;
+  font-weight: bold;
+}
+
+.weatherRow {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+/* 🌐 Mobile-specific adjustments */
+@media (max-width: 480px) {
+  .weatherMini {
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .weatherHeader {
+    font-size: 12px;
+  }
+
+  .weatherRow {
+    font-size: 13px;
+    gap: 4px;
+  }
+}

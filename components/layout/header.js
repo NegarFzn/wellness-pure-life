@@ -13,7 +13,7 @@ import { FiUser, FiLogOut } from "react-icons/fi";
 import ChallengeBox from "./ChallengeBox";
 import TopicsColumn from "./TopicsColumn";
 import SpotlightColumn from "./SpotlightColumn";
-
+import Weather from "../../components/layout/Weather";
 import classes from "./header.module.css";
 
 export default function Header({ weather }) {
@@ -36,6 +36,7 @@ export default function Header({ weather }) {
   const [topicsMap, setTopicsMap] = useState({});
   const [spotlightsMap, setSpotlightsMap] = useState({});
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const updateNYTime = () => {
@@ -122,6 +123,34 @@ export default function Header({ weather }) {
           <span className={classes.brandName}>Wellness Pure Life</span>
         </Link>
         <nav className={classes.nav}>
+          <div className={classes.searchContainer}>
+            <input
+              type="text"
+              placeholder="Search wellness topics..."
+              className={classes.searchInput}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && searchQuery.trim()) {
+                  router.push(
+                    `/search?q=${encodeURIComponent(searchQuery.trim())}`
+                  );
+                }
+              }}
+            />
+            <button
+              className={classes.searchButton}
+              onClick={() => {
+                if (searchQuery.trim()) {
+                  router.push(
+                    `/search?q=${encodeURIComponent(searchQuery.trim())}`
+                  );
+                }
+              }}
+            >
+              🔍
+            </button>
+          </div>
           <ul>
             {["Fitness", "Mindfulness", "Nourish"].map((label) => (
               <li
@@ -167,27 +196,36 @@ export default function Header({ weather }) {
             <li>
               <NavLink href="/contact">Contact</NavLink>
             </li>
-            <li className={classes.weatherWidget}>
-              <NavLink href="/weather">
+            <li
+              className={classes.weatherDropdownParent}
+              onMouseEnter={() => setActiveDropdown("Weather")}
+              onMouseLeave={() => setActiveDropdown(null)}
+            >
+              <span className={classes.weatherButton}>
                 {weather ? (
                   <div className={classes.weatherInfo}>
                     <img
                       src={weather.current.condition.icon}
                       alt="Weather icon"
-                      style={{ width: 22, height: 22 }}
+                      className={classes.weatherIcon}
                     />
-                    <div>
-                      <span style={{ fontSize: "0.85rem" }}>
-                        {weather.current.temp_c}°C
-                      </span>
-                      <br />
-                      <span style={{ fontSize: "0.7rem" }}>{nyTime} NY</span>
+                    <div className={classes.weatherText}>
+                      <span>{weather.current.temp_c}°C</span>
+                      <span>{nyTime} NY</span>
                     </div>
                   </div>
                 ) : (
                   <span className={classes.loading}>Loading...</span>
                 )}
-              </NavLink>
+              </span>
+
+              <div
+                className={`${classes.weatherMegaDropdown} ${
+                  activeDropdown === "Weather" ? classes.show : ""
+                }`}
+              >
+                <Weather />
+              </div>
             </li>
 
             {!user && status !== "loading" ? (
@@ -263,6 +301,7 @@ export default function Header({ weather }) {
             )}
           </ul>
         </nav>
+
         <Signup
           isOpen={showSignup}
           onClose={closeSignup}
