@@ -1,0 +1,19 @@
+.container {
+  padding: 2rem;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.resultItem {
+  margin-bottom: 1rem;
+}
+
+.title {
+  margin: 0.25rem 0;
+}
+
+.emphasized {
+  font-style: italic;
+}
