@@ -6,6 +6,7 @@ import Link from "next/link";
 import Subscribe from "../components/Subscribe/subscribe";
 import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
 import DailyList from "../components/DailyList/DailyList";
+import DailyTip from "../components/DailyTip/DailyTip";
 import ResetPassword from "../components/Auth/ResetPassword";
 import ResendVerificationModal from "../components/Auth/ResendVerificationModal";
 import classes from "./index.module.css";
@@ -138,6 +139,7 @@ export default function Home() {
         />
       )}
       <main className={classes.container}>
+        <DailyTip />
         <DailyList />
         <KeyFeatures />
         <Subscribe />
@@ -162,7 +164,12 @@ export default function Home() {
                   />
                   <h3>{item.title}</h3>
                   <p>{item.summary}</p>
-                  <Link href={`/news/${item.slug}`} className={classes.readMore}>Read More →</Link>
+                  <Link
+                    href={`/news/${item.slug}`}
+                    className={classes.readMore}
+                  >
+                    Read More →
+                  </Link>
                 </div>
               ))}
             </div>

@@ -1,0 +1,39 @@
+.tipContainer {
+  background-color: #d1fae5; /* Light green */
+  color: #065f46; /* Dark green */
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.tipContainer p {
+    color: #065f46;
+    font-weight: 500;
+  }
+
+.heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.loading {
+  font-style: italic;
+  color: #6b7280;
+}
+
+/* Small screen adjustments */
+@media (max-width: 480px) {
+  .tipContainer {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .heading {
+    font-size: 0.95rem;
+  }
+}

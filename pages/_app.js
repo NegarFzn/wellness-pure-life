@@ -7,10 +7,26 @@ import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "../context/ThemeContext";
 import ChatBox from "../components/ChatBox/ChatBox";
 import CookieConsent from "../components/CookieConsent/CookieConsent";
+import Script from "next/script";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      window.gtag("config", "G-BW68Y2E49W", {
+        page_path: url,
+      });
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router]);
   return (
     <SessionProvider session={session}>
       <UIProvider>
@@ -28,6 +44,24 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
                 width="device-width"
               />
             </Head>
+            <Script
+              async
+              strategy="afterInteractive"
+              src="https://www.googletagmanager.com/gtag/js?id=G-BW68Y2E49W"
+            />
+            <Script
+              id="google-analytics"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-BW68Y2E49W');
+    `,
+              }}
+            />
+
             <ToastContainer position="top-center" autoClose={3000} />
             <Toaster position="top-right" reverseOrder={false} />
             <ChatBox />
