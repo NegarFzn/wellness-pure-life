@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import classes from "./TipCard.module.css";
 
-export default function TipCard({ isPremium }) {
+export default function TipCard() {
+  const { data: session, status } = useSession();
   const [tip, setTip] = useState("");
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(true);
+
+  const isPremium = session?.user?.isPremium;
 
   useEffect(() => {
     if (!isPremium) return;
 
     const fetchTip = async () => {
       try {
-        const res = await fetch("/api/ai/daily-tip");
+        const res = await fetch("/api/mongo/daily-tip"); // or /ai/daily-tip
         const data = await res.json();
         setTip(data.tip);
       } catch {
@@ -24,6 +28,8 @@ export default function TipCard({ isPremium }) {
 
     fetchTip();
   }, [isPremium]);
+
+  if (status === "loading") return null;
 
   return (
     <div className={classes.tipContainer}>
