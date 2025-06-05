@@ -1,0 +1,145 @@
+.tipContainer {
+  background: linear-gradient(
+    135deg,
+    #f3e8ff,
+    #e0f7fa
+  ); /* lavender to aqua blend */
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e6e6f0;
+  box-shadow: 0 6px 18px rgba(140, 110, 255, 0.06);
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 0.75rem;
+}
+
+.heading {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #5e35b1;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.locked {
+  font-size: 1rem;
+  color: #5e35b1;
+  font-weight: 500;
+  background-color: rgba(243, 232, 255, 0.3);
+  padding: 0.75rem 1rem;
+  border-left: 4px solid #ce93d8;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.locked strong {
+  font-weight: 700;
+  color: #4a148c;
+}
+
+.socialProof {
+  font-size: 0.9rem;
+  color: #6c63ff;
+  margin: 0.4rem 0 0.8rem 0;
+  font-style: italic;
+}
+
+.upgradeButton {
+  display: inline-block;
+  background: linear-gradient(135deg, #9575cd, #7c4dff);
+  color: white;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(124, 77, 255, 0.25);
+}
+
+.upgradeButton:hover {
+  background: linear-gradient(135deg, #7e57c2, #651fff);
+  box-shadow: 0 6px 16px rgba(103, 58, 183, 0.3);
+  transform: translateY(-1px);
+}
+
+
+.subheading {
+  font-size: 0.9rem;
+  color: #7b68ee;
+  margin: 0.25rem 0 0 0;
+  font-weight: 400;
+}
+
+.toggleIcon {
+  margin-left: 0.6rem;
+  font-size: 1.2rem;
+  color: #7c4dff;
+  transition: transform 0.3s ease;
+}
+
+.toggleIcon.open {
+  transform: rotate(180deg);
+}
+
+.tipContainer p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  margin-top: 0.5rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.loading {
+  font-style: italic;
+  color: #888;
+}
+
+.upgradeLink {
+  display: inline-block;
+  margin-top: 0.8rem;
+  font-weight: 600;
+  color: #4a148c; /* purple CTA */
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.upgradeLink:hover {
+  color: #6a1b9a;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .tipContainer {
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 1.2rem;
+  }
+
+  .tipContainer p {
+    font-size: 0.95rem;
+  }
+}

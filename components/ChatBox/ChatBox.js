@@ -99,13 +99,6 @@ export default function ChatBox() {
     }
   };
 
-  if (status === "loading") {
-    return (
-      <div className={classes.loaderWrapper}>
-        <p className={classes.loading}>🔄 Checking access...</p>
-      </div>
-    );
-  }
 
   return (
     <div className={classes.launcher}>

@@ -180,6 +180,11 @@
   background-color: #388e3c;
 }
 
+.mobileHeader {
+  display: none;
+}
+
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -263,5 +268,63 @@
   .verifyButton {
     padding: 0.6rem 1.2rem;
     font-size: 1rem;
+  }
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: black;
+    color: white;
+    padding: 0.75rem 1rem;
+  }
+
+  .menuIcon {
+    font-size: 1.8rem;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+
+  .mobileBrand {
+    font-family: 'Georgia', serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+  }
+
+  .mobileActions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .searchIcon {
+    font-size: 1.4rem;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+
+  .subscribeBtn {
+    padding: 0.4rem 1rem;
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 9999px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  .subscribeBtn:hover {
+    background: white;
+    color: black;
+  }
+
+  .nav, .searchContainer, .brandName {
+    display: none !important;
   }
 }

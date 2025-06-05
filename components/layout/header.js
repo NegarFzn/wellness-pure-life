@@ -115,6 +115,8 @@ export default function Header({ weather }) {
     fetchNavData();
   }, []);
 
+ 
+
   return (
     <>
       <header className={classes.header}>
@@ -151,7 +153,7 @@ export default function Header({ weather }) {
               🔍
             </button>
           </div>
-          <ul>
+          <ul className={classes.mobileNavList}>
             {["Fitness", "Mindfulness", "Nourish"].map((label) => (
               <li
                 className={classes.dropdownParent}

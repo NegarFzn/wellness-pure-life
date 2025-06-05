@@ -6,7 +6,7 @@ import Link from "next/link";
 import Subscribe from "../components/Subscribe/subscribe";
 import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
 import DailyList from "../components/DailyList/DailyList";
-import DailyTip from "../components/DailyTip/DailyTip";
+import TipCard from "../components/cards/TipCard";
 import ResetPassword from "../components/Auth/ResetPassword";
 import ResendVerificationModal from "../components/Auth/ResendVerificationModal";
 import classes from "./index.module.css";
@@ -19,7 +19,6 @@ export default function Home() {
   const [resendResult, setResendResult] = useState(null);
   const [showResetModal, setShowResetModal] = useState(false);
   const [verifyStatus, setVerifyStatus] = useState(null);
-
   const router = useRouter();
   const { verifyToken, resetToken } = router.query;
 
@@ -115,7 +114,6 @@ export default function Home() {
       </Head>
 
       {/* Verification banners */}
-
       {verifyStatus === "success" && (
         <div className={classes.verifyBanner}>
           ✅ Your email has been verified successfully!
@@ -139,7 +137,7 @@ export default function Home() {
         />
       )}
       <main className={classes.container}>
-        <DailyTip />
+        <TipCard />
         <DailyList />
         <KeyFeatures />
         <Subscribe />
