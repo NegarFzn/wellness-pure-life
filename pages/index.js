@@ -6,7 +6,6 @@ import Link from "next/link";
 import Subscribe from "../components/Subscribe/subscribe";
 import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
 import DailyList from "../components/DailyList/DailyList";
-import TipCard from "../components/cards/TipCard";
 import ResetPassword from "../components/Auth/ResetPassword";
 import ResendVerificationModal from "../components/Auth/ResendVerificationModal";
 import classes from "./index.module.css";
@@ -138,7 +137,6 @@ export default function Home() {
       )}
       <main className={classes.container}>
         <DailyList />
-        <TipCard />
         <KeyFeatures />
         <Subscribe />
         {newsArticles.length > 0 && (
