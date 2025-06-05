@@ -1,5 +1,7 @@
 // components/ads/AdSidebar.js
 import AdBlock from "./AdBlock";
+import classes from "./AdSidebar.module.css";
+
 
 export default function AdSidebar({ adSlots = [] }) {
   return (

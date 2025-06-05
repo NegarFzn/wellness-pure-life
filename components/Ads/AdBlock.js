@@ -1,5 +1,5 @@
-// components/ads/AdBlock.js
 import { useEffect } from "react";
+import classes from "./AdBlock.module.css";
 
 export default function AdBlock({ adSlot, className = "" }) {
   useEffect(() => {
@@ -12,10 +12,11 @@ export default function AdBlock({ adSlot, className = "" }) {
     }
   }, []);
 
+  const combinedClassName = `${classes.adBlock} ${className}`.trim();
+
   return (
     <ins
-      className={`adsbygoogle ${className}`}
-      style={{ display: "block" }}
+      className={`adsbygoogle ${combinedClassName}`}
       data-ad-client="ca-pub-6324625824043093"
       data-ad-slot={adSlot}
       data-ad-format="auto"

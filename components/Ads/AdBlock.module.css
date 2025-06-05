@@ -1,6 +1,32 @@
-.adTop,
-.adBottom {
-  width: 100%;
+.adBlock {
+  display: block;
   margin: 2rem auto;
   text-align: center;
+}
+
+.adTop {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.adBottom {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .adBlock {
+    margin: 1rem auto;
+    padding: 0 1rem;
+  }
+
+  .adTop {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .adBottom {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
 }
