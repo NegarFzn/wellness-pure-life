@@ -4,32 +4,58 @@ import { motion, AnimatePresence } from "framer-motion";
 import classes from "./TipCard.module.css";
 
 export default function TipCard() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
+  const user = session?.user;
+  const isPremium = user?.isPremium || false;
+
   const [tip, setTip] = useState("");
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(true);
 
-  const isPremium = session?.user?.isPremium;
+  const todayKey = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
-    if (!isPremium) return;
+    if (!session) return; // ✅ wait until session loads
+    if (!isPremium) {
+      setLoading(false); // ✅ don't stay stuck in "Loading..."
+      return;
+    }
 
     const fetchTip = async () => {
+      const cached = localStorage.getItem("dailyWellnessTip");
+      const parsed = cached ? JSON.parse(cached) : null;
+
+      if (parsed && parsed.date === todayKey) {
+        setTip(parsed.tip);
+        setLoading(false);
+        return;
+      }
+
       try {
-        const res = await fetch("/api/mongo/daily-tip"); // or /ai/daily-tip
+        const res = await fetch("/api/daily-tip");
         const data = await res.json();
-        setTip(data.tip);
-      } catch {
-        setTip(null);
+        console.log("API response:", data);
+
+        if (res.ok && data.tip) {
+          setTip(data.tip);
+          localStorage.setItem(
+            "dailyWellnessTip",
+            JSON.stringify({ date: todayKey, tip: data.tip })
+          );
+        } else {
+          console.warn("No tip from API, using cached if available.");
+          setTip(parsed?.tip || null);
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setTip(parsed?.tip || null);
       } finally {
         setLoading(false);
       }
     };
 
     fetchTip();
-  }, [isPremium]);
-
-  if (status === "loading") return null;
+  }, [session, isPremium, todayKey]); // ✅ Added session to dependency array
 
   return (
     <div className={classes.tipContainer}>

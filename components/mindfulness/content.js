@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
-import Script from "next/script";
+import AdSidebar from "../../components/Ads/AdSidebar";
+import AdBlock from "../../components/Ads/AdBlock";
+import AdSidebar from "../../components/Ads/AdSidebar";
 import classes from "./content.module.css";
 import MindfulnessList from "./mindfulness-list";
 
@@ -27,6 +29,8 @@ function formatText(text) {
   return text.replace(/\n/g, "<br />");
 }
 
+const adSlots = ["1111111111", "2222222222", "3333333333"];
+
 const Content = (props) => {
   const {
     items: { title, intro, sections, additionalSections, image },
@@ -48,16 +52,7 @@ const Content = (props) => {
 
         {/* ✅ Google AdSense Script (Ensure YOUR_ADSENSE_CLIENT_ID is replaced) */}
       </Head>
-      <div className={classes["ad-top"]}>
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-6324625824043093"
-          data-ad-slot="YOUR_AD_SLOT_TOP"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
-      </div>
+      <AdBlock adSlot="1234567890" className={`${classes.adBlock} ${classes.adTop}`} />
       <div className={classes["mindfulness-container"]}>
         <div className={classes["mindfulness-content"]}>
           <div className={classes.backButtonWrapper}>
@@ -103,16 +98,7 @@ const Content = (props) => {
               </div>
             ))}
         </div>
-        <div className={classes["ad-sidebar"]}>
-          <ins
-            className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-6324625824043093"
-            data-ad-slot="YOUR_AD_SLOT_TOP"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          ></ins>
-        </div>
+        <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} />
       </div>
       <div className={classes["related-posts-wrapper"]}>
         <h3 className={classes["related-posts-title"]}>RELATED POSTS</h3>
@@ -120,17 +106,7 @@ const Content = (props) => {
           <MindfulnessList items={additionalSections} />
         </div>
       </div>
-      <div className={classes["ad-bottom"]}>
-        {" "}
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-6324625824043093"
-          data-ad-slot="YOUR_AD_SLOT_TOP"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
-      </div>
+      <AdBlock adSlot="2345678901" className={`${classes.adBlock} ${classes.adBottom}`} />
     </>
   );
 };

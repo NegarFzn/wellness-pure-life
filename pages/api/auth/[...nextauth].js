@@ -37,6 +37,7 @@ export default NextAuth({
             id: userDoc.id,
             email: user.email,
             name: user.name || null,
+            isPremium: user.isPremium || false, 
           };
         } catch (err) {
           console.error("❌ Firebase Admin Auth error:", err.message);

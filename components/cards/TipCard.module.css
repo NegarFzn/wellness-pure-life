@@ -6,7 +6,7 @@
   ); /* lavender to aqua blend */
   border-radius: 20px;
   padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.08rem;
   border: 1px solid #e6e6f0;
   box-shadow: 0 6px 18px rgba(140, 110, 255, 0.06);
   transition: box-shadow 0.3s ease;
@@ -118,6 +118,7 @@
 .upgradeLink:hover {
   color: #6a1b9a;
 }
+
 
 @keyframes fadeIn {
   from {

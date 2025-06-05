@@ -102,11 +102,42 @@
   text-align: center;
 }
 
+.adBlock {
+  display: block;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.adTop {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.adBottom {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
 /* ✅ Mobile Fix */
 @media (max-width: 768px) {
   .mindfulness-container {
     flex-direction: column;
     padding: 1rem;
+  }
+
+  .adBlock {
+    margin: 1rem auto;
+    padding: 0 1rem;
+  }
+
+  .adTop {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .adBottom {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 
   .mindfulness-content {

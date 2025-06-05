@@ -2,7 +2,6 @@
 .newsPage {
   padding: 20px;
   font-family: Arial, sans-serif;
-  background-color: var(--bg-color, #f9f9f9);
   color: var(--text-color, #000);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -13,7 +12,7 @@
   background-color: #ffffff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   border-radius: 16px;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   color: #222;
   line-height: 1.75;
 }
@@ -31,7 +30,6 @@
   -webkit-text-fill-color: transparent;
   margin-bottom: 1.5rem;
 }
-
 
 .newsImage {
   width: 100%;
@@ -51,7 +49,7 @@
 
 .newsSummary {
   font-style: italic;
-  color: #444; 
+  color: #444;
   font-size: 1.05rem;
   margin-top: 1.25rem;
 }
@@ -61,8 +59,6 @@
   color: #888;
   margin-top: 0.5rem;
 }
-
-
 
 .newsContent h3,
 .newsContent h2 {
@@ -81,7 +77,6 @@
   font-size: 1.05rem;
 }
 
-
 .generatedLabel {
   text-align: center;
   font-style: italic;
@@ -98,7 +93,6 @@
   font-size: 1.2rem;
   color: #444;
 }
-
 
 /* Header (H1) Styles */
 .newsHeader {
@@ -121,9 +115,7 @@
   margin-top: 20px;
   line-height: 1.6;
   font-size: 1.1rem;
- 
 }
-
 
 @keyframes fadeIn {
   0% {
@@ -194,8 +186,6 @@
   text-align: center;
 }
 
-
-
 .noNews {
   text-align: center;
   padding: 20px;
@@ -229,6 +219,57 @@
   color: #666;
 }
 
+.pageWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.adBlock {
+  display: block;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.adTop {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.adBottom {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .pageWrapper {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .adSidebar {
+    width: 100%;
+    order: 2;
+  }
+
+  .newsPage {
+    order: 1;
+    width: 100%;
+  }
+
+  .adBox {
+    text-align: center;
+    padding: 0.75rem 1rem;
+  }
+
+  .newsHeader {
+    text-align: center;
+    font-size: 1.75rem;
+  }
+}
 
 @media (max-width: 768px) {
   .newsHeader {
@@ -253,8 +294,6 @@
     padding: 10px;
   }
 
- 
-
   .newsItem {
     width: 100%;
     max-width: none;
@@ -267,6 +306,21 @@
 
   .noNewsImage {
     width: 100px;
+  }
+
+  .adBlock {
+    margin: 1rem auto;
+    padding: 0 1rem;
+  }
+
+  .adTop {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .adBottom {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 }
 

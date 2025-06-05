@@ -137,8 +137,8 @@ export default function Home() {
         />
       )}
       <main className={classes.container}>
-        <TipCard />
         <DailyList />
+        <TipCard />
         <KeyFeatures />
         <Subscribe />
         {newsArticles.length > 0 && (

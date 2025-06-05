@@ -1,8 +1,20 @@
 import FAQItem from "../components/FAQItem/FAQItem";
+import AdBlock from "../components/Ads/AdBlock";
 
 const FAQPage = () => {
+  const adStyle = {
+    display: "block",
+    margin: "20px 0",
+    textAlign: "center",
+    minHeight: "100px",
+  };
+
   return (
     <div style={{ maxWidth: "800px", margin: "2rem auto", padding: "1rem" }}>
+      {/* Top Ad */}
+      <div style={adStyle}>
+        <AdBlock adSlot="1234567890" />
+      </div>
       <h2 style={{ fontSize: "2rem", fontWeight: "700", marginBottom: "2rem" }}>
         Frequently Asked Questions
       </h2>
@@ -23,6 +35,10 @@ const FAQPage = () => {
         question="Is my data safe?"
         answer="Yes, we take data privacy seriously and follow industry standards to protect your information."
       />
+      {/* Bottom Ad */}
+      <div style={adStyle}>
+        <AdBlock adSlot="2345678901" />
+      </div>
     </div>
   );
 };
