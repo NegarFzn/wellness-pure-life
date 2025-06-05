@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
-import AdSidebar from "../../components/Ads/AdSidebar";
 import AdBlock from "../../components/Ads/AdBlock";
 import AdSidebar from "../../components/Ads/AdSidebar";
 import classes from "./content.module.css";
