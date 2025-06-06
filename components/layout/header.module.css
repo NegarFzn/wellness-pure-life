@@ -580,7 +580,46 @@
   background: #2563eb;
 }
 
+/* Hamburger icon for small screens */
+.hamburger {
+  display: none;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+  z-index: 3100;
+}
 
+.authButtons {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+  margin-right: 0.75rem;
+  align-items: center;
+}
+
+.authMiniBtn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.authMiniBtn:hover {
+  background: #2563eb;
+}
+.mobileOnly {
+  display: none !important;
+}
 
 /* === hamburger menu === */
 
@@ -593,6 +632,7 @@
   }
 }
 
+
 /* === Responsive === */
 @media (max-width: 768px) {
   .header {
@@ -601,6 +641,7 @@
     align-items: center;
     padding: 0.5rem 1rem;
     height: auto;
+    position: relative;
   }
 
   .logo {
@@ -616,29 +657,137 @@
     white-space: nowrap;
   }
 
+  .hamburger {
+    display: block;
+    font-size: 1.8rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    z-index: 3100;
+  }
+
   .nav {
-    width: auto;
-    margin: 0;
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: linear-gradient(90deg, #1c192c, #3c394d);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 1rem 0;
+    z-index: 3000;
+    transition: max-height 0.3s ease;
+    overflow: hidden;
+    max-height: 0;
+  }
+
+  .showNav {
+    display: flex;
+    max-height: 1000px;
+    flex-direction: column;
+    align-items: center;
   }
 
   .nav ul {
-    flex-direction: row;
-    gap: 0.5rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 0;
+    width: 100%;
   }
 
   .nav ul li {
-    padding: 0.3rem 0.5rem;
+    padding: 0.25rem 0;
+    font-size: 1rem;
+    text-align: center;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav ul li:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+  }
+
+  .mobileOnly {
+    display: flex !important;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.75rem;
+  }
+
+  .authButtons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .authMiniBtn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .authMiniBtn:hover {
+    background: #2563eb;
   }
 
   .navBtn {
-    font-size: 0.9rem;
-    padding: 0.5rem 0.75rem;
+    width: 90%;
+    margin: 0.5rem auto;
+    display: block;
+    flex: 1;
+    max-width: 160px;
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+
+    border-radius: 8px;
   }
 
   .logoutLink {
     font-size: 0.95rem;
     padding: 0.6rem 1rem;
   }
+
+  .weatherInfo {
+    margin: 1rem 0 1.5rem;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.9rem;
+  }
+
+  .searchContainer {
+    width: 90%;
+    margin: 1rem auto 0.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .searchInput {
+    flex-grow: 1;
+    padding: 0.5rem;
+    font-size: 0.95rem;
+    border-radius: 8px 0 0 8px;
+  }
+
+  .searchButton {
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    border-radius: 0 8px 8px 0;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+  }
+
   .megaDropdown {
     flex-direction: column;
     align-items: stretch;
@@ -654,19 +803,30 @@
     width: 100%;
     margin-top: 1rem;
   }
-
 }
 
 @media (max-width: 1024px) {
   .header {
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
     padding: 0.5rem 1rem;
   }
 
   .logo {
     padding: 0;
     gap: 0.5rem;
+  }
+
+  .brandName {
+    font-size: 1.2rem;
+    white-space: nowrap;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
   }
 
   .nav ul {
@@ -688,5 +848,20 @@
   .logoutDesktop {
     display: flex;
     align-items: center;
+  }
+
+  .searchContainer {
+    width: 100%;
+    justify-content: center;
+    margin: 0.5rem 0;
+  }
+
+  .searchInput {
+    width: 70%;
+    font-size: 1rem;
+  }
+
+  .searchButton {
+    font-size: 1rem;
   }
 }

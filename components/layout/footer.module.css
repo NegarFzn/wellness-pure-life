@@ -176,6 +176,7 @@
   .footerContent {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
+    padding: 0 16px;
   }
 
   .footerSection {
@@ -189,34 +190,71 @@
 }
 
 @media (max-width: 768px) {
+  .footer {
+    padding: 30px 10px;
+  }
+
   .footerContent {
     grid-template-columns: 1fr;
-    text-align: center;
     gap: 1.5rem;
+    text-align: center;
+    padding: 0 12px;
   }
 
   .footerSection {
     width: 100%;
+    padding-bottom: 12px;
   }
 
   .footerSection h3,
   .subHeading {
     text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
   }
 
   .description {
     font-size: 0.9rem;
     margin: 0 auto;
     max-width: 90%;
+    text-align: center;
   }
 
   .linkList li {
     justify-content: center;
+    padding: 6px 0;
+  }
+
+  .link {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    display: inline-block;
+    width: 100%;
   }
 
   .footerLink {
     justify-content: center;
     text-align: center;
+    padding: 10px;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footerIcon {
+    font-size: 1.2rem;
+    margin-top: 0;
+  }
+
+  .linkText {
+    align-items: center;
+    text-align: center;
+  }
+
+  .caption {
+    font-size: 0.78rem;
+    text-align: center;
+    color: #9ca3af;
   }
 
   .footerBottom {
@@ -232,10 +270,6 @@
   .exploreBlock {
     text-align: center;
   }
-
-  .linkText {
-    align-items: center;
-  }
 }
 
 @media (max-width: 640px) {
@@ -249,12 +283,14 @@
   }
 
   .footerSection h3 {
+    font-size: 1rem;
     text-align: center;
   }
 
   .contactRow {
     text-align: center;
     margin-top: 8px;
+    justify-content: center;
   }
 }
 
@@ -268,11 +304,11 @@
   }
 
   .footerSection h3 {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .subHeading {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .caption {
@@ -280,11 +316,11 @@
   }
 
   .footerIcon {
-    font-size: 1.2rem;
-    margin-top: 6px;
+    font-size: 1.1rem;
+    margin-top: 4px;
   }
 
   .footerLink {
-    gap: 8px;
+    gap: 6px;
   }
 }

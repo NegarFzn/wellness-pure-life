@@ -104,3 +104,47 @@
 .refreshButton {
   cursor: pointer;
 }
+
+/* Responsive styles for mobile screens */
+@media (max-width: 768px) {
+  .challengeColumn {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .challengeBox {
+    max-width: 90%;
+    min-width: auto;
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .challengeHeader {
+    font-size: 1.1rem;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .challengeTitle {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .challengeText {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .challengeLink {
+    font-size: 1rem;
+    text-align: center;
+    display: block;
+  }
+
+  .refreshButton {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 1rem;
+  }
+}

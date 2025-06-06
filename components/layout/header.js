@@ -37,6 +37,7 @@ export default function Header({ weather }) {
   const [spotlightsMap, setSpotlightsMap] = useState({});
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const updateNYTime = () => {
@@ -115,8 +116,6 @@ export default function Header({ weather }) {
     fetchNavData();
   }, []);
 
- 
-
   return (
     <>
       <header className={classes.header}>
@@ -124,7 +123,30 @@ export default function Header({ weather }) {
           <Image src={logoImg} alt="Wellness Pure Life" priority />
           <span className={classes.brandName}>Wellness Pure Life</span>
         </Link>
-        <nav className={classes.nav}>
+        {!user && status !== "loading" && (
+          <div className={classes.mobileOnly}>
+            <div className={classes.authButtons}>
+              <button onClick={openSignup} className={classes.authMiniBtn}>
+                Sign Up
+              </button>
+              <button onClick={openLogin} className={classes.authMiniBtn}>
+                Login
+              </button>
+            </div>
+          </div>
+        )}
+
+        <button
+          className={classes.hamburger}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          ☰
+        </button>
+
+        <nav
+          className={`${classes.nav} ${mobileMenuOpen ? classes.showNav : ""}`}
+        >
           <div className={classes.searchContainer}>
             <input
               type="text"
