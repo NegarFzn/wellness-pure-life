@@ -66,22 +66,25 @@ export default function Subscribe() {
 
   return (
     <section className={classes.newsletter}>
-      <h2>Stay Inspired, Stay Healthy</h2>
-      {!subscribed && (
-        <p>Get weekly wellness tips and updates — straight to your inbox!</p>
-      )}
-      {subscribed && (
-        <p>
-          {message.includes("already")
-            ? "✅ You're already on our list!💚"
-            : "✅ Thank you for subscribing!"}
-        </p>
-      )}
+      <div className={classes.textBlock}>
+        <h2>Stay Inspired, Stay Healthy</h2>
+        {!subscribed && (
+          <p>Get weekly wellness tips and updates — straight to your inbox!</p>
+        )}
+        {subscribed && (
+          <p>
+            {message.includes("already")
+              ? "✅ You're already on our list!💚"
+              : "✅ Thank you for subscribing!"}
+          </p>
+        )}
+      </div>
 
       {!showForm && !subscribed && (
         <button
           onClick={handleInitialClick}
           className={classes.subscribeButton}
+          aria-label="Subscribe to weekly wellness tips"
         >
           Subscribe
         </button>

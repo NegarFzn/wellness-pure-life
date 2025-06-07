@@ -1,25 +1,67 @@
 /* components/DailyList/DailyList.module.css */
 .dailyContainer {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  align-items: stretch; /* Ensures equal height alignment */
-  gap: 2rem;
-  margin-top: 2rem;
+  flex-direction: row; /* 👈 horizontal */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  gap: 1.5rem;
+  padding: 0 1rem 2rem;
 }
 
+.dailyContainer::after {
+  content: "";
+  flex: 0 0 1rem;
+}
+
+
+
 .cardWrapper {
-  flex: 1 1 45%;
-  max-width: 700px;
+  position: relative;
+  z-index: 0;
+  flex: 0 0 500px;
+  width: 500px;
+  max-width: 90vw;
+  scroll-snap-align: center;
   min-height: 320px;
   display: flex;
   flex-direction: column;
   justify-content: stretch;
   align-items: center;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.85);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
+  backdrop-filter: blur(8px);
 }
 
 .cardWrapper:hover {
-  transform: scale(1.02);
+  transform: scale(1.033) translateY(-4px);
+  filter: brightness(1.045) saturate(1.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06),
+    0 0 0 2px rgba(99, 102, 241, 0.07), 0 0 18px rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  transition: all 0.3s ease;
+}
+
+.cardWrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at center,
+    rgba(99, 102, 241, 0.07),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: -1; /* 🧠 stays behind the card */
+}
+
+.cardWrapper:hover::before {
+  opacity: 1;
 }
 
 .cardWrapper div {
@@ -37,11 +79,84 @@
   object-fit: cover;
   border-radius: 16px;
   margin-bottom: 1rem;
+  object-fit: cover;
 }
+
+.cardWrapper h3 {
+  font-size: 1.2rem;
+  line-height: 1.4;
+  word-break: break-word;
+  text-align: center;
+}
+
+
+.arrows {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.arrowBtn {
+  width: 34px;
+  height: 34px;
+  font-size: 1rem;
+  border-radius: 50%;
+  border: none;
+  background: #f9fafb;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+}
+
+.arrowBtn:hover {
+  background-color: #e5e7eb;
+  transform: scale(1.05);
+}
+
+.progressDots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: -0.5rem;
+  margin-bottom: 2rem;
+  z-index: 10;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #d1d5db;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.dot.active {
+  background-color: #6366f1;
+  transform: scale(1.25);
+}
+
+.carouselWrapper,
+.cardWrapper,
+.carouselCard {
+  overflow: visible; /* Ensure it doesn't clip below */
+  z-index: 1;
+  position: relative;
+}
+
+.cardWrapper .textContent {
+  padding: 0 1rem;
+}
+
 
 @media (max-width: 768px) {
   .dailyContainer {
-    flex-direction: column;
     align-items: center;
     gap: 1.5rem;
     margin-top: 1.5rem;
@@ -62,5 +177,129 @@
 
   .cardWrapper div {
     -webkit-line-clamp: 4; /* Slightly more text room on small screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .dailyContainer {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    gap: 1.25rem;
+    padding: 1rem 1rem 2rem;
+  }
+
+  .dailyContainer::after {
+    content: "";
+    flex: 0 0 1rem;
+  }
+
+  .cardWrapper {
+    flex: 0 0 85vw;
+    width: 85vw;
+  }
+
+  .cardWrapper img {
+    height: 180px;
+  }
+
+  .cardWrapper div {
+    -webkit-line-clamp: 4;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .cardWrapper {
+    flex: 0 0 500px;
+    width: 500px;
+  }
+  .dots {
+    display: flex !important;
+    justify-content: center;
+    margin-top: 1rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .progressDots {
+    display: flex !important;
+    justify-content: center;
+    margin-top: 1rem;
+    z-index: 10;
+    position: relative;
+  }
+}
+
+
+@media (min-width: 1024px) and (max-width: 1200px) {
+  .dailyContainer {
+    justify-content: center;
+    padding: 1rem 2rem 2rem;
+    gap: 1.5rem;
+  }
+
+  .cardWrapper {
+    flex: 0 0 calc((100% - 3rem) / 3); /* 3 cards + 2 gaps (1.5rem each) */
+    max-width: 100%;
+    scroll-snap-align: center;
+  }
+
+  .cardWrapper img {
+    height: 200px;
+  }
+
+  .progressDots {
+    display: flex;
+    justify-content: center;
+    margin: 1rem auto 1.5rem;
+    z-index: 5;
+    position: relative;
+  }
+
+  .arrowBtn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* 769px – 900px: 2 cards visible */
+@media (min-width: 769px) and (max-width: 900px) {
+  .dailyContainer {
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem 2rem;
+  }
+
+  .cardWrapper {
+    flex: 0 0 calc((100% - 1.5rem) / 2);
+    width: calc((100% - 1.5rem) / 2);
+  }
+}
+
+/* 901px – 1023px: 2.5 cards with peek */
+@media (min-width: 901px) and (max-width: 1023px) {
+  .dailyContainer {
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 0 1.25rem 2rem;
+  }
+
+  .cardWrapper {
+    flex: 0 0 44vw;
+    max-width: 44vw;
+    scroll-snap-align: center;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 768px) {
+  .cardWrapper {
+    flex: 0 0 85vw;
+    max-width: 85vw;
+    scroll-snap-align: center;
   }
 }

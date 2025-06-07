@@ -1,109 +1,286 @@
+/* ----------------------
+   Base Styles
+-----------------------*/
 .featuresSection {
-  background-color: #fdfdfd;
-  padding: 60px 20px;
+  padding: 100px 20px;
   text-align: center;
+  font-family: "Inter", "Helvetica Neue", sans-serif;
 }
 
 .heading {
-  font-size: 42px;
-  font-weight: 1000;
-  margin-bottom: 40px;
-  font-family: Raleway, sans-serif;
-  line-height: 48px;
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 3.5rem;
+  line-height: 1.2;
+  color: #1f2937;
+  letter-spacing: -0.5px;
 }
 
 .featureGrid {
-  display: grid;
-  gap: 30px;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  max-width: 1000px;
-  margin: 0 auto;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem 2rem;
 }
 
+/* ----------------------
+   Feature Card Styles
+-----------------------*/
 .featureCard {
-  background: white;
-  padding: 40px; /* ⬆ increased from 30px */
-  border-radius: 16px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease-in-out;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 2rem;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
   text-decoration: none;
-  color: black;
+  color: inherit;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%; /* Full width of container */
-  max-width: 600px; /* ⬆ Increase from default (likely 300px or less) */
-  height: 450px;
-}
-
-.featureCard img {
-  border-radius: 8px;
-}
-
-.featureCard h3 {
-  font-size: 1.3rem; /* ⬆ increased for emphasis */
-  margin-top: 10px;
-  margin-bottom: 1px;
-}
-
-.featureCard p {
-  max-width: 300px; /* Adjust width to suit your design */
-  margin: 1rem auto; /* Centers horizontally */
-  font-size: 1rem;
-  line-height: 1.6;
-  text-align: center;
-  color: #2c2c2c;
+  position: relative;
+  opacity: 0;
+  transform: none;
+  animation: fadeInUp 0.8s ease-out forwards;
+  will-change: transform, filter, box-shadow;
 }
 
 .featureCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  transform: scale(1.033) translateY(-4px);
+  filter: brightness(1.045) saturate(1.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06),
+    0 0 0 2px rgba(99, 102, 241, 0.07), 0 0 18px rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  transition: all 0.4s ease;
 }
 
-.icon {
-  width: 240px;
-  height: 200px;
+.featureCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at center,
+    rgba(99, 102, 241, 0.07),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.featureCard:hover::before {
+  opacity: 1;
+}
+
+.icon,
+.featureCard img {
+  width: 100%;
+  height: 220px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+}
+
+.featureCard h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: 1.2rem;
+  margin-bottom: 0.6rem;
+  text-align: center;
+  color: #0f172a;
+}
+
+.featureCard p {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #475569;
+  text-align: center;
+  margin: 0.75rem auto 0;
+  max-width: 95%;
+}
+
+.featureCard:hover p::first-letter {
+  display: inline-block;
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+}
+
+/* ----------------------
+   Navigation Dots + Arrows
+-----------------------*/
+.progressDots {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  z-index: 10;
+  position: relative;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #d1d5db;
+  transition: background-color 0.3s ease, transform 0.3s ease;
   flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
+.dot.active {
+  background-color: #6366f1;
+  transform: scale(1.25);
+}
+
+.arrows {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.arrowBtn {
+  width: 34px;
+  height: 34px;
+  font-size: 1rem;
+  border-radius: 50%;
+  background: #f9fafb;
+  color: #111827;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.arrowBtn:hover {
+  background-color: #e5e7eb;
+  transform: scale(1.05);
+}
+
+/* ----------------------
+   Animations
+-----------------------*/
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----------------------
+   Responsive Layouts
+-----------------------*/
+@media (max-width: 480px) {
   .featuresSection {
     padding: 2rem 1rem;
   }
 
   .heading {
-    font-size: 1.8rem;
-    line-height: 2.2rem;
+    font-size: 2rem;
     margin-bottom: 2rem;
   }
 
   .featureGrid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1rem;
+    padding: 0 1rem 2rem;
   }
 
   .featureCard {
+    min-width: 75%;
+    max-width: 82vw;
+    width: 82vw;
     padding: 1.5rem;
-    max-width: 100%;
-    height: auto;
-  }
-
-  .featureCard img {
-    width: 100%;
-    height: auto;
   }
 
   .featureCard h3 {
-    font-size: 1.2rem;
-    margin-top: 0.75rem;
+    font-size: 1.25rem;
   }
 
   .featureCard p {
-    font-size: 1rem;
-    margin: 1rem auto 0;
-    line-height: 1.5;
-    max-width: 100%;
+    font-size: 0.95rem;
+    max-width: 90%;
+  }
+
+  .icon,
+  .featureCard img {
+    height: 180px;
+  }
+
+  .progressDots,
+  .arrows {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .featureCard {
+    width: 82vw;
+  }
+
+  .progressDots,
+  .arrows {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .featureCard {
+    flex: 0 0 44vw;
+    max-width: 44vw;
+  }
+
+  .progressDots,
+  .arrows {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .featureGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .featureCard {
+    flex: none;
+    width: auto;
+  }
+
+  .progressDots,
+  .arrows {
+    display: none !important;
+  }
+}
+
+@media (hover: none) {
+  .featureCard:hover {
+    transform: none;
+    box-shadow: none;
+    filter: none;
+  }
+
+  .featureCard::before {
+    display: none;
   }
 }

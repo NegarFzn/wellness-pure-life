@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { fetchNews } from "../utils/fetch";
 import Head from "next/head";
@@ -11,6 +11,7 @@ import ResendVerificationModal from "../components/Auth/ResendVerificationModal"
 import classes from "./index.module.css";
 
 export default function Home() {
+  const containerRef = useRef();
   const [newsArticles, setNewsArticles] = useState([]);
   const [showButton, setShowButton] = useState(false);
   const [verifying, setVerifying] = useState(false);
@@ -18,13 +19,15 @@ export default function Home() {
   const [resendResult, setResendResult] = useState(null);
   const [showResetModal, setShowResetModal] = useState(false);
   const [verifyStatus, setVerifyStatus] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
   const { verifyToken, resetToken } = router.query;
+  const newsGridRef = useRef(null);
 
   useEffect(() => {
     const getNews = async () => {
       const news = await fetchNews();
-      setNewsArticles(news.slice(0, 2));
+      setNewsArticles(news.slice(0, 3));
     };
     getNews();
   }, []);
@@ -72,6 +75,29 @@ export default function Home() {
     }
   }, [resetToken]);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    const cards = container?.querySelectorAll(`.${classes.newsCard}`);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = [...cards].indexOf(entry.target);
+            setActiveIndex(index);
+          }
+        });
+      },
+      { root: container, threshold: 0.6 }
+    );
+
+    cards?.forEach((card) => observer.observe(card));
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [newsArticles]);
+
   const handleResend = async (e) => {
     e.preventDefault();
     console.log("📨 Resend clicked with email:", resendEmail);
@@ -98,6 +124,17 @@ export default function Home() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const scrollNews = (direction) => {
+    const container = newsGridRef.current;
+    if (!container) return;
+    const scrollAmount = container.offsetWidth * 0.9;
+
+    container.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -141,7 +178,7 @@ export default function Home() {
         <Subscribe />
         {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
-            <div className={classes.newsGrid}>
+            <div className={classes.newsGrid} ref={newsGridRef}>
               {newsArticles.map((item) => (
                 <div key={item.slug} className={classes.newsCard}>
                   <img
@@ -168,6 +205,32 @@ export default function Home() {
                   </Link>
                 </div>
               ))}
+            </div>
+
+            <div className={classes.progressDots}>
+              {newsArticles.map((_, i) => (
+                <span
+                  key={i}
+                  className={`${classes.dot} ${
+                    i === activeIndex ? classes.active : ""
+                  }`}
+                ></span>
+              ))}
+            </div>
+
+            <div className={classes.arrows}>
+              <button
+                onClick={() => scrollNews("left")}
+                className={classes.arrowBtn}
+              >
+                ◀
+              </button>
+              <button
+                onClick={() => scrollNews("right")}
+                className={classes.arrowBtn}
+              >
+                ▶
+              </button>
             </div>
           </section>
         )}

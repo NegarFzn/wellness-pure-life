@@ -12,6 +12,18 @@
   flex-wrap: wrap;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   color: white;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .newsletter h2 {
@@ -80,8 +92,9 @@
 }
 
 .subscribeButton:hover {
-  transform: translateY(-2px);
-  background-color: #f1f1f1;
+  background-color: #f9f9f9;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .subscribedContainer {
@@ -97,6 +110,15 @@
   transform: scale(1.02);
 }
 
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -109,42 +131,180 @@
 }
 
 /* Mobile Optimization */
-@media (max-width: 768px) {
+/* Extra Mobile: max 480px */
+/* Base mobile-first (already exists) – max-width: 480px */
+@media (max-width: 480px) {
   .newsletter {
     flex-direction: column;
-    align-items: center;
-    padding: 1.5rem 1rem;
-    text-align: center;
-    border-radius: 40px;
-    gap: 1rem;
+    padding: 1.25rem 1rem;
+    gap: 1.25rem;
+    border-radius: 36px;
   }
 
   .newsletter h2 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     text-align: center;
   }
 
   .newsletterForm {
     flex-direction: column;
     gap: 0.75rem;
+    padding: 0;
     width: 100%;
-    padding: 0 0.5rem;
-  }
-
-  .newsletterForm input {
-    width: 100%;
-    font-size: 1rem;
   }
 
   .subscribeButton {
     width: 100%;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     padding: 12px 0;
+    border-radius: 999px;
   }
 
   .subscribeButton.subscribed {
     margin: 1.5rem auto;
     width: 90%;
+    font-size: 1.1rem;
+    padding: 12px 0;
+  }
+}
+
+/* 481px–699px */
+@media (min-width: 481px) and (max-width: 699px) {
+  .newsletter h2 {
+    font-size: 1.5rem;
+  }
+
+  .newsletterForm {
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 0 0.5rem;
+  }
+
+  .subscribeButton {
+    width: 100%;
     font-size: 1.2rem;
+    padding: 13px 0;
+  }
+
+  .subscribeButton.subscribed {
+    width: 92%;
+    font-size: 1.2rem;
+  }
+}
+
+/* 700px–768px */
+@media (min-width: 700px) and (max-width: 768px) {
+  .newsletter {
+    padding: 2rem 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .newsletter h2 {
+    font-size: 1.65rem;
+  }
+
+  .subscribeButton {
+    font-size: 1.3rem;
+    padding: 14px 0;
+    width: 100%;
+  }
+
+  .subscribeButton.subscribed {
+    width: 94%;
+    font-size: 1.3rem;
+  }
+}
+
+/* 769px–900px */
+@media (min-width: 769px) and (max-width: 900px) {
+  .newsletter h2 {
+    font-size: 1.75rem;
+  }
+
+  .subscribeButton {
+    font-size: 1.4rem;
+    padding: 14px 24px;
+  }
+
+  .subscribeButton.subscribed {
+    font-size: 1.4rem;
+    padding: 14px 24px;
+    margin: 1.5rem auto;
+    width: auto;
+  }
+}
+
+/* 901px–1023px */
+@media (min-width: 901px) and (max-width: 1023px) {
+  .subscribeButton {
+    font-size: 1.5rem;
+    padding: 14px 26px;
+  }
+
+  .subscribeButton.subscribed {
+    font-size: 1.5rem;
+    padding: 14px 26px;
+  }
+}
+
+/* 1024px–1200px */
+@media (min-width: 1024px) and (max-width: 1200px) {
+  .newsletter {
+    padding: 2.5rem 3rem;
+    gap: 2rem;
+  }
+
+  .subscribeButton {
+    font-size: 1.5rem;
+    padding: 14px 28px;
+  }
+
+  .subscribeButton.subscribed {
+    font-size: 1.5rem;
+    padding: 14px 28px;
+    margin: 1.5rem auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .newsletter {
+    padding: 1rem 1rem 1rem;
+  }
+}
+
+@media (min-width: 700px) {
+  .newsletter h2 {
+    font-size: 2.2rem;
+  }
+
+  .newsletter p {
+    font-size: 1.2rem;
+  }
+}
+
+
+@media (min-width: 1024px) {
+  .newsletter {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    padding: 2.5rem 3rem;
+  }
+
+  .newsletter h2 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .newsletter p {
+    font-size: 1.2rem;
+    max-width: 480px;
+    margin: 0;
+  }
+
+  .newsletterForm,
+  .subscribeButton {
+    margin-top: 0;
   }
 }

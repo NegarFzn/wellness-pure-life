@@ -67,25 +67,30 @@
 @media (max-width: 768px) {
   .latestArticles {
     padding: 1.5rem 1rem;
+    margin: 30px auto;
   }
 
   .articlesGrid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1.25rem;
+  }
+
+  .articleCard img {
+    width: 100%;
+    max-width: 320px;  /* ✅ Prevent overly large images */
+    height: auto;
+    margin: 0 auto;
+    display: block;
   }
 
   .articleCard {
     padding: 1rem;
     text-align: center;
-  }
-
-  .articleCard img {
-    width: 100%;
-    height: auto;
+    align-items: center;
   }
 
   .articleCard h3 {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     margin: 0.75rem 0;
   }
 
@@ -96,5 +101,6 @@
 
   .articleCard a {
     font-size: 0.95rem;
+    margin-top: 8px;
   }
 }
