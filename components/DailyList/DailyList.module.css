@@ -8,14 +8,18 @@
   -webkit-overflow-scrolling: touch;
   gap: 1.5rem;
   padding: 0 1rem 2rem;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.dailyContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .dailyContainer::after {
   content: "";
   flex: 0 0 1rem;
 }
-
-
 
 .cardWrapper {
   position: relative;
@@ -89,7 +93,6 @@
   text-align: center;
 }
 
-
 .arrows {
   display: flex;
   justify-content: center;
@@ -154,6 +157,30 @@
   padding: 0 1rem;
 }
 
+.fadeEdges {
+  position: relative;
+}
+
+.fadeEdges::before,
+.fadeEdges::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.fadeEdges::before {
+  left: 0;
+  background: linear-gradient(to right, white 0%, transparent 100%);
+}
+
+.fadeEdges::after {
+  right: 0;
+  background: linear-gradient(to left, white 0%, transparent 100%);
+}
 
 @media (max-width: 768px) {
   .dailyContainer {
@@ -233,18 +260,11 @@
   }
 }
 
-
 @media (min-width: 1024px) and (max-width: 1200px) {
   .dailyContainer {
     justify-content: center;
     padding: 1rem 2rem 2rem;
     gap: 1.5rem;
-  }
-
-  .cardWrapper {
-    flex: 0 0 calc((100% - 3rem) / 3); /* 3 cards + 2 gaps (1.5rem each) */
-    max-width: 100%;
-    scroll-snap-align: center;
   }
 
   .cardWrapper img {

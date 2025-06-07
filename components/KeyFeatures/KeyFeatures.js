@@ -48,33 +48,8 @@ export default function KeyFeatures() {
 
     cards.forEach((card) => observer.observe(card));
 
-    let index = 0;
-    let autoplayStopped = false;
-
-    const scrollToCard = (i) => {
-      cards[i % cards.length]?.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-      });
-    };
-
-    const autoplay = setInterval(() => {
-      if (!autoplayStopped) {
-        index++;
-        scrollToCard(index);
-      }
-    }, 5000);
-
-    const stopAutoplay = () => {
-      autoplayStopped = true;
-    };
-
-    container.addEventListener("scroll", stopAutoplay, { once: true });
-
     return () => {
       observer.disconnect();
-      clearInterval(autoplay);
-      container.removeEventListener("scroll", stopAutoplay);
     };
   }, []);
 
@@ -132,10 +107,16 @@ export default function KeyFeatures() {
       </div>
 
       <div className={classes.arrows}>
-        <button onClick={() => scrollCards("left")} className={classes.arrowBtn}>
+        <button
+          onClick={() => scrollCards("left")}
+          className={classes.arrowBtn}
+        >
           ◀
         </button>
-        <button onClick={() => scrollCards("right")} className={classes.arrowBtn}>
+        <button
+          onClick={() => scrollCards("right")}
+          className={classes.arrowBtn}
+        >
           ▶
         </button>
       </div>

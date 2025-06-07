@@ -11,18 +11,17 @@ import ResendVerificationModal from "../components/Auth/ResendVerificationModal"
 import classes from "./index.module.css";
 
 export default function Home() {
-  const containerRef = useRef();
+  const newsGridRef = useRef(null);
   const [newsArticles, setNewsArticles] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [showButton, setShowButton] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [resendEmail, setResendEmail] = useState("");
   const [resendResult, setResendResult] = useState(null);
   const [showResetModal, setShowResetModal] = useState(false);
   const [verifyStatus, setVerifyStatus] = useState(null);
-  const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
   const { verifyToken, resetToken } = router.query;
-  const newsGridRef = useRef(null);
 
   useEffect(() => {
     const getNews = async () => {
@@ -76,8 +75,12 @@ export default function Home() {
   }, [resetToken]);
 
   useEffect(() => {
-    const container = containerRef.current;
+    const container = newsGridRef.current;
     const cards = container?.querySelectorAll(`.${classes.newsCard}`);
+
+    // ✅ Only observe in horizontal scroll layout
+    const isHorizontalScroll = window.innerWidth < 1024;
+    if (!container || !cards.length || !isHorizontalScroll) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -88,15 +91,32 @@ export default function Home() {
           }
         });
       },
-      { root: container, threshold: 0.6 }
+      {
+        root: container,
+        threshold: 0.6,
+      }
     );
 
-    cards?.forEach((card) => observer.observe(card));
+    cards.forEach((card) => observer.observe(card));
 
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [newsArticles]);
+
+  const scrollNews = (direction) => {
+    const container = newsGridRef.current;
+    if (!container) return;
+
+    const isHorizontalScroll = window.innerWidth < 1024;
+    if (!isHorizontalScroll) return;
+
+    const card = container.querySelector(`.${classes.newsCard}`);
+    const scrollAmount = card?.offsetWidth + 16 || 300;
+
+    container.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
 
   const handleResend = async (e) => {
     e.preventDefault();
@@ -124,17 +144,6 @@ export default function Home() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const scrollNews = (direction) => {
-    const container = newsGridRef.current;
-    if (!container) return;
-    const scrollAmount = container.offsetWidth * 0.9;
-
-    container.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
-    });
   };
 
   return (
@@ -181,20 +190,7 @@ export default function Home() {
             <div className={classes.newsGrid} ref={newsGridRef}>
               {newsArticles.map((item) => (
                 <div key={item.slug} className={classes.newsCard}>
-                  <img
-                    src={
-                      item.image && item.image.trim()
-                        ? item.image
-                        : "/images/defaultNews.jpg"
-                    }
-                    alt={item.title || "News image"}
-                    className={classes.image}
-                    loading="lazy"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "/images/defaultNews.jpg";
-                    }}
-                  />
+                  <img src={item.image || "/images/defaultNews.jpg"} />
                   <h3>{item.title}</h3>
                   <p>{item.summary}</p>
                   <Link
@@ -207,6 +203,7 @@ export default function Home() {
               ))}
             </div>
 
+            {/* Dots */}
             <div className={classes.progressDots}>
               {newsArticles.map((_, i) => (
                 <span
@@ -218,6 +215,7 @@ export default function Home() {
               ))}
             </div>
 
+            {/* Arrows */}
             <div className={classes.arrows}>
               <button
                 onClick={() => scrollNews("left")}

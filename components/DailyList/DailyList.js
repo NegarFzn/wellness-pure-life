@@ -19,8 +19,6 @@ const allItems = [
     .map((item) => ({ ...item, type: "nourish" })),
 ];
 
-
-
 function shuffle(array) {
   const copy = [...array];
   for (let i = copy.length - 1; i > 0; i--) {
@@ -33,69 +31,50 @@ function shuffle(array) {
 export default function DailyList() {
   const [todayItems, setTodayItems] = useState([]);
   const containerRef = useRef(null);
-  const dotRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);
-
 
   useEffect(() => {
     const shuffled = shuffle(allItems);
-    setTodayItems(shuffled.slice(0, 100));
+    setTodayItems(shuffled.slice(0, 50));
   }, []);
 
   useEffect(() => {
     const container = containerRef.current;
     const cards = container?.querySelectorAll(`.${classes.cardWrapper}`);
-    const dots = dotRefs.current;
-
     if (!container || !cards.length) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          const index = [...cards].indexOf(entry.target);
-          if (entry.isIntersecting && dots[index]) {
-            setActiveIndex(index); // ✅ TRACK
-            dots.forEach((dot, i) => {
-              dot.classList.toggle(classes.active, i === index);
-            });
+        let maxVisibleEntry = null;
+        for (const entry of entries) {
+          if (
+            entry.isIntersecting &&
+            (!maxVisibleEntry ||
+              entry.intersectionRatio > maxVisibleEntry.intersectionRatio)
+          ) {
+            maxVisibleEntry = entry;
           }
-        });
+        }
+
+        if (maxVisibleEntry) {
+          const index = [...cards].indexOf(maxVisibleEntry.target);
+          setActiveIndex(index);
+        }
       },
       { root: container, threshold: 0.6 }
     );
 
     cards.forEach((card) => observer.observe(card));
 
-    // ✅ Autoplay Logic
-    let index = 0;
-    let autoplayStopped = false;
-
-    const scrollToCard = (i) => {
-      cards[i % cards.length]?.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-      });
-    };
-
-    const autoplay = setInterval(() => {
-      if (!autoplayStopped) {
-        index++;
-        scrollToCard(index);
-      }
-    }, 5000); // every 5s
-
-    const stopAutoplay = () => {
-      autoplayStopped = true;
-    };
-
-    container.addEventListener("scroll", stopAutoplay, { once: true });
-
-    return () => {
-      observer.disconnect();
-      clearInterval(autoplay);
-      container.removeEventListener("scroll", stopAutoplay);
-    };
+    return () => observer.disconnect();
   }, [todayItems]);
+
+  useEffect(() => {
+    const dots = document.querySelectorAll(`.${classes.dot}`);
+    dots.forEach((dot, i) =>
+      dot.classList.toggle(classes.active, i === activeIndex)
+    );
+  }, [activeIndex]);
 
   const scrollCards = (dir) => {
     const container = containerRef.current;
@@ -103,13 +82,11 @@ export default function DailyList() {
     if (!container || !card) return;
 
     const scrollAmount = card.offsetWidth + 20;
+
     container.scrollBy({
       left: dir === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
     });
-
-    // ⛔ Stop autoplay on manual interaction
-    container.dispatchEvent(new Event("scroll"));
   };
 
   if (todayItems.length === 0) return null;
@@ -120,57 +97,74 @@ export default function DailyList() {
   const current = activeIndex;
 
   const getVisibleDots = () => {
-    let start = Math.max(0, current - half);
-    let end = Math.min(total, start + visibleDotCount);
-    if (end - start < visibleDotCount) {
-      start = Math.max(0, end - visibleDotCount);
+    const maxDots = visibleDotCount;
+    const total = todayItems.length;
+
+    if (total <= maxDots) {
+      return Array.from({ length: total }, (_, i) => i);
     }
-    return [...Array(end - start)].map((_, i) => start + i);
+
+    let start = activeIndex - Math.floor(maxDots / 2);
+    let end = start + maxDots;
+
+    if (start < 0) {
+      start = 0;
+      end = maxDots;
+    }
+
+    if (end > total) {
+      end = total;
+      start = Math.max(0, total - maxDots);
+    }
+
+    return Array.from({ length: end - start }, (_, i) => start + i);
   };
 
   return (
     <>
-      <div className={classes.dailyContainer} ref={containerRef}>
-        {todayItems.map((item, index) => {
-          const Component =
-            item.type === "fitness"
-              ? FitnessItem
-              : item.type === "mindfulness"
-              ? MindfulnessItem
-              : NourishItem;
+      <div className={`${classes.fadeEdges}`}>
+        <div className={classes.dailyContainer} ref={containerRef}>
+          {todayItems.map((item, index) => {
+            const Component =
+              item.type === "fitness"
+                ? FitnessItem
+                : item.type === "mindfulness"
+                ? MindfulnessItem
+                : NourishItem;
 
-          return (
-            <div className={classes.cardWrapper} key={item.id}>
-              <Component {...item} />
-            </div>
-          );
-        })}
-      </div>
+            return (
+              <div className={classes.cardWrapper} key={item.id}>
+                <Component {...item} />
+              </div>
+            );
+          })}
+        </div>
 
-      <div className={classes.progressDots}>
-        {getVisibleDots().map((i) => (
-          <span
-            key={i}
-            className={`${classes.dot} ${
-              i === activeIndex ? classes.active : ""
-            }`}
-          ></span>
-        ))}
-      </div>
+        <div className={classes.progressDots}>
+          {getVisibleDots().map((i) => (
+            <span
+              key={i}
+              className={`${classes.dot} ${
+                i === activeIndex ? classes.active : ""
+              }`}
+            />
+          ))}
+        </div>
 
-      <div className={classes.arrows}>
-        <button
-          onClick={() => scrollCards("left")}
-          className={classes.arrowBtn}
-        >
-          ◀
-        </button>
-        <button
-          onClick={() => scrollCards("right")}
-          className={classes.arrowBtn}
-        >
-          ▶
-        </button>
+        <div className={classes.arrows}>
+          <button
+            onClick={() => scrollCards("left")}
+            className={classes.arrowBtn}
+          >
+            ◀
+          </button>
+          <button
+            onClick={() => scrollCards("right")}
+            className={classes.arrowBtn}
+          >
+            ▶
+          </button>
+        </div>
       </div>
     </>
   );

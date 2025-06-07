@@ -16,35 +16,37 @@
 }
 
 .newsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  scroll-padding-left: 1rem;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 0 1rem 2rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.newsGrid::after {
+  content: "";
+  flex: 0 0 1rem;
 }
 
 .newsCard {
+  flex: 0 0 85vw;
+  max-width: 85vw;
+  scroll-snap-align: center;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   padding: 1.5rem;
   text-align: left;
-  transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
-}
-
-.newsCard:hover {
-  transform: translateY(-4px);
 }
 
 .newsCard img {
   width: 100%;
-  height: 180px;
+  height: 160px;
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 1rem;
@@ -52,34 +54,25 @@
 
 .newsCard h3 {
   font-size: 1.2rem;
-  font-weight: 700;
   margin-bottom: 0.5rem;
 }
 
 .newsCard p {
   font-size: 0.95rem;
-  line-height: 1.5;
   color: #333;
   margin-bottom: 1rem;
-  flex-grow: 1;
 }
 
 .readMore {
   font-weight: 600;
   color: #6366f1;
   text-decoration: none;
-  margin-top: auto;
   align-self: flex-start;
-  transition: color 0.2s ease;
 }
 
-.readMore:hover {
-  color: #4338ca;
-}
-
-/* Dots and arrows */
+/* Dots */
 .progressDots {
-  display: none;
+  display: flex;
   justify-content: center;
   gap: 8px;
   margin-top: 1rem;
@@ -90,7 +83,7 @@
   height: 10px;
   border-radius: 50%;
   background-color: #d1d5db;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .dot.active {
@@ -98,11 +91,12 @@
   transform: scale(1.25);
 }
 
+/* Arrows */
 .arrows {
-  display: none;
+  display: flex;
   justify-content: center;
   gap: 0.75rem;
-  margin: 0.75rem 0 1.5rem;
+  margin: 1rem 0;
 }
 
 .arrowBtn {
@@ -117,8 +111,6 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
-  transition: all 0.25s ease;
 }
 
 .arrowBtn:hover {
@@ -441,7 +433,22 @@
 
 @media (min-width: 1200px) {
   .newsGrid {
-    max-width: 1440px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    overflow: unset;
+    scroll-snap-type: none;
+    gap: 2rem;
+    max-width: 1200px;
+    padding: 0 1.5rem;
+  }
+
+  .newsCard {
+    max-width: 100%;
+  }
+
+  .progressDots,
+  .arrows {
+    display: none;
   }
 
   .newsCard img {
@@ -467,14 +474,15 @@
 
 @media (max-width: 1024px) {
   .newsGrid {
-    display: flex;
+    display: flex; /* ✅ override to flex */
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     gap: 1rem;
     padding: 0 1rem 2rem;
     -webkit-overflow-scrolling: touch;
-    
+    max-width: 100% !important;
+    width: 100% !important;
   }
 
   .newsGrid::after {
@@ -506,14 +514,25 @@
   .newsCard {
     flex: 0 0 88vw;
     max-width: 88vw;
+    padding: 0.5rem;
+  }
+
+  .newsCard img {
+    height: 110px;
   }
 
   .newsCard h3 {
     font-size: 1rem;
+    line-height: 1.35;
+    margin: 0.4rem 0 0.3rem;
   }
 
   .newsCard p {
     font-size: 0.9rem;
+  }
+
+  .readMore {
+    font-size: 0.85rem;
   }
 }
 
