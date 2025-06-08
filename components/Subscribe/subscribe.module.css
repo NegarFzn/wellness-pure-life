@@ -97,6 +97,17 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
+.subscribeButton:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.subscribeButton:active {
+  transform: scale(0.98);
+  background-color: #f0f0f0;
+}
+
+
 .subscribedContainer {
   display: flex;
   flex-direction: column;

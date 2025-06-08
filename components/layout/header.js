@@ -123,7 +123,7 @@ export default function Header({ weather }) {
           <Image src={logoImg} alt="Wellness Pure Life" priority />
           <span className={classes.brandName}>Wellness Pure Life</span>
         </Link>
-        {!user && status !== "loading" && (
+        {!user && status !== "loading" && !mobileMenuOpen && (
           <div className={classes.mobileOnly}>
             <div className={classes.authButtons}>
               <button onClick={openSignup} className={classes.authMiniBtn}>
@@ -285,7 +285,7 @@ export default function Header({ weather }) {
                     Verify your email
                   </span>
                 </li>
-              ) : (
+              ) : !mobileMenuOpen ? (
                 <>
                   <li>
                     <button onClick={openSignup} className={classes.navBtn}>
@@ -298,7 +298,7 @@ export default function Header({ weather }) {
                     </button>
                   </li>
                 </>
-              )
+              ) : null
             ) : (
               user && (
                 <li className={classes.profileDropdown}>

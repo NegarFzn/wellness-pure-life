@@ -98,7 +98,7 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 0rem;
   margin-bottom: 0.75rem;
 }
 
@@ -127,8 +127,8 @@
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: -0.5rem;
-  margin-bottom: 2rem;
+  margin-top: -0.2rem;
+  margin-bottom: 0.25rem;
   z-index: 10;
 }
 

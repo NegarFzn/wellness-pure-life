@@ -87,6 +87,12 @@
   line-height: 1.6;
 }
 
+.linkList li:hover {
+  background-color: #27272a;
+  border-radius: 6px;
+  padding-left: 4px;
+}
+
 /* ✅ Footer Bottom */
 .footerBottom {
   text-align: center;
@@ -147,6 +153,12 @@
   font-size: 1.3rem;
   margin-top: 10px;
   display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.footerIcon:hover {
+  transform: scale(1.1);
+  color: #60a5fa;
 }
 
 .cookieReset {

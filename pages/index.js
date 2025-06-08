@@ -1,3 +1,4 @@
+// pages/index.js
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { fetchNews } from "../utils/fetch";
@@ -42,16 +43,10 @@ export default function Home() {
   useEffect(() => {
     if (verifyToken) {
       const verifyEmail = async () => {
-        console.log("🔍 Verifying email with token:", verifyToken);
-        console.log("before verifying:", verifying);
         setVerifying(true);
-        console.log("after verifying:", verifying);
         try {
-          const res = await fetch(
-            `/api/auth/emailverification?token=${verifyToken}`
-          );
+          const res = await fetch(`/api/auth/emailverification?token=${verifyToken}`);
           const data = await res.json();
-          console.log("📬 Verification response:", data);
           if (res.ok && data.success) {
             router.replace("/login?verified=true");
           } else {
@@ -77,8 +72,6 @@ export default function Home() {
   useEffect(() => {
     const container = newsGridRef.current;
     const cards = container?.querySelectorAll(`.${classes.newsCard}`);
-
-    // ✅ Only observe in horizontal scroll layout
     const isHorizontalScroll = window.innerWidth < 1024;
     if (!container || !cards.length || !isHorizontalScroll) return;
 
@@ -98,20 +91,16 @@ export default function Home() {
     );
 
     cards.forEach((card) => observer.observe(card));
-
     return () => observer.disconnect();
   }, [newsArticles]);
 
   const scrollNews = (direction) => {
     const container = newsGridRef.current;
     if (!container) return;
-
     const isHorizontalScroll = window.innerWidth < 1024;
     if (!isHorizontalScroll) return;
-
     const card = container.querySelector(`.${classes.newsCard}`);
     const scrollAmount = card?.offsetWidth + 16 || 300;
-
     container.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
@@ -120,7 +109,6 @@ export default function Home() {
 
   const handleResend = async (e) => {
     e.preventDefault();
-    console.log("📨 Resend clicked with email:", resendEmail);
     setResendResult(null);
     try {
       const res = await fetch("/api/auth/emailverification", {
@@ -129,8 +117,6 @@ export default function Home() {
         body: JSON.stringify({ email: resendEmail }),
       });
       const data = await res.json();
-      console.log("🔁 Resend response:", data);
-
       setResendResult(
         res.ok
           ? "✅ A new verification link has been sent."
@@ -158,7 +144,6 @@ export default function Home() {
         <meta charSet="UTF-8" />
       </Head>
 
-      {/* Verification banners */}
       {verifyStatus === "success" && (
         <div className={classes.verifyBanner}>
           ✅ Your email has been verified successfully!
@@ -171,6 +156,7 @@ export default function Home() {
           </button>
         </div>
       )}
+
       {verifyStatus && verifyStatus !== "success" && (
         <ResendVerificationModal
           message={verifyStatus}
@@ -181,64 +167,54 @@ export default function Home() {
           onClose={() => setVerifyStatus(null)}
         />
       )}
+
       <main className={classes.container}>
         <DailyList />
         <KeyFeatures />
         <Subscribe />
+
         {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
             <div className={classes.newsGrid} ref={newsGridRef}>
               {newsArticles.map((item) => (
                 <div key={item.slug} className={classes.newsCard}>
-                  <img src={item.image || "/images/defaultNews.jpg"} />
+                  <img src={item.image || "/images/defaultNews.jpg"} alt={item.title} />
                   <h3>{item.title}</h3>
                   <p>{item.summary}</p>
-                  <Link
-                    href={`/news/${item.slug}`}
-                    className={classes.readMore}
-                  >
+                  <Link href={`/news/${item.slug}`} className={classes.readMore}>
                     Read More →
                   </Link>
                 </div>
               ))}
             </div>
 
-            {/* Dots */}
             <div className={classes.progressDots}>
               {newsArticles.map((_, i) => (
                 <span
                   key={i}
-                  className={`${classes.dot} ${
-                    i === activeIndex ? classes.active : ""
-                  }`}
+                  className={`${classes.dot} ${i === activeIndex ? classes.active : ""}`}
                 ></span>
               ))}
             </div>
 
-            {/* Arrows */}
             <div className={classes.arrows}>
-              <button
-                onClick={() => scrollNews("left")}
-                className={classes.arrowBtn}
-              >
+              <button onClick={() => scrollNews("left")} className={classes.arrowBtn}>
                 ◀
               </button>
-              <button
-                onClick={() => scrollNews("right")}
-                className={classes.arrowBtn}
-              >
+              <button onClick={() => scrollNews("right")} className={classes.arrowBtn}>
                 ▶
               </button>
             </div>
           </section>
         )}
+
         {showButton && (
           <button onClick={scrollToTop} className={classes.backToTop}>
             ↑
           </button>
         )}
       </main>
-      {/* Password Reset Modal using custom Auth-style */}
+
       {showResetModal && resetToken && (
         <ResetPassword
           token={resetToken}
