@@ -147,34 +147,6 @@ export default function Header({ weather }) {
         <nav
           className={`${classes.nav} ${mobileMenuOpen ? classes.showNav : ""}`}
         >
-          <div className={classes.searchContainer}>
-            <input
-              type="text"
-              placeholder="Search wellness topics..."
-              className={classes.searchInput}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && searchQuery.trim()) {
-                  router.push(
-                    `/search?q=${encodeURIComponent(searchQuery.trim())}`
-                  );
-                }
-              }}
-            />
-            <button
-              className={classes.searchButton}
-              onClick={() => {
-                if (searchQuery.trim()) {
-                  router.push(
-                    `/search?q=${encodeURIComponent(searchQuery.trim())}`
-                  );
-                }
-              }}
-            >
-              🔍
-            </button>
-          </div>
           <ul className={classes.mobileNavList}>
             {["Fitness", "Mindfulness", "Nourish"].map((label) => (
               <li
@@ -251,7 +223,34 @@ export default function Header({ weather }) {
                 <Weather />
               </div>
             </li>
-
+            <div className={classes.searchContainer}>
+              <input
+                type="text"
+                placeholder="Search wellness topics..."
+                className={classes.searchInput}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && searchQuery.trim()) {
+                    router.push(
+                      `/search?q=${encodeURIComponent(searchQuery.trim())}`
+                    );
+                  }
+                }}
+              />
+              <button
+                className={classes.searchButton}
+                onClick={() => {
+                  if (searchQuery.trim()) {
+                    router.push(
+                      `/search?q=${encodeURIComponent(searchQuery.trim())}`
+                    );
+                  }
+                }}
+              >
+                🔍
+              </button>
+            </div>
             {!user && status !== "loading" ? (
               justSignedUp ? (
                 <li

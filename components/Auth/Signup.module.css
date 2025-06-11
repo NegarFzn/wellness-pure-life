@@ -70,6 +70,11 @@
   width: 100%;
 }
 
+.input:focus-within {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.4); /* subtle green glow */
+  transform: translateY(-1px);
+}
+
 .button {
   padding: 0.9rem;
   background: linear-gradient(135deg, #4caf50, #2e8b57);
