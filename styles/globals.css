@@ -14,12 +14,12 @@ body {
   height: 100%;
   margin: 0;
   background: linear-gradient(180deg, #ffffff, #ffffff);
-  padding-top: 60px;
+padding: 0;
 }
 
 
 main {
-  margin: 5rem auto;
+  margin: auto;
 }
 
 h2 {

@@ -155,12 +155,22 @@ export default function Header({ weather }) {
                 onMouseEnter={() => setActiveDropdown(label)}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
-                <Link
-                  href={`/${label.toLowerCase()}`}
+                <button
                   className={classes.dropdownToggle}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (window.innerWidth <= 768) {
+                      setActiveDropdown(
+                        activeDropdown === label ? null : label
+                      );
+                    } else {
+                      router.push(`/${label.toLowerCase()}`);
+                    }
+                  }}
                 >
                   {label}
-                </Link>
+                </button>
+
                 <div
                   className={`${classes.megaDropdown} ${
                     activeDropdown === label ? classes.show : ""

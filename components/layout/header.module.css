@@ -5,7 +5,7 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   gap: 1rem;
-  padding: 1rem 2rem;
+  padding: 1.2rem 2rem;
   background: linear-gradient(to right, #1e1f3f, #1f2e56);
   color: white;
 }
@@ -13,7 +13,7 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   white-space: nowrap;
   text-decoration: none;
   color: inherit;
@@ -26,18 +26,30 @@
   object-fit: cover;
   object-position: center;
   filter: drop-shadow(0 0 0.5rem rgba(146, 145, 148, 0.5));
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.logo img:hover {
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+}
+
+.logo img:active {
+  transform: scale(0.96);
 }
 
 .brandName {
-  font-size: 1.7rem;
-  font-weight: bold;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: white;
+  transition: text-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.brandName:hover,
-.brandName:visited,
+.brandName:hover {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
 .brandName:active {
-  color: white;
-  transform: scale(1.05);
+  transform: scale(0.98);
 }
 
 /* === Search bar === */
@@ -93,11 +105,13 @@
 .mobileNavList {
   display: flex;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.09rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
+
+
 
 .nav ul li,
 .nav a,
@@ -105,8 +119,8 @@
   display: flex;
   align-items: center;
   font-family: "Roboto", sans-serif;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.3rem !important;
+  font-weight: 700;
   color: white;
   text-decoration: none;
   padding: 0.3rem 0.7rem;
@@ -117,6 +131,10 @@
 .nav ul li:hover {
   background-color: #374151;
   cursor: pointer;
+}
+
+.nav ul li a:hover {
+  color: #c4b5fd;
 }
 
 /* === Weather === */
@@ -203,7 +221,7 @@
 .navBtn {
   border: none;
   border-radius: 8px;
-  padding: 0.7rem 1.2rem; /* ⬅️ better horizontal padding */
+  padding: 0.7rem 0.8rem; /* ⬅️ better horizontal padding */
   font-size: 0.9rem;
   font-weight: 800;
   letter-spacing: 0.3px;
@@ -523,6 +541,10 @@
   transition: background 0.2s ease;
 }
 
+.authMiniBtn:active {
+  transform: scale(0.97);
+}
+
 .authMiniBtn:hover {
   background: #2563eb;
 }
@@ -553,28 +575,46 @@
 
 /* === Responsive === */
 @media (max-width: 768px) {
+  /* === HEADER === */
   .header {
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem;
-    height: auto;
-    position: relative;
+    position: sticky;
+    top: 0;
+    background: linear-gradient(to right, #1e1f3f, #1f2e56);
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
+  /* === LOGO + BRAND === */
   .logo {
-    flex-direction: row;
+    display: flex;
     align-items: center;
-    padding: 0;
     gap: 0.5rem;
-    margin: 0;
+    padding: 0;
+  }
+
+  .logo img {
+    height: 32px;
+    filter: drop-shadow(0 0 0.3rem rgba(146, 145, 148, 0.4));
+    transition: filter 0.2s ease;
   }
 
   .brandName {
-    font-size: 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
     white-space: nowrap;
+    transition: text-shadow 0.2s ease;
   }
 
+  .brandName:hover {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+
+  /* === HAMBURGER ICON === */
   .hamburger {
     display: block;
     font-size: 1.8rem;
@@ -582,58 +622,176 @@
     border: none;
     color: white;
     cursor: pointer;
-    z-index: 3100;
+    z-index: 1100;
   }
 
+  /* === MOBILE MENU === */
   .nav {
     display: none;
     flex-direction: column;
-    width: 100%;
-    background: linear-gradient(90deg, #1c192c, #3c394d);
     position: absolute;
     top: 100%;
     left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, #1c192c, #3c394d);
     padding: 1rem 0;
-    z-index: 3000;
-    transition: max-height 0.3s ease;
-    overflow: hidden;
+    z-index: 1050;
     max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(-10px);
   }
 
   .showNav {
     display: flex;
     max-height: 1000px;
+    opacity: 1;
+    transform: translateY(0);
     flex-direction: column;
     align-items: center;
   }
 
-  .nav ul {
+  .mobileNavList {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.8rem;
     padding: 1rem 0;
     width: 100%;
+    list-style: none;
+    margin: 0;
   }
 
-  .nav ul li {
-    padding: 0.25rem 0;
-    font-size: 1rem;
+  .mobileNavList li {
     text-align: center;
     width: 100%;
-    justify-content: center;
+    padding: 0.3rem 0;
   }
 
-  .nav ul li:hover {
+  .mobileNavList li:hover {
     background-color: rgba(255, 255, 255, 0.05);
     border-radius: 6px;
   }
 
+  
+
+  .dropdownToggle,
+  .mobileNavList li a {
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+  }
+
+  /* === DROPDOWN (MOBILE) === */
+  .megaDropdown {
+    display: none;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: #1e1f3f;
+    width: 100%;
+    border-radius: 12px;
+  }
+  
+  .megaDropdown.show {
+    display: flex;
+  }
+  
+  
+  .megaRightColumn {
+    padding-top: 1rem;
+    border-top: 1px solid #444;
+  }
+  
+  .challengeWrapper {
+    margin-top: 1.5rem;
+  }
+  
+  @keyframes dropdownFade {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+
+  .megaDropdown a {
+    width: 100%;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.4rem 0;
+    color: white;
+    text-decoration: none;
+    display: block;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .megaDropdown a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+  }
+
+  .megaDropdown *,
+  .megaRightColumn * {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  @keyframes dropdownFade {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* === SEARCH BAR === */
+  .searchContainer {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 9999px;
+    color: #000;
+    padding: 0.4rem 0.8rem;
+    max-width: 90%;
+    margin: 0.5rem auto;
+    width: 100%;
+  }
+
+  .searchInput {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 0.95rem;
+    border: none;
+    outline: none;
+    background: transparent;
+  }
+
+  .searchButton {
+    padding: 0.4rem 0.75rem;
+    font-size: 1rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  /* === AUTH BUTTONS === */
   .mobileOnly {
     display: flex !important;
-    width: 100%;
     justify-content: center;
     align-items: center;
     margin-top: 0.75rem;
+    width: 100%;
   }
 
   .authButtons {
@@ -644,100 +802,71 @@
   }
 
   .authMiniBtn {
-    background: #3b82f6;
-    color: white;
-    border: none;
+    padding: 0.45rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 700;
     border-radius: 6px;
-    padding: 0.6rem 0.9rem;
-    font-size: 0.85rem;
-    font-weight: 600;
+    border: none;
     cursor: pointer;
+    color: white;
+    transition: background 0.2s ease;
+  }
+
+  .authMiniBtn:first-of-type {
+    background: linear-gradient(90deg, #10b981, #059669);
+  }
+
+  .authMiniBtn:last-of-type {
+    background: #3b82f6;
   }
 
   .authMiniBtn:hover {
-    background: #2563eb;
+    opacity: 0.9;
   }
 
   .navBtn {
     width: 90%;
-    margin: 0.5rem auto;
-    display: block;
-    flex: 1;
     max-width: 160px;
-    font-size: 1rem;
     padding: 0.6rem 1rem;
+    font-size: 1rem;
+    margin: 0.4rem auto;
+    display: block;
     border-radius: 8px;
+    font-weight: 800;
   }
 
+  /* === WEATHER WIDGET === */
+  .weatherInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+
+  /* === PROFILE === */
   .logoutLink {
     font-size: 0.95rem;
     padding: 0.6rem 1rem;
   }
-
-  .weatherInfo {
-    margin: 1rem 0 1.5rem;
-    flex-direction: column;
-    align-items: center;
-    font-size: 0.9rem;
-  }
-
-  .searchContainer {
-    display: flex;
-    align-items: center;
-    background: #fff;
-    padding: 0.4rem 0.8rem;
-    border-radius: 9999px;
-    color: #000;
-    width: 100%;
-    max-width: 280px;
-    margin: 0;
-  }
-
-  .searchInput {
-    flex-grow: 1;
-    padding: 0.5rem;
-    font-size: 0.95rem;
-    border-radius: 8px 0 0 8px;
-    width: 100%;
-  }
-
-  .searchButton {
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
-    border-radius: 0 8px 8px 0;
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-  }
-
-  .megaDropdown {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .megaColumn {
-    width: 100%;
-    align-items: stretch;
-  }
-
-  .challengeBox {
-    align-self: stretch;
-    width: 100%;
-    margin-top: 1rem;
-  }
 }
 
 @media (max-width: 1024px) {
+  /* === Header Layout === */
   .header {
+    display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem;
   }
 
+  /* === Logo and Brand === */
   .logo {
-    padding: 0;
+    display: flex;
+    align-items: center;
     gap: 0.5rem;
+    padding: 0;
   }
 
   .brandName {
@@ -745,26 +874,42 @@
     white-space: nowrap;
   }
 
+  /* === Navigation === */
   .nav {
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
+    margin-top: 0.5rem;
   }
 
   .nav ul {
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem;
     font-size: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
   .nav ul li {
     padding: 0.3rem 0.5rem;
+    text-align: center;
   }
 
+  .nav ul li a {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  /* === Buttons (Sign Up / Login) === */
   .navBtn {
     padding: 0.5rem 1rem;
     font-size: 1rem;
+    border-radius: 8px;
+    margin: 0.25rem;
   }
 
   .logoutDesktop {
@@ -772,18 +917,39 @@
     align-items: center;
   }
 
+  /* === Search Bar === */
   .searchContainer {
-    width: 100%;
+    display: flex;
     justify-content: center;
-    margin: 0.5rem 0;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0.5rem auto;
+    padding: 0.4rem 0.8rem;
+    border-radius: 9999px;
+    background: white;
+    color: black;
   }
 
   .searchInput {
     width: 70%;
+    padding: 0.5rem;
     font-size: 1rem;
+    border: none;
+    outline: none;
   }
 
   .searchButton {
+    padding: 0.5rem 0.75rem;
     font-size: 1rem;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .searchButton:hover {
+    background: #2563eb;
   }
 }
