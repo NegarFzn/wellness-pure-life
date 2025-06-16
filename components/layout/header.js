@@ -365,6 +365,8 @@ export default function Header({ weather }) {
             topicsMap={topicsMap}
             navItems={["Fitness", "Mindfulness", "Nourish"]}
             closeMenu={() => setMobileMenuOpen(false)}
+            weather={weather}
+            nyTime={nyTime}
           />
         )}
 

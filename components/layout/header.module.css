@@ -402,8 +402,7 @@
 
 /* === Mega Dropdown === */
 .megaDropdown {
-  visibility: hidden;
-  opacity: 0;
+
   transform: translateX(-50%) scale(0.98);
   position: absolute;
   top: 100%;
@@ -420,8 +419,7 @@
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 .megaDropdown.show {
-  visibility: visible;
-  opacity: 1;
+
   transform: translateX(-50%) scale(1);
   display: flex;
 }
@@ -542,13 +540,11 @@
 }
 
 .searchContainer {
-  display: flex;
-  align-items: center;
-  margin-left: 2rem;
-  gap: 0.4rem;
   margin-left: 1rem;
   margin-right: 1rem;
+  gap: 0.4rem;
 }
+
 
 .searchInput {
   padding: 0.4rem 0.75rem;
@@ -621,6 +617,10 @@
   display: none !important;
 }
 
+.mobileNav {
+  display: none;
+}
+
 /* === hamburger menu === */
 
 @keyframes shimmer {
@@ -641,10 +641,6 @@
     padding: 0.5rem 1rem;
     position: relative;
     height: auto;
-  }
-
-  .dropdownParent:hover .megaDropdown {
-    display: none; /* no hover effect on mobile */
   }
 
   .logo {
@@ -740,6 +736,10 @@
     border: none;
   }
 
+  .dropdownParent:hover .megaDropdown {
+    display: none; /* disable hover-trigger on mobile */
+  }
+
   .megaDropdown,
   .weatherMegaDropdown {
     flex-direction: column;
@@ -833,6 +833,7 @@
     width: 100%;
     margin-top: 1rem;
   }
+
   .topLevelNav {
     list-style: none;
     padding: 0;
@@ -883,13 +884,6 @@
     cursor: pointer;
   }
 
-  .sublistTitle {
-    padding: 0 1rem;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #fff;
-  }
-
   .mobileSublist ul {
     list-style: none;
     padding: 0;
@@ -900,12 +894,69 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .mobileSublist a {
+  .mainSectionLink {
     display: block;
     padding: 1rem;
     text-decoration: none;
     color: #fff;
-    font-weight: 500;
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+
+  .mainSectionLink:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+  }
+
+  .mobileNavLink {
+    display: block;
+    padding: 1rem;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .mobileNavLink:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+  }
+  .mobileWeather {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    width: 80%;
+    margin: 0.5rem auto;
+  }
+  
+  
+  .weatherIcon {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 0.6rem;
+  }
+  
+  .weatherText {
+    text-align: center;
+    color: #ffffff;
+  }
+  
+  .weatherTemp {
+    font-size: 0.85rem;
+    font-weight: 400;
+    opacity: 0.85;
+    color: #eee;
+  }
+  
+  .weatherTime {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #a8d5ba; 
+  }
+
+  .mobileNav {
+    display: block;
   }
 }
 

@@ -2,7 +2,13 @@ import { useState } from "react";
 import Link from "next/link";
 import classes from "./header.module.css";
 
-export default function MobileNav({ topicsMap, navItems, closeMenu }) {
+export default function MobileNav({
+  topicsMap,
+  navItems,
+  closeMenu,
+  weather,
+  nyTime,
+}) {
   const [activeMobileSection, setActiveMobileSection] = useState(null);
 
   return (
@@ -20,6 +26,45 @@ export default function MobileNav({ topicsMap, navItems, closeMenu }) {
               </button>
             </li>
           ))}
+
+          <li>
+            <Link
+              href="/news"
+              className={classes.mobileNavLink}
+              onClick={closeMenu}
+            >
+              News
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/contact"
+              className={classes.mobileNavLink}
+              onClick={closeMenu}
+            >
+              Contact
+            </Link>
+          </li>
+
+          <li className={classes.mobileWeather}>
+            {weather ? (
+              <>
+                <img
+                  src={weather.current.condition.icon}
+                  alt="Weather icon"
+                  className={classes.weatherIcon}
+                />
+                <div className={classes.weatherText}>
+                  <div className={classes.weatherTemp}>
+                    {weather.current.temp_c}°C
+                  </div>
+                  <div className={classes.weatherTime}>{nyTime} (NY)</div>
+                </div>
+              </>
+            ) : (
+              <div className={classes.weatherText}>Loading...</div>
+            )}
+          </li>
         </ul>
       ) : (
         <div className={classes.mobileSublist}>
@@ -29,17 +74,28 @@ export default function MobileNav({ topicsMap, navItems, closeMenu }) {
           >
             ‹ Back
           </button>
-          <h4 className={classes.sublistTitle}>{activeMobileSection}</h4>
           <ul>
+            <li>
+              <Link
+                href={`/${activeMobileSection.toLowerCase()}`}
+                className={classes.mainSectionLink}
+                onClick={() => {
+                  setActiveMobileSection(null);
+                  closeMenu();
+                }}
+              >
+                {activeMobileSection}
+              </Link>
+            </li>
             {(topicsMap[activeMobileSection] || []).map((item, i) => (
               <li key={i}>
                 <Link
                   href={item.href}
+                  className={classes.mobileNavLink}
                   onClick={() => {
                     setActiveMobileSection(null);
                     closeMenu();
                   }}
-                  className={classes.mobileNavLink}
                 >
                   {item.text}
                 </Link>
