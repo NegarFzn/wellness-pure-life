@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import classes from "./SpotlightColumn.module.css";
 
-export default function SpotlightColumn({ label, spotlightsMap }) {
+export default function SpotlightColumn({ label, spotlightsMap, onLinkClick }) {
   const spotlights = spotlightsMap[label] || [];
 
   return (

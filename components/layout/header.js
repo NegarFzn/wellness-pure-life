@@ -14,6 +14,8 @@ import ChallengeBox from "./ChallengeBox";
 import TopicsColumn from "./TopicsColumn";
 import SpotlightColumn from "./SpotlightColumn";
 import Weather from "../../components/layout/Weather";
+import MobileNav from "./MobileNav";
+
 import classes from "./header.module.css";
 
 export default function Header({ weather }) {
@@ -38,6 +40,15 @@ export default function Header({ weather }) {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeMobileSection, setActiveMobileSection] = useState(null);
+
+  const handleDropdownToggle = (label) => {
+    if (activeDropdown === label) {
+      setActiveDropdown(null);
+    } else {
+      setActiveDropdown(label);
+    }
+  };
 
   useEffect(() => {
     const updateNYTime = () => {
@@ -123,6 +134,7 @@ export default function Header({ weather }) {
           <Image src={logoImg} alt="Wellness Pure Life" priority />
           <span className={classes.brandName}>Wellness Pure Life</span>
         </Link>
+
         {!user && status !== "loading" && !mobileMenuOpen && (
           <div className={classes.mobileOnly}>
             <div className={classes.authButtons}>
@@ -147,193 +159,214 @@ export default function Header({ weather }) {
         <nav
           className={`${classes.nav} ${mobileMenuOpen ? classes.showNav : ""}`}
         >
-          <ul className={classes.mobileNavList}>
-            {["Fitness", "Mindfulness", "Nourish"].map((label) => (
-              <li
-                className={classes.dropdownParent}
-                key={label}
-                onMouseEnter={() => setActiveDropdown(label)}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <button
-                  className={classes.dropdownToggle}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (window.innerWidth <= 768) {
-                      setActiveDropdown(
-                        activeDropdown === label ? null : label
-                      );
-                    } else {
-                      router.push(`/${label.toLowerCase()}`);
+          <div className={classes.searchContainer}>
+            <input
+              type="text"
+              placeholder="Search wellness topics..."
+              className={classes.searchInput}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && searchQuery.trim()) {
+                  router.push(
+                    `/search?q=${encodeURIComponent(searchQuery.trim())}`
+                  );
+                }
+              }}
+            />
+            <button
+              className={classes.searchButton}
+              onClick={() => {
+                if (searchQuery.trim()) {
+                  router.push(
+                    `/search?q=${encodeURIComponent(searchQuery.trim())}`
+                  );
+                }
+              }}
+            >
+              🔍
+            </button>
+          </div>
+
+          {!mobileMenuOpen && (
+            <ul className={classes.mobileNavList}>
+              {["Fitness", "Mindfulness", "Nourish"].map((label) => (
+                <li
+                  key={label}
+                  className={classes.dropdownParent}
+                  onMouseEnter={() => {
+                    if (window.innerWidth > 768) {
+                      setActiveDropdown(label);
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    if (window.innerWidth > 768) {
+                      setActiveDropdown(null);
                     }
                   }}
                 >
-                  {label}
-                </button>
-
-                <div
-                  className={`${classes.megaDropdown} ${
-                    activeDropdown === label ? classes.show : ""
-                  }`}
-                >
-                  <TopicsColumn
-                    label={label}
-                    topicsMap={topicsMap}
-                    onLinkClick={() => setActiveDropdown(null)}
-                  />
-                  <div className={classes.megaRightColumn}>
-                    <SpotlightColumn
-                      label={label}
-                      spotlightsMap={spotlightsMap}
-                      onLinkClick={() => setActiveDropdown(null)}
-                    />
-                    <div className={classes.challengeWrapper}>
-                      <ChallengeBox
+                  <Link
+                    href={`/${label.toLowerCase()}`}
+                    className={classes.dropdownToggle}
+                    onClick={() => handleDropdownToggle(label)}
+                  >
+                    {label}
+                  </Link>
+                  <div
+                    className={`${classes.megaDropdown} ${
+                      activeDropdown === label ? classes.show : ""
+                    }`}
+                  >
+                    <div className={classes.topicsWrapper}>
+                      <TopicsColumn
+                        label={label}
+                        topicsMap={topicsMap}
                         onLinkClick={() => setActiveDropdown(null)}
                       />
                     </div>
+                    <div className={classes.megaRightColumn}>
+                      <div className={classes.spotlightWrapper}>
+                        <SpotlightColumn
+                          label={label}
+                          spotlightsMap={spotlightsMap}
+                          onLinkClick={() => setActiveDropdown(null)}
+                        />
+                      </div>
+                      <div className={classes.challengeWrapper}>
+                        <ChallengeBox
+                          onLinkClick={() => setActiveDropdown(null)}
+                        />
+                      </div>
+                    </div>
                   </div>
+                </li>
+              ))}
+
+              <li>
+                <NavLink href="/news">News</NavLink>
+              </li>
+              <li>
+                <NavLink href="/contact">Contact</NavLink>
+              </li>
+
+              <li
+                className={classes.weatherDropdownParent}
+                onMouseEnter={() => setActiveDropdown("Weather")}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                <span className={classes.weatherButton}>
+                  {weather ? (
+                    <div className={classes.weatherInfo}>
+                      <img
+                        src={weather.current.condition.icon}
+                        alt="Weather icon"
+                        className={classes.weatherIcon}
+                      />
+                      <div className={classes.weatherText}>
+                        <span>{weather.current.temp_c}°C</span>
+                        <span>{nyTime} NY</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <span className={classes.loading}>Loading...</span>
+                  )}
+                </span>
+
+                <div
+                  className={`${classes.weatherMegaDropdown} ${
+                    activeDropdown === "Weather" ? classes.show : ""
+                  }`}
+                >
+                  <Weather />
                 </div>
               </li>
-            ))}
-            <li>
-              <NavLink href="/news">News</NavLink>
-            </li>
-            <li>
-              <NavLink href="/contact">Contact</NavLink>
-            </li>
-            <li
-              className={classes.weatherDropdownParent}
-              onMouseEnter={() => setActiveDropdown("Weather")}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <span className={classes.weatherButton}>
-                {weather ? (
-                  <div className={classes.weatherInfo}>
-                    <img
-                      src={weather.current.condition.icon}
-                      alt="Weather icon"
-                      className={classes.weatherIcon}
-                    />
-                    <div className={classes.weatherText}>
-                      <span>{weather.current.temp_c}°C</span>
-                      <span>{nyTime} NY</span>
-                    </div>
-                  </div>
-                ) : (
-                  <span className={classes.loading}>Loading...</span>
-                )}
-              </span>
 
-              <div
-                className={`${classes.weatherMegaDropdown} ${
-                  activeDropdown === "Weather" ? classes.show : ""
-                }`}
-              >
-                <Weather />
-              </div>
-            </li>
-            <div className={classes.searchContainer}>
-              <input
-                type="text"
-                placeholder="Search wellness topics..."
-                className={classes.searchInput}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && searchQuery.trim()) {
-                    router.push(
-                      `/search?q=${encodeURIComponent(searchQuery.trim())}`
-                    );
-                  }
-                }}
-              />
-              <button
-                className={classes.searchButton}
-                onClick={() => {
-                  if (searchQuery.trim()) {
-                    router.push(
-                      `/search?q=${encodeURIComponent(searchQuery.trim())}`
-                    );
-                  }
-                }}
-              >
-                🔍
-              </button>
-            </div>
-            {!user && status !== "loading" ? (
-              justSignedUp ? (
-                <li
-                  className={`${classes.pendingVerify} ${
-                    resent ? classes.verifiedPendingResent : ""
-                  }`}
-                  onClick={async () => {
-                    const userEmail =
-                      user?.email || localStorage.getItem("justSignedUpEmail");
-                    if (!userEmail)
-                      return toast.error("User email not available.");
-                    try {
-                      const res = await fetch("/api/auth/emailverification", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ email: userEmail }),
-                      });
-                      if (!res.ok) throw new Error("Request failed");
-                      toast.success("Verification email resent.");
-                      setResent(true);
-                    } catch (err) {
-                      console.error("Resend error:", err);
-                      toast.error(
-                        "❌ Failed to resend email. Please try again."
-                      );
-                    }
-                  }}
-                >
-                  <span className={classes.pendingText}>
-                    <span className={classes.pendingTextIcon}>📬</span>
-                    Verify your email
-                  </span>
-                </li>
-              ) : !mobileMenuOpen ? (
-                <>
-                  <li>
-                    <button onClick={openSignup} className={classes.navBtn}>
-                      Sign Up Free
-                    </button>
+              {!user && status !== "loading" ? (
+                justSignedUp ? (
+                  <li
+                    className={`${classes.pendingVerify} ${
+                      resent ? classes.verifiedPendingResent : ""
+                    }`}
+                    onClick={async () => {
+                      const userEmail =
+                        user?.email ||
+                        localStorage.getItem("justSignedUpEmail");
+                      if (!userEmail)
+                        return toast.error("User email not available.");
+                      try {
+                        const res = await fetch("/api/auth/emailverification", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ email: userEmail }),
+                        });
+                        if (!res.ok) throw new Error("Request failed");
+                        toast.success("Verification email resent.");
+                        setResent(true);
+                      } catch (err) {
+                        console.error("Resend error:", err);
+                        toast.error(
+                          "❌ Failed to resend email. Please try again."
+                        );
+                      }
+                    }}
+                  >
+                    <span className={classes.pendingText}>
+                      <span className={classes.pendingTextIcon}>📬</span>
+                      Verify your email
+                    </span>
                   </li>
-                  <li>
-                    <button onClick={openLogin} className={classes.navBtn}>
-                      Login
-                    </button>
-                  </li>
-                </>
-              ) : null
-            ) : (
-              user && (
-                <li className={classes.profileDropdown}>
-                  <div className={classes.profileWrapper}>
-                    <button className={classes.profileButton}>
-                      <FiUser size={18} style={{ marginRight: "0.4rem" }} />
-                      {(user?.name || "Account").charAt(0).toUpperCase() +
-                        (user?.name || "Account").slice(1)}
-                    </button>
-                    <div className={classes.dropdownContent}>
-                      <Link href="/dashboard" className={classes.dropdownLink}>
-                        <FiUser size={16} /> Profile
-                      </Link>
-                      <button
-                        onClick={() => signOut({ callbackUrl: "/" })}
-                        className={classes.logoutLink}
-                      >
-                        <FiLogOut size={16} /> Logout
+                ) : (
+                  <>
+                    <li>
+                      <button onClick={openSignup} className={classes.navBtn}>
+                        Sign Up Free
                       </button>
+                    </li>
+                    <li>
+                      <button onClick={openLogin} className={classes.navBtn}>
+                        Login
+                      </button>
+                    </li>
+                  </>
+                )
+              ) : (
+                user && (
+                  <li className={classes.profileDropdown}>
+                    <div className={classes.profileWrapper}>
+                      <button className={classes.profileButton}>
+                        <FiUser size={18} style={{ marginRight: "0.4rem" }} />
+                        {(user?.name || "Account").charAt(0).toUpperCase() +
+                          (user?.name || "Account").slice(1)}
+                      </button>
+                      <div className={classes.dropdownContent}>
+                        <Link
+                          href="/dashboard"
+                          className={classes.dropdownLink}
+                        >
+                          <FiUser size={16} /> Profile
+                        </Link>
+                        <button
+                          onClick={() => signOut({ callbackUrl: "/" })}
+                          className={classes.logoutLink}
+                        >
+                          <FiLogOut size={16} /> Logout
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              )
-            )}
-          </ul>
+                  </li>
+                )
+              )}
+            </ul>
+          )}
         </nav>
+
+        {mobileMenuOpen && (
+          <MobileNav
+            topicsMap={topicsMap}
+            navItems={["Fitness", "Mindfulness", "Nourish"]}
+            closeMenu={() => setMobileMenuOpen(false)}
+          />
+        )}
 
         <Signup
           isOpen={showSignup}

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import classes from "./TopicsColumn.module.css";
 
-export default function TopicsColumn({ label, topicsMap }) {
+export default function TopicsColumn({ label, topicsMap, onLinkClick }) {
   const topics = topicsMap[label] || [];
 
   return (

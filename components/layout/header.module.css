@@ -1,22 +1,29 @@
 /* === Header Layout === */
 .header {
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-  gap: 1rem;
-  padding: 1.2rem 2rem;
-  background: linear-gradient(to right, #1e1f3f, #1f2e56);
-  color: white;
+  padding: 0.3rem 0.4rem;
+  background: linear-gradient(90deg, #1c192c, #3c394d);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3000;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  overflow: visible;
 }
 
 .logo {
   display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  white-space: nowrap;
+  align-items: flex-end;
+  padding: 0 2rem;
+  gap: 1rem;
+  color: #594e9c;
   text-decoration: none;
-  color: inherit;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
 .logo img {
@@ -26,104 +33,54 @@
   object-fit: cover;
   object-position: center;
   filter: drop-shadow(0 0 0.5rem rgba(146, 145, 148, 0.5));
-  transition: filter 0.2s ease, transform 0.2s ease;
-}
-
-.logo img:hover {
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
-}
-
-.logo img:active {
-  transform: scale(0.96);
 }
 
 .brandName {
-  font-size: 1.8rem;
-  font-weight: 900;
-  color: white;
-  transition: text-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.brandName:hover {
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-}
-
-.brandName:active {
-  transform: scale(0.98);
-}
-
-/* === Search bar === */
-.searchContainer {
+  white-space: nowrap;
   display: flex;
   align-items: center;
-  background: #fff;
-  padding: 0.4rem 0.8rem;
-  border-radius: 9999px;
-  color: #000;
-  width: 100%;
-  max-width: 280px;
-  margin: 0;
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  gap: 0.75rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  font-family: "Poppins", sans-serif;
+  transition: color 0.3s ease, transform 0.2s ease;
 }
 
-.searchContainer:focus-within {
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.4); /* subtle green glow */
-  transform: translateY(-1px);
+.brandName:active,
+.brandName:visited,
+.brandName:hover {
+  color: white;
+  transform: scale(1.05);
 }
 
-.searchInput {
-  border: none;
-  outline: none;
-  width: 160px;
-  background: transparent;
-}
-
-.searchInput::placeholder {
-  color: #9ca3af;
-}
-
-.searchButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.searchButton:hover {
-  background: #2563eb;
-}
-
-/* === navigation === */
+/* === Navigation === */
 .nav {
   display: flex;
-  align-items: center;
+  flex-grow: 1;
   justify-content: center;
-  gap: 1.5rem;
-  flex: 1;
+  overflow-x: auto;
+  overflow: visible !important;
 }
 
-.nav ul,
-.mobileNavList {
-  display: flex;
-  align-items: center;
-  gap: 0.09rem;
+.nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
-}
-
-
-
-.nav ul li,
-.nav a,
-.dropdownToggle {
   display: flex;
   align-items: center;
-  font-family: "Roboto", sans-serif;
-  font-size: 1.3rem !important;
-  font-weight: 700;
-  color: white;
-  text-decoration: none;
-  padding: 0.3rem 0.7rem;
+  justify-content: center;
+  gap: 0.1rem;
+  font-size: 1.2rem;
+  font-weight: lighter;
+  overflow: visible !important;
+}
+
+.nav ul li {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
   border-radius: 8px;
   transition: background-color 0.2s ease;
 }
@@ -133,8 +90,117 @@
   cursor: pointer;
 }
 
-.nav ul li a:hover {
-  color: #c4b5fd;
+.nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navBtn {
+  margin-left: 10px;
+  padding: 8px 14px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: medium;
+}
+
+.navBtn:hover {
+  background: #2563eb;
+}
+
+/* === Profile Dropdown === */
+.profileDropdown {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.profileWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.profileWrapper:hover .dropdownContent {
+  display: block;
+}
+
+.profileButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: #f3f4f6;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.15s ease;
+  font-family: "Poppins", sans-serif;
+}
+
+.profileButton:hover {
+  background-color: #374151;
+  transform: translateY(-1px);
+}
+
+.profileButton span {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdownContent {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #111827;
+  border-radius: 12px;
+  min-width: 160px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  margin-top: 0;
+  transition: opacity 0.2s ease;
+}
+
+.dropdownLink,
+.logoutLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #f3f4f6;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 400;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+  border-radius: 8px;
+  cursor: pointer; /* ✅ moved up to avoid override */
+}
+
+.dropdownLink:hover,
+.logoutLink:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  cursor: pointer; /* ✅ ensure it's not lost */
+}
+
+.dropdownLink:active,
+.logoutLink:active {
+  transform: scale(0.97);
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 /* === Weather === */
@@ -180,17 +246,16 @@
   visibility: visible;
 }
 
-.authButtons,
-.navBtn {
-  display: flex;
-  gap: 0.5rem;
-  white-space: nowrap;
-}
-
 .weatherInfo {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 14px;
+  max-width: 300px;
+  margin: 0 auto;
+  font-family: system-ui, sans-serif;
 }
 
 .weatherIcon {
@@ -215,70 +280,60 @@
   margin-top: 2px; /* ✅ Add vertical spacing */
 }
 
-/* === Auth Buttons === */
+/* === Verification Alert === */
+.pendingVerify {
+  background-color: #fff4e5;
+  border: 1px solid #ffedd5;
+  padding: 0.4rem 0.8rem;
+  border-radius: 12px;
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
 
-.authMiniBtn,
-.navBtn {
-  border: none;
-  border-radius: 8px;
-  padding: 0.7rem 0.8rem; /* ⬅️ better horizontal padding */
+.pendingText {
+  color: #856404;
+  font-weight: 700;
   font-size: 0.9rem;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.pendingVerify:hover .pendingText {
   color: white;
 }
 
-.navBtn:hover,
-.authMiniBtn:hover {
-  background: #2563eb;
-  transform: translateY(-1px); /* slight elevation on hover */
+.pendingTextIcon {
+  display: inline-block;
+  animation: iconBounce 1.2s ease-in-out infinite;
 }
 
-/* Sign Up Button: Primary CTA Style */
-.authMiniBtn:first-of-type,
-.navBtn:first-of-type {
-  background: linear-gradient(90deg, #10b981, #059669);
-  color: white;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+@keyframes iconBounce {
+  0%,
+  100% {
+    transform: translateY(2px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
 
-.authMiniBtn:first-of-type:hover,
-.navBtn:first-of-type:hover {
-  background: linear-gradient(90deg, #059669, #047857);
-  transform: translateY(-1px);
-  box-shadow: 0 0 18px rgba(16, 185, 129, 0.8);
+.verifiedPendingResent {
+  background-color: #d4edda !important;
+  border-color: #c3e6cb !important;
+  color: #155724 !important;
 }
 
-/* Login Button: Secondary Style */
-.authMiniBtn:last-of-type,
-.navBtn:last-of-type {
-  background: #3b82f6;
-  color: white;
+.challengeWrapper {
+  margin-top: auto;
+  align-self: stretch;
 }
 
-.authMiniBtn:last-of-type:hover,
-.navBtn:last-of-type:hover {
-  background: #2563eb;
-  transform: translateY(-1px);
-}
-
-.signup:last-of-type {
-  background: linear-gradient(90deg, #10b981, #059669);
-  color: white;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
-}
-
-.signup:last-of-type:hover {
-  background: linear-gradient(90deg, #059669, #047857);
-  transform: translateY(-1px);
-  box-shadow: 0 0 18px rgba(16, 185, 129, 0.8);
-}
-
-/* === Weather e === */
+/* === Dropdown Parent === */
 .dropdownParent {
   position: relative;
   z-index: 3000;
@@ -486,21 +541,39 @@
   width: 100%;
 }
 
-.searchInput {
-  border: none;
-  outline: none;
-  width: 100%;
-  background: transparent;
+.searchContainer {
+  display: flex;
+  align-items: center;
+  margin-left: 2rem;
+  gap: 0.4rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
-.searchButton {
-  background: none;
+.searchInput {
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
   border: none;
-  cursor: pointer;
+  font-size: 1rem;
+  width: 200px;
+  max-width: 100%;
+  background: white;
+  color: #111827;
 }
 
 .searchInput::placeholder {
   color: #9ca3af;
+}
+
+.searchButton {
+  padding: 0.4rem 0.6rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
 }
 
 .searchButton:hover {
@@ -541,10 +614,6 @@
   transition: background 0.2s ease;
 }
 
-.authMiniBtn:active {
-  transform: scale(0.97);
-}
-
 .authMiniBtn:hover {
   background: #2563eb;
 }
@@ -553,16 +622,6 @@
 }
 
 /* === hamburger menu === */
-
-@keyframes iconBounce {
-  0%,
-  100% {
-    transform: translateY(2px);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
-}
 
 @keyframes shimmer {
   0% {
@@ -575,46 +634,32 @@
 
 /* === Responsive === */
 @media (max-width: 768px) {
-  /* === HEADER === */
   .header {
-    display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem;
-    position: sticky;
-    top: 0;
-    background: linear-gradient(to right, #1e1f3f, #1f2e56);
-    z-index: 1000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    height: auto;
   }
 
-  /* === LOGO + BRAND === */
+  .dropdownParent:hover .megaDropdown {
+    display: none; /* no hover effect on mobile */
+  }
+
   .logo {
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 0.5rem;
-    padding: 0;
-  }
-
-  .logo img {
-    height: 32px;
-    filter: drop-shadow(0 0 0.3rem rgba(146, 145, 148, 0.4));
-    transition: filter 0.2s ease;
+    margin: 0;
   }
 
   .brandName {
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-size: 1rem;
     white-space: nowrap;
-    transition: text-shadow 0.2s ease;
   }
 
-  .brandName:hover {
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-  }
-
-  /* === HAMBURGER ICON === */
   .hamburger {
     display: block;
     font-size: 1.8rem;
@@ -622,251 +667,260 @@
     border: none;
     color: white;
     cursor: pointer;
-    z-index: 1100;
+    z-index: 3100;
   }
 
-  /* === MOBILE MENU === */
   .nav {
     display: none;
     flex-direction: column;
+    width: 100%;
+    background: linear-gradient(90deg, #1c192c, #3c394d);
     position: absolute;
     top: 100%;
     left: 0;
-    width: 100%;
-    background: linear-gradient(90deg, #1c192c, #3c394d);
     padding: 1rem 0;
-    z-index: 1050;
-    max-height: 0;
+    z-index: 3000;
+    transition: max-height 0.3s ease;
     overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
-    opacity: 0;
-    transform: translateY(-10px);
+    max-height: 0;
   }
 
   .showNav {
     display: flex;
     max-height: 1000px;
-    opacity: 1;
-    transform: translateY(0);
-    flex-direction: column;
     align-items: center;
   }
 
-  .mobileNavList {
-    display: flex;
+  .nav ul {
     flex-direction: column;
     align-items: center;
-    gap: 0.8rem;
+    gap: 0.75rem;
     padding: 1rem 0;
     width: 100%;
-    list-style: none;
-    margin: 0;
   }
 
-  .mobileNavList li {
+  .nav ul li {
+    padding: 0.25rem 0;
+    font-size: 1rem;
     text-align: center;
     width: 100%;
-    padding: 0.3rem 0;
   }
 
-  .mobileNavList li:hover {
+  .nav ul li:hover {
     background-color: rgba(255, 255, 255, 0.05);
     border-radius: 6px;
   }
 
-  
-
-  .dropdownToggle,
-  .mobileNavList li a {
-    font-size: 1rem;
-    font-weight: 700;
-    color: white;
-  }
-
-  /* === DROPDOWN (MOBILE) === */
-  .megaDropdown {
-    display: none;
-    flex-direction: column;
-    padding: 1rem;
-    background-color: #1e1f3f;
+  .mobileOnly {
+    display: flex !important;
     width: 100%;
-    border-radius: 12px;
-  }
-  
-  .megaDropdown.show {
-    display: flex;
-  }
-  
-  
-  .megaRightColumn {
-    padding-top: 1rem;
-    border-top: 1px solid #444;
-  }
-  
-  .challengeWrapper {
-    margin-top: 1.5rem;
-  }
-  
-  @keyframes dropdownFade {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-
-  .megaDropdown a {
-    width: 100%;
-    font-size: 0.95rem;
-    font-weight: 600;
-    padding: 0.4rem 0;
-    color: white;
-    text-decoration: none;
-    display: block;
-    white-space: normal;
-    word-break: break-word;
+    justify-content: center;
+    margin-top: 0.75rem;
   }
 
-  .megaDropdown a:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-  }
-
-  .megaDropdown *,
-  .megaRightColumn * {
-    box-sizing: border-box;
-    width: 100%;
-  }
-
-  @keyframes dropdownFade {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* === SEARCH BAR === */
   .searchContainer {
+    width: 90%;
+    margin: 1rem auto 0.5rem;
     display: flex;
-    align-items: center;
-    background: #fff;
-    border-radius: 9999px;
-    color: #000;
-    padding: 0.4rem 0.8rem;
-    max-width: 90%;
-    margin: 0.5rem auto;
-    width: 100%;
   }
 
   .searchInput {
     flex: 1;
     padding: 0.5rem;
     font-size: 0.95rem;
-    border: none;
-    outline: none;
-    background: transparent;
+    border-radius: 8px 0 0 8px;
   }
 
   .searchButton {
-    padding: 0.4rem 0.75rem;
+    padding: 0.5rem 0.75rem;
     font-size: 1rem;
+    border-radius: 0 8px 8px 0;
     background-color: #3b82f6;
     color: white;
     border: none;
-    border-radius: 6px;
-    cursor: pointer;
   }
 
-  /* === AUTH BUTTONS === */
-  .mobileOnly {
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    margin-top: 0.75rem;
+  .megaDropdown,
+  .weatherMegaDropdown {
+    flex-direction: column;
     width: 100%;
+    padding: 0.5rem;
+    background: var(--primary-bg);
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .megaDropdown > *,
+  .megaRightColumn,
+  .weatherMegaDropdown > * {
+    width: 100%;
+  }
+
+  .megaRightColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .topicsWrapper,
+  .spotlightWrapper,
+  .challengeWrapper {
+    width: 100%;
+  }
+
+  .challengeWrapper {
+    background: linear-gradient(90deg, #f9fefc 0%, #e6f4f1 100%);
+    padding: 1rem;
+    text-align: center;
+    border: none;
+  }
+
+  .surpriseBtn {
+    width: 100%;
+    border-radius: 9999px;
+    padding: 0.75rem;
+    font-size: 1rem;
   }
 
   .authButtons {
     display: flex;
     gap: 0.5rem;
     justify-content: center;
-    align-items: center;
   }
 
   .authMiniBtn {
-    padding: 0.45rem 1rem;
-    font-size: 0.9rem;
-    font-weight: 700;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    color: white;
-    transition: background 0.2s ease;
-  }
-
-  .authMiniBtn:first-of-type {
-    background: linear-gradient(90deg, #10b981, #059669);
-  }
-
-  .authMiniBtn:last-of-type {
     background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
   }
 
   .authMiniBtn:hover {
-    opacity: 0.9;
+    background: #2563eb;
   }
 
   .navBtn {
+    display: block;
     width: 90%;
     max-width: 160px;
+    margin: 0.5rem auto;
     padding: 0.6rem 1rem;
     font-size: 1rem;
-    margin: 0.4rem auto;
-    display: block;
     border-radius: 8px;
-    font-weight: 800;
   }
 
-  /* === WEATHER WIDGET === */
-  .weatherInfo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 1rem 0;
-    font-size: 0.9rem;
-  }
-
-  /* === PROFILE === */
   .logoutLink {
     font-size: 0.95rem;
     padding: 0.6rem 1rem;
   }
+
+  .weatherInfo {
+    margin: 1rem 0 1.5rem;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.9rem;
+  }
+
+  .megaColumn {
+    width: 100%;
+  }
+
+  .challengeBox {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  .topLevelNav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .navButton {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: #fff;
+  }
+
+  .arrow {
+    font-size: 1.5rem;
+    margin-left: 0.5rem;
+  }
+
+  .navButton:hover,
+  .navButton:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+  }
+
+  .mobileSublist {
+    background: #1c1c2c;
+    padding: 1rem 0;
+  }
+
+  .backButton {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    text-align: left;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .sublistTitle {
+    padding: 0 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .mobileSublist ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobileSublist li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .mobileSublist a {
+    display: block;
+    padding: 1rem;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+  }
 }
 
+
 @media (max-width: 1024px) {
-  /* === Header Layout === */
   .header {
-    display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem;
   }
 
-  /* === Logo and Brand === */
   .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
     padding: 0;
+    gap: 0.5rem;
   }
 
   .brandName {
@@ -874,42 +928,26 @@
     white-space: nowrap;
   }
 
-  /* === Navigation === */
   .nav {
-    display: flex;
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
-    margin-top: 0.5rem;
   }
 
   .nav ul {
-    display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem;
     font-size: 1rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
   }
 
   .nav ul li {
     padding: 0.3rem 0.5rem;
-    text-align: center;
   }
 
-  .nav ul li a {
-    font-size: 1.05rem;
-    font-weight: 700;
-  }
-
-  /* === Buttons (Sign Up / Login) === */
   .navBtn {
     padding: 0.5rem 1rem;
     font-size: 1rem;
-    border-radius: 8px;
-    margin: 0.25rem;
   }
 
   .logoutDesktop {
@@ -917,39 +955,18 @@
     align-items: center;
   }
 
-  /* === Search Bar === */
   .searchContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 100%;
-    max-width: 600px;
-    margin: 0.5rem auto;
-    padding: 0.4rem 0.8rem;
-    border-radius: 9999px;
-    background: white;
-    color: black;
+    justify-content: center;
+    margin: 0.5rem 0;
   }
 
   .searchInput {
     width: 70%;
-    padding: 0.5rem;
     font-size: 1rem;
-    border: none;
-    outline: none;
   }
 
   .searchButton {
-    padding: 0.5rem 0.75rem;
     font-size: 1rem;
-    background: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  .searchButton:hover {
-    background: #2563eb;
   }
 }

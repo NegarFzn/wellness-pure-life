@@ -1,8 +1,5 @@
-/* ----------------------
-   Base Styles
------------------------*/
+
 .featuresSection {
-  padding: 100px 20px;
   text-align: center;
   font-family: "Inter", "Helvetica Neue", sans-serif;
 }
@@ -190,9 +187,7 @@
    Responsive Layouts
 -----------------------*/
 @media (max-width: 480px) {
-  .featuresSection {
-    padding: 2rem 1rem;
-  }
+
 
   .heading {
     font-size: 2rem;

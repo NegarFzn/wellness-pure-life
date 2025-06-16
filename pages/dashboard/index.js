@@ -34,6 +34,16 @@ export default function DashboardPage() {
     }
   }, [status, router]);
 
+  useEffect(() => {
+    if (status === "authenticated") {
+      const timer = setTimeout(() => {
+        router.push("/");
+      }, 5000); // 5 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [status, router]);
+
   const emailVerified = session?.user?.emailVerified || false;
 
   const handleResendVerification = async () => {
@@ -78,6 +88,10 @@ export default function DashboardPage() {
       <p className={classes.tag}>Email: {user?.email}</p>
       <p className={classes.tag}>
         Status: {emailVerified ? "✅ Verified" : "Unverified"}
+      </p>
+
+      <p className={classes.redirectNotice}>
+        Redirecting to home in 5 seconds...
       </p>
 
       {!emailVerified && (

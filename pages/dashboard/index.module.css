@@ -43,9 +43,9 @@
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
-
 @keyframes glowPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
@@ -172,50 +172,56 @@
   transform: translateY(-2px);
 }
 
+.redirectNotice {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 1.2rem;
     margin: 1rem auto;
   }
-
   .heading {
     font-size: 1.5rem;
-    text-align: center;
   }
-
   .tag {
-    text-align: center;
     font-size: 0.95rem;
   }
-
   .verifyNote {
     font-size: 0.9rem;
     padding: 0.75rem;
   }
-
   .verifyBtn {
     width: 100%;
-    margin-top: 0.75rem;
   }
-
   .quickLinks {
-    flex-direction: column;
     align-items: center;
+  }
+  .quickLinks button {
+    width: 100%;
+  }
+  .premiumBox {
+    font-size: 0.95rem;
+  }
+  .logoutBtn {
+    width: 100%;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 1.3rem;
   }
 
   .quickLinks button {
-    width: 100%;
-    font-size: 1rem;
-    padding: 0.75rem;
-  }
-
-  .premiumBox {
     font-size: 0.95rem;
   }
 
   .logoutBtn {
-    width: 100%;
-    font-size: 1rem;
-    margin-top: 1.5rem;
+    font-size: 0.95rem;
   }
 }

@@ -14,9 +14,8 @@ body {
   height: 100%;
   margin: 0;
   background: linear-gradient(180deg, #ffffff, #ffffff);
-padding: 0;
+  padding: 0;
 }
-
 
 main {
   margin: auto;
@@ -65,3 +64,24 @@ p a:active {
   --text-color: #f0f0f0;
 }
 
+:root {
+  --primary-bg: #1c192c;
+  --primary-accent: #a8d5ba;
+  --primary-text: #ffffff;
+  --button-bg: #3b82f6;
+  --button-hover: #2563eb;
+  --input-bg: #ffffff;
+  --input-text: #111827;
+  --hover-bg: rgba(255, 255, 255, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-bg: #1c1c1c;
+    --primary-accent: #6bbf8e;
+    --primary-text: #eee;
+    --secondary-bg: #2a2a2a;
+    --secondary-text: #aaa;
+    --hover-bg: #333;
+  }
+}
