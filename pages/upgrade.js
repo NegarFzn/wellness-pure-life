@@ -72,7 +72,11 @@ export default function UpgradePage() {
   return (
     <div className={classes.overlay} onClick={() => router.back()}>
       <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={classes.closeButton} onClick={() => router.back()}>
+        <button
+          className={classes.closeButton}
+          onClick={() => router.back()}
+          aria-label="Close Upgrade Modal"
+        >
           &times;
         </button>
 

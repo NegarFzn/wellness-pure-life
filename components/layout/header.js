@@ -127,6 +127,8 @@ export default function Header({ weather }) {
     fetchNavData();
   }, []);
 
+  
+
   return (
     <>
       <header className={classes.header}>

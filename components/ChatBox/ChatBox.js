@@ -22,6 +22,7 @@ export default function ChatBox() {
   const chatEndRef = useRef(null);
   const { isChatOpen, openChat, closeChat } = useUI();
 
+
   // ✅ Load chat for logged-in user
   useEffect(() => {
     if (user?.email) {
@@ -101,7 +102,7 @@ export default function ChatBox() {
 
 
   return (
-    <div className={classes.launcher}>
+    <div id="chat-box"  className={classes.launcher}>
       {isChatOpen ? (
         <div className={classes.box}>
           <button onClick={closeChat} className={classes.closeBtn}>

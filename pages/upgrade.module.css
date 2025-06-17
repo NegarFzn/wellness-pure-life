@@ -212,7 +212,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
 @keyframes slideInLeft {
   from {
     opacity: 0;
@@ -234,7 +233,6 @@
     transform: translateX(0);
   }
 }
-
 
 @keyframes fadeIn {
   from {
@@ -270,17 +268,148 @@
 }
 
 @media (max-width: 768px) {
+  .modal {
+    padding: 1.75rem;
+    border-radius: 1.25rem;
+    max-width: 90%;
+  }
+
   .modalContentSplit {
     flex-direction: column;
+    gap: 2rem;
   }
 
-  .leftInfo,
-  .signupFormRight {
-    padding: 0 !important;
-    border: none !important;
+  .leftInfo {
+    padding-right: 0;
+    border-right: none;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #e5e7eb;
   }
 
   .signupFormRight {
-    margin-top: 1rem;
+    padding-left: 0;
+    padding-top: 1.25rem;
   }
+
+  .title {
+    font-size: 1.65rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .featureItem {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .feeNote {
+    font-size: 0.95rem;
+    padding: 0.45rem 1.1rem;
+  }
+
+  .feeHighlight {
+    font-size: 1.05rem;
+    padding: 0.18rem 0.45rem;
+  }
+
+  .input {
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+
+  .subscribeButton {
+    font-size: 1.05rem;
+    padding: 0.7rem 1.35rem;
+  }
+
+  .subscribeButton::after {
+    font-size: 1.1rem;
+    right: 1.25rem;
+  }
+
+  .closeButton {
+    font-size: 1.6rem;
+    top: 0.85rem;
+    right: 0.85rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .modal {
+    padding: 1.25rem;
+    border-radius: 1rem;
+    max-width: 95%;
+  }
+
+  .modalContentSplit {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .leftInfo {
+    padding-right: 0;
+    border-right: none;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .signupFormRight {
+    padding-left: 0;
+    padding-top: 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .description {
+    font-size: 0.95rem;
+  }
+
+  .featureItem {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .feeNote {
+    font-size: 0.9rem;
+    padding: 0.4rem 1rem;
+  }
+
+  .feeHighlight {
+    font-size: 1rem;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .input {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+
+  .subscribeButton {
+    font-size: 1rem;
+    padding: 0.6rem 1.25rem;
+  }
+
+  .subscribeButton::after {
+    font-size: 1rem;
+    right: 1rem;
+  }
+
+  .closeButton {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
 }
