@@ -742,6 +742,10 @@
     white-space: nowrap;
   }
 
+  .fullName {
+    display: inline;
+  }
+
   .hamburger {
     display: block;
     font-size: 1.8rem;
