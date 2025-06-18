@@ -6,12 +6,12 @@
     "lat": 40.7142,
     "lon": -74.0064,
     "tz_id": "America/New_York",
-    "localtime_epoch": 1750228611,
-    "localtime": "2025-06-18 02:36"
+    "localtime_epoch": 1750229426,
+    "localtime": "2025-06-18 02:50"
   },
   "current": {
-    "last_updated_epoch": 1750228200,
-    "last_updated": "2025-06-18 02:30",
+    "last_updated_epoch": 1750229100,
+    "last_updated": "2025-06-18 02:45",
     "temp_c": 18.3,
     "temp_f": 64.9,
     "is_day": 0,

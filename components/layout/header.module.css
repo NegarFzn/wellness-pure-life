@@ -1180,7 +1180,7 @@
   }
 }
 
-@media (max-width: 464px) {
+@media (max-width: 430px) {
   .fullName {
     display: none;
   }
