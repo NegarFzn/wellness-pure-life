@@ -127,19 +127,46 @@ export default function Header({ weather }) {
     fetchNavData();
   }, []);
 
-  
-
   return (
     <>
       <header className={classes.header}>
         <Link href="/" className={classes.logo}>
           <Image src={logoImg} alt="Wellness Pure Life" priority />
-          <span className={classes.brandName}>Wellness Pure Life</span>
+          <span className={classes.brandName}>
+            <span className={classes.fullName}>Wellness Pure Life</span>
+            <span className={classes.shortName}>WPL</span>
+          </span>
         </Link>
 
-        {!user && status !== "loading" && !mobileMenuOpen && (
-          <div className={classes.mobileOnly}>
-            <div className={classes.authButtons}>
+        <div className={classes.rightControls}>
+          {user && (
+            <div className={`${classes.userControls} ${classes.mobileOnly}`}>
+             
+
+              <div className={classes.profileWrapper}>
+                <button className={classes.profileButton}>
+                  <FiUser size={18} style={{ marginRight: "0.4rem" }} />
+                  <span className={classes.profileName}>
+                    {(user?.name || "Account").charAt(0).toUpperCase() +
+                      (user?.name || "Account").slice(1)}
+                  </span>
+                </button>
+                <div className={classes.dropdownContent}>
+                  <Link href="/dashboard" className={classes.dropdownLink}>
+                    <FiUser size={16} /> Profile
+                  </Link>
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className={classes.logoutLink}
+                  >
+                    <FiLogOut size={16} /> Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {!user && status !== "loading" && (
+            <div className={`${classes.authButtons} ${classes.desktopOnly}`}>
               <button onClick={openSignup} className={classes.authMiniBtn}>
                 Sign Up
               </button>
@@ -147,16 +174,25 @@ export default function Header({ weather }) {
                 Login
               </button>
             </div>
-          </div>
-        )}
-
-        <button
-          className={classes.hamburger}
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          ☰
-        </button>
+          )}
+          {!user && status !== "loading" && (
+            <div className={`${classes.authButtons} ${classes.mobileOnly}`}>
+              <button onClick={openSignup} className={classes.authMiniBtn}>
+                Sign Up
+              </button>
+              <button onClick={openLogin} className={classes.authMiniBtn}>
+                Login
+              </button>
+            </div>
+          )}
+          <button
+            className={classes.hamburger}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            ☰
+          </button>
+        </div>
 
         <nav
           className={`${classes.nav} ${mobileMenuOpen ? classes.showNav : ""}`}

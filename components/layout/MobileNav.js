@@ -11,6 +11,18 @@ export default function MobileNav({
 }) {
   const [activeMobileSection, setActiveMobileSection] = useState(null);
 
+  const handleSurprise = () => {
+    const topics = topicsMap[activeMobileSection] || [];
+    if (topics.length > 0) {
+      const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+      if (randomTopic) {
+        window.location.href = randomTopic.href;
+      }
+    }
+    setActiveMobileSection(null);
+    closeMenu();
+  };
+
   return (
     <nav className={classes.mobileNav}>
       {!activeMobileSection ? (
@@ -101,6 +113,47 @@ export default function MobileNav({
                 </Link>
               </li>
             ))}
+            <li>
+              <Link
+                href={`/${activeMobileSection.toLowerCase()}`}
+                className={classes.mobileNavLink}
+                onClick={() => {
+                  setActiveMobileSection(null);
+                  closeMenu();
+                }}
+              >
+                Browse all {activeMobileSection.toLowerCase()} topics →
+              </Link>
+            </li>
+            <li>
+              <button
+                className={classes.surpriseButton}
+                onClick={handleSurprise}
+              >
+                Surprise Me
+              </button>
+              <li className={classes.premiumBox}>
+                <div className={classes.premiumInner}>
+                  <div>
+                    <span role="img" aria-label="fire">
+                      🔥
+                    </span>{" "}
+                    <strong>7-Day Challenge</strong>
+                  </div>
+                  <div>This challenge is available for Premium members.</div>
+                  <Link
+                    href="/upgrade"
+                    className={classes.premiumLink}
+                    onClick={() => {
+                      setActiveMobileSection(null);
+                      closeMenu();
+                    }}
+                  >
+                    Upgrade to Premium →
+                  </Link>
+                </div>
+              </li>
+            </li>
           </ul>
         </div>
       )}
