@@ -8,6 +8,7 @@ export default function MobileNav({
   closeMenu,
   weather,
   nyTime,
+  user,
 }) {
   const [activeMobileSection, setActiveMobileSection] = useState(null);
 
@@ -140,17 +141,34 @@ export default function MobileNav({
                     </span>{" "}
                     <strong>7-Day Challenge</strong>
                   </div>
-                  <div>This challenge is available for Premium members.</div>
-                  <Link
-                    href="/upgrade"
-                    className={classes.premiumLink}
-                    onClick={() => {
-                      setActiveMobileSection(null);
-                      closeMenu();
-                    }}
-                  >
-                    Upgrade to Premium →
-                  </Link>
+                  {user?.isPremium ? (
+                    <Link
+                      href="/challenge"
+                      className={classes.premiumActiveLink}
+                      onClick={() => {
+                        setActiveMobileSection(null);
+                        closeMenu();
+                      }}
+                    >
+                      Start Challenge →
+                    </Link>
+                  ) : (
+                    <>
+                      <div>
+                        This challenge is available for Premium members.
+                      </div>
+                      <Link
+                        href="/upgrade"
+                        className={classes.premiumLink}
+                        onClick={() => {
+                          setActiveMobileSection(null);
+                          closeMenu();
+                        }}
+                      >
+                        Upgrade to Premium →
+                      </Link>
+                    </>
+                  )}
                 </div>
               </li>
             </li>

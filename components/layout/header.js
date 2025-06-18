@@ -141,14 +141,11 @@ export default function Header({ weather }) {
         <div className={classes.rightControls}>
           {user && (
             <div className={`${classes.userControls} ${classes.mobileOnly}`}>
-             
-
               <div className={classes.profileWrapper}>
                 <button className={classes.profileButton}>
                   <FiUser size={18} style={{ marginRight: "0.4rem" }} />
                   <span className={classes.profileName}>
-                    {(user?.name || "Account").charAt(0).toUpperCase() +
-                      (user?.name || "Account").slice(1)}
+                  {(user?.name?.split(" ")[0] || "Account")}
                   </span>
                 </button>
                 <div className={classes.dropdownContent}>
@@ -186,7 +183,7 @@ export default function Header({ weather }) {
             </div>
           )}
           <button
-            className={classes.hamburger}
+            className={`${classes.hamburger} ${classes.mobileOnly}`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -405,6 +402,7 @@ export default function Header({ weather }) {
             closeMenu={() => setMobileMenuOpen(false)}
             weather={weather}
             nyTime={nyTime}
+            user={user} 
           />
         )}
 

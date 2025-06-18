@@ -630,24 +630,31 @@
 .rightControls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.6px;
   flex-shrink: 0; /* prevent squeezing */
 }
 
 .authButtons {
   display: flex;
-  gap: 6px;
+  gap: 0.5rem;              /* nice spacing between buttons */
+  justify-content: center;
+  flex-wrap: nowrap;        /* prevent wrapping */
 }
 
 .authMiniBtn {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.95rem;
-  background-color: #3b82f6;
-  color: #fff;
+  background: #3b82f6;
+  color: white;
   border: none;
   border-radius: 6px;
-  font-weight: bold;
+  padding: 0.3rem 0.9rem;   /* slightly larger padding for desktop */
+  font-size: 0.9rem;        /* clear readable size on desktop */
+  font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;      /* prevent text from wrapping */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
   transition: background 0.3s ease;
 }
 
@@ -691,6 +698,17 @@
   display: none;
 }
 
+.premiumActiveLink {
+  color: #ffffff;            /* bright white text for max contrast */
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.premiumActiveLink:hover {
+  text-decoration: underline;
+}
+
+
 /* === hamburger menu === */
 
 @keyframes shimmer {
@@ -714,6 +732,8 @@
     z-index: 999;
   }
 
+  
+
   .header {
     flex-direction: row;
     justify-content: space-between;
@@ -733,8 +753,8 @@
   }
 
   .logo img{
-    height: 25px;
-    width: auto;
+    height: 22px;
+    width: 22px;
   }
 
   .brandName {
@@ -744,6 +764,10 @@
 
   .fullName {
     display: inline;
+  }
+
+  .shortName {
+    display: none;
   }
 
   .hamburger {
@@ -911,12 +935,14 @@
   }
 
   .authMiniBtn {
+    white-space: nowrap; 
+    font-size: 0.8rem; 
     background: #3b82f6;
     color: white;
     border: none;
     border-radius: 6px;
-    padding: 0.4rem 0.9rem;
-    font-size: 0.85rem;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
   }
@@ -1182,9 +1208,11 @@
   .searchButton {
     font-size: 1rem;
   }
+
+  
 }
 
-@media (max-width: 430px) {
+@media (max-width: 431px) {
   .fullName {
     display: none;
   }
