@@ -25,7 +25,6 @@
   font-weight: bold;
   font-size: 1.2rem;
   display: flex;
- 
 }
 
 .logo img {
@@ -187,7 +186,6 @@
 .profileLink:hover {
   background-color: rgba(59, 130, 246, 0.2); /* subtle blue hover */
 }
-
 
 .dropdownContent {
   display: none;
@@ -636,9 +634,9 @@
 
 .authButtons {
   display: flex;
-  gap: 0.5rem;              /* nice spacing between buttons */
+  gap: 0.5rem; /* nice spacing between buttons */
   justify-content: center;
-  flex-wrap: nowrap;        /* prevent wrapping */
+  flex-wrap: nowrap; /* prevent wrapping */
 }
 
 .authMiniBtn {
@@ -646,11 +644,11 @@
   color: white;
   border: none;
   border-radius: 6px;
-  padding: 0.3rem 0.9rem;   /* slightly larger padding for desktop */
-  font-size: 0.9rem;        /* clear readable size on desktop */
+  padding: 0.3rem 0.9rem; /* slightly larger padding for desktop */
+  font-size: 0.9rem; /* clear readable size on desktop */
   font-weight: 600;
   cursor: pointer;
-  white-space: nowrap;      /* prevent text from wrapping */
+  white-space: nowrap; /* prevent text from wrapping */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -699,7 +697,7 @@
 }
 
 .premiumActiveLink {
-  color: #ffffff;            /* bright white text for max contrast */
+  color: #ffffff; /* bright white text for max contrast */
   font-weight: bold;
   text-decoration: none;
 }
@@ -707,7 +705,6 @@
 .premiumActiveLink:hover {
   text-decoration: underline;
 }
-
 
 /* === hamburger menu === */
 
@@ -732,34 +729,24 @@
     z-index: 999;
   }
 
-  
-
   .header {
-    flex-direction: row;
-    justify-content: space-between;
+    display: flex;
     align-items: center;
-    padding: 0.5rem 1rem;
-    position: relative;
-    height: auto;
-    margin-bottom: -50px;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
   }
 
   .logo {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    gap: 0.5rem;
-    margin: 0;
+    gap: 0.3rem;
+    flex-shrink: 1;
   }
 
-  .logo img{
+  .logo img {
     height: 22px;
     width: 22px;
-  }
-
-  .brandName {
-    font-size: 1rem;
-    white-space: nowrap;
   }
 
   .fullName {
@@ -771,7 +758,9 @@
   }
 
   .hamburger {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 1.8rem;
     background: none;
     border: none;
@@ -790,7 +779,7 @@
     left: 0;
     padding: 1rem 0;
     z-index: 3000;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.3s ease, padding 0.3s ease;
     overflow: hidden;
     max-height: 0;
   }
@@ -831,7 +820,6 @@
   .desktopOnly {
     display: none !important;
   }
-  
 
   .searchContainer {
     display: flex;
@@ -935,8 +923,8 @@
   }
 
   .authMiniBtn {
-    white-space: nowrap; 
-    font-size: 0.8rem; 
+    white-space: nowrap;
+    font-size: 0.8rem;
     background: #3b82f6;
     color: white;
     border: none;
@@ -1147,6 +1135,44 @@
     color: #fff;
     text-decoration: underline;
   }
+
+  .premiumLink:hover {
+    color: #facc15; /* gold/yellow on hover */
+  }
+
+  .verifyNotice {
+    display: inline-block; /* show only on mobile */
+  }
+
+  .rightControls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* small gap between button & hamburger */
+  }
+
+  .pendingVerify {
+    display: flex;
+    align-items: center;
+    padding: 0.3rem 0.3rem;
+    font-size: 0.8rem;
+    background: #fef3c7;
+    color: #92400e;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .pendingText {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .pendingTextIcon {
+    font-size: 1.1rem;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -1208,8 +1234,6 @@
   .searchButton {
     font-size: 1rem;
   }
-
-  
 }
 
 @media (max-width: 431px) {
@@ -1222,7 +1246,7 @@
   }
 
   .authMiniBtn {
-    padding: 4px 10px;
-    font-size: 14px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
   }
 }

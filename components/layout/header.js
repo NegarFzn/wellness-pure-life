@@ -40,7 +40,9 @@ export default function Header({ weather }) {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeMobileSection, setActiveMobileSection] = useState(null);
+  const isVerified = !!user?.emailVerified;
+
+ 
 
   const handleDropdownToggle = (label) => {
     if (activeDropdown === label) {
@@ -145,7 +147,7 @@ export default function Header({ weather }) {
                 <button className={classes.profileButton}>
                   <FiUser size={18} style={{ marginRight: "0.4rem" }} />
                   <span className={classes.profileName}>
-                  {(user?.name?.split(" ")[0] || "Account")}
+                    {user?.name?.split(" ")[0] || "Account"}
                   </span>
                 </button>
                 <div className={classes.dropdownContent}>
@@ -153,7 +155,11 @@ export default function Header({ weather }) {
                     <FiUser size={16} /> Profile
                   </Link>
                   <button
-                    onClick={() => signOut({ callbackUrl: "/" })}
+                    onClick={() =>
+                      signOut({
+                        callbackUrl: "https://wellnesspurelife.com/",
+                      })
+                    }
                     className={classes.logoutLink}
                   >
                     <FiLogOut size={16} /> Logout
@@ -172,16 +178,50 @@ export default function Header({ weather }) {
               </button>
             </div>
           )}
-          {!user && status !== "loading" && (
-            <div className={`${classes.authButtons} ${classes.mobileOnly}`}>
-              <button onClick={openSignup} className={classes.authMiniBtn}>
-                Sign Up
-              </button>
-              <button onClick={openLogin} className={classes.authMiniBtn}>
-                Login
-              </button>
-            </div>
+          {(user && !isVerified) || justSignedUp ? (
+            <button
+              className={`${classes.pendingVerify} ${
+                resent ? classes.verifiedPendingResent : ""
+              } ${classes.mobileOnly}`}
+              onClick={async () => {
+                const userEmail =
+                  user?.email || localStorage.getItem("justSignedUpEmail");
+                if (!userEmail) return toast.error("User email not available.");
+                try {
+                  const res = await fetch("/api/auth/emailverification", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: userEmail }),
+                  });
+                  if (!res.ok) throw new Error("Request failed");
+                  toast.success("Verification email resent.");
+                  setResent(true);
+                } catch (err) {
+                  console.error("Resend error:", err);
+                  toast.error("❌ Failed to resend email. Please try again.");
+                }
+              }}
+            >
+              <span className={classes.pendingText}>
+                <span className={classes.pendingTextIcon}>📬</span>
+                Verify your email
+              </span>
+            </button>
+          ) : (
+            !user &&
+            status !== "loading" &&
+            !justSignedUp && (
+              <div className={`${classes.authButtons} ${classes.mobileOnly}`}>
+                <button onClick={openSignup} className={classes.authMiniBtn}>
+                  Sign Up
+                </button>
+                <button onClick={openLogin} className={classes.authMiniBtn}>
+                  Login
+                </button>
+              </div>
+            )
           )}
+
           <button
             className={`${classes.hamburger} ${classes.mobileOnly}`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -402,7 +442,7 @@ export default function Header({ weather }) {
             closeMenu={() => setMobileMenuOpen(false)}
             weather={weather}
             nyTime={nyTime}
-            user={user} 
+            user={user}
           />
         )}
 

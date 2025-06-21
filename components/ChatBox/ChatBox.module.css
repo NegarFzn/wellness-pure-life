@@ -310,55 +310,106 @@
 
 @media (max-width: 768px) {
   .box {
-    width: calc(100% - 24px);
-    max-width: 100%;  /* Let it take full width if needed */
-    border-radius: 14px 14px 0 0;  /* Stick to bottom, rounded top only */
-    padding: 0.8rem 1rem;
-    margin: 0 auto;
+    width: calc(100% - 16px);
+    max-width: 100%;
+    position: fixed;
     bottom: 0;
+    left: 0;
     right: 0;
-    left: 0;  /* Center horizontally */
+    border-radius: 12px 12px 0 0;
+    padding: 0.6rem 0.8rem;
+    background: #fff;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  .title {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .notice {
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 8px;
+    margin-bottom: 0.4rem;
+  }
+
+  .buttonWrap {
+    margin: 0.3rem 0;
   }
 
   .log {
-    max-height: 40vh;  /* Make height adaptive to screen */
+    max-height: 35vh;
     overflow-y: auto;
-    padding-right: 4px;
+    padding: 0 2px;
+    margin-bottom: 0.5rem;
+  }
+
+  .msg {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
   }
 
   .inputRow {
-    flex-direction: column;
-    gap: 10px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
     width: 100%;
   }
 
   .input {
-    width: 100%;
+    flex: 1;
+    min-height: 34px;
     font-size: 16px;
+    padding: 0.75rem;
     border-radius: 8px;
+    border: 1px solid #ccc;
   }
 
   .send {
-    font-size: 1rem;
-    padding: 0.6rem 1rem;
-    max-width: 100%;
-    align-self: center;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 6px;
+    min-width: 60px;
+    background: #3b82f6;
+    color: #fff;
+    border: none;
   }
 
-  .title {
-    font-size: 20px;
-    text-align: center;
+  .send:disabled {
+    opacity: 0.6;
   }
 
-  .notice {
-    font-size: 1rem;
-    padding: 12px;
-    text-align: center;
+  .upgradeButton {
+    margin: 0 auto 0.4rem auto;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
   }
 
   .launcher {
+    position: fixed;
     bottom: 16px;
     right: 16px;
-    left: auto;
+    z-index: 1000;
+  }
+
+  .closeBtn {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 1.2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .loading {
+    text-align: center;
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
   }
 }
+
+
