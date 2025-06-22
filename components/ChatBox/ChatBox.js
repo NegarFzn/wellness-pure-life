@@ -179,7 +179,7 @@ export default function ChatBox() {
           {loading && <p className={classes.loading}>Thinking...</p>}
         </div>
       ) : (
-        <button onClick={openChat} className={classes.send}>
+        <button onClick={openChat} className={classes.askAssistantBtn}>
           💬 Ask Wellness Assistant
         </button>
       )}

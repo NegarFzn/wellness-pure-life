@@ -42,8 +42,6 @@ export default function Header({ weather }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isVerified = !!user?.emailVerified;
 
- 
-
   const handleDropdownToggle = (label) => {
     if (activeDropdown === label) {
       setActiveDropdown(null);
@@ -394,7 +392,7 @@ export default function Header({ weather }) {
                   <>
                     <li>
                       <button onClick={openSignup} className={classes.navBtn}>
-                        Sign Up Free
+                        Sign Up
                       </button>
                     </li>
                     <li>
