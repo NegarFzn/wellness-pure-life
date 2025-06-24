@@ -99,7 +99,18 @@ export default function ChallengeBox({ onLinkClick }) {
               This challenge is available for Premium members.
             </p>
             <Link href="/upgrade" legacyBehavior>
-              <a className={classes.challengeLink}>Upgrade to Premium →</a>
+              <a
+                className={classes.challengeLink}
+                onClick={() => {
+                  const dropdown = document.querySelector(
+                    `.${classes.megaDropdown}`
+                  );
+                  if (dropdown) dropdown.style.display = "none";
+                  if (onLinkClick) onLinkClick(); // THIS closes dropdown via parent state
+                }}
+              >
+                Upgrade to Premium →
+              </a>
             </Link>
           </>
         )}
