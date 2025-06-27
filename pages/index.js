@@ -209,7 +209,7 @@ export default function Home() {
         )}
 
         {showButton && (
-          <button onClick={scrollToTop} className={classes.backToTop}>
+          <button onClick={scrollToTop} className={classes.backToTop} >
             ↑
           </button>
         )}

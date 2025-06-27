@@ -318,7 +318,7 @@
 .pendingVerify {
   display: inline-flex;
   align-items: center;
-  padding: 0.4rem 0.4rem;
+  padding: 0.4rem 0.8rem !important;
   background: #fef3c7;
   color: #92400e;
   border: none;
@@ -336,7 +336,7 @@
 }
 
 .pendingText {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
@@ -1158,8 +1158,8 @@
   }
 
   .pendingVerify {
-    font-size: 0.8rem; /* slightly smaller text for narrow screens */
-    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem; 
+    padding: 0.3rem 0.4rem !important;
   }
 
   .pendingText:hover {
