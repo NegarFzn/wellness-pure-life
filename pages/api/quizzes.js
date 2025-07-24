@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   try {
     switch (method) {
       case "GET": {
-        const { slug, type, quizSlug, user, recent } = query;
+        const { slug, type, quizSlug, user, recent, daily } = query;
 
         if (slug) {
           const quiz = await getQuizBySlug(slug);
@@ -39,6 +39,13 @@ export default async function handler(req, res) {
         if (user === "true") {
           const history = await getUserQuizHistory(req);
           return res.status(200).json(history);
+        }
+
+        if (daily === "true") {
+          const dailyHistory = await getUserQuizHistory(req, {
+            filterDaily: true,
+          });
+          return res.status(200).json(dailyHistory);
         }
 
         if (recent === "true") {
@@ -86,6 +93,7 @@ export default async function handler(req, res) {
           result,
           answers,
           email,
+          isDaily: quizSlug === "daily-quiz",
         });
 
         const recs = await getRecommendationsByTypeAndSlug(result, quizSlug);

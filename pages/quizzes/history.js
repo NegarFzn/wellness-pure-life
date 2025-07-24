@@ -26,6 +26,7 @@ export default function QuizHistory() {
     Balanced: 0,
     "Low Stress": 0,
     Unknown: 0,
+    "Daily Quiz": 0,
   };
 
   history.forEach((q) => {
@@ -35,7 +36,9 @@ export default function QuizHistory() {
       q.result === "Low Stress"
         ? q.result
         : "Unknown";
+
     countByType[key]++;
+    if (q.isDaily) countByType["Daily Quiz"]++;
   });
 
   const filtered = history.filter((q) => {
@@ -110,6 +113,9 @@ export default function QuizHistory() {
         >
           ❓ {countByType["Unknown"]}
         </button>
+        <button className={classes.summaryBtn} disabled>
+          🗓️ Daily Quiz: {countByType["Daily Quiz"]}
+        </button>
         {selectedType && (
           <button
             className={classes.clearFilter}
@@ -145,6 +151,7 @@ export default function QuizHistory() {
                 >
                   {entry.result}
                 </em>
+                {entry.isDaily && <span> 🗓️</span>}
                 <br />
                 <small>{new Date(entry.createdAt).toLocaleString()}</small>
               </li>

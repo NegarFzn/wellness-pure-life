@@ -39,7 +39,7 @@ export default function DashboardPage() {
     if (status === "authenticated") {
       const timer = setTimeout(() => {
         router.push("/");
-      }, 5000);
+      }, 15000);
       return () => clearTimeout(timer);
     }
   }, [status, router]);
@@ -102,7 +102,7 @@ export default function DashboardPage() {
       </p>
 
       <p className={classes.redirectNotice}>
-        Redirecting to home in 5 seconds...
+        Redirecting to home in 15 seconds...
       </p>
 
       {!emailVerified && (
@@ -124,6 +124,9 @@ export default function DashboardPage() {
         </button>
         <button onClick={() => router.push("/nourish")}>🍎 Nutrition</button>
         <button onClick={() => router.push("/fitness")}>🏋️ Fitness</button>
+        <button onClick={() => router.push("/quizzes/history")}>
+          🕘 View Full Quiz History
+        </button>
       </div>
 
       {session?.user?.isPremium && (

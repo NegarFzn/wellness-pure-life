@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Head from "next/head";
 import Layout from "../components/layout/layout";
 import { UIProvider } from "../context/UIContext";
@@ -10,11 +11,13 @@ import CookieConsent from "../components/CookieConsent/CookieConsent";
 import Script from "next/script";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import DailyQuiz from "../components/DailyQuiz/DailyQuiz";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const router = useRouter();
+  const [showDaily, setShowDaily] = useState(false);
 
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -27,11 +30,24 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router]);
+
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    const last = localStorage.getItem("lastDailyShown");
+    if (last !== today) {
+      setShowDaily(true);
+      localStorage.setItem("lastDailyShown", today);
+    }
+  }, []);
+
   return (
     <SessionProvider session={session}>
       <UIProvider>
         <ThemeProvider>
           <Layout>
+            {showDaily && (
+              <DailyQuiz onClose={() => setShowDaily(false)} />
+            )}
             <Head>
               <title>Wellness Pure Life</title>
               <meta
