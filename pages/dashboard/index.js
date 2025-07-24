@@ -13,6 +13,7 @@ export default function DashboardPage() {
 
   const [session, setSession] = useState(initialSession);
   const [resending, setResending] = useState(false);
+  const [quizResults, setQuizResults] = useState([]);
 
   useEffect(() => {
     const refreshSession = async () => {
@@ -38,17 +39,29 @@ export default function DashboardPage() {
     if (status === "authenticated") {
       const timer = setTimeout(() => {
         router.push("/");
-      }, 5000); // 5 seconds
-
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [status, router]);
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      const res = await fetch("/api/quiz/user");
+      if (res.ok) {
+        const data = await res.json();
+        setQuizResults(data);
+      }
+    };
+
+    if (status === "authenticated") {
+      fetchResults();
+    }
+  }, [status]);
 
   const emailVerified = session?.user?.emailVerified || false;
 
   const handleResendVerification = async () => {
     if (!user?.email) return;
-
     setResending(true);
     try {
       const res = await fetch("/api/auth/emailverification", {
@@ -56,9 +69,7 @@ export default function DashboardPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: user.email }),
       });
-
       if (!res.ok) throw new Error("Failed to send verification email");
-
       toast.success(" Verification email sent.");
     } catch (error) {
       console.error(error);
@@ -131,6 +142,21 @@ export default function DashboardPage() {
           </ul>
         </div>
       )}
+
+      {quizResults.length > 0 && (
+        <div className={classes.quizHistory}>
+          <h3>Your Quiz History</h3>
+          <ul>
+            {quizResults.map((result, index) => (
+              <li key={index} className={classes.quizItem}>
+                <strong>{result.slug}</strong> → <em>{result.result}</em> <br />
+                <small>{new Date(result.createdAt).toLocaleString()}</small>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <button className={classes.logoutBtn} onClick={handleLogout}>
         Logout
       </button>

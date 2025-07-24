@@ -71,3 +71,48 @@ export function createContactEmail(name, email, message) {
   `;
   return { subject, body: emailTemplate(bodyContent) };
 }
+
+export function createWeeklySummaryEmail(name, result) {
+  const subject = `🗓️ Your Weekly Wellness Summary: ${result}`;
+
+  const bodyContent = `
+    <h2>🌿 Hi ${name || "there"},</h2>
+    <p>This week you're trending as <strong>${result}</strong>.</p>
+    <p>Here are some tailored suggestions:</p>
+    <ul>
+      <li>🧘 <a href="https://wellnesspurelife.com/mindfulness">Meditation Practices</a></li>
+      <li>🥗 <a href="https://wellnesspurelife.com/nourish">Healthy Meal Plans</a></li>
+      <li>🏋️‍♀️ <a href="https://wellnesspurelife.com/fitness">Custom Fitness Routines</a></li>
+    </ul>
+    <p>Stay well and consistent 💚</p>
+  `;
+
+  return { subject, body: emailTemplate(bodyContent) };
+}
+
+export function createQuizResultEmail(
+  email,
+  result,
+  answers,
+  quiz,
+  recommendations = []
+) {
+  const recList = recommendations
+    .map((r) => `<li><strong>${r.title}:</strong> ${r.description}</li>`)
+    .join("");
+
+  const bodyContent = `
+    <h2>Your result: ${result}</h2>
+    <p>Here are your answers:</p>
+    <ul>${Object.entries(answers)
+      .map(([q, a]) => `<li>${q}: ${a}</li>`)
+      .join("")}</ul>
+    <h3>Our Recommendations:</h3>
+    <ul>${recList}</ul>
+  `;
+
+  return {
+    subject: `Your Wellness Quiz Result: ${result}`,
+    body: emailTemplate(bodyContent),
+  };
+}

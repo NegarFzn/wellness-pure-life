@@ -33,10 +33,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <ThemeProvider>
           <Layout>
             <Head>
-              <title>Healthy Life</title>
+              <title>Wellness Pure Life</title>
               <meta
                 name="description"
-                content="A website about healthy living."
+                content="Discover expert content on fitness, nutrition, and mindfulness to live your healthiest life."
               />
               <meta
                 name="viewport"

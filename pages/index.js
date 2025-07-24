@@ -9,6 +9,7 @@ import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
 import DailyList from "../components/DailyList/DailyList";
 import ResetPassword from "../components/Auth/ResetPassword";
 import ResendVerificationModal from "../components/Auth/ResendVerificationModal";
+import QuizCard from "../components/QuizCard/QuizCard";
 import classes from "./index.module.css";
 
 export default function Home() {
@@ -172,7 +173,7 @@ export default function Home() {
         <DailyList />
         <KeyFeatures />
         <Subscribe />
-
+        <QuizCard /> 
         {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
             <div className={classes.newsGrid} ref={newsGridRef}>
