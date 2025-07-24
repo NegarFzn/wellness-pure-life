@@ -200,22 +200,24 @@
 }
 
 .summaryBtn {
-  background: #f3f0ff;
-  border: 1px solid #e0d7ff;
-  border-radius: 999px;
-  padding: 0.4rem 0.8rem;
+  background-color: #f1f1f5;
+  border: 1px solid transparent;
+  color: #444;
+  padding: 6px 12px;
+  margin: 4px;
+  border-radius: 8px;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .summaryBtn:hover {
-  background: #ede9fe;
+  background-color: #eaeafa;
 }
 
 .active {
-  background: #c084fc;
-  color: white;
+  background-color: #cfcaf6;
+  color: #333;
   font-weight: 600;
 }
 

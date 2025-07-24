@@ -177,6 +177,16 @@ export default function QuizPage({ quiz }) {
               No recommendations found for this result.
             </p>
           )}
+          <div className={classes.historyBox}>
+            <h4 className={classes.historyTitle}>📘 Reflect on Your Journey</h4>
+            <p className={classes.historyText}>
+              Want to track how your wellness evolves over time? Check your quiz
+              history for insights.
+            </p>
+            <a href="/quizzes/history" className={classes.historyButton}>
+              View My Quiz History
+            </a>
+          </div>
         </div>
       )}
     </div>

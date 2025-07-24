@@ -39,14 +39,15 @@ export default function DashboardPage() {
     if (status === "authenticated") {
       const timer = setTimeout(() => {
         router.push("/");
-      }, 15000);
+      }, 60000);
       return () => clearTimeout(timer);
     }
   }, [status, router]);
 
   useEffect(() => {
     const fetchResults = async () => {
-      const res = await fetch("/api/quiz/user");
+      const res = await fetch("/api/quizzes?user=true");
+
       if (res.ok) {
         const data = await res.json();
         setQuizResults(data);
@@ -70,7 +71,7 @@ export default function DashboardPage() {
         body: JSON.stringify({ email: user.email }),
       });
       if (!res.ok) throw new Error("Failed to send verification email");
-      toast.success(" Verification email sent.");
+      toast.success("✅ Verification email sent.");
     } catch (error) {
       console.error(error);
       toast.error("❌ Error resending verification email.");
@@ -102,7 +103,7 @@ export default function DashboardPage() {
       </p>
 
       <p className={classes.redirectNotice}>
-        Redirecting to home in 15 seconds...
+        Redirecting to home in 1 minute... 
       </p>
 
       {!emailVerified && (
@@ -124,9 +125,6 @@ export default function DashboardPage() {
         </button>
         <button onClick={() => router.push("/nourish")}>🍎 Nutrition</button>
         <button onClick={() => router.push("/fitness")}>🏋️ Fitness</button>
-        <button onClick={() => router.push("/quizzes/history")}>
-          🕘 View Full Quiz History
-        </button>
       </div>
 
       {session?.user?.isPremium && (
@@ -140,7 +138,7 @@ export default function DashboardPage() {
             <li>🛌 Sleep improvement tracker</li>
             <li>💬 1-on-1 coaching sessions</li>
             <li>📚 Exclusive articles and challenges</li>
-            <li>🎧 Mindfulness audio library(coming soon)</li>
+            <li>🎧 Mindfulness audio library (coming soon)</li>
             <li>💡 Early access to new features</li>
           </ul>
         </div>
@@ -148,15 +146,27 @@ export default function DashboardPage() {
 
       {quizResults.length > 0 && (
         <div className={classes.quizHistory}>
-          <h3>Your Quiz History</h3>
-          <ul>
-            {quizResults.map((result, index) => (
-              <li key={index} className={classes.quizItem}>
-                <strong>{result.slug}</strong> → <em>{result.result}</em> <br />
-                <small>{new Date(result.createdAt).toLocaleString()}</small>
-              </li>
+          <h3 className={classes.subHeading}>🕘 Recent Quiz Activity</h3>
+          <div className={classes.quizCardGrid}>
+            {quizResults.slice(0, 4).map((result, index) => (
+              <div key={index} className={classes.quizCard}>
+                <div className={classes.quizSlug}>{result.slug}</div>
+                <div className={classes.quizResult}>
+                  <span>Result: </span>
+                  <em>{result.result}</em>
+                </div>
+                <div className={classes.quizDate}>
+                  {new Date(result.createdAt).toLocaleString()}
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
+          <button
+            className={classes.historyFullBtn}
+            onClick={() => router.push("/quizzes/history")}
+          >
+            🧾 View Full Quiz History
+          </button>
         </div>
       )}
 
