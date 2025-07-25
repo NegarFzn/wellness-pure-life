@@ -9,67 +9,87 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .box {
-  background: white;
-  border-radius: 1.25rem;
-  padding: 2rem 1.8rem;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 2rem 2rem;
   width: 90%;
-  max-width: 420px;
+  max-width: 440px;
   text-align: center;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
   font-family: "Inter", sans-serif;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
   animation: slideIn 0.3s ease;
 }
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: scale(0.96);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
 }
 
-.h2 {
-  font-size: 1.6rem;
-  margin-bottom: 1rem;
+.box h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.2rem;
   color: #4c1d95;
+  font-weight: 700;
 }
 
 .select {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.2rem;
   font-size: 1rem;
   border-radius: 0.75rem;
-  border: 1px solid #ddd;
-  margin-bottom: 1rem;
-  background: #f9f9ff;
-  color: #333;
+  border: 1px solid #d1d5db;
+  background: #f3f4f6;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.select:focus {
+  border-color: #8b5cf6;
 }
 
 .submitBtn {
-  background: #8b5cf6;
+  background: linear-gradient(to right, #8b5cf6, #7c3aed);
   color: white;
-  padding: 0.6rem 1.4rem;
+  padding: 0.75rem 1.6rem;
   border: none;
   border-radius: 0.75rem;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
 .submitBtn:hover {
-  background: #7c3aed;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
 }
 
 .thankYou {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   color: #16a34a;
   font-weight: 600;
+  margin-top: 1rem;
 }

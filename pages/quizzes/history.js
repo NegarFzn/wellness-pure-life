@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useUI } from "../../context/UIContext";
 import classes from "./history.module.css";
 import {
   BarChart,
@@ -23,6 +24,7 @@ export default function QuizHistory() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
   const [selectedType, setSelectedType] = useState(null);
+  const { openLogin } = useUI();
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -30,12 +32,35 @@ export default function QuizHistory() {
         .then((res) => res.json())
         .then((data) => {
           setHistory(data);
-          setLoading(false);
         })
-        .catch(() => setLoading(false));
+        .finally(() => setLoading(false));
+    } else if (status === "unauthenticated") {
+      setLoading(false);
     }
   }, [status]);
 
+  if (status === "loading" || loading) {
+    return (
+      <div className={classes.container}>
+        <p className={classes.loading}>🔄 Loading your quiz history...</p>
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return (
+      <div className={classes.authBox}>
+        <div className={classes.authCard}>
+          <h2>🔐 Please log in to view your quiz history.</h2>
+          <button className={classes.authBtn} onClick={openLogin}>
+            🔑 Log In
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Count and group logic
   const countByType = {
     "High Stress": 0,
     Balanced: 0,
@@ -47,13 +72,9 @@ export default function QuizHistory() {
   const dailyMap = {};
 
   history.forEach((q) => {
-    const key =
-      q.result === "High Stress" ||
-      q.result === "Balanced" ||
-      q.result === "Low Stress"
-        ? q.result
-        : "Unknown";
-
+    const key = ["High Stress", "Balanced", "Low Stress"].includes(q.result)
+      ? q.result
+      : "Unknown";
     countByType[key]++;
     if (q.isDaily) countByType["Daily Quiz"]++;
 
@@ -69,6 +90,10 @@ export default function QuizHistory() {
     }
     dailyMap[dateKey][key]++;
   });
+
+  const chartData = Object.values(dailyMap).sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
 
   const pieData = Object.entries(countByType)
     .filter(([key]) => key !== "Daily Quiz")
@@ -90,22 +115,6 @@ export default function QuizHistory() {
     setSelectedType((prev) => (prev === type ? null : type));
   };
 
-  if (status === "loading" || loading) {
-    return <p className={classes.loading}>🔄 Loading your quiz history...</p>;
-  }
-
-  if (status === "unauthenticated") {
-    return (
-      <div className={classes.authBox}>
-        <h2>🔐 You must be signed in to view your quiz history.</h2>
-      </div>
-    );
-  }
-
-  const chartData = Object.values(dailyMap).sort(
-    (a, b) => new Date(a.date) - new Date(b.date)
-  );
-
   return (
     <div className={classes.container}>
       <h1 className={classes.heading}>📘 My Quiz History</h1>
@@ -119,41 +128,29 @@ export default function QuizHistory() {
       />
 
       <div className={classes.summary}>
-        <button
-          className={`${classes.summaryBtn} ${
-            selectedType === "Balanced" ? classes.active : ""
-          }`}
-          onClick={() => handleTypeClick("Balanced")}
-        >
-          🧘 Balanced ({countByType["Balanced"]})
-        </button>
-        <button
-          className={`${classes.summaryBtn} ${
-            selectedType === "High Stress" ? classes.active : ""
-          }`}
-          onClick={() => handleTypeClick("High Stress")}
-        >
-          ⚠️ High ({countByType["High Stress"]})
-        </button>
-        <button
-          className={`${classes.summaryBtn} ${
-            selectedType === "Low Stress" ? classes.active : ""
-          }`}
-          onClick={() => handleTypeClick("Low Stress")}
-        >
-          🌤️ Low ({countByType["Low Stress"]})
-        </button>
-        <button
-          className={`${classes.summaryBtn} ${
-            selectedType === "Unknown" ? classes.active : ""
-          }`}
-          onClick={() => handleTypeClick("Unknown")}
-        >
-          ❓ Unknown ({countByType["Unknown"]})
-        </button>
+        {["Balanced", "High Stress", "Low Stress", "Unknown"].map((type) => (
+          <button
+            key={type}
+            className={`${classes.summaryBtn} ${
+              selectedType === type ? classes.active : ""
+            }`}
+            onClick={() => handleTypeClick(type)}
+          >
+            {type === "Balanced"
+              ? "🧘"
+              : type === "High Stress"
+              ? "⚠️"
+              : type === "Low Stress"
+              ? "🌤️"
+              : "❓"}{" "}
+            {type} ({countByType[type]})
+          </button>
+        ))}
+
         <button className={classes.summaryBtn} disabled>
           🗓️ Daily Quiz: {countByType["Daily Quiz"]}
         </button>
+
         {selectedType && (
           <button
             className={classes.clearFilter}

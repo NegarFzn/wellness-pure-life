@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import Layout from "../components/layout/layout";
 import { UIProvider } from "../context/UIContext";
@@ -9,7 +9,6 @@ import { ThemeProvider } from "../context/ThemeContext";
 import ChatBox from "../components/ChatBox/ChatBox";
 import CookieConsent from "../components/CookieConsent/CookieConsent";
 import Script from "next/script";
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 import DailyQuiz from "../components/DailyQuiz/DailyQuiz";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,25 +17,22 @@ import "../styles/globals.css";
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const router = useRouter();
   const [showDaily, setShowDaily] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const handleRouteChange = (url) => {
-      window.gtag("config", "G-BW68Y2E49W", {
-        page_path: url,
-      });
-    };
-    router.events.on("routeChangeComplete", handleRouteChange);
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [router]);
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const today = new Date().toISOString().split("T")[0];
     const last = localStorage.getItem("lastDailyShown");
+    console.log("Today:", today, "Last shown:", last); // Debug
+
     if (last !== today) {
-      setShowDaily(true);
       localStorage.setItem("lastDailyShown", today);
+      setShowDaily(true);
     }
   }, []);
 
@@ -45,9 +41,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <UIProvider>
         <ThemeProvider>
           <Layout>
-            {showDaily && (
+            {mounted && showDaily && (
               <DailyQuiz onClose={() => setShowDaily(false)} />
             )}
+
             <Head>
               <title>Wellness Pure Life</title>
               <meta
@@ -56,10 +53,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
               />
               <meta
                 name="viewport"
-                content="initial-scale=1.0"
-                width="device-width"
+                content="width=device-width, initial-scale=1.0"
               />
             </Head>
+
             <Script
               async
               strategy="afterInteractive"
@@ -70,11 +67,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
               strategy="afterInteractive"
               dangerouslySetInnerHTML={{
                 __html: `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-BW68Y2E49W');
-    `,
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', 'G-BW68Y2E49W');
+                `,
               }}
             />
 

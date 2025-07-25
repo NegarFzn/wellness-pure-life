@@ -20,25 +20,29 @@ export default function QuizzesIndex() {
 
   return (
     <div className={classes.container}>
-    <h1 className={classes.heading}>All Quizzes</h1>
-    <ul className={classes.quizList}>
-      {quizzes.map((quiz) => (
-        <li className={classes.quizItem} key={quiz.slug}>
-          <Link href={`/quizzes/${quiz.slug}`} className={classes.quizLink}>
-            <span className={classes.icon}>
-              {quiz.slug.includes("mind") ? "🧠" :
-               quiz.slug.includes("fitness") ? "🏋️‍♀️" :
-               quiz.slug.includes("nutrition") ? "🥗" :
-               quiz.slug.includes("stress") ? "😌" :
-               quiz.slug.includes("balance") ? "⚖️" :
-               "📊"}
-            </span>
-            <span className={classes.quizTitle}>{quiz.title}</span>
-          </Link>
-        </li>
-      ))}
-    </ul>
-  </div>
-  
+      <h1 className={classes.heading}>All Quizzes</h1>
+      <ul className={classes.quizList}>
+        {quizzes.map((quiz) => (
+          <li className={classes.quizItem} key={quiz.slug}>
+            <Link href={`/quizzes/${quiz.slug}`} className={classes.quizLink}>
+              <span className={classes.icon}>
+                {quiz.slug.includes("mind")
+                  ? "🧠"
+                  : quiz.slug.includes("fitness")
+                  ? "🏋️‍♀️"
+                  : quiz.slug.includes("nutrition")
+                  ? "🥗"
+                  : quiz.slug.includes("stress")
+                  ? "😌"
+                  : quiz.slug.includes("balance")
+                  ? "⚖️"
+                  : "📊"}
+              </span>
+              <span className={classes.quizTitle}>{quiz.title}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
