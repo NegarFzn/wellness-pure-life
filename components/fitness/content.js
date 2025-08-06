@@ -2,8 +2,6 @@ import Image from "next/image";
 import { useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import AdSidebar from "../../components/Ads/AdSidebar";
-import AdBlock from "../../components/Ads/AdBlock";
 import classes from "./content.module.css";
 import FitnessList from "./fitness-list";
 
@@ -58,7 +56,7 @@ const Content = (props) => {
 
         {/* ✅ Google AdSense Script (Ensure YOUR_ADSENSE_CLIENT_ID is replaced) */}
       </Head>
-      <AdBlock adSlot="1234567890" className={`${classes.adBlock} ${classes.adTop}`} />
+     {/*  <AdBlock adSlot="1234567890" className={`${classes.adBlock} ${classes.adTop}`} /> */}
       <div className={classes["fitness-container"]}>
         <div className={classes["fitness-content"]}>
           <div className={classes.backButtonWrapper}>
@@ -106,7 +104,7 @@ const Content = (props) => {
               </div>
             ))}
         </div>
-        <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} />
+       {/*  <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} /> */}
       </div>
       <div className={classes["related-posts-wrapper"]}>
         <h3 className={classes["related-posts-title"]}>RELATED POSTS</h3>
@@ -114,7 +112,7 @@ const Content = (props) => {
           <FitnessList items={additionalSections} />
         </div>
       </div>
-      <AdBlock adSlot="2345678901" className={`${classes.adBlock} ${classes.adBottom}`} />
+      {/* <AdBlock adSlot="2345678901" className={`${classes.adBlock} ${classes.adBottom}`} /> */}
     </>
   );
 };

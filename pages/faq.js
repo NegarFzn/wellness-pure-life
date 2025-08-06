@@ -1,20 +1,34 @@
 import FAQItem from "../components/FAQItem/FAQItem";
-import AdBlock from "../components/Ads/AdBlock";
 
 const FAQPage = () => {
+  // Ad styling
   const adStyle = {
     display: "block",
-    margin: "20px 0",
+    margin: "2rem 0",
     textAlign: "center",
     minHeight: "100px",
   };
 
+  // Page wrapper styling
+  const wrapperStyle = {
+    maxWidth: "800px",
+    margin: "2rem auto",
+    padding: "1rem",
+  };
+
+  // Header styling
+  const headerStyle = {
+    fontSize: "2rem",
+    fontWeight: "700",
+    marginBottom: "2rem",
+  };
+
   return (
-    <div style={{ maxWidth: "800px", margin: "2rem auto", padding: "1rem" }}>
+    <div style={wrapperStyle}>
       {/* Top Ad */}
-      <div style={adStyle}>
+      {/*  <div style={adStyle}>
         <AdBlock adSlot="1234567890" />
-      </div>
+      </div> */}
       <h2 style={{ fontSize: "2rem", fontWeight: "700", marginBottom: "2rem" }}>
         Frequently Asked Questions
       </h2>
@@ -36,9 +50,9 @@ const FAQPage = () => {
         answer="Yes, we take data privacy seriously and follow industry standards to protect your information."
       />
       {/* Bottom Ad */}
-      <div style={adStyle}>
+      {/* <div style={adStyle}>
         <AdBlock adSlot="2345678901" />
-      </div>
+      </div> */}
     </div>
   );
 };

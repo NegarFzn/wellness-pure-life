@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "wellnesspurelife-mobile",
+    "slug": "wellnesspurelife-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "wellnesspurelifemobile",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#A1CEDC",
+    "plugins": ["expo-router"],
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#A1CEDC"
+      }
+    },
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#A1CEDC"
+    },
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

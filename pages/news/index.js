@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchNews } from "../../utils/fetch";
 import Link from "next/link";
-import AdSidebar from "../../components/Ads/AdSidebar";
-import AdBlock from "../../components/Ads/AdBlock";
 import classes from "./index.module.css";
 
 export default function News() {
@@ -21,15 +19,17 @@ export default function News() {
 
   return (
     <div className={classes.pageWrapper}>
-      <AdBlock
-        adSlot="1234567890"
-        className={`${classes.adBlock} ${classes.adTop}`}
-      />
       {/* LEFT: News Content */}
       <div className={classes.newsPage}>
         <h1 className={classes.newsHeader}>Latest Health & Wellness News</h1>
+
+        {/* <AdBlock
+          adSlot="1234567890"
+          className={`${classes.adBlock} ${classes.adTop}`}
+        /> */}
+
         {loading ? (
-          <p>Loading news...</p>
+          <p className={classes.loading}>Loading news...</p>
         ) : articles.length > 0 ? (
           <ul className={classes.newsList}>
             {articles.map((article) => (
@@ -64,14 +64,17 @@ export default function News() {
             <p>Please check back later.</p>
           </div>
         )}
+
+        {/* <AdBlock
+          adSlot="2345678901"
+          className={`${classes.adBlock} ${classes.adBottom}`}
+        /> */}
       </div>
 
       {/* RIGHT: Google Ad */}
+      {/* 
       <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} />
-      <AdBlock
-        adSlot="2345678901"
-        className={`${classes.adBlock} ${classes.adBottom}`}
-      />
+      */}
     </div>
   );
 }

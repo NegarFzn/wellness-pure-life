@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
-import AdBlock from "../../components/Ads/AdBlock";
-import AdSidebar from "../../components/Ads/AdSidebar";
 import classes from "./content.module.css";
 import MindfulnessList from "./mindfulness-list";
 
@@ -51,7 +49,7 @@ const Content = (props) => {
 
         {/* ✅ Google AdSense Script (Ensure YOUR_ADSENSE_CLIENT_ID is replaced) */}
       </Head>
-      <AdBlock adSlot="1234567890" className={`${classes.adBlock} ${classes.adTop}`} />
+      {/* <AdBlock adSlot="1234567890" className={`${classes.adBlock} ${classes.adTop}`} /> */}
       <div className={classes["mindfulness-container"]}>
         <div className={classes["mindfulness-content"]}>
           <div className={classes.backButtonWrapper}>
@@ -97,7 +95,7 @@ const Content = (props) => {
               </div>
             ))}
         </div>
-        <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} />
+        {/*   <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} /> */}
       </div>
       <div className={classes["related-posts-wrapper"]}>
         <h3 className={classes["related-posts-title"]}>RELATED POSTS</h3>
@@ -105,7 +103,7 @@ const Content = (props) => {
           <MindfulnessList items={additionalSections} />
         </div>
       </div>
-      <AdBlock adSlot="2345678901" className={`${classes.adBlock} ${classes.adBottom}`} />
+      {/*  <AdBlock adSlot="2345678901" className={`${classes.adBlock} ${classes.adBottom}`} /> */}
     </>
   );
 };

@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
-import AdBlock from "../../components/Ads/AdBlock";
-import AdSidebar from "../../components/Ads/AdSidebar";
 import classes from "./content.module.css";
 import NourishList from "./nourish-list";
 
@@ -51,7 +49,7 @@ const Content = (props) => {
 
         {/* ✅ Google AdSense Script (Replace with Your Client ID) */}
       </Head>
-      <AdBlock adSlot="1234567890" className={`${classes.adBlock} ${classes.adTop}`} />
+      {/* <AdBlock adSlot="1234567890" className={`${classes.adBlock} ${classes.adTop}`} /> */}
       <div className={classes["nourish-container"]}>
         <div className={classes["nourish-content"]}>
           <div className={classes.backButtonWrapper}>
@@ -97,7 +95,7 @@ const Content = (props) => {
               </div>
             ))}
         </div>
-        <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} />
+        {/* <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} /> */}
       </div>
       <div className={classes["related-posts-wrapper"]}>
         <h3 className={classes["related-posts-title"]}>RELATED POSTS</h3>
@@ -105,7 +103,7 @@ const Content = (props) => {
           <NourishList items={additionalSections} />
         </div>
       </div>
-      <AdBlock adSlot="2345678901" className={`${classes.adBlock} ${classes.adBottom}`} />
+      {/* <AdBlock adSlot="2345678901" className={`${classes.adBlock} ${classes.adBottom}`} /> */}
     </>
   );
 };

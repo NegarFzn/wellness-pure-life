@@ -29,13 +29,17 @@
 
 .main-content {
   margin-top: 10px;
-  width: 90%;
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
   min-height: 100vh;
 }
 
 .fitness-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
   justify-content: center;
   width: 100%;
@@ -62,13 +66,17 @@
 }
 
 .section {
-  width: 90%;
+  width: 100%;
   max-width: 800px;
+  margin: 0 auto;
+  margin-bottom: 40px;
+  padding: 0 1rem;
 }
 
+/* ✅ Responsive Layout */
 @media (max-width: 768px) {
   .header {
-    height: 140px; /* ✅ Reduce further for better first-view visibility */
+    height: 140px;
   }
 
   .left-align {
@@ -78,14 +86,14 @@
   }
 
   .main-content {
-    width: 95%;
-    padding-bottom: 20px;
+    width: 100%;
+    padding: 0 1rem 20px;
   }
 
   .section {
     width: 100%;
     margin-bottom: 30px;
-    padding: 0 10px; /* ✅ Add side padding */
+    padding: 0 10px;
   }
 
   .fitness-container {
@@ -100,7 +108,6 @@
     bottom: 15px;
   }
 }
-
 
 @media (max-width: 480px) {
   .left-align {

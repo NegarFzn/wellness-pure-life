@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import fitness from "../data/fitness.json";
 import mindfulness from "../data/mindfulness.json";
 import nourish from "../data/nourish.json";
-import AdSidebar from "../components/Ads/AdSidebar";
 import classes from "./search.module.css";
 
 export default function SearchPage() {
@@ -178,7 +177,7 @@ export default function SearchPage() {
       </div>
 
       {/* Right Side: Google Ad */}
-      <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} />
+      {/* <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} /> */}
     </div>
   );
 }
