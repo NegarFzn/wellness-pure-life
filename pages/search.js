@@ -64,18 +64,6 @@ export default function SearchPage() {
     setResults(matched);
   }, [q]);
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.adsbygoogle) {
-      try {
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      } catch (e) {
-        console.error("AdsbyGoogle error", e);
-      }
-    }
-  }, []);
-
-  
-
   return (
     <div className={classes.pageWrapper}>
       {/* Left Side: Main Content */}
