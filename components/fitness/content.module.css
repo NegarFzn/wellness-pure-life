@@ -6,7 +6,6 @@
   padding-left: 10px;
 }
 
-/* ✅ Back Button Styles */
 .backButton {
   color: rgb(32, 200, 140);
   font-size: 0.9rem;
@@ -25,11 +24,11 @@
 
 .backButton:hover {
   color: rgb(255, 102, 102);
-  transition: 0.3s;
+  transition: 0.3s !important;
 }
 
 .fitness-container {
-  display: block; /* Previously 'flex' with sidebar; now simplified */
+  display: block;
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
@@ -37,7 +36,6 @@
 
 .fitness-content {
   max-width: 800px;
-  width: 100%; /* Use full width now */
   margin: 0 auto;
   text-align: left;
   font-size: 1.4rem;
@@ -56,8 +54,7 @@
   border-radius: 10px;
 }
 
-/* 🚫 Removed: .ad-sidebar, .adBlock, .adTop, .adBottom */
-
+/* ✅ Updated: RELATED POSTS - HORIZONTAL SCROLL STYLE */
 .related-posts-wrapper {
   width: 100%;
   max-width: 1200px;
@@ -120,9 +117,8 @@
   }
 
   .fitness-content {
-    width: 100%;
-    padding: 1rem 0.5rem;
-    font-size: 1.1rem;
+    padding: 0 0.75rem;
+    font-size: 1.15rem;
   }
 
   .fitness-content p {
@@ -131,7 +127,7 @@
   }
 
   .fitness-content img {
-    width: 100%;
+    max-width: 100%;
     height: auto;
     border-radius: 8px;
   }
@@ -146,14 +142,14 @@
     padding: 6px 10px;
   }
 
+  .related-posts-wrapper {
+    align-items: center;
+    padding: 0 1rem;
+  }
+
   .related-posts-title {
     text-align: center;
     font-size: 1.4rem;
-  }
-
-  .related-posts-wrapper {
-    padding: 0 1rem;
-    align-items: center;
   }
 
   .related-posts-container {
@@ -162,11 +158,5 @@
 
   .related-posts-container .post-item {
     width: 260px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .related-posts-container {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
 }

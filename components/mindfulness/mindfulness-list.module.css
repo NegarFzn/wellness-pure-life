@@ -1,15 +1,27 @@
 .mindfulness-list-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 15px;
+  gap: 20px; /* More open layout */
   list-style: none;
   padding: 0;
+  margin: 0 auto;
+  max-width: 1280px; /* Slightly wider for better alignment on desktops */
+  justify-items: center; /* Centers cards in each column */
+}
+
+@media (max-width: 1024px) {
+  .mindfulness-list-container {
+    gap: 18px;
+    padding: 0 1rem;
+    max-width: 100%; /* Use full width on tablets */
+  }
 }
 
 @media (max-width: 768px) {
   .mindfulness-list-container {
     grid-template-columns: 1fr;
-    padding: 0 1rem; /* Add side padding for better spacing */
-    gap: 1.25rem; /* Slightly increase vertical spacing */
+    gap: 1.5rem; /* Increased vertical spacing */
+    padding: 0 1rem; /* Side padding for better readability */
+    justify-items: stretch; /* Cards take full width on mobile */
   }
 }

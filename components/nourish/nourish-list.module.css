@@ -1,15 +1,24 @@
 .nourish-list-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 15px;
+  gap: 20px; /* Slightly larger for a cleaner look */
   list-style: none;
   padding: 0;
+  margin: 0 auto; /* ✅ Center grid */
+  max-width: 1200px; /* ✅ Prevent overly wide layouts */
+}
+
+@media (max-width: 1024px) {
+  .nourish-list-container {
+    gap: 18px;
+    padding: 0 1rem;
+  }
 }
 
 @media (max-width: 768px) {
   .nourish-list-container {
     grid-template-columns: 1fr;
-    padding: 0 1rem; /* Add horizontal padding for breathing room */
-    gap: 1.25rem; /* Improve spacing between items */
+    gap: 1.25rem; /* More vertical space on mobile */
+    padding: 0 1rem; /* Horizontal breathing room */
   }
 }

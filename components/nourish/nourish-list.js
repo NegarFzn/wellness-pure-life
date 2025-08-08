@@ -3,7 +3,7 @@ import classes from "./nourish-list.module.css";
 
 export default function NourishList(props) {
   const { items } = props;
-  if (!items) {
+  if (!items || !Array.isArray(items) || items.length === 0) {
     return <p>Loading...</p>;
   }
 
@@ -15,6 +15,7 @@ export default function NourishList(props) {
           id={item.id}
           title={item.title}
           summary={item.summary}
+          intro={item.intro}   // ✅ pass intro as fallback (consistent with others)
           image={item.image}
         />
       ))}

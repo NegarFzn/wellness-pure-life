@@ -3,9 +3,7 @@ import classes from "./mindfulness-list.module.css";
 
 export default function MindfulnessList(props) {
   const { items } = props;
-  if (!items) {
-    return <p>Loading...</p>;
-  }
+  if (!items) return <p>Loading...</p>;
 
   return (
     <ul className={classes["mindfulness-list-container"]}>
@@ -15,6 +13,7 @@ export default function MindfulnessList(props) {
           id={item.id}
           title={item.title}
           summary={item.summary}
+          intro={item.intro} // ✅ pass intro as fallback (matches Fitness)
           image={item.image}
         />
       ))}

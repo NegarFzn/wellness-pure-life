@@ -1,80 +1,137 @@
-.item {
-  display: flex;
-  flex-direction: column; /* ✅ Stack elements on small screens */
-  align-items: center;
-  text-align: center;
-  margin: 10px 0;
-  padding: 1.5rem;
-  border-radius: 10px;
-  background: white;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
+.card {
+  list-style: none;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
 }
 
-.textContainer {
-  margin-top: 15px; /* ✅ Adjust as needed */
-}
-
-.item img {
-  width: 100%;
-  max-width: 200px;
-  height: auto;
-  border-radius: 10px;
-}
-
-
-.item p {
-  font-size: 1rem;
-  line-height: 1.4;
-  margin-top: 10px;
-}
-
-.link {
+.cardLink {
+  display: grid;
+  grid-template-rows: 180px auto;
   text-decoration: none;
   color: inherit;
+  height: 100%;
 }
 
-.link h3 {
-  font-size: 1.2rem;
-  margin-top: 0;
+.media {
+  position: relative;
+  overflow: hidden;
+}
+.media img {
+  object-fit: cover;
+}
+.mediaOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 60%,
+    rgba(0, 0, 0, 0.08)
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.card:hover .mediaOverlay {
+  opacity: 1;
 }
 
+.content {
+  padding: 14px 16px 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.title {
+  font-weight: 700;
+  line-height: 1.25;
+  font-size: 1.3rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* clamp to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.25em * 2);
+}
+
+.summary {
+  color: #444;
+  line-height: 1.45;
+  font-size: 0.95rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* → 2-line teaser (looks premium) */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.45em * 2);
+}
+
+/* If you truly want single-line summaries with …, swap the block above for:
+.summary { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } */
+
+.cta {
+  margin-top: 2px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+.card:hover .cta {
+  opacity: 1;
+}
+
+/* Mobile-first adjustments */
 @media (max-width: 768px) {
-  .item {
-    padding: 1rem;
-    margin: 0.75rem 0;
+  .card {
+    border-radius: 12px;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.06);
+    transform: none !important; /* No hover-lift on touch */
   }
 
-  .item img {
-    max-width: 160px;
-    height: auto;
+  .cardLink {
+    grid-template-rows: 150px auto; /* smaller image for mobile */
   }
 
-  .textContainer {
-    margin-top: 1rem;
-    padding: 0 0.5rem;
+  .media {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
 
-  .link h3 {
-    font-size: 1.1rem;
+  .content {
+    padding: 12px 14px 14px;
+    gap: 6px;
   }
 
-  .item p {
-    font-size: 0.95rem;
-    line-height: 1.5;
+  .title {
+    font-size: 1rem;
+    -webkit-line-clamp: 2; /* still 2 lines */
+    min-height: calc(1.25em * 2);
+  }
+
+  .summary {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    -webkit-line-clamp: 2; /* keeps teaser short */
+    min-height: calc(1.4em * 2);
+  }
+
+  .cta {
+    font-size: 0.85rem;
   }
 }
 
-@media (max-width: 1024px) and (min-width: 769px) {
-  .item img {
-    max-width: 180px;
+/* Optional: for very small screens (<400px) */
+@media (max-width: 400px) {
+  .cardLink {
+    grid-template-rows: 130px auto;
   }
-
-  .link h3 {
-    font-size: 1.15rem;
-  }
-
-  .item p {
+  .title {
     font-size: 0.95rem;
+  }
+  .summary {
+    font-size: 0.85rem;
   }
 }

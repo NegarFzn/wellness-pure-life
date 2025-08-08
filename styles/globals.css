@@ -76,6 +76,20 @@ p a:active {
   --hover-bg: rgba(255, 255, 255, 0.1);
 }
 
+/* styles/globals.css */
+:root {
+  --container-max: 1200px;
+  --content-max: 800px;
+  --accent: rgb(32, 200, 140);
+  --accent-2: rgb(255, 102, 102);
+  --ink: #0f172a;
+  --ink-soft: #334155;
+  --paper: #ffffff;
+  --muted: #f1f5f9;
+  --shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+
+
 @media (prefers-color-scheme: dark) {
   :root {
     --primary-bg: #1c1c1c;

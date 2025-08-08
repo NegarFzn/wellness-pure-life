@@ -3,9 +3,7 @@ import classes from "./fitness-list.module.css";
 
 export default function FitnessList(props) {
   const { items } = props;
-  if (!items) {
-    return <p>Loading...</p>;
-  }
+  if (!items) return <p>Loading...</p>;
 
   return (
     <ul className={classes["fitness-list-container"]}>
@@ -15,6 +13,7 @@ export default function FitnessList(props) {
           id={item.id}
           title={item.title}
           summary={item.summary}
+          intro={item.intro} // ✅ pass intro as fallback
           image={item.image}
         />
       ))}
