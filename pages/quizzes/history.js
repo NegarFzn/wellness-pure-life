@@ -31,7 +31,7 @@ export default function QuizHistory() {
       fetch("/api/quizzes?user=true")
         .then((res) => res.json())
         .then((data) => {
-          setHistory(data);
+          setHistory(Array.isArray(data) ? data : []);
         })
         .finally(() => setLoading(false));
     } else if (status === "unauthenticated") {
@@ -72,11 +72,15 @@ export default function QuizHistory() {
   const dailyMap = {};
 
   history.forEach((q) => {
+    const slug = (q.slug || q.quizSlug || "").toLowerCase();
     const key = ["High Stress", "Balanced", "Low Stress"].includes(q.result)
       ? q.result
       : "Unknown";
     countByType[key]++;
-    if (q.isDaily) countByType["Daily Quiz"]++;
+
+    const isDaily =
+      q.isDaily === true || slug === "daily-quiz" || slug === "daily-checkin";
+    if (isDaily) countByType["Daily Quiz"]++;
 
     const dateKey = new Date(q.createdAt).toISOString().split("T")[0];
     if (!dailyMap[dateKey]) {
@@ -102,7 +106,8 @@ export default function QuizHistory() {
   const COLORS = ["#dc2626", "#16a34a", "#ca8a04", "#6b7280"];
 
   const filtered = history.filter((q) => {
-    const matchesTitle = q.slug.toLowerCase().includes(filter.toLowerCase());
+    const slug = (q.slug || q.quizSlug || "").toLowerCase();
+    const matchesTitle = slug.includes(filter.toLowerCase());
     const matchesType =
       !selectedType ||
       (selectedType === "Unknown"
@@ -224,27 +229,34 @@ export default function QuizHistory() {
       ) : (
         <div className={classes.scrollList}>
           <ul className={classes.quizList}>
-            {filtered.map((entry, idx) => (
-              <li key={idx} className={classes.quizItem}>
-                <strong>{entry.slug}</strong> — Result:{" "}
-                <em
-                  className={
-                    entry.result === "High Stress"
-                      ? classes.highStress
-                      : entry.result === "Balanced"
-                      ? classes.balanced
-                      : entry.result === "Low Stress"
-                      ? classes.lowStress
-                      : classes.unknown
-                  }
-                >
-                  {entry.result}
-                </em>
-                {entry.isDaily && <span> 🗓️</span>}
-                <br />
-                <small>{new Date(entry.createdAt).toLocaleString()}</small>
-              </li>
-            ))}
+            {filtered.map((entry, idx) => {
+              const slug = entry.slug || entry.quizSlug;
+              const isDaily =
+                entry.isDaily === true ||
+                (slug || "").toLowerCase() === "daily-quiz" ||
+                (slug || "").toLowerCase() === "daily-checkin";
+              return (
+                <li key={idx} className={classes.quizItem}>
+                  <strong>{slug}</strong> — Result:{" "}
+                  <em
+                    className={
+                      entry.result === "High Stress"
+                        ? classes.highStress
+                        : entry.result === "Balanced"
+                        ? classes.balanced
+                        : entry.result === "Low Stress"
+                        ? classes.lowStress
+                        : classes.unknown
+                    }
+                  >
+                    {entry.result}
+                  </em>
+                  {isDaily && <span> 🗓️</span>}
+                  <br />
+                  <small>{new Date(entry.createdAt).toLocaleString()}</small>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import Layout from "../components/layout/layout";
 import { UIProvider } from "../context/UIContext";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "../context/ThemeContext";
@@ -11,33 +11,61 @@ import CookieConsent from "../components/CookieConsent/CookieConsent";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import DailyQuiz from "../components/DailyQuiz/DailyQuiz";
+import DailyQuizSync from "../components/DailyQuiz/DailyQuizSync";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/globals.css";
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+// Inner app so we can use useSession() (must be inside SessionProvider)
+function AppInner({ Component, pageProps }) {
   const router = useRouter();
+  const { status } = useSession();
   const [showDaily, setShowDaily] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
 
+  // ------- Guest: 30s delayed modal (now skips blocked routes + updates on route change) -------
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    const BLOCKED = ["/login", "/signup", "/register", "/dashboard"];
+    if (BLOCKED.includes(router.pathname)) return;
+
     const today = new Date().toISOString().split("T")[0];
     const last = localStorage.getItem("lastDailyShown");
-    console.log("Today:", today, "Last shown:", last); // Debug
+    if (last === today) return;
 
-    if (last !== today) {
-      localStorage.setItem("lastDailyShown", today);
+    const timer = setTimeout(() => {
       setShowDaily(true);
-    }
-  }, []);
+      localStorage.setItem("lastDailyShown", today); // mark only when shown
+    }, 30000);
+
+    return () => clearTimeout(timer);
+  }, [router.pathname]);
+
+  // ------- After login: optionally reopen the quiz (intent-only, smart about guest submission) -------
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (status !== "authenticated") return;
+
+    const intent = localStorage.getItem("openDailyQuizAfterLogin") === "true";
+    if (!intent) return;
+
+    localStorage.removeItem("openDailyQuizAfterLogin");
+
+    const today = new Date().toISOString().split("T")[0];
+    const hasGuestSubmission = !!localStorage.getItem(`daily-checkin:${today}`);
+    if (hasGuestSubmission) return; // let DailyQuizSync handle it silently
+
+    setShowDaily(true);
+    localStorage.setItem("lastDailyShown", today); // prevent double open later
+  }, [status]);
 
   return (
-    <SessionProvider session={session}>
+    <>
+      {/* Always mounted: posts guest results after login */}
+      <DailyQuizSync />
+
       <UIProvider>
         <ThemeProvider>
           <Layout>
@@ -83,6 +111,14 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           </Layout>
         </ThemeProvider>
       </UIProvider>
+    </>
+  );
+}
+
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  return (
+    <SessionProvider session={session}>
+      <AppInner Component={Component} pageProps={pageProps} />
     </SessionProvider>
   );
 }

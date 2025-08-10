@@ -1,5 +1,6 @@
 // pages/login.js
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -69,8 +70,9 @@ export default function LoginPage() {
     <div className={classes.container}>
       <div className={classes.card}>
         <h2 className={classes.title}>Login to Wellness Pure Life</h2>
-        <form onSubmit={handleLogin}>
-          <label>Email</label>
+
+        <form onSubmit={handleLogin} className={classes.form}>
+          <label className={classes.label}>Email</label>
           <input
             type="email"
             className={classes.input}
@@ -78,7 +80,8 @@ export default function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <label>Password</label>
+
+          <label className={classes.label}>Password</label>
           <input
             type="password"
             className={classes.input}
@@ -86,6 +89,7 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
           <div className={classes.checkboxRow}>
             <input
               type="checkbox"
@@ -95,6 +99,7 @@ export default function LoginPage() {
             />
             <label htmlFor="rememberMe">Remember Me</label>
           </div>
+
           <button type="submit" className={classes.button}>
             Login
           </button>
@@ -105,6 +110,13 @@ export default function LoginPage() {
           >
             Forgot your password?
           </button>
+          <p className={classes.signupBelow}>
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className={classes.signupLink}>
+              Sign up here
+            </Link>
+          </p>
+
           {error && <p className={classes.error}>{error}</p>}
           {success && <p className={classes.success}>✅ Login successful!</p>}
         </form>

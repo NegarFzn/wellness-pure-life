@@ -174,7 +174,7 @@ export default function Home() {
         <KeyFeatures />
         <Subscribe />
         <QuizCard /> 
-        {newsArticles.length > 0 && (
+        {/* {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
             <div className={classes.newsGrid} ref={newsGridRef}>
               {newsArticles.map((item) => (
@@ -207,7 +207,7 @@ export default function Home() {
               </button>
             </div>
           </section>
-        )}
+        )} */}
 
         {showButton && (
           <button onClick={scrollToTop} className={classes.backToTop} >

@@ -67,8 +67,11 @@ export default async function handler(req, res) {
           link,
           clickedAt,
           action,
-        } = req.body;
+          slug, // allow alt field
+          isDaily, // optional flag from client
+        } = req.body || {};
 
+        // Track recommendation clicks
         if (action === "click") {
           await logRecommendationClick({
             quizSlug,
@@ -81,27 +84,54 @@ export default async function handler(req, res) {
           return res.status(201).json({ message: "Click recorded" });
         }
 
+        // Use token email if available, otherwise fall back to body.email
         const token = await getToken({ req });
         const email = token?.email || emailFromBody;
 
-        if (!quizSlug || !result || !answers || !email) {
+        if (!quizSlug && !slug) {
+          return res.status(400).json({ error: "Missing quiz slug" });
+        }
+        if (!result || !answers || !email) {
           return res.status(400).json({ error: "Missing required fields" });
         }
 
+        // Normalize slug + daily flag
+        const finalSlug =
+          (quizSlug || slug || "").toString().toLowerCase() || "daily-quiz";
+        const dailyFlag =
+          typeof isDaily === "boolean"
+            ? isDaily
+            : finalSlug === "daily-quiz" || finalSlug === "daily-checkin";
+
+        // Save first so daily-only users still get persisted even if no quiz config/email template
         const saved = await saveQuizResult({
-          slug: quizSlug,
+          slug: finalSlug,
+          quizSlug: finalSlug,
           result,
           answers,
           email,
-          isDaily: quizSlug === "daily-quiz",
+          isDaily: dailyFlag,
         });
 
-        const recs = await getRecommendationsByTypeAndSlug(result, quizSlug);
-        const quiz = await getQuizBySlug(quizSlug);
+        // Try to load quiz config (may not exist for daily-quiz)
+        const quiz = await getQuizBySlug(finalSlug);
 
+        // If it's a daily check-in and there's no quiz config, just return success (skip email)
+        if (!quiz && dailyFlag) {
+          return res.status(201).json({
+            message: saved?.newEntry
+              ? "Daily result saved."
+              : "Duplicate daily result ignored.",
+          });
+        }
+
+        // If not daily and still no config, that's an error
         if (!quiz) {
           return res.status(404).json({ error: "Quiz not found for email." });
         }
+
+        // Build recommendations and send email
+        const recs = await getRecommendationsByTypeAndSlug(result, finalSlug);
 
         const { subject, body } = createQuizResultEmail(
           email,
@@ -111,12 +141,17 @@ export default async function handler(req, res) {
           recs
         );
 
-        await sendEmail(email, subject, body);
+        try {
+          await sendEmail(email, subject, body);
+        } catch (e) {
+          // Don't fail the whole request if email fails; the result is already saved
+          console.error("Email send failed:", e);
+        }
 
         return res.status(201).json({
-          message: saved.newEntry
+          message: saved?.newEntry
             ? "Result saved and email sent."
-            : "Duplicate result; email sent for testing.",
+            : "Duplicate result; email attempted.",
         });
       }
 
