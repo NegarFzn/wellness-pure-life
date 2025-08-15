@@ -77,6 +77,7 @@ export default function Contact() {
               required
               className={classes.formInput}
               autoComplete="name"
+              placeholder="Your full name"
             />
           </div>
           <div className={classes.formGroup}>
@@ -89,6 +90,7 @@ export default function Contact() {
               required
               className={classes.formInput}
               autoComplete="email"
+              placeholder="you@example.com"
             />
           </div>
           <div className={classes.formGroup}>
@@ -99,6 +101,7 @@ export default function Contact() {
               onChange={handleChange}
               required
               className={classes.formTextarea}
+              placeholder="How can we help?"
             />
           </div>
           <button

@@ -9,17 +9,17 @@ export default function DailyQuiz({ onClose }) {
   const [submitted, setSubmitted] = useState(false);
   const [savedLocally, setSavedLocally] = useState(false);
 
-  // visibility and flow state (parent controls mount; show immediately)
+  // visibility and flow state
   const [visible, setVisible] = useState(true);
-  const [showPrompt, setShowPrompt] = useState(false); // pre-login prompt
-  const [showQuiz, setShowQuiz] = useState(false); // actual quiz
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
 
   const { status, data: session } = useSession();
   const isLoggedIn = status === "authenticated";
   const router = useRouter();
   const mountedRef = useRef(false);
 
-  // Decide initial step (prompt vs quiz) and react to status changes
+  // Decide initial step
   useEffect(() => {
     if (!mountedRef.current) {
       mountedRef.current = true;
@@ -30,7 +30,6 @@ export default function DailyQuiz({ onClose }) {
       }
       return;
     }
-    // If user logs in while the modal is open, move from prompt to quiz
     if (visible && isLoggedIn) {
       setShowPrompt(false);
       setShowQuiz(true);
@@ -62,15 +61,21 @@ export default function DailyQuiz({ onClose }) {
             isDaily: true,
             result: answer,
             answers: [answer],
-            // send email explicitly to avoid any token edge cases
-            email: session?.user?.email || undefined,
+            // Always send something, even if email missing from session
+            email: session?.user?.email || "",
           }),
         });
-        if (!res.ok) throw new Error(`Save failed: ${res.status}`);
+
+        if (!res.ok) {
+          const txt = await res.text();
+          console.error("DailyQuiz save failed:", res.status, txt);
+          throw new Error(`Save failed: ${res.status}`);
+        }
+
         setSubmitted(true);
         setTimeout(() => handleClose(), 2000);
       } catch (e) {
-        // Fallback: store locally so DailyQuizSync or this component can sync later
+        console.warn("Falling back to local save:", e.message);
         const today = new Date().toISOString().split("T")[0];
         try {
           localStorage.setItem(
@@ -88,7 +93,6 @@ export default function DailyQuiz({ onClose }) {
           `daily-checkin:${today}`,
           JSON.stringify({ answer, at: Date.now() })
         );
-        // They’ve submitted as guest; don’t reopen after login
         localStorage.removeItem("openDailyQuizAfterLogin");
       } catch {}
       setSavedLocally(true);
@@ -96,14 +100,13 @@ export default function DailyQuiz({ onClose }) {
     }
   };
 
-  // If they log in while the modal is still open AFTER a local submit, sync it
+  // Sync local answers after login
   useEffect(() => {
     if (!submitted || !isLoggedIn) return;
 
     const syncLocalIfExists = async () => {
       if (typeof window === "undefined") return;
 
-      // sync ALL pending guest entries (not just today)
       const keys = [];
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
@@ -127,17 +130,20 @@ export default function DailyQuiz({ onClose }) {
               isDaily: true,
               result: localAnswer,
               answers: [localAnswer],
-              email: session?.user?.email || undefined,
+              email: session?.user?.email || "",
             }),
           });
 
           if (res.ok) {
             localStorage.removeItem(key);
+          } else {
+            const txt = await res.text();
+            console.error("DailyQuiz sync failed:", res.status, txt);
           }
         }
         handleClose();
-      } catch {
-        // ignore; keep modal open
+      } catch (err) {
+        console.error("DailyQuiz sync error:", err);
       }
     };
 
@@ -155,8 +161,9 @@ export default function DailyQuiz({ onClose }) {
   const gotoLogin = () => {
     try {
       const today = new Date().toISOString().split("T")[0];
-      const hasGuestSubmission = !!localStorage.getItem(`daily-checkin:${today}`);
-      // Only set reopen flag if no guest submission yet
+      const hasGuestSubmission = !!localStorage.getItem(
+        `daily-checkin:${today}`
+      );
       if (!hasGuestSubmission && !submitted) {
         localStorage.setItem("openDailyQuizAfterLogin", "true");
       }
@@ -171,7 +178,7 @@ export default function DailyQuiz({ onClose }) {
     <div
       className={classes.overlay}
       onClick={(e) => {
-        if (e.target === e.currentTarget) handleClose(); // click outside closes
+        if (e.target === e.currentTarget) handleClose();
       }}
     >
       <div
@@ -180,7 +187,6 @@ export default function DailyQuiz({ onClose }) {
         aria-modal="true"
         aria-labelledby="dq-title"
       >
-        {/* STEP 1: Prompt (for logged-out users) */}
         {showPrompt && !showQuiz && (
           <div className={classes.centered}>
             <h2 id="dq-title" className={classes.h2}>
@@ -207,7 +213,6 @@ export default function DailyQuiz({ onClose }) {
           </div>
         )}
 
-        {/* STEP 2: Actual Quiz */}
         {showQuiz &&
           (!submitted ? (
             <>
@@ -224,7 +229,6 @@ export default function DailyQuiz({ onClose }) {
                 <option value="Balanced">🙂 Balanced</option>
                 <option value="Low Stress">😌 Low Stress</option>
               </select>
-
               <div className={classes.actionsRow}>
                 <button className={classes.submitBtn} onClick={handleSubmit}>
                   Submit

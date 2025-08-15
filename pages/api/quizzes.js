@@ -89,9 +89,19 @@ export default async function handler(req, res) {
         const email = token?.email || emailFromBody;
 
         if (!quizSlug && !slug) {
+          console.warn("POST /api/quizzes missing quizSlug or slug", {
+            quizSlug,
+            slug,
+          });
           return res.status(400).json({ error: "Missing quiz slug" });
         }
         if (!result || !answers || !email) {
+          console.warn("POST /api/quizzes missing required fields", {
+            hasResult: !!result,
+            hasAnswers: Array.isArray(answers) && answers.length > 0,
+            emailFromToken: token?.email,
+            emailFromBody,
+          });
           return res.status(400).json({ error: "Missing required fields" });
         }
 
@@ -122,6 +132,7 @@ export default async function handler(req, res) {
             message: saved?.newEntry
               ? "Daily result saved."
               : "Duplicate daily result ignored.",
+            debug: { saved }, // optional: helps debug in frontend
           });
         }
 
