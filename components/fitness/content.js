@@ -5,7 +5,7 @@ import classes from "./content.module.css";
 import FitnessList from "./fitness-list";
 
 /* ------------------------------------------------------
-   Enhanced formatterr
+   Enhanced formatter
    - Inline markers kept
    - Lists require ≥ 2 consecutive items
    - Avoids decimals (e.g., 2.0) and single numbered lines
