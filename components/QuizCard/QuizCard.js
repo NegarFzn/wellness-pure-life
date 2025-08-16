@@ -19,7 +19,7 @@ export default function QuizCard() {
           nutrition. Start your path to balance.
         </p>
         <Link href="/quizzes" className={classes.button}>
-          Take the Quiz
+          TTTTake the Quiz
         </Link>
       </div>
     </div>
