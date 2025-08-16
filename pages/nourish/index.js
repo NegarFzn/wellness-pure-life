@@ -220,19 +220,21 @@ function NourishPage(props) {
 
         {/* Sticky sub-nav */}
         <nav className={classes.subnav} aria-label="Section navigation">
-          <ul className={classes.subnavList} role="list">
-            {categories.map((c) => (
-              <li key={c.key}>
-                <a
-                  className={classes.subnavLink}
-                  href={`#${c.key}`}
-                  data-key={c.key}
-                >
-                  {c.title}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className={classes.subnavWrapper}>
+            <ul className={classes.subnavList} role="list">
+              {categories.map((c) => (
+                <li key={c.key}>
+                  <a
+                    className={classes.subnavLink}
+                    href={`#${c.key}`}
+                    data-key={c.key}
+                  >
+                    {c.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </nav>
 
         {/* --- Category Sections with ids --- */}

@@ -57,7 +57,7 @@
 }
 
 .subnavLink {
-  display: inline-block;
+  display: inline-flex;
   padding: 10px 20px;
   font-weight: 500;
   text-decoration: none;
@@ -66,8 +66,12 @@
   color: #000;
   background-color: #fff;
   transition: all 0.2s ease;
-  white-space: nowrap;
+  white-space: nowrap;       /* ✅ Prevent word wrap */
+  max-width: 100%;           /* ✅ Prevent button overflow */
+  overflow: hidden;          /* Optional: Clip if too wide */
+  text-overflow: ellipsis;   /* Optional: Add "..." when clipped */
 }
+
 
 .subnavLink:hover {
   background-color: #f5f5f5;
@@ -370,6 +374,25 @@
     font-size: 20px;
   }
 }
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .subnavList {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .subnavList li {
+    flex: 1 1 30%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .subnavLink {
+    width: 100%;
+  }
+}
+
 
 /* Optional: visually-hidden but focusable (for skip links) */
 .sr-only-focusable {
