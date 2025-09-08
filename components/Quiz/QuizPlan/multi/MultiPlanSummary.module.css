@@ -1,0 +1,181 @@
+.container {
+  background-color: #ffffff;
+  padding: 2.5rem 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+  max-width: 800px;
+  margin: 2rem auto;
+  font-family: "Segoe UI", sans-serif;
+  color: #1f2937;
+  line-height: 1.6;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.2rem;
+  color: #111827;
+}
+
+.subheading {
+  font-size: 1.125rem;
+  text-align: center;
+  color: #4b5563;
+  margin-bottom: 2rem;
+}
+
+.actionsRow {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.utilityButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.utilityButton {
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.utilityButton {
+  background: linear-gradient(to right, #1c6dd0, #38b6ff);
+  color: white;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.utilityButton:hover {
+  background: linear-gradient(to right, #1558b0, #27a2f5);
+  transform: scale(1.03);
+}
+
+.utilityButton:active {
+  transform: scale(0.97);
+}
+
+.summaryList {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.5rem;
+}
+
+.summaryList li {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.summaryList li strong {
+  display: inline-block;
+  min-width: 160px;
+  color: #111827;
+}
+
+.summaryList ul {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.summaryList ul li {
+  list-style-type: disc;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+}
+
+.toastBox {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #003662;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: fadeInOut 4s ease-in-out forwards;
+}
+
+.successMessage {
+  margin-top: 1rem;
+  color: green;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, 0px);
+  }
+  90% {
+    opacity: 1;
+    transform: translate(-50%, 0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 2rem 1.5rem;
+    margin: 1.5rem 1rem;
+  }
+
+  .heading {
+    font-size: 1.5rem;
+  }
+
+  .subheading {
+    font-size: 1rem;
+  }
+
+  .utilityButton {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+  }
+
+  .actionsRow {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .utilityButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 1.35rem;
+  }
+
+  .subheading {
+    font-size: 0.95rem;
+  }
+
+  .summaryList li strong {
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+}

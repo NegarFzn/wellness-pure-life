@@ -1,0 +1,98 @@
+.container {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: linear-gradient(to bottom right, #f8fafc, #ffffff);
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  font-family: "Inter", sans-serif;
+  color: #1f2937;
+}
+
+.planContainer {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+}
+
+.planTitle {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #0f172a;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #0f172a;
+  text-align: center;
+}
+
+.subheading {
+  font-size: 1.15rem;
+  color: #475569;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.card {
+  background: #f9fafb;
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.card p {
+  margin-bottom: 0.8rem;
+}
+
+.challengeList {
+  padding-left: 1.5rem;
+  margin-top: 1rem;
+}
+
+.challengeList li {
+  margin-bottom: 0.5rem;
+}
+
+.loadingContainer,
+.errorContainer {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.loadingText,
+.errorText {
+  font-size: 1.25rem;
+  color: #475569;
+  margin-bottom: 1rem;
+}
+
+.retryButton {
+  background-color: #ef4444;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.retryButton:hover {
+  background-color: #dc2626;
+}
+
+@media (max-width: 480px) {
+  .heading,
+  .planTitle {
+    font-size: 1.6rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+}

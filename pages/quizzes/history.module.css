@@ -279,6 +279,21 @@
   border-radius: 4px;
 }
 
+.viewResultBtn {
+  margin-top: 0.5rem;
+  background: #eff6ff;
+  border: 1px solid #2563eb;
+  color: #2563eb;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.viewResultBtn:hover {
+  background: #dbeafe;
+}
+
 /* Mobile responsive */
 @media (max-width: 640px) {
   .container {

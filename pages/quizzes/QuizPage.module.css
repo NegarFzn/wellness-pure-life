@@ -1,187 +1,134 @@
 .container {
-  max-width: 760px;
+  max-width: 680px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 1rem;
   font-family: "Inter", sans-serif;
+  background: #fefefe;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
 }
 
 .title {
-  text-align: center;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  color: #6b21a8;
-  margin-bottom: 2rem;
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.5rem;
 }
 
 .questionBlock {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background-color: #f9fafb;
+  background: #ffffff;
+  padding: 1.2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.8s ease forwards;
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 .questionText {
-  font-weight: 600;
   font-size: 1.1rem;
+  font-weight: 600;
   margin-bottom: 0.8rem;
-  color: #111827;
+  color: #444;
 }
 
 .optionLabel {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 400;
-  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
   cursor: pointer;
+  font-size: 1rem;
+  color: #222;
 }
 
-.optionLabel input {
-  margin-right: 0.5rem;
+.optionLabel input[type="radio"] {
+  accent-color: #4caf50;
+  width: 18px;
+  height: 18px;
 }
 
 .emailInput {
-  margin-top: 1.5rem;
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
   width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  border: 1px solid #d1d5db;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s;
+}
+
+.emailInput:focus {
+  border-color: #4caf50;
+  outline: none;
 }
 
 .submitButton {
-  margin-top: 2rem;
-  padding: 0.75rem 2rem;
-  background-color: #9333ea;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #4caf50, #81c784);
+  color: white;
   font-weight: 600;
-  font-size: 1rem;
+  border: none;
+  padding: 1rem 1.5rem;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: background 0.3s ease;
+  margin-top: 1rem;
+  transition: background 0.3s;
 }
 
 .submitButton:hover {
-  background-color: #7e22ce;
+  background: linear-gradient(135deg, #388e3c, #66bb6a);
 }
 
-.recommendationList {
-  margin-top: 2.5rem;
-  padding: 1rem;
-  border-radius: 1rem;
-  background-color: #fafafa;
-  animation: fadeIn 0.6s ease-in-out;
-}
-
-.recommendationTitle {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #4c1d95; /* warm purple tone */
-  text-align: center;
-  margin-bottom: 1.2rem;
-}
-
-.recommendationItem {
-  background: #fff;
-  border-left: 6px solid #c084fc;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-  padding: 1.2rem 1.5rem;
-  margin: 1rem 0;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  list-style: none;
-}
-
-.recommendationItem:hover {
-  border-left: 6px solid #a78bfa;
-  transform: scale(1.02);
-  background-color: #fdfbff;
-}
-
-.recommendationItem p:first-child {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #1e293b;
-}
-
-.recommendationDesc {
-  font-size: 1rem;
-  color: #475569;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.recommendationDesc::after {
-  content: "•";
-  font-size: 1.5rem;
-  color: #9333ea;
-  margin-left: 0.5rem;
-  line-height: 0;
-}
-
-.historyBox {
+.resultBox {
+  background-color: #e8f5e9;
+  border: 1px solid #c8e6c9;
+  border-radius: 10px;
+  padding: 2rem;
   margin-top: 2rem;
-  padding: 1.5rem;
-  background-color: #f7f5ff;
-  border: 1px solid #e0d9f8;
-  border-radius: 1rem;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.6s ease-out;
 }
 
-.historyTitle {
-  font-size: 1.2rem;
+.resultTitle {
+  font-size: 1.75rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+  color: #2e7d32;
 }
 
-.historyText {
-  font-size: 0.95rem;
-  color: #555;
-  margin-bottom: 1rem;
+.resultContent {
+  border-top: 1px solid #a5d6a7;
+  padding-top: 1.5rem;
 }
 
-.historyButton {
-  display: inline-block;
-  padding: 0.5rem 1.2rem;
-  background-color: #6c3ef3;
-  color: white;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background 0.3s ease;
+.resultDescription {
+  font-size: 1.05rem;
+  margin: 0.5rem 0;
+  line-height: 1.6;
+  color: #333;
 }
 
-.historyButton:hover {
-  background-color: #5126cc;
+.resultList {
+  padding-left: 1.2rem;
+  margin-top: 1rem;
+  font-size: 1rem;
 }
 
-/* Mobile optimization */
-@media (max-width: 768px) {
-  .recommendationTitle {
-    font-size: 1.3rem;
-  }
-
-  .recommendationItem {
-    padding: 0.8rem 1rem;
-  }
-
-  .recommendationDesc {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.3rem;
-  }
+.resultList li {
+  margin-bottom: 0.6rem;
+  line-height: 1.4;
 }
 
-/* Smooth entrance */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -189,105 +136,106 @@
   }
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 1rem;
-  }
+.error {
+  color: #d32f2f;
+  background: #ffebee;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  margin: 1rem;
+  text-align: center;
+}
 
-  .title {
-    font-size: 1.5rem;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
+.loading {
+  color: #555;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 2rem;
+}
 
-  .questionBlock {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: #f9f9f9;
-    border-radius: 12px;
-  }
+.inlineError {
+  color: #d32f2f;
+  background-color: #fdecea;
+  border: 1px solid #f5c6cb;
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin: 1rem 0;
+  font-weight: 500;
+}
 
-  .questionText {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
+.animateOnScroll {
+  transition: all 0.6s ease-in-out;
+}
 
-  .optionLabel {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    cursor: pointer;
-  }
+/* Fade-in Delays for Staggered Animation */
+.fadeDelay0 {
+  animation-delay: 0s;
+}
+.fadeDelay1 {
+  animation-delay: 0.2s;
+}
+.fadeDelay2 {
+  animation-delay: 0.4s;
+}
+.fadeDelay3 {
+  animation-delay: 0.6s;
+}
 
-  .emailInput {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1rem;
-    margin: 1rem 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
-
-  .submitButton {
-    width: 100%;
-    padding: 0.8rem;
-    font-size: 1.1rem;
-    background-color: #7c3aed;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-
-  .submitButton:hover {
-    background-color: #6b21a8;
-  }
-
-  .recommendationList {
-    margin-top: 2rem;
-  }
-
-  .recommendationTitle {
-    font-size: 1.3rem;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-
-  .recommendationItem {
-    background: #fff;
-    padding: 1rem;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-  }
-
-  .recommendationDesc {
-    font-size: 0.95rem;
-    margin-top: 0.5rem;
-    color: #444;
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 📱 Mobile Adjustments */
 @media (max-width: 600px) {
-  .questionBlock {
-    padding: 1rem;
+  .container {
+    padding: 1rem 1rem 2rem;
   }
 
   .title {
     font-size: 1.5rem;
   }
 
-  .submitButton {
-    width: 100%;
+  .questionBlock {
+    padding: 1rem;
+  }
+
+  .questionText {
+    font-size: 1rem;
   }
 
   .optionLabel {
     font-size: 0.95rem;
   }
 
-  .questionText {
+  .submitButton {
     font-size: 1rem;
+    padding: 0.9rem 1.2rem;
+  }
+
+  .resultBox {
+    padding: 1.2rem;
+  }
+
+  .resultTitle {
+    font-size: 1.3rem;
+  }
+
+  .resultDescription,
+  .resultList {
+    font-size: 0.95rem;
   }
 }

@@ -1,0 +1,156 @@
+.quizPage {
+  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.quizContainer {
+  width: 100%;
+  max-width: 760px;
+  background-color: #ffffff;
+  padding: 2.5rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
+
+/* Loading State */
+.loading {
+  padding-top: 5rem;
+  text-align: center;
+  color: #334155;
+}
+
+.loader {
+  border: 5px solid #f0f9ff;
+  border-top: 5px solid #0ea5e9;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Invalid Goal State */
+.invalidContainer {
+  max-width: 600px;
+  margin: 6rem auto;
+  text-align: center;
+  background-color: #fff1f2;
+  padding: 3rem 2rem;
+  border: 1px solid #fecdd3;
+  border-radius: 1rem;
+  color: #b91c1c;
+  box-shadow: 0 5px 20px rgba(185, 28, 28, 0.05);
+}
+
+.heading {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.message {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.backBtn {
+  background-color: #0ea5e9;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.backBtn:hover {
+  background-color: #0284c7;
+}
+
+.goalHeader {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* -----------------------------------
+   ✅ Responsive Enhancements (Mobile)
+------------------------------------ */
+
+@media (max-width: 768px) {
+  .quizPage {
+    padding: 1.25rem;
+  }
+
+  .quizContainer {
+    padding: 1.75rem 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .heading {
+    font-size: 1.6rem;
+  }
+
+  .message {
+    font-size: 1rem;
+  }
+
+  .backBtn {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+
+  .goalHeader {
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .quizPage {
+    padding: 1rem;
+  }
+
+  .quizContainer {
+    padding: 1.5rem 1rem;
+  }
+
+  .heading {
+    font-size: 1.4rem;
+  }
+
+  .message {
+    font-size: 0.95rem;
+  }
+
+  .invalidContainer {
+    margin: 3rem auto;
+    padding: 2rem 1rem;
+  }
+
+  .loader {
+    width: 36px;
+    height: 36px;
+  }
+
+  .goalHeader {
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+  }
+}

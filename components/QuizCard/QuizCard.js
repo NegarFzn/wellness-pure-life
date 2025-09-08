@@ -18,7 +18,7 @@ export default function QuizCard() {
           Take our personalized quiz to get insights into your body, mind, and
           nutrition. Start your path to balance.
         </p>
-        <Link href="/quizzes" className={classes.button}>
+        <Link href="/quizzes/quiz-main" className={classes.button}>
           Take the Quiz
         </Link>
       </div>

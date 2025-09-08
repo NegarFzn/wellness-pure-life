@@ -1,140 +1,150 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
-import { getQuizBySlug } from "../../lib/quizzesdb";
 import classes from "./QuizPage.module.css";
 
-export async function getServerSideProps(context) {
-  const quiz = await getQuizBySlug(context.params.slug);
-  if (!quiz) {
-    return { notFound: true };
-  }
-  return { props: { quiz: JSON.parse(JSON.stringify(quiz)) } };
-}
+// Optional: key normalization map (only if needed across quizzes)
+const keyMap = {
+  time: "timeOfDay", // Fix mismatch between frontend & DB keys
+};
 
-export default function QuizPage({ quiz }) {
+export default function QuizPage() {
+  const router = useRouter();
+  const { slug } = router.query;
+
+  const [quiz, setQuiz] = useState(null);
   const [answers, setAnswers] = useState({});
-  const [result, setResult] = useState(null);
-  const [recommendations, setRecommendations] = useState([]);
   const [email, setEmail] = useState("");
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+  const [inlineError, setInlineError] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoadingRecs, setIsLoadingRecs] = useState(false);
 
+  // 🔹 Auto-fill email from session
   useEffect(() => {
-    async function checkSession() {
-      const session = await getSession();
+    getSession().then((session) => {
       if (session?.user?.email) {
         setEmail(session.user.email);
         setIsAuthenticated(true);
       }
-    }
-    checkSession();
+    });
   }, []);
 
-  const handleAnswer = (questionId, option) => {
-    setAnswers({ ...answers, [questionId]: option });
+  // 🔹 Load quiz by slug
+  useEffect(() => {
+    if (!slug) return;
+
+    fetch("/api/quiz/quiz-main?mode=questions")
+      .then((res) => res.json())
+      .then((all) => {
+        const matched = all.find((q) => q.slug === slug);
+        if (matched) {
+          setQuiz(matched);
+        } else {
+          setError("❌ Quiz not found.");
+        }
+      })
+      .catch(() => setError("Failed to load quiz."));
+  }, [slug]);
+
+  // 🔹 Track selection
+  const handleChange = (key, value) => {
+    setAnswers((prev) => ({ ...prev, [key]: value }));
   };
 
+  // 🔹 Email format validator
+  const isValidEmail = (email) =>
+    !!email?.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  // 🔹 Normalize keys before submission
+  const normalizeAnswers = (rawAnswers) => {
+    const normalized = {};
+    for (const key in rawAnswers) {
+      const normalizedKey = keyMap[key] || key;
+      normalized[normalizedKey] = rawAnswers[key];
+    }
+    return normalized;
+  };
+
+  // 🔹 Submit
   const handleSubmit = async () => {
-    if (!email) {
-      alert("Please enter your email");
+    setInlineError("");
+    setError(null);
+    setResult(null);
+
+    const trimmedEmail = email?.trim();
+
+    // Validation
+    if (!quiz || quiz.questions.some((q) => !answers[q.key])) {
+      setInlineError("⚠️ Please answer all questions before submitting.");
       return;
     }
 
-    const answerValues = Object.values(answers);
-    const traitScores = {};
-
-    for (const answer of answerValues) {
-      const traits = answer.points;
-      for (const [trait, pts] of Object.entries(traits)) {
-        traitScores[trait] = (traitScores[trait] || 0) + pts;
-      }
+    if (!isValidEmail(trimmedEmail)) {
+      setInlineError("⚠️ Please enter a valid email address.");
+      return;
     }
 
-    let calculatedResult = null;
-    let maxScore = -1;
-
-    for (const [trait, score] of Object.entries(traitScores)) {
-      if (score > maxScore) {
-        maxScore = score;
-        calculatedResult = trait;
-      }
-    }
-
-    setResult(calculatedResult);
-    setIsLoadingRecs(true);
+    const normalizedAnswers = normalizeAnswers(answers);
 
     try {
-      await fetch("/api/quizzes", {
+      const res = await fetch("/api/quiz/quiz-main", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          quizSlug: quiz.slug,
-          result: calculatedResult,
-          answers,
-          email,
+          slug,
+          answers: normalizedAnswers,
+          email: trimmedEmail,
         }),
       });
 
-      const recRes = await fetch(
-        `/api/quizzes?type=${encodeURIComponent(
-          calculatedResult
-        )}&quizSlug=${encodeURIComponent(quiz.slug)}`
-      );
-
-      const recs = await recRes.json();
-      setRecommendations(recs);
-    } catch (error) {
-      console.error(
-        "Error submitting quiz or fetching recommendations:",
-        error
-      );
-    } finally {
-      setIsLoadingRecs(false);
-    }
-  };
-
-  const handleRecommendationClick = async (rec) => {
-    try {
-      await fetch("/api/quizzes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "click",
-          quizSlug: quiz.slug,
-          result,
-          email,
-          recommendation: rec.title,
-          link: rec.link,
-          clickedAt: new Date().toISOString(),
-        }),
-      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Submission failed.");
+      setResult(data.result);
     } catch (err) {
-      console.error("Failed to log click:", err);
+      setError(err.message);
     }
   };
+
+  // 🔹 Error screen
+  if (error) {
+    return <div className={classes.error}>{error}</div>;
+  }
+
+  // 🔹 Loading
+  if (!quiz) {
+    return <div className={classes.loading}>⏳ Loading quiz...</div>;
+  }
 
   return (
     <div className={classes.container}>
-      <h1 className={classes.title}>{quiz.title}</h1>
+      <h1 className={classes.title}>{quiz.title || slug}</h1>
+
       {!result ? (
-        <div>
-          {quiz.questions.map((q) => (
-            <div key={q.id} className={classes.questionBlock}>
+        <>
+          {quiz.questions.map((q, index) => (
+            <div
+              key={q.key}
+              className={`${classes.questionBlock} ${
+                classes[`fadeDelay${index % 4}`]
+              } ${classes.animateOnScroll}`}
+            >
               <p className={classes.questionText}>{q.question}</p>
               {q.options.map((opt) => (
-                <label key={opt.text} className={classes.optionLabel}>
+                <label key={opt} className={classes.optionLabel}>
                   <input
                     type="radio"
-                    name={q.id}
-                    value={opt.text}
-                    onChange={() => handleAnswer(q.id, opt)}
-                    className="mr-2"
+                    name={q.key}
+                    value={opt}
+                    checked={answers[q.key] === opt}
+                    onChange={() => handleChange(q.key, opt)}
                   />
-                  {opt.text}
+                  <span>{opt}</span>
                 </label>
               ))}
             </div>
           ))}
+
           {!isAuthenticated && (
             <input
               type="email"
@@ -142,50 +152,39 @@ export default function QuizPage({ quiz }) {
               className={classes.emailInput}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
             />
           )}
-          <button onClick={handleSubmit} className={classes.submitButton}>
-            Submit
-          </button>
-        </div>
-      ) : (
-        <div className={classes.recommendationList}>
-          <h2 className={classes.recommendationTitle}>Your Result: {result}</h2>
-          <h3 className={classes.recommendationTitle}>Recommendations</h3>
-          {isLoadingRecs ? (
-            <p className={classes.recommendationDesc}>
-              🧠 Just a moment… we're curating your personalized wellness tips!
-            </p>
-          ) : recommendations.length > 0 ? (
-            <ul>
-              {recommendations.map((rec) => (
-                <li
-                  key={rec._id}
-                  className={classes.recommendationItem}
-                  onClick={() => handleRecommendationClick(rec)}
-                >
-                  <p className="font-semibold">{rec.title}</p>
-                  <p className={classes.recommendationDesc}>
-                    {rec.description}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className={classes.recommendationDesc}>
-              No recommendations found for this result.
-            </p>
+
+          {inlineError && (
+            <div className={classes.inlineError}>{inlineError}</div>
           )}
-          <div className={classes.historyBox}>
-            <h4 className={classes.historyTitle}>📘 Reflect on Your Journey</h4>
-            <p className={classes.historyText}>
-              Want to track how your wellness evolves over time? Check your quiz
-              history for insights.
-            </p>
-            <a href="/quizzes/history" className={classes.historyButton}>
-              View My Quiz History
-            </a>
+
+          <button onClick={handleSubmit} className={classes.submitButton}>
+            🚀 Submit
+          </button>
+        </>
+      ) : (
+        <div className={classes.resultBox}>
+          <h2 className={classes.resultTitle}>🎯 Your Personalized Tips</h2>
+
+          <div className={classes.resultContent}>
+            {result.matchedTitle ? (
+              <>
+                <p className={classes.resultDescription}>
+                  <strong>{result.matchedTitle}</strong>
+                </p>
+                <p className={classes.resultDescription}>
+                  {result.matchedDescription}
+                </p>
+                <ul className={classes.resultList}>
+                  {result.matchedValues?.map((v, i) => (
+                    <li key={i}>✅ {v}</li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p>No matching recommendation found for your responses.</p>
+            )}
           </div>
         </div>
       )}

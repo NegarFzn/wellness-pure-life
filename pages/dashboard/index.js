@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useSession, signOut, getSession } from "next-auth/react";
 import { useUI } from "../../context/UIContext";
 import { toast } from "react-toastify";
-import classes from "./index.module.css";
+import classes from "./index.module.css"; 
 
 export default function DashboardPage() {
   const { data: initialSession, status } = useSession();
@@ -46,11 +46,11 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const fetchResults = async () => {
-      const res = await fetch("/api/quizzes?user=true");
+      const res = await fetch("/api/quiz/quiz-main?user=true");
 
       if (res.ok) {
         const data = await res.json();
-        setQuizResults(data);
+        setQuizResults(Array.isArray(data.history) ? data.history : []);
       }
     };
 
@@ -103,7 +103,7 @@ export default function DashboardPage() {
       </p>
 
       <p className={classes.redirectNotice}>
-        Redirecting to home in 1 minute... 
+        Redirecting to home in 1 minute...
       </p>
 
       {!emailVerified && (
@@ -158,6 +158,12 @@ export default function DashboardPage() {
                 <div className={classes.quizDate}>
                   {new Date(result.createdAt).toLocaleString()}
                 </div>
+                <button
+                  className={classes.viewBtn}
+                  onClick={() => router.push(`/quizzes/result/${result._id}`)}
+                >
+                  🔍 View Summary
+                </button>
               </div>
             ))}
           </div>

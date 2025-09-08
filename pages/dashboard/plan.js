@@ -1,11 +1,11 @@
-// /pages/dashboard/plan.js
+
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import classes from "./plan.module.css";
 
-export default function WellnessPlanPage() {
+export default function DashboardPlanPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [latestQuiz, setLatestQuiz] = useState(null);

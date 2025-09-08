@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "next-auth/react"; 
 
 export default function DailyQuizSync() {
   const { status, data: session } = useSession();

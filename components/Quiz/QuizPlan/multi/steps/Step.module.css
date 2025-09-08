@@ -1,0 +1,211 @@
+.stepContainer {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+}
+
+.heading {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #0f172a;
+}
+
+.subheading {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.optionGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #3b82f6; /* blue-500 */
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.button:hover {
+  background-color: #2563eb; /* blue-600 */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+  background-color: #1d4ed8; /* blue-700 */
+  transform: scale(0.98);
+}
+
+.button:disabled,
+.button[disabled] {
+  background-color: #d1d5db;
+  color: #6b7280;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.button.outline {
+  background-color: transparent;
+  color: #1d4ed8;
+  border: 2px solid #1d4ed8;
+}
+
+.button.outline:hover {
+  background-color: #e0f2fe;
+  border-color: #2563eb;
+  color: #1e3a8a;
+}
+
+.button.fullWidth {
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .optionGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.optionButton {
+  padding: 1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  background-color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.optionButton:hover {
+  border-color: #2563eb;
+  background-color: #f0f9ff;
+}
+
+.optionButton:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.4);
+}
+
+.selected {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+  font-weight: 600;
+  color: #1e40af;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.navigation button {
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0.85rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* ✅ FitnessSummaryStep-specific */
+.summaryList {
+  text-align: left;
+  background-color: #f9fafb;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 500px;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #1e293b;
+}
+
+.summaryList li {
+  margin-bottom: 1.25rem;
+}
+
+.summaryList li > ul {
+  margin-top: 0.5rem;
+  padding-left: 1.2rem;
+  list-style-type: circle;
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+/* ✅ Mobile and Tablet Responsiveness */
+@media (max-width: 768px) {
+  .stepContainer {
+    padding: 2rem 1.5rem;
+  }
+
+  .heading {
+    font-size: 1.55rem;
+  }
+
+  .subheading {
+    font-size: 0.95rem;
+  }
+
+  .navigation {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .navigation button {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .summaryList {
+    font-size: 0.95rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 1.35rem;
+  }
+
+  .subheading {
+    font-size: 0.9rem;
+  }
+
+  .summaryList {
+    padding: 1.2rem;
+  }
+
+  .summaryList li > ul {
+    font-size: 0.9rem;
+  }
+
+  .button {
+    font-size: 0.95rem;
+    padding: 0.65rem 1.25rem;
+  }
+}

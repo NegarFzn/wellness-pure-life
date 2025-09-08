@@ -1,0 +1,55 @@
+.quizWrapper {
+  max-width: 640px;
+  margin: 3rem auto;
+  padding: 2rem 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  font-family: "Inter", sans-serif;
+}
+
+.stepIndicator {
+  font-size: 1rem;
+  text-align: center;
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.progressBar {
+  height: 10px;
+  background-color: #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: #22c55e; /* green-500 */
+  width: 0%;
+  transition: width 0.4s ease-in-out;
+}
+
+.stepContent {
+  margin-top: 1rem;
+}
+@media (max-width: 480px) {
+  .quizWrapper {
+    padding: 1.25rem 1rem;
+    margin: 1.5rem 1rem;
+    border-radius: 16px;
+  }
+
+  .stepIndicator {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .progressBar {
+    height: 8px;
+    margin-bottom: 1.25rem;
+  }
+
+  .stepContent {
+    margin-top: 0.75rem;
+  }
+}

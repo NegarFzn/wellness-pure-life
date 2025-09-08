@@ -1,18 +1,47 @@
 import Link from "next/link";
+import clsx from "clsx";
 import classes from "./button.module.css";
 
-export default function Button(props) {
-  if (props.link) {
+export default function Button({
+  children,
+  onClick,
+  link,
+  size = "md",          // Options: "sm", "md", "lg"
+  variant = "primary",  // Options: "primary", "secondary", "ghost"
+  fullWidth = false,
+  disabled = false,
+  type = "button",
+  ...props
+}) {
+  const classNames = clsx(
+    classes.button,
+    classes[variant],
+    classes[size],
+    {
+      [classes.fullWidth]: fullWidth,
+      [classes.disabled]: disabled,
+    }
+  );
+
+  if (link) {
     return (
-      <Link href={props.link}>
-        <button className={classes.btn}>{props.children}</button>
+      <Link href={link} legacyBehavior passHref>
+        <a className={classNames} aria-disabled={disabled} {...props}>
+          {children}
+        </a>
       </Link>
     );
   }
 
   return (
-    <button className={classes.btn} onClick={props.onClick}>
-      {props.children}
+    <button
+      type={type}
+      className={classNames}
+      onClick={onClick}
+      disabled={disabled}
+      {...props}
+    >
+      {children}
     </button>
   );
 }

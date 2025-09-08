@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import nourishHeader from "./../../public/images/nourish_header.jpg";
+import NourishStartQuiz from "../../components/TopPages/NourishStartQuiz";
+import NourishHighlights from "../../components/TopPages/NourishHighlights";
 import classes from "./index.module.css";
 import NourishList from "../../components/nourish/nourish-list";
 
@@ -173,51 +176,8 @@ function NourishPage(props) {
       </header>
 
       <main className={classes["main-content"]}>
-        {/* --- SEO Intro Block (human-written) --- */}
-        <section className={classes.intro}>
-          <h1 className={classes["left-align"]}>Eat Well, Feel Strong</h1>
-          <p>
-            Food fuels your training, mood, sleep, and focus. In this hub you’ll
-            find straightforward, evidence‑aware guidance for building meals
-            that work in busy real life—not just on paper. Every guide breaks
-            down what to eat, why it matters, and simple swaps you can make
-            today. We focus on patterns, not perfection: more plants, quality
-            protein, smart carbs, and healthy fats.
-          </p>
-          <p>
-            New here? Start with <strong>Nutrient Essentials</strong> to learn
-            the role of protein, fiber, and hydration. Browse
-            <strong> Superfood Secrets</strong> to see which trendy foods
-            actually deliver, then use <strong>Mindful Meals</strong>
-            for quick templates you can repeat on weeknights. Curious about
-            supplements? Our <strong>Daily Supplements</strong>
-            section explains what’s helpful, what’s hype, and how to use
-            products safely.
-          </p>
-          <p>
-            Nutrition works best alongside movement and recovery. Pair these
-            guides with our
-            <Link href="/fitness"> fitness </Link> and
-            <Link href="/mindfulness"> mindfulness </Link> hubs for routines
-            that support energy, stress, and sleep. When you’re ready, jump into
-            a feature below or save a meal template to your bookmarks.
-          </p>
-          <details className={classes.faq}>
-            <summary>
-              FAQs: Do I need supplements? How do I build a balanced plate?
-            </summary>
-            <div>
-              <p>
-                Start with food first: aim for a quarter plate protein, half
-                plate colorful plants, and a quarter plate smart carbs, plus a
-                thumb of healthy fats. Supplements can help fill gaps (like
-                vitamin D or omega‑3) but check with a qualified professional if
-                you have medical conditions or take medications.
-              </p>
-            </div>
-          </details>
-        </section>
-
+        <NourishStartQuiz />
+        <NourishHighlights />
         {/* Sticky sub-nav */}
         <nav className={classes.subnav} aria-label="Section navigation">
           <div className={classes.subnavWrapper}>

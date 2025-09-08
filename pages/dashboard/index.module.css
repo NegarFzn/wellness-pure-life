@@ -206,16 +206,21 @@
   text-transform: capitalize;
 }
 
+.quizSlug:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .quizResult {
   font-style: italic;
   font-size: 1rem;
   margin-bottom: 0.5rem;
-  color: #475569;
+  color: #374151;
 }
 
 .quizDate {
   font-size: 0.9rem;
-  color: #64748b;
+  color: #475569;
 }
 
 .historyFullBtn {
@@ -233,6 +238,23 @@
 
 .historyFullBtn:hover {
   background: linear-gradient(to right, #10b981, #059669);
+}
+
+.viewResultBtn {
+  margin-top: 0.75rem;
+  background: linear-gradient(to right, #3b82f6, #2563eb);
+  color: white;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.viewResultBtn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(to right, #2563eb, #1d4ed8);
 }
 
 @media (max-width: 768px) {
@@ -264,5 +286,8 @@
   .quickLinks button,
   .logoutBtn {
     font-size: 0.95rem;
+  }
+  .quizCardGrid {
+    gap: 1rem;
   }
 }

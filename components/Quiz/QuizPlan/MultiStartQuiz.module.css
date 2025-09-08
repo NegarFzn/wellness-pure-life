@@ -1,0 +1,317 @@
+.heroSection {
+  padding: 4rem 2rem;
+  background: linear-gradient(to right, #f0f9ff, #ecfeff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: row;
+  gap: 4rem;
+  max-width: 1200px;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.textBlock {
+  flex: 1 1 500px;
+}
+
+.heading {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.subHeading {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 0.25rem;
+}
+
+.highlight {
+  background: linear-gradient(to right, #6ee7b7, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subText {
+  font-size: 1rem;
+  color: #475569;
+  margin-bottom: 1.5rem;
+}
+
+.bold {
+  font-weight: 600;
+  color: #3b82f6;
+}
+
+.progressWrapper {
+  margin-bottom: 1rem;
+}
+
+.progressBar {
+  background-color: #e2e8f0;
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.progressFill {
+  background-color: #3b82f6;
+  height: 100%;
+  width: 0;
+  transition: width 0.4s ease, opacity 0.3s ease;
+  opacity: 0.9;
+}
+
+.quizWrapper {
+  margin: 2rem 0 1.5rem;
+}
+
+.quizLabel {
+  font-weight: 600;
+  color: #0f172a;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.goalOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.goalButton {
+  border: 2px solid #cbd5e1;
+  background: white;
+  border-radius: 999px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.goalButton:hover {
+  border-color: #3b82f6;
+}
+
+.activeGoal {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.goalText {
+  font-weight: 500;
+}
+
+.selectionNote {
+  font-size: 0.95rem;
+  color: #22c55e;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.ctaWrapper {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.primaryCta {
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.primaryCta:hover:enabled {
+  background-color: #2563eb;
+}
+
+.primaryCta:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondaryCta {
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  border: 2px solid #3b82f6;
+  color: #3b82f6;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.secondaryCta:hover {
+  background-color: #ebf4ff;
+}
+
+.socialProof {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.mockupWrapper {
+  flex: 1 1 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.6;
+}
+
+.mockup {
+  width: 100%;
+  max-width: 360px;
+  background: #f8fbfc; /* Soft background */
+  border-radius: 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-inline: auto;
+}
+
+.mockHeader {
+  height: 48px;
+  border-radius: 2rem;
+  background-color: #5a6370; /* Deep gray-blue */
+}
+
+.mockLine,
+.mockLineShort {
+  height: 12px;
+  border-radius: 10px;
+  background-color: #e7f1f5;
+}
+
+.mockLineShort {
+  width: 60%;
+}
+
+.mockGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.mockCard {
+  height: 90px;
+  border-radius: 1.25rem;
+  background: linear-gradient(145deg, #e8f0ff, #dce9ff);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.mockCard:hover {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+.goalButton:focus-visible,
+.primaryCta:focus-visible,
+.secondaryCta:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 3px;
+}
+
+.goalButton:hover .goalText {
+  color: #3b82f6;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.heroSection {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroSection {
+    animation: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .heroContent {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ctaWrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primaryCta,
+  .secondaryCta {
+    width: 100%;
+    text-align: center;
+  }
+
+  .heading {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .subHeading {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .subText {
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .textBlock {
+    padding-inline: 1rem;
+  }
+
+  .mockupWrapper {
+    margin-top: 2rem;
+  }
+  .heroSection {
+    padding: 3rem 1rem;
+  }
+
+  .quizWrapper {
+    margin-top: 1.5rem;
+  }
+
+  .ctaWrapper {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+}

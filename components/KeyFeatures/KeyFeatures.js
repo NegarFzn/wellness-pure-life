@@ -14,7 +14,7 @@ export default function KeyFeatures() {
     const card = container.querySelector(`.${classes.featureCard}`);
     if (!card) return;
 
-    const scrollAmount = card.offsetWidth + 16;
+    const scrollAmount = card.offsetWidth + 20;
     container.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
@@ -24,8 +24,6 @@ export default function KeyFeatures() {
   useEffect(() => {
     const container = containerRef.current;
     const cards = container.querySelectorAll(`.${classes.featureCard}`);
-    const dots = document.querySelectorAll(`.${classes.dot}`);
-
     if (!cards.length) return;
 
     const observer = new IntersectionObserver(
@@ -34,9 +32,6 @@ export default function KeyFeatures() {
           const index = [...cards].indexOf(entry.target);
           if (entry.isIntersecting) {
             setActiveIndex(index);
-            dots.forEach((dot, i) =>
-              dot.classList.toggle(classes.active, i === index)
-            );
           }
         });
       },
@@ -48,9 +43,7 @@ export default function KeyFeatures() {
 
     cards.forEach((card) => observer.observe(card));
 
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   const features = [
@@ -58,38 +51,50 @@ export default function KeyFeatures() {
       href: "/fitness",
       img: "/images/fitness.jpg",
       title: "Stronger Body",
-      desc: "💪 Discover guided workouts and expert tips to help you move better, build lasting strength, and feel your best.",
+      desc: "💪 Guided workouts and expert tips to help you move better, build strength, and feel your best.",
+      color: "#f97316", // orange
     },
     {
       href: "/mindfulness",
       img: "/images/mindfulness.jpg",
       title: "Calm Your Mind",
-      desc: "🧘‍♀️ Learn to reduce stress, improve focus, and create calm through simple mindfulness practices and breathing.",
+      desc: "🧘‍♀️ Reduce stress, improve focus, and create calm through simple mindfulness practices.",
+      color: "#3b82f6", // blue
     },
     {
       href: "/nourish",
       img: "/images/nourish.jpg",
       title: "Nourishment",
-      desc: "🌿 Fuel up with balanced meals and superfoods that energize, heal, and uplift—naturally.",
+      desc: "🌿 Fuel up with balanced meals and superfoods that energize, heal, and uplift — naturally.",
+      color: "#10b981", // green
     },
   ];
 
   return (
     <section className={classes.featuresSection}>
       <h2 className={classes.heading}>Guiding You to a Healthier Life</h2>
+      <p className={classes.subheading}>
+        Explore our core pillars of wellness — designed to help you thrive with
+        balance in body, mind, and lifestyle.
+      </p>
 
       <div className={classes.featureGrid} ref={containerRef}>
         {features.map((f, i) => (
           <Link href={f.href} className={classes.featureCard} key={i}>
-            <Image
-              src={f.img}
-              alt={f.title}
-              width={200}
-              height={150}
-              className={classes.icon}
-              priority
-            />
-            <h3>{f.title}</h3>
+            <div
+              className={classes.imageWrapper}
+              style={{ borderColor: f.color }}
+            >
+              <Image
+                src={f.img}
+                alt={f.title}
+                width={400}
+                height={250}
+                className={classes.image}
+                priority
+              />
+            </div>
+            <h3 style={{ color: f.color }}>{f.title}</h3>
             <p>{f.desc}</p>
           </Link>
         ))}

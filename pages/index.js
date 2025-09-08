@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { fetchNews } from "../utils/fetch";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import Subscribe from "../components/Subscribe/subscribe";
 import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
@@ -28,7 +29,7 @@ export default function Home() {
   useEffect(() => {
     const getNews = async () => {
       const news = await fetchNews();
-      setNewsArticles(news.slice(0, 3));
+      setNewsArticles(news.slice(0, 4));
     };
     getNews();
   }, []);
@@ -46,7 +47,9 @@ export default function Home() {
       const verifyEmail = async () => {
         setVerifying(true);
         try {
-          const res = await fetch(`/api/auth/emailverification?token=${verifyToken}`);
+          const res = await fetch(
+            `/api/auth/emailverification?token=${verifyToken}`
+          );
           const data = await res.json();
           if (res.ok && data.success) {
             router.replace("/login?verified=true");
@@ -136,13 +139,16 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Healthy Living - Mind & Body Wellness</title>
+        <title>Wellness Pure Life - Fitness, Nutrition & Mindfulness</title>
         <meta
           name="description"
-          content="Achieve a balanced and healthier life with fitness, mindfulness, and nourishing food tips."
+          content="Wellness Pure Life helps you thrive with expert tips in fitness, mindfulness, and nutrition. Discover guides, workouts, recipes, and wellness insights."
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta charSet="UTF-8" />
+        <meta
+          name="keywords"
+          content="fitness, mindfulness, nutrition, wellness, healthy living, workouts, mental health"
+        />
+        <meta name="robots" content="index, follow" />
       </Head>
 
       {verifyStatus === "success" && (
@@ -173,18 +179,32 @@ export default function Home() {
         <DailyList />
         <KeyFeatures />
         <Subscribe />
-        <QuizCard /> 
-        {/* {newsArticles.length > 0 && (
+        <QuizCard />
+        {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
+            <h2 className={classes.newsHeading}>
+              Latest Research & Wellness Insights
+            </h2>
             <div className={classes.newsGrid} ref={newsGridRef}>
               {newsArticles.map((item) => (
                 <div key={item.slug} className={classes.newsCard}>
-                  <img src={item.image || "/images/defaultNews.jpg"} alt={item.title} />
-                  <h3>{item.title}</h3>
-                  <p>{item.summary}</p>
-                  <Link href={`/news/${item.slug}`} className={classes.readMore}>
-                    Read More →
-                  </Link>
+                  <div className={classes.newsImageWrapper}>
+                    <img
+                      src={item.image || "/images/defaultNews.jpg"}
+                      alt={item.title}
+                      className={classes.newsImage}
+                    />
+                  </div>
+                  <div className={classes.newsContent}>
+                    <h3 className={classes.newsTitle}>{item.title}</h3>
+                    <p className={classes.newsSummary}>{item.summary}</p>
+                    <Link
+                      href={`/news/${item.slug}`}
+                      className={classes.readMore}
+                    >
+                      Read More →
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
@@ -193,24 +213,32 @@ export default function Home() {
               {newsArticles.map((_, i) => (
                 <span
                   key={i}
-                  className={`${classes.dot} ${i === activeIndex ? classes.active : ""}`}
+                  className={`${classes.dot} ${
+                    i === activeIndex ? classes.active : ""
+                  }`}
                 ></span>
               ))}
             </div>
 
             <div className={classes.arrows}>
-              <button onClick={() => scrollNews("left")} className={classes.arrowBtn}>
+              <button
+                onClick={() => scrollNews("left")}
+                className={classes.arrowBtn}
+              >
                 ◀
               </button>
-              <button onClick={() => scrollNews("right")} className={classes.arrowBtn}>
+              <button
+                onClick={() => scrollNews("right")}
+                className={classes.arrowBtn}
+              >
                 ▶
               </button>
             </div>
           </section>
-        )} */}
+        )}
 
         {showButton && (
-          <button onClick={scrollToTop} className={classes.backToTop} >
+          <button onClick={scrollToTop} className={classes.backToTop}>
             ↑
           </button>
         )}

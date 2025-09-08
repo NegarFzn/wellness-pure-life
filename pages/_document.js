@@ -6,7 +6,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          {/* ✅ Google AdSense Script */}
+          {/* ✅ Google AdSense */}
           <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6324625824043093"
@@ -27,7 +27,39 @@ class MyDocument extends Document {
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
-          {/* Optional: favicon or other link tags can go here */}
+          {/* ✅ Open Graph (Social Sharing) */}
+          <meta
+            property="og:title"
+            content="Wellness Pure Life – Personalized Wellness Plans"
+          />
+          <meta
+            property="og:description"
+            content="Create your custom fitness, nutrition, and mindfulness plans based on your goals."
+          />
+          <meta
+            property="og:image"
+            content="https://wellnesspurelife.com/og-image.jpg"
+          />
+          <meta property="og:url" content="https://wellnesspurelife.com" />
+          <meta property="og:type" content="website" />
+
+          {/* ✅ Twitter Card Metadata */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta
+            name="twitter:title"
+            content="Wellness Pure Life – Personalized Plans"
+          />
+          <meta
+            name="twitter:description"
+            content="Custom wellness programs based on your preferences and goals."
+          />
+          <meta
+            name="twitter:image"
+            content="https://wellnesspurelife.com/og-image.jpg"
+          />
+
+          {/* Optional: favicon or other link tags */}
+          {/* <link rel="icon" href="/favicon.ico" /> */}
         </Head>
         <body>
           <div id="overlays" />

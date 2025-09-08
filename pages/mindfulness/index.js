@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import mindfulnessHeader from "./../../public/images/mindfulness_header.jpg";
+import MindfulnessHighlights from "../../components/TopPages/MindfulnessHighlights";
+import MindfulnessStartQuiz from "../../components/TopPages/MindfulnessStartQuiz";
 import classes from "./index.module.css";
 import MindfulnessList from "../../components/mindfulness/mindfulness-list";
 
@@ -172,50 +175,126 @@ function MindfulnessPage(props) {
       </header>
 
       <main className={classes["main-content"]}>
-        {/* --- SEO Intro Block (human-written) --- */}
+        <MindfulnessStartQuiz />
+        <MindfulnessHighlights />
+
+        {/* Educational Overview */}
         <section className={classes.intro}>
-          <h1 className={classes["left-align"]}>
-            Mindfulness that Fits Real Life
-          </h1>
+          <h2 className={classes.sectionTitle}>
+            Foundations of Mindfulness Practice
+          </h2>
+
+          <div className={classes.cardGrid}>
+            <motion.div
+              className={`${classes.card} ${classes.cardCardio}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              onClick={() =>
+                document
+                  .getElementById("meditation")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              <span>🧘‍♂️</span>
+              <h3>Meditation</h3>
+            </motion.div>
+
+            <motion.div
+              className={`${classes.card} ${classes.cardResistance}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              onClick={() =>
+                document
+                  .getElementById("breathwork")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              <span>🌬️</span>
+              <h3>Breathwork</h3>
+            </motion.div>
+
+            <motion.div
+              className={`${classes.card} ${classes.cardRecovery}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              onClick={() =>
+                document
+                  .getElementById("sleep")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              <span>😴</span>
+              <h3>Sleep Hygiene</h3>
+            </motion.div>
+
+            <motion.div
+              className={`${classes.card} ${classes.cardFlexibility}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              onClick={() =>
+                document
+                  .getElementById("journaling")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              <span>📔</span>
+              <h3>Journaling</h3>
+            </motion.div>
+          </div>
+
+          {/* Educational Guide */}
+          <h2 className={classes.sectionTitle}>How to Begin Your Practice</h2>
           <p>
-            Mindfulness isn’t about emptying your mind—it’s about paying kind,
-            steady attention to what’s here now. In this hub you’ll find short,
-            repeatable practices you can use before a big meeting, after a
-            stressful commute, or when you simply want to reset. Every guide
-            includes exact steps, common mistakes to avoid, and gentle
-            progressions so you can build a habit without overwhelm.
+            Start with <strong>5–10 minutes daily</strong> of mindful breathing
+            or guided meditation. Gradually build a consistent routine that
+            supports your emotional balance and mental clarity.{" "}
+            <em>It's not about perfection — it's about presence.</em>
           </p>
+
+          <h2 className={classes.sectionTitle}>Common Mindfulness Mistakes</h2>
+          <ul>
+            <li>
+              Expecting instant results or "clearing the mind completely."
+            </li>
+            <li>Forcing practices instead of gently integrating them.</li>
+            <li>Inconsistency and skipping reflection time.</li>
+            <li>Ignoring the connection between body and mind.</li>
+          </ul>
+
+          <h2 className={classes.sectionTitle}>Additional Resources</h2>
           <p>
-            New to meditation? Start with a five‑minute{" "}
-            <strong>breathing practice</strong> and add time as it feels right.
-            If focus is your goal, try our <strong>productivity & focus</strong>{" "}
-            routines designed to clear mental clutter in just a few minutes. For
-            emotional balance, explore <strong>stress reduction</strong> and{" "}
-            <strong>mental wellness</strong> articles packed with grounding
-            techniques you can use at home or at work.
+            Combine your mental practice with nourishing movement from our{" "}
+            <Link href="/fitness">fitness section</Link> or healthy habits from
+            the <Link href="/nourish">nourish section</Link>. Explore articles,
+            guided audios, and breath techniques tailored for everyday stress
+            and burnout.
           </p>
+
+          <blockquote>
+            <em>
+              “Peace is not a place to get to — it’s a moment you create.”
+            </em>
+          </blockquote>
+        </section>
+
+        {/* CTA Section */}
+        <section className={classes.ctaSection}>
+          <h2>Begin Your Mindful Path</h2>
           <p>
-            Mind and body support each other: pairing mindfulness with movement
-            and nutrition speeds recovery and improves energy. Visit our{" "}
-            <Link href="/fitness"> fitness </Link> and{" "}
-            <Link href="/nourish"> nutrition </Link> hubs to round out your
-            routine. When you’re ready, dive into a feature from below or save a
-            quick practice to your bookmarks so it’s there when you need it.
+            Discover personalized practices or take our quick quiz to start your
+            journey toward more presence and peace.
           </p>
-          <details className={classes.faq}>
-            <summary>
-              FAQs: How long should I meditate? What if my mind wanders?
-            </summary>
-            <div>
-              <p>
-                Start with 3–5 minutes and add 1–2 minutes each week. Wandering
-                is normal—when you notice it, gently return to the breath or
-                your chosen anchor without judgment. If you feel anxious, open
-                your eyes, lower the intensity, or switch to a grounding
-                exercise like naming five things you can see.
-              </p>
-            </div>
-          </details>
+          <Link href="/start" className={classes.ctaButton}>
+            Start Now
+          </Link>
         </section>
 
         {/* Sticky sub-nav */}

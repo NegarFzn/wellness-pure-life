@@ -1,0 +1,38 @@
+.utilityButton {
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.shareButton {
+  background: linear-gradient(to right, #1c6dd0, #38b6ff);
+  color: white;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.shareButton:hover {
+  background: linear-gradient(to right, #1558b0, #27a2f5);
+  transform: scale(1.03);
+}
+
+.shareButton:active {
+  transform: scale(0.97);
+}
+
+/* ✅ Mobile Styling */
+@media (max-width: 768px) {
+  .utilityButton {
+    font-size: 0.95rem;
+    padding: 0.65rem 1rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .shareButton {
+    border-radius: 6px;
+  }
+}

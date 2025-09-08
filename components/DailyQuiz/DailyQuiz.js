@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import classes from "./DailyQuiz.module.css";
 
 export default function DailyQuiz({ onClose }) {
-  // quiz state
+  // quiz state 
   const [answer, setAnswer] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [savedLocally, setSavedLocally] = useState(false);

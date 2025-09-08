@@ -1,4 +1,3 @@
-/* General Styles */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -15,60 +14,87 @@
   align-items: center;
 }
 
-.newsGrid {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  gap: 1rem;
-  padding: 0 1rem 2rem;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+.newsHeading {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1f2937;
 }
 
-.newsGrid::after {
-  content: "";
-  flex: 0 0 1rem;
+.newsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.2rem;
+  padding: 1rem 1.5rem;
 }
 
 .newsCard {
-  flex: 0 0 85vw;
-  max-width: 85vw;
+  flex-shrink: 0;
+  width: 280px; /* slightly narrower */
   scroll-snap-align: center;
-  background: #fff;
+  background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
-  text-align: left;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.newsImageWrapper {
+  width: 100%;
+  height: 150px; /* smaller image */
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.newsImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.newsContent {
+  padding: 0.75rem 1rem; /* tighter spacing */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex-grow: 1;
 }
 
-.newsCard img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 1rem;
+.newsTitle {
+  font-size: 1rem; /* smaller font */
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.35rem;
+  line-height: 1.4;
+  min-height: auto;
 }
 
-.newsCard h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-}
-
-.newsCard p {
-  font-size: 0.95rem;
-  color: #333;
-  margin-bottom: 1rem;
+.newsSummary {
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .readMore {
   font-weight: 600;
+  font-size: 0.9rem;
   color: #6366f1;
   text-decoration: none;
   align-self: flex-start;
+  margin-top: auto;
+}
+
+.readMore:hover {
+  text-decoration: underline;
+  color: #4f46e5;
 }
 
 /* Dots */
@@ -260,24 +286,36 @@
   }
 }
 
-@media (max-width: 500px) {
-  .newsCard {
-    padding: 0.5rem;
-    flex: 0 0 88vw;
-    max-width: 88vw;
+/* ======= Mobile Scroll Behavior (≤ 767px) ======= */
+@media (max-width: 767px) {
+  .newsGrid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: 1rem;
+    padding: 0 1rem 2rem;
+    max-width: 100%;
   }
 
-  .newsCard img {
+  .newsCard {
+    flex: 0 0 85vw;
+    max-width: 85vw;
+    scroll-snap-align: center;
+    padding: 0.5rem;
+  }
+
+  .newsImageWrapper {
     height: 110px;
   }
 
-  .newsCard h3 {
+  .newsTitle {
     font-size: 1rem;
     line-height: 1.35;
     margin: 0.4rem 0 0.3rem;
   }
 
-  .newsCard p {
+  .newsSummary {
     font-size: 0.85rem;
     line-height: 1.35;
   }
@@ -285,45 +323,10 @@
   .readMore {
     font-size: 0.85rem;
   }
-}
 
-@media (min-width: 600px) {
-  .newsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .container {
-    padding: 1rem 0.5rem;
-    text-align: left;
-  }
-
-  .latestNewsSection {
-    padding: 0.5rem;
-  }
-
-  .latestNewsSection {
-    padding: 0.75rem;
-  }
-  .newsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .newsCard h3 {
-    font-size: 1.1rem;
-  }
-
-  .newsCard p {
-    font-size: 0.9rem;
-  }
-
-  .readMore {
-    font-size: 0.9rem;
-  }
-
-  .newsCard a {
-    font-size: 0.9rem;
+  .progressDots,
+  .arrows {
+    display: flex;
   }
 
   .backToTop {
@@ -362,6 +365,7 @@
     padding: 0.6rem 1.2rem;
     font-size: 1rem;
   }
+
   .mobileHeader {
     display: flex;
     align-items: center;
@@ -424,25 +428,15 @@
   }
 }
 
-@media (min-width: 900px) {
-  .newsGrid {
-    padding: 0 2rem;
-  }
-
-  .newsCard img {
-    max-height: 140px;
-  }
-}
-
-@media (min-width: 1200px) {
+/* ======= Tablet (768px–1023px): 2 Columns ======= */
+@media (min-width: 768px) and (max-width: 1023px) {
   .newsGrid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    overflow: unset;
-    scroll-snap-type: none;
-    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
     max-width: 1200px;
-    padding: 0 1.5rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+    gap: 1.5rem;
   }
 
   .newsCard {
@@ -453,16 +447,12 @@
   .arrows {
     display: none;
   }
-
-  .newsCard img {
-    max-height: 130px;
-  }
 }
 
-@media (min-width: 1024px) {
+/* ======= Desktop (1024px–1279px): 3 Columns ======= */
+@media (min-width: 1024px) and (max-width: 1279px) {
   .newsGrid {
     grid-template-columns: repeat(3, 1fr);
-    max-width: 1440px;
   }
 
   .newsCard img {
@@ -475,44 +465,14 @@
   }
 }
 
-@media (max-width: 1024px) {
+/* ======= Large Desktop (1280px and up): 4 Columns ======= */
+@media (min-width: 1280px) {
   .newsGrid {
-    display: flex; /* ✅ override to flex */
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    gap: 1rem;
-    padding: 0 1rem 2rem;
-    -webkit-overflow-scrolling: touch;
-    max-width: 100% !important;
-    width: 100% !important;
-  }
-
-  .newsGrid::after {
-    content: "";
-    flex: 0 0 1rem;
-  }
-
-  .newsCard {
-    flex: 0 0 85vw;
-    max-width: 85vw;
-    scroll-snap-align: center;
-  }
-
-  .newsCard p {
-    -webkit-line-clamp: 4;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .progressDots,
-  .arrows {
-    display: flex;
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
+/* ======= Extra Small Mobile Refinement (≤ 480px) ======= */
 @media (max-width: 480px) {
   .newsCard {
     flex: 0 0 88vw;
@@ -524,13 +484,13 @@
     height: 110px;
   }
 
-  .newsCard h3 {
+  .newsTitle {
     font-size: 1rem;
     line-height: 1.35;
     margin: 0.4rem 0 0.3rem;
   }
 
-  .newsCard p {
+  .newsSummary {
     font-size: 0.9rem;
   }
 
@@ -539,7 +499,8 @@
   }
 }
 
-@media (min-width: 1025px) {
+/* ======= Hide Dots and Arrows Above 1024px ======= */
+@media (min-width: 1024px) {
   .progressDots,
   .arrows {
     display: none;

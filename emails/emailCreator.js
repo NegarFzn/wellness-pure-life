@@ -116,3 +116,41 @@ export function createQuizResultEmail(
     body: emailTemplate(bodyContent),
   };
 }
+
+export function createFitnessEmail(answers) {
+  // Format logic (already done)
+  return {
+    subject: "Your Fitness Plan",
+    body: emailTemplate(/* formatted fitness HTML */),
+  };
+}
+
+export function createMindfulnessEmail(answers) {
+  return {
+    subject: "Your Mindfulness Plan",
+    body: emailTemplate(`
+      <h2>🧘‍♀️ Mindfulness Plan</h2>
+      <p>Here are some personalized suggestions to reduce stress and stay focused:</p>
+      <ul>
+        ${(answers.activities || []).map((a) => `<li>${a}</li>`).join("")}
+      </ul>
+    `),
+  };
+}
+
+export function createNourishEmail(answers) {
+  return {
+    subject: "Your Personalized Nutrition Plan",
+    body: emailTemplate(`
+      <h2>🥗 Nutrition Plan</h2>
+      <p>Based on your preferences, here's what suits your goals:</p>
+      <ul>
+        <li><strong>Diet Type:</strong> ${answers.dietType}</li>
+        <li><strong>Meals/Day:</strong> ${answers.mealsPerDay}</li>
+        <li><strong>Allergies:</strong> ${
+          answers.allergies?.join(", ") || "None"
+        }</li>
+      </ul>
+    `),
+  };
+}

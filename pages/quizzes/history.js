@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useUI } from "../../context/UIContext";
+import { useRouter } from "next/router";
 import classes from "./history.module.css";
 import {
   BarChart,
@@ -25,15 +26,42 @@ export default function QuizHistory() {
   const [filter, setFilter] = useState("");
   const [selectedType, setSelectedType] = useState(null);
   const { openLogin } = useUI();
+  const router = useRouter();
 
   useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const [mainRes, planRes] = await Promise.all([
+          fetch("/api/quizzes?user=true"),
+          fetch("/api/quiz/quiz-plan?mode=history"),
+        ]);
+
+        const mainData = await mainRes.json();
+        const planData = await planRes.json();
+
+        const mainHistory = Array.isArray(mainData.history)
+          ? mainData.history
+          : [];
+        const planHistory = Array.isArray(planData.history)
+          ? planData.history
+          : [];
+
+        const merged = [
+          ...mainHistory,
+          ...planHistory.map((item) => ({ ...item, isPlan: true })),
+        ];
+
+        setHistory(merged);
+      } catch (err) {
+        console.error("Failed to fetch history:", err);
+        setHistory([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (status === "authenticated") {
-      fetch("/api/quizzes?user=true")
-        .then((res) => res.json())
-        .then((data) => {
-          setHistory(Array.isArray(data) ? data : []);
-        })
-        .finally(() => setLoading(false));
+      fetchHistory();
     } else if (status === "unauthenticated") {
       setLoading(false);
     }
@@ -60,7 +88,7 @@ export default function QuizHistory() {
     );
   }
 
-  // Count and group logic
+  // Group + count logic (only for non-plan entries)
   const countByType = {
     "High Stress": 0,
     Balanced: 0,
@@ -72,6 +100,8 @@ export default function QuizHistory() {
   const dailyMap = {};
 
   history.forEach((q) => {
+    if (q.isPlan) return; // Skip plan entries
+
     const slug = (q.slug || q.quizSlug || "").toLowerCase();
     const key = ["High Stress", "Balanced", "Low Stress"].includes(q.result)
       ? q.result
@@ -120,9 +150,39 @@ export default function QuizHistory() {
     setSelectedType((prev) => (prev === type ? null : type));
   };
 
+  const getQuizType = (slug) => {
+    const s = slug?.toLowerCase();
+    if (
+      [
+        "fitness",
+        "get_toned",
+        "lose_weight",
+        "build_muscle",
+        "improve_wellness",
+      ].includes(s)
+    ) {
+      return "fitness";
+    }
+    if (["mindfulness", "meditation", "breathwork", "journaling"].includes(s)) {
+      return "mindfulness";
+    }
+    if (
+      [
+        "nourish",
+        "eat_better",
+        "weight_support",
+        "boost_energy",
+        "improve_gut_health",
+      ].includes(s)
+    ) {
+      return "nourish";
+    }
+    return "unsupported";
+  };
+
   return (
     <div className={classes.container}>
-      <h1 className={classes.heading}>📘 My Quiz History</h1>
+      <h1 className={classes.heading}>📘 My Quiz & Plan History</h1>
 
       <input
         type="text"
@@ -235,25 +295,34 @@ export default function QuizHistory() {
                 entry.isDaily === true ||
                 (slug || "").toLowerCase() === "daily-quiz" ||
                 (slug || "").toLowerCase() === "daily-checkin";
+
               return (
                 <li key={idx} className={classes.quizItem}>
-                  <strong>{slug}</strong> — Result:{" "}
-                  <em
-                    className={
-                      entry.result === "High Stress"
-                        ? classes.highStress
-                        : entry.result === "Balanced"
-                        ? classes.balanced
-                        : entry.result === "Low Stress"
-                        ? classes.lowStress
-                        : classes.unknown
-                    }
-                  >
-                    {entry.result}
-                  </em>
+                  <strong>{slug}</strong> —{" "}
+                  {entry.isPlan
+                    ? "Saved Plan"
+                    : `Result: ${entry.result || "N/A"}`}
                   {isDaily && <span> 🗓️</span>}
                   <br />
                   <small>{new Date(entry.createdAt).toLocaleString()}</small>
+                  <br />
+                  {entry.isPlan ? (
+                    <button
+                      className={classes.viewResultBtn}
+                      onClick={() => router.push(`/quizzes/quiz-plan/${slug}`)}
+                    >
+                      🧭 View Plan
+                    </button>
+                  ) : (
+                    <button
+                      className={classes.viewResultBtn}
+                      onClick={() =>
+                        router.push(`/quizzes/result/${entry._id}`)
+                      }
+                    >
+                      🔍 View Full Result
+                    </button>
+                  )}
                 </li>
               );
             })}
