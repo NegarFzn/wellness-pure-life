@@ -36,7 +36,7 @@ export default function FeatureHighlights() {
     <section className={classes.featureSection} aria-label="Platform Benefits">
       <div className={classes.container}>
         <h2 className={classes.title}>
-          What Make WellnessPureLife Different?
+          What Makes WellnessPureLife Different?
         </h2>
         <div className={classes.grid}>
           {features.map((feature, index) => {
