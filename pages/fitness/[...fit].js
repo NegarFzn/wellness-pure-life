@@ -40,6 +40,7 @@ function fitnessDetailsPage(props) {
         <meta name="description" content={fitData.description} />
       </Head>
       <Content items={fitData} />
+      
       {showButton && (
         <button onClick={scrollToTop} className={classes.backToTop}>
           ↑
@@ -68,7 +69,7 @@ export async function getStaticProps(context) {
     }
 
     const { params } = context;
-    
+
     if (!params.fit || params.fit.length === 0) {
       throw new Error("Invalid URL: Fitness ID is missing.");
     }

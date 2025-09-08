@@ -1,7 +1,7 @@
 // components/HeroStartQuiz/HeroStartQuizMindfulness.jsx
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import classes from "./FitnessStartQuiz.module.css"; // You can create a separate CSS module if needed
+import classes from "./MindfulnessStartQuiz.module.css"; // You can create a separate CSS module if needed
 
 export default function HeroStartQuizMindfulness() {
   const router = useRouter();

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
+import FeedbackPrompt from "../../components/UI/FeedbackPrompt";
 import classes from "./content.module.css";
 import FitnessList from "./fitness-list";
 
@@ -205,7 +206,7 @@ const Content = (props) => {
           ))}
         </div>
       </div>
-
+      <FeedbackPrompt />
       <div className={classes["related-posts-wrapper"]}>
         <h3 className={classes["related-posts-title"]}>RELATED POSTS</h3>
         <div className={classes["related-posts-container"]}>

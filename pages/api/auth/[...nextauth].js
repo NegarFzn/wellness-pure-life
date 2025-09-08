@@ -37,10 +37,10 @@ export default NextAuth({
             id: userDoc.id,
             email: user.email,
             name: user.name || null,
-            isPremium: user.isPremium || false, 
+            isPremium: user.isPremium || false,
           };
         } catch (err) {
-          console.error("❌ Firebase Admin Auth error:", err.message);
+          console.error("❌ Firebase Admin Auth error:", err);
           return null;
         }
       },
@@ -74,7 +74,7 @@ export default NextAuth({
           token.isPremium = userData?.isPremium || false;
           token.emailVerified = userData?.isVerified || false;
         } catch (err) {
-          console.error("🔥 Error fetching user claims:", err.message);
+          console.error("❌ Firebase Admin Auth error:", err);
           token.isPremium = false;
           token.emailVerified = false;
         }

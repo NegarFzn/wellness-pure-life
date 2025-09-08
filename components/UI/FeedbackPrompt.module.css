@@ -1,0 +1,93 @@
+.feedbackBox {
+  background-color: #dff4ff;
+  color: #045a74;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 1rem 1.5rem;
+  margin: 2rem auto;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  width: fit-content;
+  max-width: 100%;
+  transition: all 0.3s ease;
+}
+
+.icons {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 1.8rem;
+  transition: transform 0.2s ease;
+}
+
+.icon:hover {
+  animation: bounce 0.4s ease;
+  transform: scale(1.25);
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: orangered;
+}
+
+/* ✨ Animated Bounce Effect */
+@keyframes bounce {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.25) translateY(-4px);
+  }
+  100% {
+    transform: scale(1.1) translateY(0);
+  }
+}
+
+/* Comment section */
+.commentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 300px;
+  text-align: left;
+}
+
+.question {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.textarea {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  resize: vertical;
+  min-height: 60px;
+  font-family: inherit;
+}
+
+.submitButton {
+  background-color: #0077b6;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.3s ease;
+}
+
+.submitButton:hover {
+  background-color: #023e8a;
+}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
+import FeedbackPrompt from "../../components/UI/FeedbackPrompt";
 import classes from "./content.module.css";
 import NourishList from "./nourish-list";
 
@@ -172,7 +173,7 @@ const Content = (props) => {
         </div>
         {/* <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} /> */}
       </div>
-
+      <FeedbackPrompt />
       <div className={classes["related-posts-wrapper"]}>
         <h3 className={classes["related-posts-title"]}>RELATED POSTS</h3>
         <div className={classes["related-posts-container"]}>
