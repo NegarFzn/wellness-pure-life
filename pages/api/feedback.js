@@ -2,8 +2,31 @@
 import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
 const dbName = "wellnesspurelife";
+const options = {};
+
+// 🔄 Global caching for serverless environments (e.g. Vercel)
+let cachedClient = global._mongoClient;
+let cachedDb = global._mongoDb;
+
+if (!cachedClient) {
+  cachedClient = null;
+  cachedDb = null;
+}
+
+async function connectToDatabase() {
+  if (cachedClient && cachedDb) {
+    return { client: cachedClient, db: cachedDb };
+  }
+
+  const client = await MongoClient.connect(uri, options);
+  const db = client.db(dbName);
+
+  global._mongoClient = client;
+  global._mongoDb = db;
+
+  return { client, db };
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -17,8 +40,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    await client.connect();
-    const db = client.db(dbName);
+    const { db } = await connectToDatabase();
     const feedbackCollection = db.collection("page_feedback");
 
     await feedbackCollection.insertOne({
