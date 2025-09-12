@@ -3,21 +3,6 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import DailyQuizAnalysis from "../../components/Quiz/DailyQuiz/DailyQuizAnalysis";
 import classes from "./index.module.css";
-import {
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
-} from "recharts";
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -28,7 +13,18 @@ export default function DashboardPage() {
   const [dailyData, setDailyData] = useState([]);
   const [mainData, setMainData] = useState([]);
   const [planData, setPlanData] = useState(null);
-  const COLORS = ["#dc2626", "#16a34a", "#ca8a04", "#6b7280"];
+
+  const SectionCard = ({ icon, title, description, onClick }) => (
+    <button onClick={onClick} className={classes.sectionCard}>
+      <div className={classes.sectionCardContent}>
+        <span className={classes.sectionCardIcon}>{icon}</span>
+        <div>
+          <h3 className={classes.sectionCardTitle}>{title}</h3>
+          <p className={classes.sectionCardDescription}>{description}</p>
+        </div>
+      </div>
+    </button>
+  );
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/");
@@ -37,12 +33,10 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!user?.email) return;
 
-    // 🟦 1. Fetch DAILY mood history
     fetch("/api/quiz/quiz-daily?mode=history")
       .then((res) => res.json())
       .then((data) => setDailyData(data.history || []));
 
-    // 🟨 2. Fetch MAIN quiz saved answers from new endpoint
     fetch(
       `/api/quiz/quiz-main?mode=saved&email=${encodeURIComponent(user.email)}`
     )
@@ -51,34 +45,17 @@ export default function DashboardPage() {
         const latest = [...(data.history || [])].sort(
           (a, b) => new Date(b.savedAt) - new Date(a.savedAt)
         )[0];
-
         if (!latest || !latest.answers || !latest.slug) return;
-
-        // Construct recommendation query from answers
-        const params = new URLSearchParams({ slug: latest.slug });
-        Object.entries(latest.answers).forEach(([key, value]) => {
-          params.append(key, value);
-        });
-
-        // Fetch recommendation
         const rec = await fetch(
           `/api/quiz/quiz-main?mode=saved&email=${encodeURIComponent(
             user.email
           )}`
         )
           .then((r) => r.json())
-          .catch((err) => {
-            console.error("Error fetching recommendation:", err);
-            return {};
-          });
-
+          .catch(() => ({}));
         setMainData([{ ...latest, ...rec }]);
-      })
-      .catch((err) => {
-        console.error("Error fetching main quiz saved history:", err);
       });
 
-    // 🟩 3. Fetch PLAN quiz history
     fetch(
       `/api/quiz/quiz-plan?mode=history&email=${encodeURIComponent(user.email)}`
     )
@@ -128,11 +105,7 @@ export default function DashboardPage() {
 
   if (status === "loading") return <p>Loading...</p>;
 
-  const { count, chart } = getMoodSummary();
-  const pieData = Object.entries(count).map(([name, value]) => ({
-    name,
-    value,
-  }));
+  const { count } = getMoodSummary();
 
   return (
     <div className={classes.container}>
@@ -158,58 +131,103 @@ export default function DashboardPage() {
                 {s === "overview"
                   ? "🏠 Overview"
                   : s === "daily"
-                  ? "📅 Mood"
+                  ? "📅 Mood Check-Ins"
                   : s === "main"
-                  ? "🧘 Insights"
+                  ? "🧠 General Insights"
                   : s === "plan"
-                  ? "🗂️ Plan"
+                  ? "📋 Your Plan"
                   : "✨ Premium"}
               </button>
             ))}
         </div>
       </header>
-      {user?.isPremium && (
-        <div className={classes.premiumBanner}>
-          <div className={classes.confetti}></div>
-          <h2 className={classes.premiumHeading}>
-            👑 You're a Premium Member!
-          </h2>
-          <p className={classes.premiumSub}>
-            Thank you for supporting Wellness Pure Life. Enjoy your exclusive
-            features!
-          </p>
-        </div>
-      )}
 
       <main className={classes.main}>
         {section === "overview" && (
           <div className={classes.overviewSection}>
-            <p className={classes.overviewIntro}>
-              🔍 A quick glance into your wellness trends and goals.
-            </p>
-            <div className={classes.buttonGroup}>
-              <button onClick={() => setSection("daily")}>
-                📈 View Mood Trends
+            <div className={classes.heroBanner}>
+              <h2 className={classes.sectionTitle}>👋 Welcome back</h2>
+              <p className={classes.sectionIntro}>
+                Here’s a quick summary of your wellness. Choose a section to
+                explore:
+              </p>
+
+              {user?.isPremium && (
+                <div className={classes.welcomeStickers}>
+                  <span className={classes.sticker}>💎</span>
+                  <span className={classes.sticker}>🌟</span>
+                  <span className={classes.sticker}>💖</span>
+                  <span className={classes.sticker}>🎊</span>
+                </div>
+              )}
+            </div>
+
+            <div className={classes.wellnessSummary}>
+              <h3>🗓️ Today’s Summary</h3>
+              <p>
+                {count.Balanced > 0
+                  ? `You’re feeling balanced today. Great job staying mindful! 🌿`
+                  : count["High Stress"] > 0
+                  ? `It looks like you're under stress. Try a breathing exercise. 🧘`
+                  : `Let’s check in with your mood today.`}
+              </p>
+              <button
+                onClick={() => setSection("daily")}
+                className={classes.summaryButton}
+              >
+                ➕ Add Mood Check-In
               </button>
-              <button onClick={() => setSection("plan")}>
-                🗂️ See Your Plan
-              </button>
+            </div>
+
+            <div className={classes.progressStats}>
+              <div className={classes.statItem}>
+                📅 Mood Entries: <strong>{dailyData.length}</strong>
+              </div>
+              <div className={classes.statItem}>
+                📋 Plan: <strong>{planData ? "✅" : "❌"}</strong>
+              </div>
+              <div className={classes.statItem}>
+                🧠 Insight: <strong>{mainData[0]?.matchedTitle || "–"}</strong>
+              </div>
+            </div>
+
+            <div className={classes.sectionGrid}>
+              <SectionCard
+                icon="📅"
+                title="Mood Check-Ins"
+                description="Track your emotional trends with daily mood quizzes."
+                onClick={() => setSection("daily")}
+              />
+              <SectionCard
+                icon="🧠"
+                title="General Insights"
+                description="Insights from the general wellness quiz."
+                onClick={() => setSection("main")}
+              />
+              <SectionCard
+                icon="📋"
+                title="Your Plan"
+                description="Personalized plan from quizzes."
+                onClick={() => setSection("plan")}
+              />
             </div>
           </div>
         )}
 
-        {section === "daily" && (
-          <div>
-            <DailyQuizAnalysis />
-          </div>
-        )}
+        {section === "daily" && <DailyQuizAnalysis />}
 
         {section === "main" && (
           <div className={classes.mainInsights}>
-            <h2 className={classes.sectionTitle}>🧘 Your Insights</h2>
+            <h2 className={classes.sectionTitle}>🧠 Your Insights</h2>
             {mainData.length === 0 ? (
-              <p>
-                ⚠️ No insights found. Please complete a quiz to get started.
+              <p className={classes.emptyMessage}>
+                🤖 No insights yet.{" "}
+                <button
+                  onClick={() => router.push("/quizzes")}
+                  className={classes.primaryBtn}
+                >
+                  Take Quiz Now
+                </button>
               </p>
             ) : (
               mainData.map((entry, idx) => (
@@ -222,7 +240,6 @@ export default function DashboardPage() {
                       {entry.matchedDescription}
                     </p>
                   )}
-
                   <div className={classes.answerList}>
                     {Object.entries(entry.answers || {}).map(([k, v]) => (
                       <p key={k}>
@@ -230,16 +247,13 @@ export default function DashboardPage() {
                       </p>
                     ))}
                   </div>
-
-                  {Array.isArray(entry.matchedValues) &&
-                    entry.matchedValues.length > 0 && (
-                      <ul className={classes.recommendationList}>
-                        {entry.matchedValues.map((item, i) => (
-                          <li key={i}>✅ {item}</li>
-                        ))}
-                      </ul>
-                    )}
-
+                  {Array.isArray(entry.matchedValues) && (
+                    <ul className={classes.recommendationList}>
+                      {entry.matchedValues.map((item, i) => (
+                        <li key={i}>✅ {item}</li>
+                      ))}
+                    </ul>
+                  )}
                   <small className={classes.timestamp}>
                     Saved at: {new Date(entry.savedAt).toLocaleString()}
                   </small>
@@ -251,11 +265,9 @@ export default function DashboardPage() {
 
         {section === "plan" && (
           <div className={classes.planSection}>
-            <h2 className={classes.planTitle}>🗂️ Your Plan</h2>
-
+            <h2 className={classes.planTitle}>📋 Your Plan</h2>
             {planData ? (
               <>
-                {/* TAGS (Optional: Extract from title or use hardcoded if needed) */}
                 <div className={classes.planTagRow}>
                   {planData.matchedPlan?.title?.split("|").map((tag, i) => (
                     <span key={i} className={classes.planTag}>
@@ -263,20 +275,14 @@ export default function DashboardPage() {
                     </span>
                   ))}
                 </div>
-
-                {/* SUMMARY */}
                 <p className={classes.planSummary}>
                   {planData.matchedPlan?.summary}
                 </p>
-
-                {/* STRUCTURE LIST */}
                 <ul className={classes.planList}>
                   {planData.matchedPlan?.structure?.map((s, i) => (
                     <li key={i}>{s}</li>
                   ))}
                 </ul>
-
-                {/* ENERGY LINE (optional extra info) */}
                 {planData.matchedPlan?.energy && (
                   <p className={classes.planEnergy}>
                     {planData.matchedPlan.energy}
@@ -294,6 +300,12 @@ export default function DashboardPage() {
 
         {section === "premium" && user?.isPremium && (
           <div className={classes.premiumSection}>
+            <div className={classes.welcomeStickers}>
+              <span className={classes.sticker}>✨</span>
+              <span className={classes.sticker}>💖</span>
+              <span className={classes.sticker}>🌈</span>
+              <span className={classes.sticker}>🎉</span>
+            </div>
             <h2>✨ Premium Benefits</h2>
             <ul>
               <li>🧘 Guided meditations</li>
@@ -302,9 +314,6 @@ export default function DashboardPage() {
               <li>📊 Weekly health progress reports</li>
               <li>🛌 Sleep improvement tracker</li>
               <li>💬 1-on-1 coaching sessions</li>
-              <li>📚 Exclusive articles and challenges</li>
-              <li>🎧 Mindfulness audio library</li>
-              <li>💡 Early access to new features</li>
             </ul>
           </div>
         )}
