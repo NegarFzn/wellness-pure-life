@@ -16,9 +16,9 @@ export default async function handler(req, res) {
 
     switch (method) {
       case "GET": {
-        const { daily } = query;
+        const { mode } = query;
 
-        if (daily === "true") {
+        if (mode === "history") {
           const token = await getToken({ req });
           const email = token?.email;
 
@@ -30,12 +30,9 @@ export default async function handler(req, res) {
             .collection(savedCollection)
             .find({ email, slug: "daily-quiz" })
             .sort({ savedAt: -1 })
-            .limit(10)
             .toArray();
 
-          return res
-            .status(200)
-            .json(dailyResults.map(({ _id, ...rest }) => rest));
+          return res.status(200).json({ history: dailyResults });
         }
 
         return res.status(400).json({ error: "Missing or invalid query" });

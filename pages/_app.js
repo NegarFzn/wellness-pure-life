@@ -10,8 +10,8 @@ import ChatBox from "../components/ChatBox/ChatBox";
 import CookieConsent from "../components/CookieConsent/CookieConsent";
 import Script from "next/script";
 import { useRouter } from "next/router";
-import DailyQuiz from "../components/DailyQuiz/DailyQuiz";
-import DailyQuizSync from "../components/DailyQuiz/DailyQuizSync";
+import DailyQuiz from "../components/Quiz/DailyQuiz/DailyQuiz";
+import DailyQuizSync from "../components/Quiz/DailyQuiz/DailyQuizSync";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/globals.css";
 

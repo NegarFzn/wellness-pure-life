@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import classes from "./QuizMain.module.css";
+import classes from "./index.module.css";
 
 export default function QuizMainPage() {
   const [quizzes, setQuizzes] = useState([]);
@@ -124,7 +124,7 @@ export default function QuizMainPage() {
             {filteredQuizzes.map((quiz) => (
               <li className={classes.quizItem} key={quiz.slug}>
                 <Link
-                  href={`/quizzes/${quiz.slug}`}
+                  href={`/quizzes/quiz-main/${quiz.slug}`}
                   className={classes.quizLink}
                 >
                   <span className={classes.icon}>

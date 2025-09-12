@@ -1,8 +1,4 @@
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { useUI } from "../../context/UIContext";
-import { useRouter } from "next/router";
-import classes from "./history.module.css";
 import {
   BarChart,
   Bar,
@@ -18,63 +14,59 @@ import {
   Cell,
   Legend,
 } from "recharts";
+import classes from "./DailyQuizAnalysis.module.css";
 
-export default function QuizHistory() {
-  const { data: session, status } = useSession();
+export default function DailyQuizAnalysis() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
   const [selectedType, setSelectedType] = useState(null);
-  const { openLogin } = useUI();
-  const router = useRouter();
 
   useEffect(() => {
-    const fetchDailyHistory = async () => {
+    const fetchData = async () => {
       try {
         const res = await fetch("/api/quiz/quiz-daily?mode=history");
         const data = await res.json();
-        const dailyHistory = Array.isArray(data.history) ? data.history : [];
-        setHistory(dailyHistory);
+        setHistory(Array.isArray(data.history) ? data.history : []);
       } catch (err) {
-        console.error("Failed to fetch daily history:", err);
-        setHistory([]);
+        console.error("Error fetching mood history:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (status === "authenticated") {
-      fetchDailyHistory();
-    } else if (status === "unauthenticated") {
-      setLoading(false);
-    }
-  }, [status]);
+    fetchData();
+  }, []);
 
-  if (status === "loading" || loading) {
-    return (
-      <div className={classes.container}>
-        <p className={classes.loading}>🔄 Loading your daily check-ins...</p>
-      </div>
-    );
-  }
+  const handleTypeClick = (type) => {
+    setSelectedType((prev) => (prev === type ? null : type));
+  };
 
-  if (status === "unauthenticated") {
-    return (
-      <div className={classes.authBox}>
-        <div className={classes.authCard}>
-          <h2>🔐 Please log in to view your daily history.</h2>
-          <button className={classes.authBtn} onClick={openLogin}>
-            🔑 Log In
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const exportToCSV = (data) => {
+    const headers = ["Date", "Result"];
+    const rows = data.map((entry) => {
+      const result = Array.isArray(entry.answers)
+        ? entry.answers[0]
+        : entry.answers;
+      const date = new Date(entry.savedAt).toISOString();
+      return [date, result];
+    });
 
-  // Apply filters first
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "daily_mood_data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const filtered = history.filter((q) => {
     const result = Array.isArray(q.answers) ? q.answers[0] : q.answers;
-
     const matchesType =
       !selectedType ||
       (selectedType === "Unknown"
@@ -82,7 +74,6 @@ export default function QuizHistory() {
         : result === selectedType);
 
     const formattedDate = new Date(q.savedAt).toISOString().split("T")[0];
-
     const searchQuery = filter.toLowerCase().replace(/\s+/g, "");
     const matchesSearch =
       filter.trim() === "" ||
@@ -92,7 +83,6 @@ export default function QuizHistory() {
     return matchesType && matchesSearch;
   });
 
-  // Count result types based on filtered results
   const countByType = {
     "High Stress": 0,
     Balanced: 0,
@@ -109,8 +99,8 @@ export default function QuizHistory() {
       : "Unknown";
 
     countByType[key]++;
-
     const dateKey = new Date(q.savedAt).toISOString().split("T")[0];
+
     if (!dailyMap[dateKey]) {
       dailyMap[dateKey] = {
         date: dateKey,
@@ -134,27 +124,21 @@ export default function QuizHistory() {
 
   const COLORS = ["#dc2626", "#16a34a", "#ca8a04", "#6b7280"];
 
-  const handleTypeClick = (type) => {
-    setSelectedType((prev) => (prev === type ? null : type));
-  };
+  if (loading) {
+    return <p className={classes.loading}>🔄 Loading mood trends...</p>;
+  }
 
   return (
     <div className={classes.container}>
-      <h1 className={classes.heading}>🧘‍♀️ Daily Mood & Stress Check-ins</h1>
+      <h2 className={classes.heading}>🧘 Mood Trends & Stress Insights</h2>
 
       <input
         type="text"
-        placeholder="Search quizzes by title..."
+        placeholder="Search by result or date..."
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
         className={classes.filterInput}
       />
-
-      <div className={classes.dailyTotalWrapper}>
-        <span className={classes.dailyTotal}>
-          🗓️ Total Daily Quiz: {history.length}
-        </span>
-      </div>
 
       <div className={classes.summary}>
         {["Balanced", "High Stress", "Low Stress", "Unknown"].map((type) => (
@@ -175,7 +159,6 @@ export default function QuizHistory() {
             {type} ({countByType[type]})
           </button>
         ))}
-
         {selectedType && (
           <button
             className={classes.clearFilter}
@@ -186,8 +169,15 @@ export default function QuizHistory() {
         )}
       </div>
 
-      <div className={classes.chartSection}>
-        <h2>📈 Daily Trends (Line)</h2>
+      <button
+        className={classes.exportBtn}
+        onClick={() => exportToCSV(filtered)}
+      >
+        📤 Export CSV
+      </button>
+
+      <div className={classes.chartContainer}>
+        <h3>📈 Daily Trends (Line)</h3>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -200,8 +190,10 @@ export default function QuizHistory() {
             <Line type="monotone" dataKey="Unknown" stroke="#6b7280" />
           </LineChart>
         </ResponsiveContainer>
+      </div>
 
-        <h2>📊 Daily Result Totals (Bar)</h2>
+      <div className={classes.chartContainer}>
+        <h3>📊 Daily Totals (Bar)</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -214,8 +206,10 @@ export default function QuizHistory() {
             <Bar dataKey="Unknown" fill="#6b7280" />
           </BarChart>
         </ResponsiveContainer>
+      </div>
 
-        <h2>📌 Overall Mood Distribution (Pie)</h2>
+      <div className={classes.chartContainer}>
+        <h3>📌 Mood Distribution (Pie)</h3>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
@@ -240,13 +234,32 @@ export default function QuizHistory() {
         </ResponsiveContainer>
       </div>
 
-      {filtered.length === 0 ? (
-        <p className={classes.empty}>
-          😕 No daily entries found for{" "}
-          {selectedType ? `"${selectedType}"` : "the current filter"}.
-        </p>
-      ) : (
-        <div className={classes.scrollList}>
+      {/* Mood Emoji Calendar */}
+      <h3>🗓️ Mood Calendar</h3>
+      <div className={classes.moodCalendar}>
+        {chartData.map((day, idx) => {
+          const topMood =
+            day["High Stress"] > 0
+              ? "⚠️"
+              : day["Balanced"] > 0
+              ? "🧘"
+              : day["Low Stress"] > 0
+              ? "🌤️"
+              : "❓";
+
+          return (
+            <div key={idx} className={classes.moodDay}>
+              <span className={classes.moodEmoji}>{topMood}</span>
+              <span className={classes.moodDate}>{day.date}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className={classes.scrollList}>
+        {filtered.length === 0 ? (
+          <p className={classes.empty}>😕 No entries found for this filter.</p>
+        ) : (
           <ul className={classes.quizList}>
             {filtered.map((entry, idx) => {
               const result = Array.isArray(entry.answers)
@@ -254,7 +267,8 @@ export default function QuizHistory() {
                 : entry.answers;
               return (
                 <li key={idx} className={classes.quizItem}>
-                  <strong>Result: {result || "N/A"}</strong> <br />
+                  <strong>{result || "Unknown"}</strong>
+                  <br />
                   <small>
                     {new Date(entry.savedAt).toLocaleString("en-US", {
                       dateStyle: "medium",
@@ -265,8 +279,8 @@ export default function QuizHistory() {
               );
             })}
           </ul>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

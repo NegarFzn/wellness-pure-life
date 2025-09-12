@@ -52,7 +52,7 @@ export default function DailyQuiz({ onClose }) {
 
     if (isLoggedIn) {
       try {
-        const res = await fetch("/api/quizzes", {
+        const res = await fetch("/api/quiz/quiz-daily", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

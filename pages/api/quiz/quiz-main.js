@@ -26,6 +26,24 @@ export default async function handler(req, res) {
       return res.status(200).json(quizzes);
     }
 
+    // ✅ GET (mode=email): Return saved quizzes for a specific user
+    // http://localhost:3000/api/quiz/quiz-main?email=someone@example.com
+    // ────────────────────────────────────────────────
+    if (method === "GET" && req.query.mode === "saved") {
+      const email = req.query.email?.trim();
+      if (!email) {
+        return res.status(400).json({ error: "Missing or invalid email." });
+      }
+
+      const history = await db
+        .collection(savedCollection)
+        .find({ email }, { projection: { _id: 0 } })
+        .sort({ savedAt: -1 })
+        .toArray();
+
+      return res.status(200).json({ history });
+    }
+
     // ────────────────────────────────────────────────
     // ✅ GET (with answers): Return matched recommendation
     // http://localhost:3000/api/quiz/quiz-main?slug=fitness&goal=Lose%20weight&activityLevel=Sedentary&location=Home&frequency=2
