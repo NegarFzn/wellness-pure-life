@@ -288,7 +288,7 @@ export default function DashboardPage() {
 
                   {/* ⏱️ Timestamp */}
                   <small className={classes.timestamp}>
-                    Saved at: {new Date(entry.savedAt).toLocaleString()}
+                    Savedd at: {new Date(entry.savedAt).toLocaleString()}
                   </small>
                 </div>
               ))
