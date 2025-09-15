@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import fitnessHeader from "./../../public/images/fitness_header.jpg";
 import classes from "./index.module.css";
 import FitnessList from "../../components/fitness/fitness-list";
-import MultiStartQuiz from "../../components/Quiz/QuizPlan/MultiStartQuiz.js";
+import FitnessStartQuiz from "../../components/Quiz/QuizPlan/FitnessStartQuiz.js";
 import FitnessHighlights from "../../components/TopPages/FitnessHighlights.js";
 
 function FitnessPage(props) {
@@ -115,7 +115,7 @@ function FitnessPage(props) {
       </header>
 
       <main className={classes["main-content"]}>
-        <MultiStartQuiz />
+        <FitnessStartQuiz />
         <FitnessHighlights />
 
         {/* Educational Overview */}

@@ -174,61 +174,7 @@
   font-weight: 500;
 }
 
-.mockupWrapper {
-  flex: 1 1 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0.6;
-}
 
-.mockup {
-  width: 100%;
-  max-width: 360px;
-  background: #f8fbfc; /* Soft background */
-  border-radius: 2rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  margin-inline: auto;
-}
-
-.mockHeader {
-  height: 48px;
-  border-radius: 2rem;
-  background-color: #5a6370; /* Deep gray-blue */
-}
-
-.mockLine,
-.mockLineShort {
-  height: 12px;
-  border-radius: 10px;
-  background-color: #e7f1f5;
-}
-
-.mockLineShort {
-  width: 60%;
-}
-
-.mockGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-
-.mockCard {
-  height: 90px;
-  border-radius: 1.25rem;
-  background: linear-gradient(145deg, #e8f0ff, #dce9ff);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
-}
-
-.mockCard:hover {
-  transform: scale(1.02);
-  transition: transform 0.3s ease;
-}
 
 .goalButton:focus-visible,
 .primaryCta:focus-visible,

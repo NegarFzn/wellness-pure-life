@@ -7,7 +7,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import mindfulnessHeader from "./../../public/images/mindfulness_header.jpg";
 import MindfulnessHighlights from "../../components/TopPages/MindfulnessHighlights";
-import MindfulnessStartQuiz from "../../components/TopPages/MindfulnessStartQuiz";
+import MindfulnessStartQuiz from "../../components/Quiz/QuizPlan/MindfulnessStartQuiz";
 import classes from "./index.module.css";
 import MindfulnessList from "../../components/mindfulness/mindfulness-list";
 

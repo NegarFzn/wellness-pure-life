@@ -2,17 +2,36 @@ import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import DailyQuizAnalysis from "../../components/Quiz/DailyQuiz/DailyQuizAnalysis";
+import QuizCard from "../../components/QuizCard/QuizCard";
+import FitnessStartQuiz from "../../components/Quiz/QuizPlan/FitnessStartQuiz";
+import MindfulnessStartQuiz from "../../components/Quiz/QuizPlan/MindfulnessStartQuiz";
+import NourishStartQuiz from "../../components/Quiz/QuizPlan/NourishStartQuiz";
 import classes from "./index.module.css";
+
+const planTypes = [
+  { type: "fitness", label: "💪 Fitness Plan" },
+  { type: "mindfulness", label: "🧘 Mindfulness Plan" },
+  { type: "nourish", label: "🥗 Nourish Plan" },
+];
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const user = session?.user;
   const router = useRouter();
-
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [activeQuiz, setActiveQuiz] = useState(null);
   const [section, setSection] = useState("overview");
   const [dailyData, setDailyData] = useState([]);
   const [mainData, setMainData] = useState([]);
   const [planData, setPlanData] = useState(null);
+
+  const handleQuizOpen = (type) => {
+    setActiveQuiz(type); // triggers useEffect
+  };
+
+  const closeQuizModal = () => {
+    setActiveQuiz(null);
+  };
 
   const SectionCard = ({ icon, title, description, onClick }) => (
     <button onClick={onClick} className={classes.sectionCard}>
@@ -65,7 +84,10 @@ export default function DashboardPage() {
           (a, b) => new Date(b.savedAt) - new Date(a.savedAt)
         );
         const matched = sorted.find(
-          (entry) => entry.email === user.email || entry.email === null
+          (entry) =>
+            (entry.email === user.email || entry.email === null) &&
+            entry.matchedPlan &&
+            typeof entry.matchedPlan === "object"
         );
         setPlanData(matched || null);
       });
@@ -113,6 +135,13 @@ export default function DashboardPage() {
         <h1 className={classes.title}>
           Welcome, {user?.name || user?.email?.split("@")[0]} 👋
         </h1>
+        {user?.isPremium && (
+          <div className={classes.premiumBadgeTop}>
+            <span className={classes.star}>🌟</span>
+            Premium Member
+          </div>
+        )}
+
         <p className={classes.tag}>Email: {user?.email}</p>
         <p className={classes.tag}>
           Status: {user?.emailVerified ? "✅ Verified" : "Unverified"}
@@ -126,7 +155,9 @@ export default function DashboardPage() {
                 onClick={() =>
                   setSection((prev) => (prev === s ? "overview" : s))
                 }
-                className={section === s ? classes.activeTab : ""}
+                className={`${classes.tabButton} ${
+                  section === s ? classes.activeTab : ""
+                }`}
               >
                 {s === "overview"
                   ? "🏠 Overview"
@@ -162,32 +193,22 @@ export default function DashboardPage() {
               )}
             </div>
 
-            <div className={classes.wellnessSummary}>
-              <h3>🗓️ Today’s Summary</h3>
-              <p>
-                {count.Balanced > 0
-                  ? `You’re feeling balanced today. Great job staying mindful! 🌿`
-                  : count["High Stress"] > 0
-                  ? `It looks like you're under stress. Try a breathing exercise. 🧘`
-                  : `Let’s check in with your mood today.`}
-              </p>
-              <button
-                onClick={() => setSection("daily")}
-                className={classes.summaryButton}
-              >
-                ➕ Add Mood Check-In
-              </button>
-            </div>
-
-            <div className={classes.progressStats}>
-              <div className={classes.statItem}>
-                📅 Mood Entries: <strong>{dailyData.length}</strong>
+            <div className={classes.statsGrid}>
+              <div className={classes.statCard}>
+                <div className={classes.statLabel}>📅 Mood Entries</div>
+                <div className={classes.statValue}>{dailyData.length}</div>
               </div>
-              <div className={classes.statItem}>
-                📋 Plan: <strong>{planData ? "✅" : "❌"}</strong>
+              <div className={classes.statCard}>
+                <div className={classes.statLabel}>🧠 Insight</div>
+                <div className={classes.statValue}>
+                  {mainData[0]?.matchedTitle || "—"}
+                </div>
               </div>
-              <div className={classes.statItem}>
-                🧠 Insight: <strong>{mainData[0]?.matchedTitle || "–"}</strong>
+              <div className={classes.statCard}>
+                <div className={classes.statLabel}>📋 Plan</div>
+                <div className={classes.statValue}>
+                  {planData ? "✅" : "❌"}
+                </div>
               </div>
             </div>
 
@@ -197,18 +218,24 @@ export default function DashboardPage() {
                 title="Mood Check-Ins"
                 description="Track your emotional trends with daily mood quizzes."
                 onClick={() => setSection("daily")}
+                className={`${classes.sectionCard} ${classes.insight}`}
+                variant="insight"
               />
               <SectionCard
                 icon="🧠"
                 title="General Insights"
                 description="Insights from the general wellness quiz."
                 onClick={() => setSection("main")}
+                className={`${classes.sectionCard} ${classes.insight}`}
+                variant="insight"
               />
               <SectionCard
                 icon="📋"
                 title="Your Plan"
                 description="Personalized plan from quizzes."
                 onClick={() => setSection("plan")}
+                className={`${classes.sectionCard} ${classes.insight}`}
+                variant="insight"
               />
             </div>
           </div>
@@ -217,56 +244,115 @@ export default function DashboardPage() {
         {section === "daily" && <DailyQuizAnalysis />}
 
         {section === "main" && (
-          <div className={classes.mainInsights}>
+          <div
+            className={classes.mainInsights}
+            role="region"
+            aria-label="General Wellness Insights"
+          >
             <h2 className={classes.sectionTitle}>🧠 Your Insights</h2>
-            {mainData.length === 0 ? (
-              <p className={classes.emptyMessage}>
-                🤖 No insights yet.{" "}
-                <button
-                  onClick={() => router.push("/quizzes")}
-                  className={classes.primaryBtn}
-                >
-                  Take Quiz Now
-                </button>
-              </p>
-            ) : (
+            <p className={classes.planSubtitle}>
+              Tailored to your quiz answers:
+            </p>
+
+            {/* ✅ Loop over insights if available */}
+            {mainData.length > 0 ? (
               mainData.map((entry, idx) => (
-                <div key={idx} className={classes.card}>
-                  <h3 className={classes.cardTitle}>
-                    {entry.matchedTitle || "🔍 Insight"}
-                  </h3>
-                  {entry.matchedDescription && (
-                    <p className={classes.cardDescription}>
-                      {entry.matchedDescription}
-                    </p>
-                  )}
-                  <div className={classes.answerList}>
+                <div
+                  key={idx}
+                  className={`${classes.card} ${classes.fadeInOnScroll}`}
+                >
+                  {/* 🟦 User Answers */}
+                  <section className={classes.planTagRow}>
                     {Object.entries(entry.answers || {}).map(([k, v]) => (
-                      <p key={k}>
-                        <strong>{k}:</strong> {v}
-                      </p>
+                      <span key={k} className={classes.planTag}>
+                        {`${k}: ${v}`}
+                      </span>
                     ))}
-                  </div>
+                  </section>
+
+                  {/* 🟨 Summary box */}
+                  {entry.matchedDescription && (
+                    <blockquote className={classes.cardDescription}>
+                      {entry.matchedDescription}
+                    </blockquote>
+                  )}
+
+                  {/* ✅ Recommendations list */}
                   {Array.isArray(entry.matchedValues) && (
                     <ul className={classes.recommendationList}>
                       {entry.matchedValues.map((item, i) => (
-                        <li key={i}>✅ {item}</li>
+                        <li key={i}>{item}</li> // Icon handled in CSS ::before
                       ))}
                     </ul>
                   )}
+
+                  {/* ⏱️ Timestamp */}
                   <small className={classes.timestamp}>
                     Saved at: {new Date(entry.savedAt).toLocaleString()}
                   </small>
                 </div>
               ))
+            ) : (
+              <p className={classes.emptyMessage}>
+                🤖 No insights yet. Start your wellness discovery today.
+              </p>
+            )}
+
+            {/* 🧠 Quiz CTA */}
+            <div className={classes.noPlan}>
+              <p className={classes.noPlanText}>
+                💡 Want to explore your general wellness? Take the quiz below:
+              </p>
+              <div className={classes.planLinksGrid}>
+                <button
+                  className={classes.takePlanLink}
+                  onClick={() => setShowQuiz(true)}
+                >
+                  <span role="img" aria-label="Brain">
+                    🧠
+                  </span>{" "}
+                  Take Main Quiz
+                </button>
+              </div>
+            </div>
+
+            {/* ✅ Modal */}
+            {showQuiz && (
+              <div
+                className={classes.modalOverlay}
+                onClick={() => setShowQuiz(false)}
+              >
+                <div
+                  className={classes.modalContent}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    className={classes.closeModal}
+                    onClick={() => setShowQuiz(false)}
+                    aria-label="Close"
+                  >
+                    ❌
+                  </button>
+                  <QuizCard />
+                </div>
+              </div>
             )}
           </div>
         )}
 
         {section === "plan" && (
-          <div className={classes.planSection}>
+          <div
+            className={classes.planSection}
+            role="region"
+            aria-label="Your Personalized Plan"
+          >
             <h2 className={classes.planTitle}>📋 Your Plan</h2>
-            {planData ? (
+            <p className={classes.planSubtitle}>
+              Tailored to your quiz answers:
+            </p>
+
+            {/* ✅ Show user’s plan if it exists */}
+            {planData?.matchedPlan && (
               <>
                 <div className={classes.planTagRow}>
                   {planData.matchedPlan?.title?.split("|").map((tag, i) => (
@@ -275,39 +361,96 @@ export default function DashboardPage() {
                     </span>
                   ))}
                 </div>
+
                 <p className={classes.planSummary}>
                   {planData.matchedPlan?.summary}
                 </p>
+
                 <ul className={classes.planList}>
-                  {planData.matchedPlan?.structure?.map((s, i) => (
-                    <li key={i}>{s}</li>
-                  ))}
+                  {planData.matchedPlan?.structure?.map((s, i) => {
+                    const [day, ...rest] = s.split(":");
+                    const title = rest.join(":").trim();
+                    return (
+                      <li key={i}>
+                        <div className={classes.textBox}>
+                          <strong>{day.trim()}:</strong>
+                          <span>{title}</span>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
+
                 {planData.matchedPlan?.energy && (
                   <p className={classes.planEnergy}>
                     {planData.matchedPlan.energy}
                   </p>
                 )}
               </>
-            ) : (
-              <p>
-                ⚠️ No saved plan found. Please complete the fitness plan quiz to
-                generate one.
+            )}
+
+            {/* ✅ Always show quiz retake options */}
+            <div className={classes.noPlan}>
+              <p className={classes.noPlanText}>
+                💡 Want to improve your wellness? Retake any plan quiz below:
               </p>
+              <div className={classes.planLinksGrid}>
+                {planTypes.map(({ type, label }) => (
+                  <button
+                    key={type}
+                    onClick={() => handleQuizOpen(type)}
+                    className={classes.takePlanLink}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* ✅ Modal for MultiStartQuiz */}
+            {activeQuiz && (
+              <div
+                className={classes.modalOverlay}
+                onClick={() => closeQuizModal()}
+              >
+                <div
+                  className={classes.modalContent}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    className={classes.closeModal}
+                    onClick={() => closeQuizModal()}
+                  >
+                    ❌
+                  </button>
+                  {activeQuiz === "fitness" && <FitnessStartQuiz />}
+                  {activeQuiz === "mindfulness" && <MindfulnessStartQuiz />}
+                  {activeQuiz === "nourish" && <NourishStartQuiz />}
+                </div>
+              </div>
             )}
           </div>
         )}
 
         {section === "premium" && user?.isPremium && (
           <div className={classes.premiumSection}>
+            <div className={classes.premiumBadgeBanner}>
+              <div className={classes.badge}>🌟 Premium Member</div>
+              <p className={classes.tagline}>
+                You now have full access to exclusive features!
+              </p>
+            </div>
+
             <div className={classes.welcomeStickers}>
               <span className={classes.sticker}>✨</span>
               <span className={classes.sticker}>💖</span>
               <span className={classes.sticker}>🌈</span>
               <span className={classes.sticker}>🎉</span>
             </div>
-            <h2>✨ Premium Benefits</h2>
-            <ul>
+
+            <h2 className={classes.premiumTitle}>✨ Premium Benefits</h2>
+
+            <ul className={classes.premiumList}>
               <li>🧘 Guided meditations</li>
               <li>🥗 Personalized meal plans</li>
               <li>🤖 AI Wellness Assistant access</li>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import classes from "./MultiStartQuiz.module.css";
+import classes from "./StartQuiz.module.css";
 
-export default function MultiStartQuiz() {
+export default function FitnessStartQuiz() {
   const router = useRouter();
   const [goal, setGoal] = useState(null);
   const [goals, setGoals] = useState([]);
@@ -145,23 +145,6 @@ export default function MultiStartQuiz() {
 
           <div className={classes.socialProof}>
             ⭐️⭐️⭐️⭐️⭐️ Trusted by 10,000+ on their wellness journey
-          </div>
-        </div>
-
-        {/* Mockup Panel */}
-        <div className={classes.mockupWrapper} aria-hidden="true">
-          <div className={classes.mockup}>
-            <div className={classes.mockHeader} />
-            <div className={classes.mockContent}>
-              <div className={classes.mockLine} />
-              <div className={classes.mockLineShort} />
-              <div className={classes.mockGrid}>
-                <div className={classes.mockCard} />
-                <div className={classes.mockCard} />
-                <div className={classes.mockCard} />
-                <div className={classes.mockCard} />
-              </div>
-            </div>
           </div>
         </div>
       </div>
