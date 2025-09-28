@@ -3,9 +3,8 @@ import fs from "fs/promises";
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
 import nourishHeader from "./../../public/images/nourish_header.jpg";
-import NourishStartQuiz from "../../components/Quiz/QuizPlan/NourishStartQuiz";
+import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
 import NourishHighlights from "../../components/TopPages/NourishHighlights";
 import classes from "./index.module.css";
 import NourishList from "../../components/nourish/nourish-list";
@@ -175,7 +174,7 @@ function NourishPage(props) {
       </header>
 
       <main className={classes["main-content"]}>
-        <NourishStartQuiz />
+        <MultiStartQuiz slug="nourish-plan" />
         <NourishHighlights />
         {/* Sticky sub-nav */}
         <nav className={classes.subnav} aria-label="Section navigation">

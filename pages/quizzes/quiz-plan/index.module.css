@@ -1,21 +1,9 @@
-.quizPage {
+.centerWrapper {
+ margin: 0 auto;
   padding: 2rem;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+ 
 }
 
-.quizContainer {
-  width: 100%;
-  max-width: 760px;
-  background-color: #ffffff;
-  padding: 2.5rem 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-}
-
-/* Loading State */
 .loading {
   padding-top: 5rem;
   text-align: center;

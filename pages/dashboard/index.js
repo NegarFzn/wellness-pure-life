@@ -3,9 +3,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import DailyQuizAnalysis from "../../components/Quiz/DailyQuiz/DailyQuizAnalysis";
 import QuizCard from "../../components/QuizCard/QuizCard";
-import FitnessStartQuiz from "../../components/Quiz/QuizPlan/FitnessStartQuiz";
-import MindfulnessStartQuiz from "../../components/Quiz/QuizPlan/MindfulnessStartQuiz";
-import NourishStartQuiz from "../../components/Quiz/QuizPlan/NourishStartQuiz";
+import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz.js";
 import classes from "./index.module.css";
 
 const planTypes = [
@@ -288,7 +286,7 @@ export default function DashboardPage() {
 
                   {/* ⏱️ Timestamp */}
                   <small className={classes.timestamp}>
-                    Savedd at: {new Date(entry.savedAt).toLocaleString()}
+                    Saved at: {new Date(entry.savedAt).toLocaleString()}
                   </small>
                 </div>
               ))
@@ -423,9 +421,9 @@ export default function DashboardPage() {
                   >
                     ❌
                   </button>
-                  {activeQuiz === "fitness" && <FitnessStartQuiz />}
-                  {activeQuiz === "mindfulness" && <MindfulnessStartQuiz />}
-                  {activeQuiz === "nourish" && <NourishStartQuiz />}
+                  {activeQuiz === "fitness" ||
+                    "mindfulness" ||
+                    ("nourish" && <MultiStartQuiz />)}
                 </div>
               </div>
             )}

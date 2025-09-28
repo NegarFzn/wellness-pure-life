@@ -1,17 +1,23 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import ChoiceStep from "./2_ChoiceStep";
+import MultiSummaryStep from "./3_SummaryStep";
+import MultiPlanSummary from "./4_PlanSummary";
 import classes from "./QuizEngine.module.css";
 
-// Import Fitness Steps
-import MultiLevelStep from "./multi/steps/MultiLevelStep";
-import ActivityPreferenceStep from "./multi/steps/ActivityPreferenceStep";
-import TimeCommitmentStep from "./multi/steps/TimeCommitmentStep";
-import CurrentChallengesStep from "./multi/steps/CurrentChallengesStep";
-import MultiSummaryStep from "./multi/steps/MultiSummaryStep";
-import MultiPlanSummary from "./multi/MultiPlanSummary";
-
-export default function QuizEngine({ slug, goal }) {
+export default function QuizEngine({
+  slug,
+  goal,
+  questions: initialQuestions = [],
+}) {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [questions, setQuestions] = useState(initialQuestions);
+  const [loading, setLoading] = useState(initialQuestions.length === 0);
+
+  const router = useRouter();
+  const { data: session } = useSession();
 
   const updateAnswer = (stepKey, value) => {
     setAnswers((prev) => ({ ...prev, [stepKey]: value }));
@@ -20,59 +26,69 @@ export default function QuizEngine({ slug, goal }) {
   const nextStep = () => setCurrentStep((prev) => prev + 1);
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
 
+  // Fallback fetch only if no questions were passed in
+  useEffect(() => {
+    if (initialQuestions.length > 0) return;
+
+    const fetchQuestions = async () => {
+      try {
+        const res = await fetch("/api/quiz/quiz-plan?mode=questions");
+        const data = await res.json();
+        const quiz = data.find((q) => q.slug === slug);
+
+        if (quiz?.questions) {
+          setQuestions(quiz.questions);
+        }
+      } catch (err) {
+        console.error("❌ Failed to load questions:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, [slug, initialQuestions]);
+
+  // Pre-fill goal if passed from StartQuiz
   useEffect(() => {
     if (goal) {
-      console.log("Setting goal:", goal);
       updateAnswer("goal", goal);
     }
   }, [goal]);
 
-  const getStepsBySlug = () => {
-    if (slug === "fitness-plan") {
-      return [
-        <MultiLevelStep
-          key="fitnessLevel"
-          onNext={nextStep}
-          onBack={prevStep}
-          updateAnswer={(val) => updateAnswer("fitnessLevel", val)}
-          defaultValue={answers.fitnessLevel}
-        />,
-        <ActivityPreferenceStep
-          key="activityPreference"
-          onNext={nextStep}
-          onBack={prevStep}
-          updateAnswer={(val) => updateAnswer("activityPreference", val)}
-          defaultValue={answers.activityPreference}
-        />,
-        <TimeCommitmentStep
-          key="timeCommitment"
-          onNext={nextStep}
-          onBack={prevStep}
-          updateAnswer={(val) => updateAnswer("timeCommitment", val)}
-          defaultValue={answers.timeCommitment}
-        />,
-        <CurrentChallengesStep
-          key="challenges"
-          onNext={nextStep}
-          onBack={prevStep}
-          updateAnswer={(val) => updateAnswer("challenges", val)}
-          defaultValue={answers.challenges}
-        />,
-        <MultiSummaryStep
-          key="summary"
-          onNext={nextStep}
-          onBack={prevStep}
-          answers={answers}
-          slug={slug}
-        />,
-        <MultiPlanSummary key="plan" answers={answers} />,
-      ];
-    }
+  if (loading) return <p>Loading quiz...</p>;
 
-    return [<p key="unsupported">Slug not yet supported.</p>];
-  };
+  const steps = [
+    ...questions.map((q) => (
+      <ChoiceStep
+        key={q.key}
+        slug={slug}
+        questionKey={q.key}
+        defaultValue={answers[q.key]}
+        updateAnswer={(val) => updateAnswer(q.key, val)}
+        onNext={nextStep}
+        onBack={prevStep}
+        questions={questions} // ✅ so it doesn’t refetch
+      />
+    )),
+    <MultiSummaryStep
+      key="summary"
+      onNext={nextStep}
+      onBack={prevStep}
+      answers={answers}
+      slug={slug}
+      questions={questions}
+    />,
+    <MultiPlanSummary
+      key="plan"
+      answers={answers}
+      questions={questions}
+      slug={slug}
+      session={session}
+      router={router}
+    />,
+  ];
 
-  const steps = getStepsBySlug();
   const progress = ((currentStep + 1) / steps.length) * 100;
 
   return (

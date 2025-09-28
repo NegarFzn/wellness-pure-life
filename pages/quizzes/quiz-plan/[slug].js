@@ -1,7 +1,9 @@
+// /Users/negar/Documents/Udemy/NextJs-max/wellnesspurelife/pages/quizzes/quiz-plan/[slug].js
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import MultiPlanSummary from "../../../components/Quiz/QuizPlan/multi/MultiPlanSummary";
+import MultiPlanSummary from "../../../components/Quiz/QuizPlan/4_PlanSummary";
 import classes from "./PlanPage.module.css";
 
 export default function MultiPlanPage() {
@@ -22,20 +24,22 @@ export default function MultiPlanPage() {
         let parsed = null;
         const userEmail = session?.user?.email || null;
 
-        // 1. Try to get answers from MongoDB if user is logged in
+        // 1. Try MongoDB if logged in
         if (userEmail) {
           const res = await fetch(
             `/api/quiz/quiz-plan?slug=${slug}&email=${encodeURIComponent(
               userEmail
             )}`
           );
-          const data = await res.json();
-          parsed = data?.answers || null;
+          if (res.ok) {
+            const data = await res.json();
+            parsed = data?.answers || null;
+          }
         }
 
-        // 2. Fallback to localStorage
+        // 2. Fallback to sessionStorage (not localStorage, since QuizEngine saves here:contentReference[oaicite:1]{index=1})
         if (!parsed && typeof window !== "undefined") {
-          const stored = localStorage.getItem(`${slug}_answers`);
+          const stored = sessionStorage.getItem(`${slug}_plan_answers`);
           if (stored) {
             try {
               parsed = JSON.parse(stored);
@@ -55,21 +59,18 @@ export default function MultiPlanPage() {
 
         setAnswers(parsed);
 
-        // 3. Fetch question mapping
+        // 3. Fetch questions
         const qRes = await fetch("/api/quiz/quiz-plan?mode=questions");
         if (!qRes.ok) throw new Error("Failed to fetch quiz questions");
         const qData = await qRes.json();
 
         let normalized = [];
-        if (Array.isArray(qData) && qData.every((x) => x?.key && x?.question)) {
-          normalized = qData;
-        } else if (Array.isArray(qData)) {
+        if (Array.isArray(qData)) {
           const doc = qData.find((d) => (d?.slug || "").toLowerCase() === slug);
           normalized = doc?.questions || [];
         } else if (qData?.questions) {
           normalized = qData.questions;
         }
-
         setQuestions(normalized);
       } catch (error) {
         console.error("Error loading plan page:", error);
@@ -96,7 +97,7 @@ export default function MultiPlanPage() {
         <p className={classes.errorText}>{errMsg}</p>
         <button
           className={classes.retryButton}
-          onClick={() => router.push(`/${slug?.split("-")[0]}`)}
+          onClick={() => router.push(`/quizzes/quiz-plan?slug=${slug}`)}
         >
           ← Take the Quiz Again
         </button>
@@ -106,12 +107,7 @@ export default function MultiPlanPage() {
 
   return (
     <div className={classes.planContainer}>
-      <MultiPlanSummary
-        slug={slug}
-        answers={answers}
-        questions={questions}
-        email={session?.user?.email || null}
-      />
+      <MultiPlanSummary slug={slug} answers={answers} questions={questions} />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import mindfulnessHeader from "./../../public/images/mindfulness_header.jpg";
 import MindfulnessHighlights from "../../components/TopPages/MindfulnessHighlights";
-import MindfulnessStartQuiz from "../../components/Quiz/QuizPlan/MindfulnessStartQuiz";
+import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
 import classes from "./index.module.css";
 import MindfulnessList from "../../components/mindfulness/mindfulness-list";
 
@@ -175,7 +175,7 @@ function MindfulnessPage(props) {
       </header>
 
       <main className={classes["main-content"]}>
-        <MindfulnessStartQuiz />
+        <MultiStartQuiz slug="mindfulness-plan" />
         <MindfulnessHighlights />
 
         {/* Educational Overview */}

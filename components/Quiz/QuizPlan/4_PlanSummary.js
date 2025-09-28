@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import PremiumCallout from "../../../PremiumButton/PremiumCallout";
-import ShareButton from "../../../UI/ShareButton";
-import classes from "./MultiPlanSummary.module.css";
-import Button from "../../../UI/button";
+import PremiumCallout from "../../PremiumButton/PremiumCallout";
+import ShareButton from "../../UI/ShareButton";
+import classes from "./PlanSummary.module.css";
+import Button from "../../UI/button";
 
-export default function MultiPlanSummary({ answers }) {
+export default function MultiPlanSummary({ answers, questions = [], slug }) {
   const [showPremium, setShowPremium] = useState(true);
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -17,110 +17,74 @@ export default function MultiPlanSummary({ answers }) {
   const [isSending, setIsSending] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
-  const slug = router.query.slug;
+
+  const saveCalled = useRef(false); // 🔒 lock to avoid duplicate save
+
   const category = slug?.replace("-plan", "");
+  const finalAnswers = loadedAnswers || answers;
 
-  const {
-    fitnessLevel,
-    activityPreference,
-    timeCommitment,
-    challenges: rawChallenges = [],
-  } = loadedAnswers || answers;
-
-  const challenges = Array.isArray(rawChallenges)
-    ? rawChallenges
-    : rawChallenges
-    ? [rawChallenges]
-    : [];
-
-  // ⏬ Build ShareButton props dynamically
-  const shareTitle = "My Personalized Wellness Plan";
-
-  const shareText = `Check out my personalized wellness plan based on my preferences at Wellness Pure Life.`;
-
-  const shareUrl = `https://wellnesspurelife.com${router.asPath}`;
-
-  // ⏬ Build dynamic label map
+  // ⏬ Build label map from provided questions
   useEffect(() => {
-    const fetchLabels = async () => {
-      try {
-        const res = await fetch("/api/quiz/quiz-plan?mode=questions");
-        const data = await res.json();
-        const quiz = data.find((q) => q.slug === slug);
-
-        const map = {};
-        quiz?.questions?.forEach((q) => {
-          q.options.forEach((opt) => {
-            map[opt.value] = opt.label;
-          });
+    if (questions.length > 0) {
+      const map = {};
+      questions.forEach((q) => {
+        q.options.forEach((opt) => {
+          map[opt.value] = opt.label;
         });
-
-        setLabelMap(map);
-      } catch (err) {
-        console.error("❌ Failed to fetch label map:", err);
-      }
-    };
-
-    fetchLabels();
-  }, []);
+      });
+      setLabelMap(map);
+    }
+  }, [questions]);
 
   const formatLabel = (val) => labelMap[val] || val;
 
-  // ✅ Save to MongoDB
+  // ✅ Save answers (only once, at the end)
   useEffect(() => {
-    if (
-      status !== "authenticated" ||
-      !session?.user?.email ||
-      submitted ||
-      !answers
-    )
-      return;
+    if (status !== "authenticated" || !session?.user?.email || !answers) return;
+    if (saveCalled.current) return; // ⛔ already saved once
 
-    console.log("🔐 Authenticated. Saving with email:", session.user.email);
+    saveCalled.current = true; // mark as saved
 
-    const submitToDB = async () => {
+    const save = async () => {
       try {
+        sessionStorage.setItem(`${slug}_plan_answers`, JSON.stringify(answers));
+
         const res = await fetch("/api/quiz/quiz-plan", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            slug: "fitness-plan",
+            slug,
             answers,
-            email: session.user.email, // ✅ guaranteed email
+            email: session.user.email,
           }),
         });
 
         const data = await res.json();
-        console.log("✅ Save response:", data);
         setSubmitted(true);
+        setMatchedPlan(data.matchedPlan || null);
+        console.log("✅ Plan saved:", data);
       } catch (err) {
         console.error("❌ Failed to save quiz result:", err);
       }
     };
 
-    submitToDB();
-  }, [answers, session?.user?.email, status, submitted]);
+    save();
+  }, [answers, status, slug, session?.user?.email]);
 
-  // ✅ Fetch saved answers + plan
+  // ✅ Load saved plan (so we can display matched structure/summary)
   useEffect(() => {
-    if (status !== "authenticated") return;
+    if (status !== "authenticated" || !slug || !session?.user?.email) return;
 
     const fetchSavedPlan = async () => {
       try {
         const res = await fetch(
-          `/api/quiz/quiz-plan?slug=fitness-plan&email=${encodeURIComponent(
+          `/api/quiz/quiz-plan?slug=${slug}&email=${encodeURIComponent(
             session.user.email
           )}`
         );
-
-        if (!res.ok) {
-          console.warn("No saved plan found.");
-          return;
-        }
+        if (!res.ok) return;
 
         const data = await res.json();
-        console.log("📦 Loaded saved:", data);
-
         setLoadedAnswers(data.answers);
         setMatchedPlan(data.matchedPlan);
       } catch (err) {
@@ -129,8 +93,9 @@ export default function MultiPlanSummary({ answers }) {
     };
 
     fetchSavedPlan();
-  }, [session?.user?.email, status]);
+  }, [session?.user?.email, status, slug]);
 
+  // ✅ Check premium reminder
   useEffect(() => {
     const checkShouldShowPremium = async () => {
       if (session?.user && !session.user.isPremium) {
@@ -148,20 +113,23 @@ export default function MultiPlanSummary({ answers }) {
     checkShouldShowPremium();
   }, [session?.user, session?.user?.isPremium, category]);
 
+  // ✅ Email plan
   const sendPlanToEmail = async () => {
     setIsSending(true);
-    setToastMsg(""); // reset message
+    setToastMsg("");
+
     try {
       const res = await fetch("/api/quiz/sendEmail-plan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: session.user.email,
-          answers: loadedAnswers || answers,
+          answers: finalAnswers,
           category,
           matchedPlan,
         }),
       });
+
       const data = await res.json();
       if (res.ok) {
         setToastMsg("📧 Plan sent to your email.");
@@ -170,17 +138,20 @@ export default function MultiPlanSummary({ answers }) {
         setToastMsg("❌ Failed to send email: " + data.error);
       }
     } catch (err) {
-      console.error("Email sending error:", err);
+      console.error("❌ Email send error:", err);
       setToastMsg("❌ Failed to send email.");
     } finally {
       setIsSending(false);
-      setTimeout(() => setToastMsg(""), 4000); // auto-hide
+      setTimeout(() => setToastMsg(""), 4000);
     }
   };
 
   return (
     <div className={classes.container}>
-      <h2 className={classes.heading}>Your Personalized Fitness Plan</h2>
+      <h2 className={classes.heading}>
+        Your Personalized{" "}
+        {category?.charAt(0).toUpperCase() + category?.slice(1)} Plan
+      </h2>
 
       {matchedPlan?.summary && (
         <p className={classes.subheading}>{matchedPlan.summary}</p>
@@ -195,7 +166,11 @@ export default function MultiPlanSummary({ answers }) {
             🖨️ Print
           </button>
 
-          <ShareButton title={shareTitle} text={shareText} url={shareUrl} />
+          <ShareButton
+            title="My Personalized Wellness Plan"
+            text="Check out my personalized wellness plan based on my preferences at Wellness Pure Life."
+            url={`https://wellnesspurelife.com${router.asPath}`}
+          />
 
           {session?.user?.email && (
             <button
@@ -214,25 +189,14 @@ export default function MultiPlanSummary({ answers }) {
       </div>
 
       <div className={classes.summaryList}>
-        <p>
-          <strong>Fitness Level:</strong> {formatLabel(fitnessLevel)}
-        </p>
-        <p>
-          <strong>Preferred Activity:</strong> {formatLabel(activityPreference)}
-        </p>
-        <p>
-          <strong>Time Commitment:</strong> {formatLabel(timeCommitment)}
-        </p>
-        <p>
-          <strong>Challenges:</strong>
-        </p>
-        <ul>
-          {challenges.length > 0 ? (
-            challenges.map((c) => <li key={c}>{formatLabel(c)}</li>)
-          ) : (
-            <li>None</li>
-          )}
-        </ul>
+        {questions.map((q) => (
+          <div key={q.key} style={{ marginBottom: "0.5rem" }}>
+            <p>
+              <strong>{q.question}</strong>:{" "}
+              {formatLabel(finalAnswers[q.key]) || "N/A"}
+            </p>
+          </div>
+        ))}
       </div>
 
       {matchedPlan?.structure && (
@@ -249,13 +213,12 @@ export default function MultiPlanSummary({ answers }) {
       {!session?.user && (
         <p style={{ marginTop: "1rem" }}>
           Want to save this plan permanently?{" "}
-          <Button size="sm" onClick={() => router.push("/auth/login")}>
+          <Button size="sm" onClick={() => router.push("/login")}>
             Log in or Sign up
           </Button>
         </p>
       )}
 
-      {/* ✅ Extracted reusable Premium block */}
       {session?.user && !session.user.isPremium && showPremium && (
         <PremiumCallout
           category={category}

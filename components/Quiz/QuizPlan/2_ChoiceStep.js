@@ -1,55 +1,39 @@
 import { useEffect, useState } from "react";
 import classes from "./Step.module.css";
 
-export default function CurrentChallengesStep({
+export default function ChoiceStep({
+  slug,
+  questionKey,
+  defaultValue,
+  updateAnswer,
   onNext,
   onBack,
-  updateAnswer,
-  defaultValue = "",
+  questions = [], // ✅ passed from QuizEngine
 }) {
-  const [selected, setSelected] = useState(defaultValue);
+  const [selected, setSelected] = useState(defaultValue || "");
   const [questionData, setQuestionData] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchQuestion = async () => {
-      try {
-        const res = await fetch("/api/quiz/quiz-plan?mode=questions");
-        const data = await res.json();
-
-        const fitnessQuiz = data.find((quiz) => quiz.slug === "fitness-plan");
-        if (fitnessQuiz && fitnessQuiz.questions) {
-          const q = fitnessQuiz.questions.find((q) => q.key === "challenges");
-          if (q) setQuestionData(q);
-        }
-      } catch (err) {
-        console.error("❌ Failed to fetch challenges question:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchQuestion();
-  }, []);
-
-  const handleSelect = (value) => {
-    setSelected(value);
-  };
+    if (questions.length > 0) {
+      const q = questions.find((q) => q.key === questionKey);
+      if (q) setQuestionData(q);
+    }
+  }, [questions, questionKey]);
 
   const handleNext = () => {
     if (selected) {
-      updateAnswer(selected); // pass as string
+      // ✅ only update parent state, no saving here
+      updateAnswer(selected);
       onNext();
     }
   };
 
-  if (loading) return <p>Loading...</p>;
   if (!questionData) return <p>Question not found.</p>;
 
   return (
-    <div className={classes.stepContainer}>
+    <>
       <h2 className={classes.heading}>{questionData.question}</h2>
-      <p className={classes.subheading}>Select the one that applies.</p>
+      <p className={classes.subheading}>Please select one option.</p>
 
       <div className={classes.optionGrid}>
         {questionData.options.map((opt) => (
@@ -59,7 +43,7 @@ export default function CurrentChallengesStep({
             className={`${classes.optionButton} ${
               selected === opt.value ? classes.selected : ""
             }`}
-            onClick={() => handleSelect(opt.value)}
+            onClick={() => setSelected(opt.value)}
             aria-pressed={selected === opt.value}
           >
             {opt.label}
@@ -79,6 +63,6 @@ export default function CurrentChallengesStep({
           Continue →
         </button>
       </div>
-    </div>
+    </>
   );
 }

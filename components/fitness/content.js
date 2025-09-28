@@ -213,6 +213,7 @@ const Content = (props) => {
           <FitnessList items={additionalSections} />
         </div>
       </div>
+    
     </>
   );
 };
