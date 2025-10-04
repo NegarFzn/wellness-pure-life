@@ -2,6 +2,7 @@ import Head from "next/head";
 import fs from "fs/promises";
 import path from "path";
 import Content from "../../components/mindfulness/content";
+import AuthorBox from "../../components/UI/AuthorBox";
 import { useState, useEffect } from "react";
 import classes from "./index.module.css";
 
@@ -42,6 +43,7 @@ function MindfulnessDetailPage(props) {
         <meta name="description" content={mindData.summary} />
       </Head>
       <Content items={mindData} />
+      <AuthorBox />
       {showButton && (
         <button onClick={scrollToTop} className={classes.backToTop}>
           ↑

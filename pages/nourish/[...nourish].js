@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { useState, useEffect } from "react";
 import Content from "../../components/nourish/content";
+import AuthorBox from "../../components/UI/AuthorBox";
 import classes from "./index.module.css";
 
 function NourishDetailPage(props) {
@@ -40,6 +41,7 @@ function NourishDetailPage(props) {
         <meta name="description" content={nourishData.summary} />
       </Head>
       <Content items={nourishData} />
+      <AuthorBox />
       {showButton && (
         <button onClick={scrollToTop} className={classes.backToTop}>
           ↑

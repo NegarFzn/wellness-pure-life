@@ -5,6 +5,7 @@ import FeedbackPrompt from "../../components/UI/FeedbackPrompt";
 import classes from "./content.module.css";
 import FitnessList from "./fitness-list";
 
+
 /* ------------------------------------------------------
    Enhanced formatter
    - Inline markers kept

@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { useState, useEffect } from "react";
 import Content from "../../components/fitness/content";
+import AuthorBox from "../../components/UI/AuthorBox";
 import classes from "./index.module.css";
 
 function fitnessDetailsPage(props) {
@@ -40,7 +41,7 @@ function fitnessDetailsPage(props) {
         <meta name="description" content={fitData.description} />
       </Head>
       <Content items={fitData} />
-      
+      <AuthorBox />
       {showButton && (
         <button onClick={scrollToTop} className={classes.backToTop}>
           ↑
