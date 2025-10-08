@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
 import classes from "./QuizPage.module.css";
@@ -117,77 +118,150 @@ export default function QuizPage() {
   }
 
   return (
-    <div className={classes.container}>
-      <h1 className={classes.title}>{quiz.title || slug}</h1>
+    <>
+      <Head>
+        <title>
+          {quiz?.title
+            ? `${quiz.title} – Wellness Pure Life Quiz`
+            : "Wellness Quiz – Wellness Pure Life"}
+        </title>
+        <meta
+          name="description"
+          content={
+            quiz?.description ||
+            "Discover personalized wellness tips with our interactive quiz. Tailored fitness, nutrition, and mindfulness guidance for a better life."
+          }
+        />
 
-      {!result ? (
-        <>
-          {quiz.questions.map((q, index) => (
-            <div
-              key={q.key}
-              className={`${classes.questionBlock} ${
-                classes[`fadeDelay${index % 4}`]
-              } ${classes.animateOnScroll}`}
-            >
-              <p className={classes.questionText}>{q.question}</p>
-              {q.options.map((opt) => (
-                <label key={opt} className={classes.optionLabel}>
-                  <input
-                    type="radio"
-                    name={q.key}
-                    value={opt}
-                    checked={answers[q.key] === opt}
-                    onChange={() => handleChange(q.key, opt)}
-                  />
-                  <span>{opt}</span>
-                </label>
-              ))}
-            </div>
-          ))}
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Wellness Pure Life" />
+        <meta
+          property="og:title"
+          content={
+            quiz?.title
+              ? `${quiz.title} – Wellness Pure Life Quiz`
+              : "Wellness Quiz – Wellness Pure Life"
+          }
+        />
+        <meta
+          property="og:description"
+          content={
+            quiz?.description ||
+            "Discover personalized wellness tips with our interactive quiz. Tailored fitness, nutrition, and mindfulness guidance for a better life."
+          }
+        />
+        <meta
+          property="og:image"
+          content="https://wellnesspurelife.com/images/social-card.jpg"
+        />
+        <meta
+          property="og:url"
+          content={`https://wellnesspurelife.com/quizzes/quiz-main/${slug}`}
+        />
 
-          {!isAuthenticated && (
-            <input
-              type="email"
-              placeholder="Your Email"
-              className={classes.emailInput}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          )}
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content={
+            quiz?.title
+              ? `${quiz.title} – Wellness Pure Life Quiz`
+              : "Wellness Quiz – Wellness Pure Life"
+          }
+        />
+        <meta
+          name="twitter:description"
+          content={
+            quiz?.description ||
+            "Discover personalized wellness tips with our interactive quiz. Tailored fitness, nutrition, and mindfulness guidance for a better life."
+          }
+        />
+        <meta
+          name="twitter:image"
+          content="https://wellnesspurelife.com/images/social-card.jpg"
+        />
 
-          {inlineError && (
-            <div className={classes.inlineError}>{inlineError}</div>
-          )}
+        {/* Extra */}
+        <meta name="robots" content="index, follow" />
+        <link
+          rel="canonical"
+          href={`https://wellnesspurelife.com/quizzes/quiz-main/${slug}`}
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>{" "}
+      <div className={classes.container}>
+        <h1 className={classes.title}>{quiz.title || slug}</h1>
 
-          <button onClick={handleSubmit} className={classes.submitButton}>
-            🚀 Submit
-          </button>
-        </>
-      ) : (
-        <div className={classes.resultBox}>
-          <h2 className={classes.resultTitle}>🎯 Your Personalized Tips</h2>
+        {!result ? (
+          <>
+            {quiz.questions.map((q, index) => (
+              <div
+                key={q.key}
+                className={`${classes.questionBlock} ${
+                  classes[`fadeDelay${index % 4}`]
+                } ${classes.animateOnScroll}`}
+              >
+                <p className={classes.questionText}>{q.question}</p>
+                {q.options.map((opt) => (
+                  <label key={opt} className={classes.optionLabel}>
+                    <input
+                      type="radio"
+                      name={q.key}
+                      value={opt}
+                      checked={answers[q.key] === opt}
+                      onChange={() => handleChange(q.key, opt)}
+                    />
+                    <span>{opt}</span>
+                  </label>
+                ))}
+              </div>
+            ))}
 
-          <div className={classes.resultContent}>
-            {result.matchedTitle ? (
-              <>
-                <p className={classes.resultDescription}>
-                  <strong>{result.matchedTitle}</strong>
-                </p>
-                <p className={classes.resultDescription}>
-                  {result.matchedDescription}
-                </p>
-                <ul className={classes.resultList}>
-                  {result.matchedValues?.map((v, i) => (
-                    <li key={i}>✅ {v}</li>
-                  ))}
-                </ul>
-              </>
-            ) : (
-              <p>No matching recommendation found for your responses.</p>
+            {!isAuthenticated && (
+              <input
+                type="email"
+                placeholder="Your Email"
+                className={classes.emailInput}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             )}
+
+            {inlineError && (
+              <div className={classes.inlineError}>{inlineError}</div>
+            )}
+
+            <button onClick={handleSubmit} className={classes.submitButton}>
+              🚀 Submit
+            </button>
+          </>
+        ) : (
+          <div className={classes.resultBox}>
+            <h2 className={classes.resultTitle}>🎯 Your Personalized Tips</h2>
+
+            <div className={classes.resultContent}>
+              {result.matchedTitle ? (
+                <>
+                  <p className={classes.resultDescription}>
+                    <strong>{result.matchedTitle}</strong>
+                  </p>
+                  <p className={classes.resultDescription}>
+                    {result.matchedDescription}
+                  </p>
+                  <ul className={classes.resultList}>
+                    {result.matchedValues?.map((v, i) => (
+                      <li key={i}>✅ {v}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <p>No matching recommendation found for your responses.</p>
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }

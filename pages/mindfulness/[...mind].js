@@ -41,7 +41,70 @@ function MindfulnessDetailPage(props) {
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={mindData.summary} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="UTF-8" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Wellness Pure Life" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={mindData.summary} />
+        <meta
+          property="og:image"
+          content={`https://wellnesspurelife.com/${mindData.image}`}
+        />
+        <meta
+          property="og:url"
+          content={`https://wellnesspurelife.com/mindfulness/${mindData.id}`}
+        />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={mindData.summary} />
+        <meta
+          name="twitter:image"
+          content={`https://wellnesspurelife.com/${mindData.image}`}
+        />
+
+        {/* Canonical & Favicon */}
+        <link
+          rel="canonical"
+          href={`https://wellnesspurelife.com/mindfulness/${mindData.id}`}
+        />
+        <link rel="icon" href="/favicon.ico" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              headline: mindData.title,
+              description: mindData.summary,
+              image: [`https://wellnesspurelife.com/${mindData.image}`],
+              author: {
+                "@type": "Person",
+                name: "Bayan Negar Fozooni",
+              },
+              publisher: {
+                "@type": "Organization",
+                name: "Wellness Pure Life",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://wellnesspurelife.com/logo.jpg",
+                },
+              },
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": `https://wellnesspurelife.com/mindfulness/${mindData.id}`,
+              },
+              datePublished: "2025-01-01", // Optional: Replace with actual if you have
+              dateModified: "2025-01-01", // Optional
+            }),
+          }}
+        />
       </Head>
+
       <Content items={mindData} />
       <AuthorBox />
       {showButton && (

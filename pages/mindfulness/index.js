@@ -154,6 +154,44 @@ function MindfulnessPage(props) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Wellness Pure Life" />
+        <meta
+          property="og:title"
+          content="Mindfulness | Meditation, Stress Relief & Wellness"
+        />
+        <meta
+          property="og:description"
+          content="Reduce stress, improve focus, and build emotional resilience with practical mindfulness. Step-by-step meditations, breathing techniques, and science-backed habits for everyday calm."
+        />
+        <meta
+          property="og:image"
+          content="https://wellnesspurelife.com/images/social-card.jpg"
+        />
+        <meta
+          property="og:url"
+          content="https://wellnesspurelife.com/mindfulness"
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Mindfulness | Wellness Pure Life" />
+        <meta
+          name="twitter:description"
+          content="Step into calm with science-backed meditations, breathing techniques, and stress relief strategies for everyday peace."
+        />
+        <meta
+          name="twitter:image"
+          content="https://wellnesspurelife.com/images/social-card.jpg"
+        />
+
+        {/* Canonical & Favicon */}
+        <link rel="canonical" href="https://wellnesspurelife.com/mindfulness" />
+        <link rel="icon" href="/favicon.ico" />
+
+        {/* JSON-LD Structured Data: Breadcrumb & ItemList */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -330,9 +368,8 @@ function MindfulnessPage(props) {
                 {category.title}
               </h2>
               <hr />
-              <div className={classes["mindfulness-container"]}>
-                <MindfulnessList items={category.items} />
-              </div>
+
+              <MindfulnessList items={category.items} />
             </section>
           );
         })}

@@ -1,6 +1,21 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /dashboard/*
+Disallow: /profile
+Disallow: /profile/*
+Disallow: /history
+Disallow: /history/*
+Disallow: /premium
+Disallow: /premium/*
+Disallow: /settings
+Disallow: /settings/*
+Disallow: /private
+Disallow: /private/*
+Disallow: /login
+Disallow: /register
+Disallow: /auth/*
 
 # Host
 Host: https://wellnesspurelife.com

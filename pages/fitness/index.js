@@ -94,10 +94,67 @@ function FitnessPage(props) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
+
+        {/* Open Graph for Facebook & LinkedIn */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Wellness Pure Life" />
+        <meta
+          property="og:title"
+          content="Fitness | Workouts, Training Plans, and Recovery Guides"
+        />
+        <meta
+          property="og:description"
+          content="Explore personalized training programs, cardio routines, strength techniques, and yoga practices for a stronger, healthier you."
+        />
+        <meta
+          property="og:image"
+          content="https://wellnesspurelife.com/images/social-card.jpg"
+        />
+        <meta
+          property="og:url"
+          content="https://wellnesspurelife.com/fitness"
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Fitness | Wellness Pure Life" />
+        <meta
+          name="twitter:description"
+          content="Train smarter with wellness-focused plans, workouts, and expert-backed guidance tailored to your level."
+        />
+        <meta
+          name="twitter:image"
+          content="https://wellnesspurelife.com/images/social-card.jpg"
+        />
+
+        {/* Canonical & Favicon */}
+        <link rel="canonical" href="https://wellnesspurelife.com/fitness" />
+        <link rel="icon" href="/favicon.ico" />
+
+        {/* Structured Data: Breadcrumb JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([breadcrumbLd]),
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Home",
+                    item: "https://wellnesspurelife.com/",
+                  },
+                  {
+                    "@type": "ListItem",
+                    position: 2,
+                    name: "Fitness",
+                    item: "https://wellnesspurelife.com/fitness",
+                  },
+                ],
+              },
+            ]),
           }}
         />
       </Head>
@@ -268,37 +325,10 @@ function FitnessPage(props) {
                 {category.title}
               </h2>
               <hr />
-              <div className={classes["fitness-container"]}>
-                <FitnessList items={category.items} />
-              </div>
+              <FitnessList items={category.items} />
             </section>
           );
         })}
-
-        {/* References */}
-        <section className={classes.references}>
-          <h2>References & Sources</h2>
-          <ul>
-            <li>
-              <a href="https://www.cdc.gov/physicalactivity/" target="_blank">
-                CDC – Physical Activity Basics
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.who.int/news-room/fact-sheets/detail/physical-activity"
-                target="_blank"
-              >
-                WHO – Physical Activity Fact Sheet
-              </a>
-            </li>
-            <li>
-              <a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank">
-                PubMed – Exercise Science Research
-              </a>
-            </li>
-          </ul>
-        </section>
 
         {showButton && (
           <button

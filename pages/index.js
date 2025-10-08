@@ -139,7 +139,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Wellness Pure Life - Fitness, Nutrition & Mindfulness</title>
+        <title>Wellness Pure Life – Fitness, Nutrition & Mindfulness</title>
         <meta
           name="description"
           content="Wellness Pure Life helps you thrive with expert tips in fitness, mindfulness, and nutrition. Discover guides, workouts, recipes, and wellness insights."
@@ -149,6 +149,71 @@ export default function Home() {
           content="fitness, mindfulness, nutrition, wellness, healthy living, workouts, mental health"
         />
         <meta name="robots" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="UTF-8" />
+
+        {/* Open Graph (Facebook/LinkedIn) */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Wellness Pure Life" />
+        <meta
+          property="og:title"
+          content="Wellness Pure Life – Fitness, Nutrition & Mindfulness"
+        />
+        <meta
+          property="og:description"
+          content="Thrive with Wellness Pure Life: your trusted source for fitness routines, mindful practices, and nutritious living."
+        />
+        <meta
+          property="og:image"
+          content="https://wellnesspurelife.com/images/social-card.jpg"
+        />
+        <meta property="og:url" content="https://wellnesspurelife.com/" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Wellness Pure Life – Fitness, Nutrition & Mindfulness"
+        />
+        <meta
+          name="twitter:description"
+          content="Explore guides, tools, and expert content for a healthier lifestyle with Wellness Pure Life."
+        />
+        <meta
+          name="twitter:image"
+          content="https://wellnesspurelife.com/images/social-card.jpg"
+        />
+
+        {/* Canonical & Favicon */}
+        <link rel="canonical" href="https://wellnesspurelife.com/" />
+        <link rel="icon" href="/favicon.ico" />
+
+        {/* Structured Data (JSON-LD for Home Page) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "Wellness Pure Life",
+              url: "https://wellnesspurelife.com/",
+              potentialAction: {
+                "@type": "SearchAction",
+                target:
+                  "https://wellnesspurelife.com/search?q={search_term_string}",
+                "query-input": "required name=search_term_string",
+              },
+              publisher: {
+                "@type": "Organization",
+                name: "Wellness Pure Life",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://wellnesspurelife.com/images/logo.jpg",
+                },
+              },
+            }),
+          }}
+        />
       </Head>
 
       {verifyStatus === "success" && (

@@ -37,9 +37,66 @@ function NourishDetailPage(props) {
   return (
     <div>
       <Head>
+        {/* SEO Title & Description */}
         <title>{pageTitle}</title>
         <meta name="description" content={nourishData.summary} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="UTF-8" />
+
+        {/* Canonical URL */}
+        <link
+          rel="canonical"
+          href={`https://wellnesspurelife.com/nourish/${nourishData.id}`}
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        {/* Open Graph Meta Tags */}
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Wellness Pure Life" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={nourishData.summary} />
+        <meta
+          property="og:image"
+          content={`https://wellnesspurelife.com/images/nourish/${nourishData.image}`}
+        />
+        <meta
+          property="og:url"
+          content={`https://wellnesspurelife.com/nourish/${nourishData.id}`}
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={nourishData.summary} />
+        <meta
+          name="twitter:image"
+          content={`https://wellnesspurelife.com/images/nourish/${nourishData.image}`}
+        />
+
+        {/* Article Structured Data - JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              headline: nourishData.title,
+              description: nourishData.summary,
+              author: {
+                "@type": "Person",
+                name: "Wellness Pure Life Team",
+              },
+              datePublished: nourishData.date || "2025-01-01",
+              image: `https://wellnesspurelife.com/images/nourish/${nourishData.image}`,
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": `https://wellnesspurelife.com/nourish/${nourishData.id}`,
+              },
+            }),
+          }}
+        />
       </Head>
+
       <Content items={nourishData} />
       <AuthorBox />
       {showButton && (

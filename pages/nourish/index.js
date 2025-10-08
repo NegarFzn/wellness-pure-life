@@ -153,6 +153,44 @@ function NourishPage(props) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Wellness Pure Life" />
+        <meta
+          property="og:title"
+          content="Nourish | Healthy Eating, Superfoods & Balanced Meals"
+        />
+        <meta
+          property="og:description"
+          content="Explore practical nutrition, superfoods, and supplement basics with easy-to-follow tips for balanced living."
+        />
+        <meta
+          property="og:image"
+          content="https://wellnesspurelife.com/images/nourish_header.jpg"
+        />
+        <meta
+          property="og:url"
+          content="https://wellnesspurelife.com/nourish"
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Nourish | Wellness Pure Life" />
+        <meta
+          name="twitter:description"
+          content="Simple, delicious, and smart nutrition. Learn to nourish your body with expert-backed guidance and tips."
+        />
+        <meta
+          name="twitter:image"
+          content="https://wellnesspurelife.com/images/nourish_header.jpg"
+        />
+
+        {/* Canonical & Favicon */}
+        <link rel="canonical" href="https://wellnesspurelife.com/nourish" />
+        <link rel="icon" href="/favicon.ico" />
+
+        {/* JSON-LD Structured Data: Breadcrumb & ItemList */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

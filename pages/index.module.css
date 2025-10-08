@@ -288,6 +288,12 @@
 
 /* ======= Mobile Scroll Behavior (≤ 767px) ======= */
 @media (max-width: 767px) {
+   .container {
+    padding: 1rem 0.75rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+  }
+
   .newsGrid {
     display: flex;
     overflow-x: auto;

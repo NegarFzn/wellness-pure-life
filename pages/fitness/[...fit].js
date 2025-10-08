@@ -37,9 +37,79 @@ function fitnessDetailsPage(props) {
   return (
     <div>
       <Head>
-        <title>{pageTitle}</title>
+        <title>{`${conciseTitle} | Fitness | Wellness Pure Life`}</title>
         <meta name="description" content={fitData.description} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="UTF-8" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Wellness Pure Life" />
+        <meta
+          property="og:title"
+          content={`${fitData.title} | Fitness | Wellness Pure Life`}
+        />
+        <meta property="og:description" content={fitData.description} />
+        <meta
+          property="og:image"
+          content={`https://wellnesspurelife.com${
+            fitData.image || "/images/social-card.jpg"
+          }`}
+        />
+        <meta
+          property="og:url"
+          content={`https://wellnesspurelife.com/fitness/${fitData.id}`}
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${fitData.title} | Fitness`} />
+        <meta name="twitter:description" content={fitData.description} />
+        <meta
+          name="twitter:image"
+          content={`https://wellnesspurelife.com${
+            fitData.image || "/images/social-card.jpg"
+          }`}
+        />
+
+        {/* Canonical & Favicon */}
+        <link
+          rel="canonical"
+          href={`https://wellnesspurelife.com/fitness/${fitData.id}`}
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              headline: fitData.title,
+              description: fitData.description,
+              url: `https://wellnesspurelife.com/fitness/${fitData.id}`,
+              image: `https://wellnesspurelife.com${
+                fitData.image || "/images/social-card.jpg"
+              }`,
+              author: {
+                "@type": "Organization",
+                name: "Wellness Pure Life",
+              },
+              publisher: {
+                "@type": "Organization",
+                name: "Wellness Pure Life",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://wellnesspurelife.com/images/social-card.jpg",
+                },
+              },
+              mainEntityOfPage: `https://wellnesspurelife.com/fitness/${fitData.id}`,
+            }),
+          }}
+        />
       </Head>
+
       <Content items={fitData} />
       <AuthorBox />
       {showButton && (

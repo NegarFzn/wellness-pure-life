@@ -1,4 +1,47 @@
+/** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: "https://wellnesspurelife.com",
   generateRobotsTxt: true,
+  exclude: [
+    "/dashboard",
+    "/dashboard/*",
+    "/profile",
+    "/profile/*",
+    "/history",
+    "/history/*",
+    "/premium",
+    "/premium/*",
+    "/settings",
+    "/settings/*",
+    "/private",
+    "/private/*",
+    "/login",
+    "/register",
+    "/auth/*",
+  ],
+  robotsTxtOptions: {
+    policies: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: [
+          "/dashboard",
+          "/dashboard/*",
+          "/profile",
+          "/profile/*",
+          "/history",
+          "/history/*",
+          "/premium",
+          "/premium/*",
+          "/settings",
+          "/settings/*",
+          "/private",
+          "/private/*",
+          "/login",
+          "/register",
+          "/auth/*",
+        ],
+      },
+    ],
+  },
 };

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import classes from "./index.module.css";
@@ -65,90 +66,141 @@ export default function QuizMainPage() {
   const showClear = searchTerm || activeCategory !== "all";
 
   return (
-    <div className={classes.container}>
-      <h1 className={classes.heading}>📝 All Quizzes</h1>
-
-      <div className={classes.stickyBar}>
-        <input
-          type="text"
-          placeholder="Search quizzes..."
-          className={classes.searchInput}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+    <>
+      <Head>
+        <title>All Wellness Quizzes | Wellness Pure Life</title>
+        <meta
+          name="description"
+          content="Browse all wellness quizzes on fitness, mindfulness, nutrition, stress and balance. Discover insights tailored to your lifestyle."
         />
 
-        <div className={classes.categoryBar}>
-          {categories.map((cat) => (
-            <button
-              key={cat.value}
-              className={`${classes.categoryButton} ${
-                activeCategory === cat.value ? classes.active : ""
-              }`}
-              onClick={() => setActiveCategory(cat.value)}
-            >
-              <span className={classes.categoryIcon}>{cat.icon}</span>
-              {cat.label}
-            </button>
-          ))}
-        </div>
-      </div>
+        {/* Open Graph for sharing */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Wellness Pure Life" />
+        <meta
+          property="og:title"
+          content="All Wellness Quizzes | Wellness Pure Life"
+        />
+        <meta
+          property="og:description"
+          content="Browse all wellness quizzes on fitness, mindfulness, nutrition, stress and balance. Discover insights tailored to your lifestyle."
+        />
+        <meta
+          property="og:image"
+          content="https://wellnesspurelife.com/images/logo.jpg"
+        />
+        <meta
+          property="og:url"
+          content="https://wellnesspurelife.com/quizzes/quiz-main"
+        />
 
-      {searchTerm && (
-        <p className={classes.searchHighlight}>
-          🔍 Searching for: <strong>{searchTerm}</strong>
-        </p>
-      )}
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="All Wellness Quizzes | Wellness Pure Life"
+        />
+        <meta
+          name="twitter:description"
+          content="Browse all wellness quizzes on fitness, mindfulness, nutrition, stress and balance. Discover insights tailored to your lifestyle."
+        />
+        <meta
+          name="twitter:image"
+          content="https://wellnesspurelife.com/images/logo.jpg"
+        />
 
-      {loading ? (
-        <p className={classes.loading}>⏳ Loading quizzes...</p>
-      ) : filteredQuizzes.length === 0 ? (
-        <>
-          <p className={classes.emptyMessage}>
-            😕 No quizzes match your search or category.
-          </p>
-          {showClear && (
-            <button
-              className={classes.clearFilters}
-              onClick={() => {
-                setSearchTerm("");
-                setActiveCategory("all");
-              }}
-            >
-              🔄 Clear Filters
-            </button>
-          )}
-        </>
-      ) : (
-        <>
-          <ul className={classes.quizList}>
-            {filteredQuizzes.map((quiz) => (
-              <li className={classes.quizItem} key={quiz.slug}>
-                <Link
-                  href={`/quizzes/quiz-main/${quiz.slug}`}
-                  className={classes.quizLink}
-                >
-                  <span className={classes.icon}>
-                    {getIconForSlug(quiz.slug)}
-                  </span>
-                  <span className={classes.quizTitle}>{quiz.title}</span>
-                </Link>
-              </li>
+        {/* Canonical */}
+        <link
+          rel="canonical"
+          href="https://wellnesspurelife.com/quizzes/quiz-main"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>{" "}
+      <div className={classes.container}>
+        <h1 className={classes.heading}>📝 All Quizzes</h1>
+
+        <div className={classes.stickyBar}>
+          <input
+            type="text"
+            placeholder="Search quizzes..."
+            className={classes.searchInput}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+
+          <div className={classes.categoryBar}>
+            {categories.map((cat) => (
+              <button
+                key={cat.value}
+                className={`${classes.categoryButton} ${
+                  activeCategory === cat.value ? classes.active : ""
+                }`}
+                onClick={() => setActiveCategory(cat.value)}
+              >
+                <span className={classes.categoryIcon}>{cat.icon}</span>
+                {cat.label}
+              </button>
             ))}
-          </ul>
+          </div>
+        </div>
 
-          {showClear && (
-            <button
-              className={classes.clearFilters}
-              onClick={() => {
-                setSearchTerm("");
-                setActiveCategory("all");
-              }}
-            >
-              🔄 Clear Filters
-            </button>
-          )}
-        </>
-      )}
-    </div>
+        {searchTerm && (
+          <p className={classes.searchHighlight}>
+            🔍 Searching for: <strong>{searchTerm}</strong>
+          </p>
+        )}
+
+        {loading ? (
+          <p className={classes.loading}>⏳ Loading quizzes...</p>
+        ) : filteredQuizzes.length === 0 ? (
+          <>
+            <p className={classes.emptyMessage}>
+              😕 No quizzes match your search or category.
+            </p>
+            {showClear && (
+              <button
+                className={classes.clearFilters}
+                onClick={() => {
+                  setSearchTerm("");
+                  setActiveCategory("all");
+                }}
+              >
+                🔄 Clear Filters
+              </button>
+            )}
+          </>
+        ) : (
+          <>
+            <ul className={classes.quizList}>
+              {filteredQuizzes.map((quiz) => (
+                <li className={classes.quizItem} key={quiz.slug}>
+                  <Link
+                    href={`/quizzes/quiz-main/${quiz.slug}`}
+                    className={classes.quizLink}
+                  >
+                    <span className={classes.icon}>
+                      {getIconForSlug(quiz.slug)}
+                    </span>
+                    <span className={classes.quizTitle}>{quiz.title}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            {showClear && (
+              <button
+                className={classes.clearFilters}
+                onClick={() => {
+                  setSearchTerm("");
+                  setActiveCategory("all");
+                }}
+              >
+                🔄 Clear Filters
+              </button>
+            )}
+          </>
+        )}
+      </div>
+    </>
   );
 }

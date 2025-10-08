@@ -1,6 +1,5 @@
-// /Users/negar/Documents/Udemy/NextJs-max/wellnesspurelife/pages/quizzes/quiz-plan/[slug].js
-
 import { useEffect, useState } from "react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import MultiPlanSummary from "../../../components/Quiz/QuizPlan/4_PlanSummary";
@@ -106,8 +105,109 @@ export default function MultiPlanPage() {
   }
 
   return (
-    <div className={classes.planContainer}>
-      <MultiPlanSummary slug={slug} answers={answers} questions={questions} />
-    </div>
+    <>
+      <Head>
+        <title>
+          {slug
+            ? `${slug} Plan | Wellness Pure Life`
+            : "Wellness Plan | Wellness Pure Life"}
+        </title>
+        <meta
+          name="description"
+          content="Explore your personalized wellness plan crafted from your quiz responses. Start your journey to a healthier you."
+        />
+
+        {/* Open Graph (for social sharing) */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Wellness Pure Life" />
+        <meta
+          property="og:title"
+          content={
+            slug
+              ? `${slug} Plan | Wellness Pure Life`
+              : "Wellness Plan | Wellness Pure Life"
+          }
+        />
+        <meta
+          property="og:description"
+          content="Explore your personalized wellness plan crafted from your quiz responses. Start your journey to a healthier you."
+        />
+        <meta
+          property="og:image"
+          content="https://wellnesspurelife.com/images/social-card.jpg"
+        />
+        <meta
+          property="og:url"
+          content={`https://wellnesspurelife.com/quizzes/quiz-plan/${
+            slug || ""
+          }`}
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content={
+            slug
+              ? `${slug} Plan | Wellness Pure Life`
+              : "Wellness Plan | Wellness Pure Life"
+          }
+        />
+        <meta
+          name="twitter:description"
+          content="Explore your personalized wellness plan crafted from your quiz responses. Start your journey to a healthier you."
+        />
+        <meta
+          name="twitter:image"
+          content="https://wellnesspurelife.com/images/social-card.jpg"
+        />
+
+        {/* Canonical & Favicon */}
+        <link
+          rel="canonical"
+          href={`https://wellnesspurelife.com/quizzes/quiz-plan/${slug || ""}`}
+        />
+        <link rel="icon" href="/favicon.ico" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": `https://wellnesspurelife.com/quizzes/quiz-plan/${
+                  slug || ""
+                }`,
+              },
+              headline: slug
+                ? `${slug} Wellness Plan`
+                : "Wellness Plan | Wellness Pure Life",
+              description:
+                "Explore your personalized wellness plan crafted from your quiz responses. Start your journey to a healthier you.",
+              image: "https://wellnesspurelife.com/images/social-card.jpg",
+              author: {
+                "@type": "Organization",
+                name: "Wellness Pure Life",
+                url: "https://wellnesspurelife.com",
+              },
+              publisher: {
+                "@type": "Organization",
+                name: "Wellness Pure Life",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://wellnesspurelife.com/images/logo.jpg",
+                },
+              },
+              datePublished: new Date().toISOString(),
+              dateModified: new Date().toISOString(),
+            }),
+          }}
+        />
+      </Head>{" "}
+      <div className={classes.planContainer}>
+        <MultiPlanSummary slug={slug} answers={answers} questions={questions} />
+      </div>
+    </>
   );
 }

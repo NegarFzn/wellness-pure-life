@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import Head from "next/head";
+
 import classes from "./index.module.css";
 
 export default function ChallengePage() {
@@ -28,12 +30,12 @@ export default function ChallengePage() {
   useEffect(() => {
     const getLocalMidnight = (date) =>
       new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  
+
     const todayMidnight = getLocalMidnight(new Date());
-  
+
     let storedStart = localStorage.getItem("challengeStartDate");
     let startDateMidnight;
-  
+
     if (!storedStart) {
       // First-time user
       const isoStart = todayMidnight.toISOString();
@@ -45,18 +47,18 @@ export default function ChallengePage() {
       const parsedStart = new Date(storedStart);
       startDateMidnight = getLocalMidnight(parsedStart);
     }
-  
+
     const diffInDays = Math.floor(
       (todayMidnight - startDateMidnight) / (1000 * 60 * 60 * 24)
     );
-  
+
     if (diffInDays >= 7) {
       // Automatic reset
       const newStart = todayMidnight.toISOString();
       localStorage.setItem("challengeStartDate", newStart);
       localStorage.removeItem(`completedDays_${storedStart}`);
       localStorage.removeItem("dailyChallenge");
-  
+
       setCompletedDays([]);
       setDayNumber(1);
       setCompletedKey(`completedDays_${newStart}`);
@@ -64,14 +66,13 @@ export default function ChallengePage() {
       setDayNumber(Math.min(7, diffInDays + 1));
       const key = `completedDays_${storedStart}`;
       setCompletedKey(key);
-  
+
       const storedCompleted = localStorage.getItem(key);
       if (storedCompleted) {
         setCompletedDays(JSON.parse(storedCompleted));
       }
     }
   }, []);
-  
 
   // Load challenges
   useEffect(() => {
@@ -147,85 +148,93 @@ export default function ChallengePage() {
   }, []);
 
   return (
-    <div className={classes.container}>
-      <h1 className={classes.heading}>Your 7-Day Wellness Challenge</h1>
-      <p className={classes.subtext}>
-        These challenges are generated just for you by ChatGPT:
-      </p>
+    <>
+      <Head>
+        <title>7‑Day Wellness Challenge | Wellness Pure Life</title>
+        {/* Prevent indexing by search engines */}
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>{" "}
+      <div className={classes.container}>
+        <h1 className={classes.heading}>Your 7-Day Wellness Challenge</h1>
+        <p className={classes.subtext}>
+          These challenges are generated just for you by ChatGPT:
+        </p>
 
-      <div className={classes.progressBar}>
-        <div
-          className={classes.progressFill}
-          style={{ width: `${(completedDays.length / 7) * 100}%` }}
-        />
-      </div>
-      <p className={classes.progressText}>
-        {completedDays.length}/7 Days Complete
-      </p>
+        <div className={classes.progressBar}>
+          <div
+            className={classes.progressFill}
+            style={{ width: `${(completedDays.length / 7) * 100}%` }}
+          />
+        </div>
+        <p className={classes.progressText}>
+          {completedDays.length}/7 Days Complete
+        </p>
 
-      {/* ✅ Google AdSense block here */}
-      <div className={classes.adContainer}>
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-6324625824043093"
-          data-ad-slot="YOUR_AD_SLOT_TOP"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
-      </div>
+        {/* ✅ Google AdSense block here */}
+        <div className={classes.adContainer}>
+          <ins
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client="ca-pub-6324625824043093"
+            data-ad-slot="YOUR_AD_SLOT_TOP"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+        </div>
 
-      <button
-        className={classes.resetButton}
-        onClick={() => setShowResetModal(true)}
-      >
-        🔄 Reset Progress
-      </button>
+        <button
+          className={classes.resetButton}
+          onClick={() => setShowResetModal(true)}
+        >
+          🔄 Reset Progress
+        </button>
 
-      {loading ? (
-        <p className={classes.loading}>Loading your challenges...</p>
-      ) : (
-        <ol className={classes.challengeList}>
-          {challenges.map((item, index) => {
-            const isToday = index + 1 === dayNumber;
-            const isComplete = completedDays.includes(index);
-            const emoji = getEmojiForChallenge(item);
+        {loading ? (
+          <p className={classes.loading}>Loading your challenges...</p>
+        ) : (
+          <ol className={classes.challengeList}>
+            {challenges.map((item, index) => {
+              const isToday = index + 1 === dayNumber;
+              const isComplete = completedDays.includes(index);
+              const emoji = getEmojiForChallenge(item);
 
-            return (
-              <li
-                key={index}
-                className={`${classes.challengeItem} ${
-                  isToday ? classes.currentDay : ""
-                } ${isComplete ? classes.completed : ""}`}
-              >
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={isComplete}
-                    onChange={() => toggleComplete(index)}
-                  />
-                  <span className={classes.checkboxLabel}>
-                    {emoji} <strong>Day {index + 1}:</strong> {item}
-                  </span>
-                </label>
-              </li>
-            );
-          })}
-        </ol>
-      )}
+              return (
+                <li
+                  key={index}
+                  className={`${classes.challengeItem} ${
+                    isToday ? classes.currentDay : ""
+                  } ${isComplete ? classes.completed : ""}`}
+                >
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={isComplete}
+                      onChange={() => toggleComplete(index)}
+                    />
+                    <span className={classes.checkboxLabel}>
+                      {emoji} <strong>Day {index + 1}:</strong> {item}
+                    </span>
+                  </label>
+                </li>
+              );
+            })}
+          </ol>
+        )}
 
-      {/* ✅ Custom Modal */}
-      {showResetModal && (
-        <div className={classes.modalOverlay}>
-          <div className={classes.modalContent}>
-            <p>Are you sure you want to reset your challenge progress?</p>
-            <div className={classes.modalActions}>
-              <button onClick={handleResetProgress}>Yes, Reset</button>
-              <button onClick={() => setShowResetModal(false)}>Cancel</button>
+        {/* ✅ Custom Modal */}
+        {showResetModal && (
+          <div className={classes.modalOverlay}>
+            <div className={classes.modalContent}>
+              <p>Are you sure you want to reset your challenge progress?</p>
+              <div className={classes.modalActions}>
+                <button onClick={handleResetProgress}>Yes, Reset</button>
+                <button onClick={() => setShowResetModal(false)}>Cancel</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }
