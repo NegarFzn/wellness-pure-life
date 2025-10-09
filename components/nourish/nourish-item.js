@@ -39,7 +39,7 @@ export default function NourishItem({ title, image, summary, intro, id }) {
         <div className={classes.media}>
           <Image
             src={image ? `/images/${image}` : "/images/placeholderNourish.jpg"}
-            alt={title}
+             alt={title || "Wellness Pure Life - Nourish Guide"}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             priority

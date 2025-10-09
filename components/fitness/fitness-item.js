@@ -36,7 +36,7 @@ export default function FitnessItem({ title, image, summary, intro, id }) {
         <div className={classes.media}>
           <Image
             src={image ? `/images/${image}` : "/images/placeholderFit.jpg"}
-            alt={title}
+             alt={title || "Wellness Pure Life - Fitness Guide"}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             priority

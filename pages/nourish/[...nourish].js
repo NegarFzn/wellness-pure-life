@@ -40,6 +40,7 @@ function NourishDetailPage(props) {
         {/* SEO Title & Description */}
         <title>{pageTitle}</title>
         <meta name="description" content={nourishData.summary} />
+         <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
 

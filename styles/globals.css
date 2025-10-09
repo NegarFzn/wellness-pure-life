@@ -86,8 +86,9 @@ p a:active {
   --ink-soft: #334155;
   --paper: #ffffff;
   --muted: #f1f5f9;
-  --shadow: 0 2px 12px rgba(0,0,0,.08);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
+
 
 
 @media (prefers-color-scheme: dark) {

@@ -203,7 +203,7 @@ function NourishPage(props) {
         <nav>
           <Image
             src={nourishHeader}
-            alt="Colorful whole foods and balanced plates — WellnessPureLife Nourish"
+            alt="Banner showing healthy meals, superfoods, and balanced nutrition — Wellness Pure Life"
             fill
             priority
             sizes="(max-width: 768px) 100vw, 100vw"

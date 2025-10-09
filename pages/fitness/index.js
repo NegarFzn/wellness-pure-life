@@ -163,7 +163,7 @@ function FitnessPage(props) {
         <nav>
           <Image
             src={fitnessHeader}
-            alt="People training with dumbbells and doing yoga — WellnessPureLife Fitness"
+            alt="Banner showing fitness training, strength exercises, and yoga — Wellness Pure Life"
             fill
             priority
             sizes="(max-width: 768px) 100vw, 100vw"

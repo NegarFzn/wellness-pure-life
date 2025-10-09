@@ -39,7 +39,7 @@ export default function MindfulnessItem({ title, image, summary, intro, id }) {
         <div className={classes.media}>
           <Image
             src={image ? `/images/${image}` : "/images/placeholderMind.jpg"}
-            alt={title}
+             alt={title || "Wellness Pure Life - Mindfulness Guide"}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             priority

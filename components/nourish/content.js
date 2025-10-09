@@ -132,7 +132,7 @@ const Content = (props) => {
             <div className={classes.topImageWrapper}>
               <Image
                 src={`/images/${image}`}
-                alt={title}
+                alt={title || "Wellness Pure Life - Nourish Guide"}
                 width={1200}
                 height={650}
                 priority
@@ -162,7 +162,10 @@ const Content = (props) => {
               {section.image && (
                 <Image
                   src={`/images/${section.image}`}
-                  alt={section.heading}
+                  alt={
+                    section.heading ||
+                    "Wellness Pure Life - Mindfulness Section"
+                  }
                   width={700}
                   height={420}
                   loading="lazy"

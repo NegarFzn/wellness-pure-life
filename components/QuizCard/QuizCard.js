@@ -8,7 +8,7 @@ export default function QuizCard() {
       <div className={classes.cardContent}>
         <Image
           src="/images/quiz-banner.jpg"
-          alt="Take Our Wellness Quiz"
+           alt="Wellness quiz banner with body, mind, and nutrition visuals"
           width={320}
           height={180}
           className={classes.image}

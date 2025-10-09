@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import classes from "./KeyFeatures.module.css";
@@ -87,7 +87,7 @@ export default function KeyFeatures() {
             >
               <Image
                 src={f.img}
-                alt={f.title}
+                  alt={`${f.title} – ${f.desc.replace(/[\u{1F600}-\u{1F6FF}]/gu, '')}`}
                 width={400}
                 height={250}
                 className={classes.image}

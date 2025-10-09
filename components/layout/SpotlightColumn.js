@@ -19,7 +19,7 @@ export default function SpotlightColumn({ label, spotlightsMap, onLinkClick }) {
                 >
                   <Image
                     src={item.img}
-                    alt={item.text}
+                    alt={`Spotlight: ${item.text} – ${label} article`}
                     width={70}
                     height={70}
                     className={classes.spotlightImage}

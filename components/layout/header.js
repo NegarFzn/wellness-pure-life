@@ -332,7 +332,7 @@ export default function Header({ weather }) {
                     <div className={classes.weatherInfo}>
                       <img
                         src={weather.current.condition.icon}
-                        alt="Weather icon"
+                        alt={`Current weather: ${weather.current.condition.text}, ${weather.current.temp_c}°C in NY`}
                         className={classes.weatherIcon}
                       />
                       <div className={classes.weatherText}>

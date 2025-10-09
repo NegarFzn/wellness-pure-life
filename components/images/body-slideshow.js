@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import bodyImg from '../../public/images/body.jpg';
+import bodyImg from "../../public/images/body.jpg";
 import fitnessImg from "../../public/images/fitness_02.jpg";
 import classes from "./slideshow.module.css";
 
 const images = [
-  { image: bodyImg, alt: "good feeling" },
-  { image: fitnessImg, alt: "good feeling" },
+  { image: bodyImg, alt: "Relaxed person enjoying a wellness moment" },
+  { image: fitnessImg, alt: "Woman exercising as part of a fitness routine" },
 ];
 
 export default function BodySlideshow() {
@@ -20,7 +20,6 @@ export default function BodySlideshow() {
         prevIndex < images.length - 1 ? prevIndex + 1 : 0
       );
     }, 10000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -30,8 +29,14 @@ export default function BodySlideshow() {
         <Image
           key={index}
           src={image.image}
-          className={index === currentImageIndex ? classes.active : ""}
           alt={image.alt}
+          width={1200}
+          height={800}
+          className={`${classes.image} ${
+            index === currentImageIndex ? classes.active : ""
+          }`}
+          priority={index === 0}
+          loading={index === 0 ? "eager" : "lazy"}
         />
       ))}
     </div>

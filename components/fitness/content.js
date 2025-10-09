@@ -6,6 +6,7 @@ import classes from "./content.module.css";
 import FitnessList from "./fitness-list";
 
 
+
 /* ------------------------------------------------------
    Enhanced formatter
    - Inline markers kept
@@ -167,7 +168,7 @@ const Content = (props) => {
             <div className={classes.topImageWrapper}>
               <Image
                 src={`/images/${image}`}
-                alt={title}
+                alt={title || "Wellness Pure Life - Fitness Guide"}
                 width={1200}
                 height={650}
                 priority
@@ -197,7 +198,9 @@ const Content = (props) => {
               {section.image && (
                 <Image
                   src={`/images/${section.image}`}
-                  alt={section.heading}
+                  alt={
+                    section.heading || "Wellness Pure Life - Fitness Section"
+                  }
                   width={700}
                   height={420}
                   loading="lazy"
@@ -214,7 +217,6 @@ const Content = (props) => {
           <FitnessList items={additionalSections} />
         </div>
       </div>
-    
     </>
   );
 };

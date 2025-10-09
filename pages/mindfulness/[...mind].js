@@ -41,6 +41,7 @@ function MindfulnessDetailPage(props) {
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={mindData.summary} />
+         <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
 

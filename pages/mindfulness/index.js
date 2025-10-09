@@ -204,7 +204,7 @@ function MindfulnessPage(props) {
         <nav>
           <Image
             src={mindfulnessHeader}
-            alt="Calm scene for meditation and breathing — WellnessPureLife Mindfulness"
+            alt="Banner showing meditation, breathing practices, and mindful living — Wellness Pure Life"
             fill
             priority
             sizes="(max-width: 768px) 100vw, 100vw"

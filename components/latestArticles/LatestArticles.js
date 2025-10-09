@@ -36,7 +36,10 @@ const LatestArticles = () => {
           <div key={article.id} className={classes.articleCard}>
             <Image
               src={`/images/${article.image}`}
-              alt={article.title}
+              alt={`${article.title} – ${article.summary.replace(
+                /[\u{1F600}-\u{1F6FF}]/gu,
+                ""
+              )}`}
               width={250}
               height={160}
             />

@@ -27,7 +27,7 @@ export default function AuthorBox() {
       <div className={styles.authorImage}>
         <Image
           src="/images/wellness-avatar.jpg"
-          alt="Wellness Pure Life Icon"
+          alt="Avatar of the Wellness Pure Life author"
           width={64}
           height={64}
           className={styles.avatar}

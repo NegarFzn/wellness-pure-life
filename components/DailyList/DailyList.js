@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import fitnessData from "../../data/fitness.json";
 import mindfulnessData from "../../data/mindfulness.json";
 import nourishData from "../../data/nourish.json";

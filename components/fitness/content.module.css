@@ -110,6 +110,8 @@
   transform: translateY(-4px);
 }
 
+
+
 /* ✅ Mobile Fix */
 @media (max-width: 768px) {
   .fitness-container {
