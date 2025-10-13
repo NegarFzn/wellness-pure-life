@@ -1,0 +1,320 @@
+/*
+  File: 21-days-mindfulness.module.css
+  Description: Final UX-perfect, animated, expressive styling for Mindfulness and Nourish
+*/
+
+.main {
+  padding: 1.5rem;
+  max-width: 700px;
+  margin: auto;
+  font-family: "Inter", sans-serif;
+  line-height: 1.7;
+  background: linear-gradient(to bottom, #fdfcfb, #f1f5f9);
+}
+
+.title {
+  font-size: 2.25rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #334155;
+  font-weight: 700;
+}
+
+.premiumBadge {
+  background: linear-gradient(to right, #c7d2fe, #e0e7ff);
+  color: #1e293b;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  margin: 0 auto 1rem;
+  display: block;
+  width: fit-content;
+  box-shadow: 0 0 0 3px #e0e7ff;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 #e0e7ff;
+  }
+  70% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.progressContainer {
+  margin-bottom: 2rem;
+}
+
+.progressLabel {
+  font-size: 1rem;
+  text-align: center;
+  color: #4b5563;
+  margin-bottom: 0.25rem;
+}
+
+.progressBar {
+  background-color: #e5e7eb;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(to right, #93c5fd, #60a5fa);
+  transition: width 0.4s ease-in-out;
+  border-radius: 6px;
+}
+
+.markdown {
+  font-size: 1rem;
+  color: #374151;
+  margin-top: 1rem;
+  animation: fadeInUp 0.5s ease-in-out;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  color: #334155;
+  margin-top: 1.5rem;
+  font-weight: 600;
+  scroll-margin-top: 5rem;
+}
+
+.markdown h2::before {
+  content: "🌬️ ";
+}
+
+.markdown h3::before {
+  content: "💧 ";
+}
+
+.markdown p {
+  margin-bottom: 1rem;
+}
+
+.markdown ul {
+  list-style: none;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+  padding-left: 0;
+  color: #475569;
+}
+
+.markdown li {
+  margin-bottom: 0.6rem;
+  line-height: 1.6;
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.markdown li::before {
+  content: "🌸";
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+}
+
+.markdown strong {
+  color: #0e7490;
+  font-weight: 600;
+}
+
+.markdown blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  background: #fef9c3;
+  border-left: 4px solid #eab308;
+  border-radius: 0.5rem;
+  font-style: italic;
+  color: #78350f;
+}
+
+.markdown code {
+  background: #f1f5f9;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.95rem;
+  border-radius: 0.3rem;
+  font-family: "Fira Code", monospace;
+  color: #334155;
+}
+
+.tipBox {
+  background-color: #ecfdf5;
+  border-left: 4px solid #10b981;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  color: #064e3b;
+  font-style: italic;
+  box-shadow: inset 0 0 0 1px #d1fae5;
+}
+
+.lockedBox,
+.congratsBox {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 2rem 1.5rem;
+  border-radius: 1rem;
+  text-align: center;
+  margin-top: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+}
+
+.lockedTitle {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.lockedMessage {
+  color: #475569;
+  margin-bottom: 1.5rem;
+}
+
+.certificateButton,
+.navLink,
+.utilityButton {
+  display: inline-block;
+  background: linear-gradient(to right, #10b981, #34d399);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+  border: none;
+}
+
+.certificateButton:hover,
+.navLink:hover,
+.utilityButton:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(to right, #059669, #10b981);
+  box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+}
+
+.navButtons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  gap: 0.75rem;
+}
+
+.dailyNotice {
+  margin-top: 1.5rem;
+  background: #fff7ed;
+  color: #92400e;
+  border: 1px solid #fdba74;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  font-size: 0.95rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modalContent {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  animation: fadeInUp 0.3s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modalClose {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.loginLink {
+  color: #0ea5e9;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.utilityButtons {
+  margin: 2.5rem auto 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.secondaryButton {
+  background: linear-gradient(to right, #f3f4f6, #e5e7eb);
+  color: #1f2937;
+  border: 1px solid #d1d5db;
+  box-shadow: none;
+}
+
+.secondaryButton:hover {
+  background: #f1f5f9;
+  transform: none;
+  box-shadow: inset 0 0 0 1px #cbd5e1;
+}
+
+@media (max-width: 600px) {
+  .main {
+    padding: 1rem;
+  }
+  .title {
+    font-size: 1.5rem;
+  }
+  .certificateButton,
+  .navLink,
+  .utilityButton {
+    width: 100%;
+    font-size: 1rem;
+  }
+  .navButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+  .premiumBadge {
+    font-size: 0.9rem;
+  }
+}

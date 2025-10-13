@@ -3,11 +3,14 @@ import fs from "fs/promises";
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import nourishHeader from "./../../public/images/nourish_header.jpg";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import nourishHeader from "/public/images/nourish_header.jpg";
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
 import NourishHighlights from "../../components/TopPages/NourishHighlights";
 import classes from "./index.module.css";
 import NourishList from "../../components/nourish/nourish-list";
+import ChallengeBox from "../../components/ChallengeBox/ChallengeBox";
 
 function NourishPage(props) {
   const [showButton, setShowButton] = useState(false);
@@ -200,20 +203,133 @@ function NourishPage(props) {
       </Head>
 
       <header className={classes.header}>
-        <nav>
-          <Image
-            src={nourishHeader}
-            alt="Banner showing healthy meals, superfoods, and balanced nutrition — Wellness Pure Life"
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 100vw"
-          />
-        </nav>
+        <Image
+          src={nourishHeader}
+          alt="Banner showing healthy meals, superfoods, and balanced nutrition — Wellness Pure Life"
+          fill
+          priority
+          sizes="(max-width: 768px) 100vw, 100vw"
+        />
       </header>
 
       <main className={classes["main-content"]}>
         <MultiStartQuiz slug="nourish-plan" />
         <NourishHighlights />
+        {/* Educational Overview */}
+        <section className={classes.intro}>
+          <h2 className={classes.sectionTitle}>
+            Foundations of Healthy Nutrition Habits
+          </h2>
+
+          <div className={classes.cardGrid}>
+            <motion.div
+              className={`${classes.card} ${classes.cardCardio}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              onClick={() =>
+                document
+                  .getElementById("superfoodSecrets")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              <span>🥗</span>
+              <h3>Super Food</h3>
+            </motion.div>
+
+            <motion.div
+              className={`${classes.card} ${classes.cardResistance}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              onClick={() =>
+                document
+                  .getElementById("nutrientEssentials")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              <span>💧</span>
+              <h3>nutrient Essentials</h3>
+            </motion.div>
+
+            <motion.div
+              className={`${classes.card} ${classes.cardRecovery}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              onClick={() =>
+                document
+                  .getElementById("mindfulMeals")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              <span>🍱</span>
+              <h3>mindful Meals</h3>
+            </motion.div>
+
+            <motion.div
+              className={`${classes.card} ${classes.cardFlexibility}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              onClick={() =>
+                document
+                  .getElementById("dailySupplements")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              <span>🦠</span>
+              <h3>Supplements</h3>
+            </motion.div>
+          </div>
+
+          {/* Educational Guide */}
+          <h2 className={classes.sectionTitle}>
+            How to Start Nourishing Better
+          </h2>
+          <p>
+            Begin by adding <strong>1 small habit per week</strong>: drink more
+            water, include colorful veggies, or prepare your meals ahead. Build
+            a sustainable relationship with food that energizes your body and
+            sharpens your mind.
+          </p>
+
+          <h2 className={classes.sectionTitle}>Common Nutrition Mistakes</h2>
+          <ul>
+            <li>Skipping meals or extreme dieting patterns.</li>
+            <li>Over-relying on packaged or ultra-processed foods.</li>
+            <li>Ignoring hydration and fiber intake.</li>
+            <li>Focusing on restriction instead of nourishment.</li>
+          </ul>
+
+          <h2 className={classes.sectionTitle}>Additional Resources</h2>
+          <p>
+            Pair your nutrition journey with mindful practices from our{" "}
+            <Link href="/mindfulness">mindfulness section</Link> or
+            energy-boosting routines from the{" "}
+            <Link href="/fitness">fitness section</Link>. Discover simple
+            recipes, expert insights, and tips to fuel your best self.
+          </p>
+
+          <blockquote>
+            <em>
+              “Healthy eating is not about strict rules — it's about creating a
+              rhythm that feeds your life.”
+            </em>
+          </blockquote>
+          <hr />
+          <ChallengeBox
+            title="Nourish Your Body in 21 Days"
+            description="Enjoy daily nutrition goals, simple recipes, and mindful eating habits that help you feel lighter, healthier, and more energized — one bite at a time."
+            href="/challenge/21-days-nourish/1"
+            color="#fbc02d" // Sunny yellow for warmth and vitality
+          />
+        </section>
+
         {/* Sticky sub-nav */}
         <nav className={classes.subnav} aria-label="Section navigation">
           <div className={classes.subnavWrapper}>

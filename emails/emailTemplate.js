@@ -33,3 +33,24 @@ export function emailTemplate(content) {
     </html>
   `;
 }
+
+export function createChallengeCompletionEmail(name, certificateUrl) {
+  const subject = "🎉 Congratulations – 21 Days of Mindfulness Completed!";
+
+  const bodyContent = `
+    <h2 style="text-align: center;">Hi ${name || "there"},</h2>
+    <p style="text-align: center;">🎉 You’ve completed the <strong>21 Days of Mindfulness</strong> challenge!</p>
+    <p style="text-align: center;">We hope this journey brought you peace and clarity. 🧘</p>
+    <div style="text-align: center; margin: 40px 0;">
+      <a href="${certificateUrl}"
+         style="display: inline-block; padding: 14px 28px; background-color: #4b006e; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
+        🎓 Download Your Certificate
+      </a>
+    </div>
+  `;
+
+  return {
+    subject,
+    body: emailTemplate(bodyContent),
+  };
+}

@@ -154,3 +154,33 @@ export function createNourishEmail(answers) {
     `),
   };
 }
+
+export function create21DaysMindfulnessChallengeEmail(name, day, challenge) {
+  const subject = `Day ${day} – 21 Days of Mindfulness`;
+
+  const bodyContent = `
+    <h2>Hi ${name || "there"},</h2>
+    <p>Welcome to Day ${day} of your <strong>Mindfulness Journey</strong> 🌿</p>
+    <h3>${challenge.title}</h3>
+    <p>${challenge.content}</p>
+    <blockquote><strong>🧘 Mindfulness Tip:</strong> ${
+      challenge.tip
+    }</blockquote>
+    <p>
+      👉 <a href="https://wellnesspurelife.com/challenge/21-days-mindfulness/${day}">
+        View Day ${day} Online
+      </a>
+    </p>
+    <hr />
+    <p style="font-size:13px;color:gray;">
+      You’re receiving this email because you joined the 21 Days of Mindfulness challenge at Wellness Pure Life.
+      <br />
+      <a href="https://wellnesspurelife.com/unsubscribe">Unsubscribe</a>
+    </p>
+  `;
+
+  return {
+    subject,
+    body: emailTemplate(bodyContent),
+  };
+}

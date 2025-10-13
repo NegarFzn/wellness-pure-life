@@ -5,11 +5,12 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import mindfulnessHeader from "./../../public/images/mindfulness_header.jpg";
+import mindfulnessHeader from "/public/images/mindfulness_header.jpg";
 import MindfulnessHighlights from "../../components/TopPages/MindfulnessHighlights";
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
 import classes from "./index.module.css";
 import MindfulnessList from "../../components/mindfulness/mindfulness-list";
+import ChallengeBox from "../../components/ChallengeBox/ChallengeBox";
 
 function MindfulnessPage(props) {
   const [showButton, setShowButton] = useState(false);
@@ -215,6 +216,38 @@ function MindfulnessPage(props) {
       <main className={classes["main-content"]}>
         <MultiStartQuiz slug="mindfulness-plan" />
         <MindfulnessHighlights />
+        {/* 🎧 Guided Audio Meditations */}
+        <section className={classes.audioSection}>
+          <h2 className={classes.sectionTitle}>Guided Audio Meditations</h2>
+          <p>
+            Find your calm with short, science-backed meditations. Listen
+            anytime to reset your mind and body.
+          </p>
+
+          <div className={classes.audioGrid}>
+            <div className={classes.audioCard}>
+              <h3>Guided Breathing (5 min)</h3>
+              <audio controls className={classes.audioPlayer}>
+                <source src="/audio/guided-breathing.mp3" type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+
+            <div className={classes.audioCard}>
+              <h3>Body Scan Meditation (7 min)</h3>
+              <audio controls className={classes.audioPlayer}>
+                <source src="/audio/body-scan.mp3" type="audio/mpeg" />
+              </audio>
+            </div>
+
+            <div className={classes.audioCard}>
+              <h3>Morning Focus Meditation (4 min)</h3>
+              <audio controls className={classes.audioPlayer}>
+                <source src="/audio/morning-focus.mp3" type="audio/mpeg" />
+              </audio>
+            </div>
+          </div>
+        </section>
 
         {/* Educational Overview */}
         <section className={classes.intro}>
@@ -236,7 +269,7 @@ function MindfulnessPage(props) {
               }
             >
               <span>🧘‍♂️</span>
-              <h3>Meditation</h3>
+              <h3>meditation</h3>
             </motion.div>
 
             <motion.div
@@ -247,12 +280,12 @@ function MindfulnessPage(props) {
               transition={{ duration: 0.6, delay: 0.1 }}
               onClick={() =>
                 document
-                  .getElementById("breathwork")
+                  .getElementById("stressReduction")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
             >
               <span>🌬️</span>
-              <h3>Breathwork</h3>
+              <h3>stress reduction</h3>
             </motion.div>
 
             <motion.div
@@ -263,12 +296,12 @@ function MindfulnessPage(props) {
               transition={{ duration: 0.6, delay: 0.2 }}
               onClick={() =>
                 document
-                  .getElementById("sleep")
+                  .getElementById("productivityAndFocus")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
             >
               <span>😴</span>
-              <h3>Sleep Hygiene</h3>
+              <h3>Focus</h3>
             </motion.div>
 
             <motion.div
@@ -279,12 +312,12 @@ function MindfulnessPage(props) {
               transition={{ duration: 0.6, delay: 0.3 }}
               onClick={() =>
                 document
-                  .getElementById("journaling")
+                  .getElementById("mentalWellness")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
             >
               <span>📔</span>
-              <h3>Journaling</h3>
+              <h3>mental wellness</h3>
             </motion.div>
           </div>
 
@@ -321,18 +354,54 @@ function MindfulnessPage(props) {
               “Peace is not a place to get to — it’s a moment you create.”
             </em>
           </blockquote>
-        </section>
+          <hr />
+          {/* 🛒 Tools I Recommend */}
+          {/* <section className={classes.toolsSection}>
+            <h2 className={classes.sectionTitle}>Tools I Recommend</h2>
+            <p>
+              Enhance your mindfulness practice with quality tools I personally
+              recommend — from journals to yoga essentials and calming teas.
+            </p>
 
-        {/* CTA Section */}
-        <section className={classes.ctaSection}>
-          <h2>Begin Your Mindful Path</h2>
-          <p>
-            Discover personalized practices or take our quick quiz to start your
-            journey toward more presence and peace.
-          </p>
-          <Link href="/start" className={classes.ctaButton}>
-            Start Now
-          </Link>
+            <div className={classes.toolsGrid}>
+              <Link
+                href="https://www.amazon.com/dp/B09YHBVVWZ"
+                target="_blank"
+                className={classes.toolCard}
+              >
+                <span>📔</span>
+                <h3>Mindfulness Journal</h3>
+                <p>Track your thoughts, gratitude, and reflections each day.</p>
+              </Link>
+
+              <Link
+                href="https://www.amazon.com/dp/B07ZVR2J8L"
+                target="_blank"
+                className={classes.toolCard}
+              >
+                <span>🧘‍♀️</span>
+                <h3>Eco Yoga Mat</h3>
+                <p>Non-slip, eco-friendly mat for daily yoga or meditation.</p>
+              </Link>
+
+              <Link
+                href="https://www.iherb.com/pr/yogi-tea-calming/2020"
+                target="_blank"
+                className={classes.toolCard}
+              >
+                <span>🍵</span>
+                <h3>Yogi Calming Tea</h3>
+                <p>Relaxing herbal blend to support a peaceful mind.</p>
+              </Link>
+            </div>
+          </section> */}
+
+          <ChallengeBox
+            title="Unlock Calm in 21 Days"
+            description="Discover daily micro-practices to ease your mind, reduce stress, and build lasting peace — in just a few mindful minutes each day."
+            href="/challenge/21-days-mindfulness/1"
+            color="#4caf50"
+          />
         </section>
 
         {/* Sticky sub-nav */}

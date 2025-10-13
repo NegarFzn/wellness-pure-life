@@ -60,6 +60,8 @@ export default NextAuth({
         token.uid = user.id; // 🔥 Add this line
         token.email = user.email;
         token.name = user.name;
+   
+    
       }
 
       if (token.id) {

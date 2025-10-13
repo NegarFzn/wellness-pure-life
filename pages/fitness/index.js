@@ -5,11 +5,12 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import fitnessHeader from "./../../public/images/fitness_header.jpg";
+import fitnessHeader from "/public/images/fitness_header.jpg";
 import classes from "./index.module.css";
 import FitnessList from "../../components/fitness/fitness-list";
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz.js";
 import FitnessHighlights from "../../components/TopPages/FitnessHighlights.js";
+import ChallengeBox from "../../components/ChallengeBox/ChallengeBox.js";
 
 function FitnessPage(props) {
   const [showButton, setShowButton] = useState(false);
@@ -280,18 +281,13 @@ function FitnessPage(props) {
               will follow.”
             </em>
           </blockquote>
-        </section>
-
-        {/* CTA Section */}
-        <section className={classes.ctaSection}>
-          <h2>Ready to Begin?</h2>
-          <p>
-            Start with a beginner plan or take our quick quiz to get
-            personalized recommendations.
-          </p>
-          <Link href="/start" className={classes.ctaButton}>
-            Start Now
-          </Link>
+          <hr/>
+          <ChallengeBox
+            title="Get Strong in 21 Days"
+            description="Follow daily strength-boosting moves and energizing tips to build lean muscle, gain power, and stay motivated — all in just 10 minutes a day."
+            href="/challenge/21-days-fitness/1"
+            color="#ffa743ff"
+          />
         </section>
 
         {/* Sticky sub-nav */}

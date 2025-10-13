@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
 
-
-export async function sendEmail(email, subject, body) {
+export async function sendEmail(email, subject, body, attachments = []) {
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: parseInt(process.env.EMAIL_PORT),
@@ -20,6 +19,7 @@ export async function sendEmail(email, subject, body) {
       to: email,
       subject,
       html: body,
+      attachments,
     });
     console.log("✅ Email sent:", info.messageId);
   } catch (err) {
