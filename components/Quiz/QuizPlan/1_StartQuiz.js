@@ -36,12 +36,8 @@ export default function MultiStartQuiz({ slug }) {
 
   const handleStart = () => {
     if (!goal) return;
-
-    // ✅ Save questions + goal for this session
     sessionStorage.setItem(`${slug}_questions`, JSON.stringify(questions));
     sessionStorage.setItem(`${slug}_goal`, goal);
-
-    // Redirect to index page with slug
     router.push(`/quizzes/quiz-plan?slug=${slug}`);
   };
 
@@ -89,7 +85,10 @@ export default function MultiStartQuiz({ slug }) {
   };
 
   return (
-    <section className={classes.heroSection} aria-label="Start Quiz">
+    <section className={classes.heroSection}>
+      {/* Background Visual */}
+      <div className={classes.heroBackground} />
+
       <div className={classes.heroContent}>
         <div className={classes.textBlock}>
           {renderHeading()}
@@ -100,51 +99,40 @@ export default function MultiStartQuiz({ slug }) {
             lifestyle.
           </p>
 
-          {/* progress bar */}
-          <div
-            className={classes.progressWrapper}
-            role="progressbar"
-            aria-valuenow={progress}
-            aria-valuemin={0}
-            aria-valuemax={100}
-          >
-            <div className={classes.progressBar}>
-              <div
-                className={classes.progressFill}
-                style={{ width: `${progress}%` }}
-              />
+          {/* Progress Bar */}
+          {goal && (
+            <div className={classes.progressWrapper}>
+              <div className={classes.progressBar}>
+                <div
+                  className={classes.progressFill}
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* goal options */}
+          {/* Goal Cards */}
           <div className={classes.quizWrapper}>
-            <label htmlFor="goal-options" className={classes.quizLabel}>
-              What’s your main goal?
-            </label>
+            <label className={classes.quizLabel}>What’s your main goal?</label>
+
             {loading ? (
-              <p>Loading goals...</p>
-            ) : goals.length === 0 ? (
-              <p>No goals found.</p>
+              <p className={classes.loadingText}>Loading goals...</p>
             ) : (
-              <div
-                id="goal-options"
-                className={classes.goalOptions}
-                role="radiogroup"
-              >
+              <div className={classes.goalGrid}>
                 {goals.map((opt) => {
                   const active = goal === opt.value;
                   return (
                     <button
                       key={opt.value}
                       onClick={() => setGoal(opt.value)}
-                      className={`${classes.goalButton} ${
+                      className={`${classes.goalCard} ${
                         active ? classes.activeGoal : ""
                       }`}
-                      aria-pressed={active}
-                      role="radio"
                     >
-                      <span aria-hidden="true">{opt.emoji || "🎯"}</span>
-                      <span className={classes.goalText}>{opt.label}</span>
+                      <div className={classes.goalIcon}>
+                        {opt.emoji || "🎯"}
+                      </div>
+                      <div className={classes.goalText}>{opt.label}</div>
                     </button>
                   );
                 })}
@@ -160,6 +148,7 @@ export default function MultiStartQuiz({ slug }) {
             </div>
           )}
 
+          {/* CTA */}
           <div className={classes.ctaWrapper}>
             <button
               onClick={handleStart}
@@ -168,10 +157,9 @@ export default function MultiStartQuiz({ slug }) {
             >
               {goal ? "Continue – Get My Plan →" : "Start the Quiz – It’s Free"}
             </button>
-            <a href="/guides" className={classes.secondaryCta}>
-              Explore Free Tips & Guides
-            </a>
           </div>
+
+          {/* Social Proof */}
           <div className={classes.socialProof}>
             ⭐️⭐️⭐️⭐️⭐️ Trusted by 10,000+ on their wellness journey
           </div>

@@ -281,7 +281,10 @@ function FitnessPage(props) {
               will follow.”
             </em>
           </blockquote>
-          <hr/>
+          <hr />
+          <div className={classes.challengeHeader}>
+            Start Your Fitness Journey
+          </div>
           <ChallengeBox
             title="Get Strong in 21 Days"
             description="Follow daily strength-boosting moves and energizing tips to build lean muscle, gain power, and stay motivated — all in just 10 minutes a day."

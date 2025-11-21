@@ -322,6 +322,9 @@ function NourishPage(props) {
             </em>
           </blockquote>
           <hr />
+          <div className={classes.challengeHeader}>
+            Start Your Nourish Journey
+          </div>
           <ChallengeBox
             title="Nourish Your Body in 21 Days"
             description="Enjoy daily nutrition goals, simple recipes, and mindful eating habits that help you feel lighter, healthier, and more energized — one bite at a time."

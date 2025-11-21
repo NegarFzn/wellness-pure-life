@@ -15,6 +15,44 @@ import ChallengeBox from "../../components/ChallengeBox/ChallengeBox";
 function MindfulnessPage(props) {
   const [showButton, setShowButton] = useState(false);
 
+  useEffect(() => {
+    const music = new Audio("/audio/mindfulness-background.mp3");
+    music.volume = 0; // start silent
+    music.loop = true; // repeat forever
+
+    // Fade In
+    const fadeIn = (target = 0.35, speed = 0.015) => {
+      const interval = setInterval(() => {
+        if (music.volume < target) {
+          music.volume = Math.min(music.volume + speed, target);
+        } else {
+          clearInterval(interval);
+        }
+      }, 150);
+    };
+
+    // Fade Out
+    const fadeOut = (speed = 0.02) => {
+      const interval = setInterval(() => {
+        if (music.volume > 0) {
+          music.volume = Math.max(music.volume - speed, 0);
+        } else {
+          clearInterval(interval);
+          music.pause();
+        }
+      }, 120);
+    };
+
+    // Auto-play when entering the page
+    music
+      .play()
+      .then(() => fadeIn())
+      .catch(() => {});
+
+    // Fade out when leaving the page
+    return () => fadeOut();
+  }, []);
+
   const categories = [
     { key: "featured", title: "FEATURED", items: props.featured },
     { key: "meditation", title: "MEDITATION", items: props.meditation },
@@ -219,29 +257,19 @@ function MindfulnessPage(props) {
         {/* 🎧 Guided Audio Meditations */}
         <section className={classes.audioSection}>
           <h2 className={classes.sectionTitle}>Guided Audio Meditations</h2>
-          <p>
-            Find your calm with short, science-backed meditations. Listen
-            anytime to reset your mind and body.
+          <p className={classes.sectionSubtitle}>
+            Find your calm with short, science-backed meditations.
           </p>
 
-          <div className={classes.audioGrid}>
-            <div className={classes.audioCard}>
-              <h3>Guided Breathing (5 min)</h3>
-              <audio controls className={classes.audioPlayer}>
-                <source src="/audio/guided-breathing.mp3" type="audio/mpeg" />
-                Your browser does not support the audio element.
-              </audio>
-            </div>
+          <div className={classes.audioBlock}>
+            <h3 className={classes.audioTitle}>
+              Short Morning Focus Meditation
+            </h3>
+            <p className={classes.audioCTA}>
+              Tap play to begin your calm moment…
+            </p>
 
-            <div className={classes.audioCard}>
-              <h3>Body Scan Meditation (7 min)</h3>
-              <audio controls className={classes.audioPlayer}>
-                <source src="/audio/body-scan.mp3" type="audio/mpeg" />
-              </audio>
-            </div>
-
-            <div className={classes.audioCard}>
-              <h3>Morning Focus Meditation (4 min)</h3>
+            <div className={classes.audioWrapper}>
               <audio controls className={classes.audioPlayer}>
                 <source src="/audio/morning-focus.mp3" type="audio/mpeg" />
               </audio>
@@ -395,7 +423,9 @@ function MindfulnessPage(props) {
               </Link>
             </div>
           </section> */}
-
+          <div className={classes.challengeHeader}>
+            Start Your Mindfullness Journey
+          </div>
           <ChallengeBox
             title="Unlock Calm in 21 Days"
             description="Discover daily micro-practices to ease your mind, reduce stress, and build lasting peace — in just a few mindful minutes each day."

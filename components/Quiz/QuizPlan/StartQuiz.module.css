@@ -1,282 +1,220 @@
+/* Base Layout */
 .heroSection {
-  padding: 4rem 2rem;
-  background: linear-gradient(to right, #f0f9ff, #ecfeff);
+  min-height: auto;
+  padding-top: 10px; /* reduced top space as requested */
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 40px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .heroContent {
-  display: flex;
-  flex-direction: row;
-  gap: 4rem;
-  max-width: 1200px;
   width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  max-width: 1100px; /* Match your main page content width */
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .textBlock {
-  flex: 1 1 500px;
+  background: linear-gradient(145deg, #ffffff, #f0fdfa, #ecfdf5);
+  border-radius: 20px;
+  padding: 28px 20px 26px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
 }
 
+/* Typography */
 .heading {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #0f172a;
-  line-height: 1.2;
-  margin-bottom: 1rem;
+  font-size: 1.9rem;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.25;
+}
+
+.highlight {
+  color: #22c55e;
+  font-weight: 900;
 }
 
 .subHeading {
   display: block;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-top: 0.25rem;
-}
-
-.highlight {
-  background: linear-gradient(to right, #6ee7b7, #3b82f6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.secondaryCta {
-  padding: 0.75rem 1.5rem;
-  border-radius: 999px;
-  border: 2px solid #3b82f6;
-  color: #3b82f6;
-  font-weight: 600;
+  margin-top: 10px;
   font-size: 1rem;
-  text-decoration: none;
-  transition: all 0.2s ease-in-out;
-}
-
-.secondaryCta:hover {
-  background-color: #ebf4ff;
+  color: #6b7280;
+  font-weight: 500;
 }
 
 .subText {
+  text-align: center;
   font-size: 1rem;
-  color: #475569;
-  margin-bottom: 1.5rem;
+  margin: 18px 0 22px;
+  color: #374151;
 }
 
 .bold {
-  font-weight: 600;
-  color: #3b82f6;
+  font-weight: 700;
 }
 
+/* Progress Bar */
 .progressWrapper {
-  margin-bottom: 1rem;
+  margin-bottom: 26px;
 }
 
 .progressBar {
-  background-color: #e2e8f0;
-  border-radius: 999px;
   height: 8px;
+  background: #e5e7eb;
+  border-radius: 20px;
   overflow: hidden;
 }
 
 .progressFill {
-  background-color: #3b82f6;
   height: 100%;
-  width: 0;
-  transition: width 0.4s ease, opacity 0.3s ease;
-  opacity: 0.9;
+  background: linear-gradient(to right, #22c55e, #4ade80);
+  transition: width 0.3s ease;
 }
 
+/* Goal Cards – Perfect for Mobile */
 .quizWrapper {
-  margin: 2rem 0 1.5rem;
+  margin-top: 6px;
 }
 
 .quizLabel {
-  font-weight: 600;
-  color: #0f172a;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 4px;
 }
 
-.goalOptions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
+/* Horizontal scroll for mobile */
 
-.goalButton {
-  border: 2px solid #cbd5e1;
-  background: white;
-  border-radius: 999px;
-  padding: 0.6rem 1.2rem;
-  font-size: 0.95rem;
-  color: #1e293b;
+.goalGrid {
   display: flex;
+  flex-wrap: wrap;                  /* allows wrapping */
+  justify-content: center;          /* center-align rows */
   align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
-  cursor: pointer;
+  gap: 12px 16px;                   /* vertical | horizontal spacing */
+  margin-top: 10px;
+  width: 100%;
 }
 
-.goalButton:hover {
-  border-color: #3b82f6;
+/* Hide scrollbar (clean UX) */
+.goalGrid::-webkit-scrollbar {
+  display: none;
+}
+.goalGrid {
+  scrollbar-width: none;
 }
 
-.activeGoal {
-  background-color: #3b82f6;
-  color: white;
-  border-color: #3b82f6;
+.goalCard {
+  max-width: 100%;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 20px; /* larger horizontal size */
+  border-radius: 999px;
+  border: 2px solid #d3d8e1; /* softer premium border */
+  background: #ffffff;
+  font-size: 0.95rem;
+  letter-spacing: 0.2px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.goalCard:hover {
+  background: #f8fafc;
+}
+
+.goalIcon {
+  font-size: 16px;
 }
 
 .goalText {
-  font-weight: 500;
-}
-
-.selectionNote {
   font-size: 0.95rem;
-  color: #22c55e;
-  margin-bottom: 1.5rem;
-  font-style: italic;
 }
 
-.ctaWrapper {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
+/* Active State */
+.activeGoal {
+  border-color: #22c55e;
+  background: #ecfdf5;
+  transform: scale(1.04);
 }
 
-.primaryCta {
-  background-color: #3b82f6;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 999px;
+/* Selection Note */
+.selectionNote {
+  margin-top: 16px;
+  font-size: 0.95rem;
+  text-align: center;
+  color: #16a34a;
   font-weight: 600;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out;
 }
 
-.primaryCta:hover:enabled {
-  background-color: #2563eb;
+/* CTA Button – Thumb Optimized */
+.primaryCta {
+  width: 100%;
+  margin-top: 24px;
+  padding: 18px 20px;
+  border-radius: 999px;
+  border: none;
+  font-size: 1.05rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #22c55e, #4ade80);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.primaryCta:active {
+  transform: scale(0.97);
 }
 
 .primaryCta:disabled {
-  opacity: 0.5;
+  background: #d1d5db;
   cursor: not-allowed;
 }
 
-.secondaryCta {
-  padding: 0.75rem 1.5rem;
-  border-radius: 999px;
-  border: 2px solid #3b82f6;
-  color: #3b82f6;
-  font-weight: 600;
-  font-size: 1rem;
-  text-decoration: none;
-  transition: all 0.2s ease-in-out;
-}
-
-.secondaryCta:hover {
-  background-color: #ebf4ff;
-}
-
+/* Social Proof */
 .socialProof {
-  font-size: 0.9rem;
-  color: #64748b;
+  margin-top: 22px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #9ca3af;
   font-weight: 500;
 }
 
-.socialProof {
-  font-size: 0.9rem;
-  color: #64748b;
-  font-weight: 500;
+/* Desktop Enhancements */
+@media (min-width: 768px) {
+  .textBlock {
+    padding: 50px 40px;
+  }
+
+  .heading {
+    font-size: 2.6rem;
+  }
+
+  .goalGrid {
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .goalCard {
+    min-width: 200px;
+  }
 }
 
-.goalButton:focus-visible,
-.primaryCta:focus-visible,
-.secondaryCta:focus-visible {
-  outline: 2px solid #93c5fd;
-  outline-offset: 3px;
-}
-
-.goalButton:hover .goalText {
-  color: #3b82f6;
-}
-
+/* Smooth entrance */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-.heroSection {
-  animation: fadeInUp 0.8s ease-out;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .heroSection {
-    animation: none;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .heroContent {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .ctaWrapper {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .primaryCta,
-  .secondaryCta {
-    width: 100%;
-    text-align: center;
-  }
-
-  .heading {
-    font-size: 2rem;
-    text-align: center;
-  }
-
-  .subHeading {
-    font-size: 1.3rem;
-    text-align: center;
-  }
-
-  .subText {
-    font-size: 0.95rem;
-    text-align: center;
-    margin-bottom: 1.25rem;
-  }
-
-  .textBlock {
-    padding-inline: 1rem;
-  }
-
-  .mockupWrapper {
-    margin-top: 2rem;
-  }
-  .heroSection {
-    padding: 3rem 1rem;
-  }
-
-  .quizWrapper {
-    margin-top: 1.5rem;
-  }
-
-  .ctaWrapper {
-    margin-top: 1rem;
-    margin-bottom: 2rem;
   }
 }
