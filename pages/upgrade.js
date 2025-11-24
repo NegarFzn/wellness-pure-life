@@ -13,6 +13,7 @@ export default function UpgradePage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [plan, setPlan] = useState("monthly");
 
   const handleUpgrade = async () => {
     setLoading(true);
@@ -29,7 +30,7 @@ export default function UpgradePage() {
         const res = await fetch("/api/create-checkout-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, password }),
+          body: JSON.stringify({ name, email, password, plan }),
         });
 
         const data = await res.json();
@@ -51,6 +52,7 @@ export default function UpgradePage() {
           body: JSON.stringify({
             email: session.user.email,
             uid: session.user.uid,
+            plan,
           }),
         });
 
@@ -83,10 +85,28 @@ export default function UpgradePage() {
         <div className={classes.modalContentSplit}>
           <div className={classes.leftInfo}>
             <h1 className={classes.title}>Upgrade to Premium</h1>
-            <p className={classes.feeNote}>
-              Only <span className={classes.feeHighlight}>$5</span> /month.
-              Cancel anytime.
-            </p>
+            <div className={classes.feeWrapper}>
+              <label>
+                <input
+                  type="radio"
+                  name="plan"
+                  value="monthly"
+                  checked={plan === "monthly"}
+                  onChange={() => setPlan("monthly")}
+                />
+                Monthly – $5/month
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="plan"
+                  value="yearly"
+                  checked={plan === "yearly"}
+                  onChange={() => setPlan("yearly")}
+                />
+                Yearly – $39/year (save 35%)
+              </label>
+            </div>
 
             <p className={classes.description}>
               Unlock exclusive wellness challenges, guidance, and mental clarity

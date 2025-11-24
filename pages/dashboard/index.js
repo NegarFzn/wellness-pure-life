@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Head from "next/head";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import DailyQuizAnalysis from "../../components/Quiz/DailyQuiz/DailyQuizAnalysis";
 import QuizCard from "../../components/QuizCard/QuizCard";
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz.js";
+import DailyRitual from "../../components/DailyRitual";
 import classes from "./index.module.css";
 
 const planTypes = [
@@ -137,21 +139,54 @@ export default function DashboardPage() {
       </Head>
 
       <div className={classes.container}>
-        <header className={classes.header}>
-          <h1 className={classes.title}>
-            Welcome, {user?.name || user?.email?.split("@")[0]} 👋
-          </h1>
-          {user?.isPremium && (
-            <div className={classes.premiumBadgeTop}>
-              <span className={classes.star}>🌟</span>
-              Premium Member
-            </div>
-          )}
+        <div className={classes.dashboardHero}>
+          <div className={classes.heroContentGrid}>
+            {/* LEFT SIDE — Welcome Content */}
+            <div className={classes.heroLeft}>
+              <div className={classes.heroTopRow}>
+                <h1 className={classes.heroTitle}>
+                  Welcome{user?.name ? ` ${user.name}` : ""} 👋
+                </h1>
 
-          <p className={classes.tag}>Email: {user?.email}</p>
-          <p className={classes.tag}>
-            Status: {user?.emailVerified ? "✅ Verified" : "Unverified"}
-          </p>
+                {user?.isPremium && (
+                  <div className={classes.premiumBadge}>
+                    <span className={classes.star}>💎</span> Premium Member
+                  </div>
+                )}
+              </div>
+
+              <div className={classes.heroMeta}>
+                <span>Email: {user?.email}</span>
+                <span>
+                  Status: {user?.emailVerified ? "✅ Verified" : "Unverified"}
+                </span>
+              </div>
+
+              <p className={classes.heroDesc}>
+                Your wellness dashboard is ready. What would you like to focus
+                on today?
+              </p>
+
+              <div className={classes.quickActions}>
+                <Link href="/mindfulness">
+                  <button>🧠 Mind</button>
+                </Link>
+                <Link href="/fitness">
+                  <button>💪 Body</button>
+                </Link>
+                <Link href="/nourish">
+                  <button>🥗 Nutrition</button>
+                </Link>
+              </div>
+            </div>
+
+            {/* RIGHT SIDE — Ritual Card */}
+            <div className={classes.heroRight}>
+              <DailyRitual isPremium={user?.isPremium} />
+            </div>
+          </div>
+
+          {/* Tabs stay full width below */}
           <div className={classes.tabBar}>
             {["overview", "daily", "main", "plan", user?.isPremium && "premium"]
               .filter(Boolean)
@@ -177,72 +212,59 @@ export default function DashboardPage() {
                 </button>
               ))}
           </div>
-        </header>
+        </div>
 
         <main className={classes.main}>
           {section === "overview" && (
             <div className={classes.overviewSection}>
-              <div className={classes.heroBanner}>
-                <h2 className={classes.sectionTitle}>👋 Welcome back</h2>
-                <p className={classes.sectionIntro}>
-                  Here’s a quick summary of your wellness. Choose a section to
-                  explore:
-                </p>
-
-                {user?.isPremium && (
-                  <div className={classes.welcomeStickers}>
-                    <span className={classes.sticker}>💎</span>
-                    <span className={classes.sticker}>🌟</span>
-                    <span className={classes.sticker}>💖</span>
-                    <span className={classes.sticker}>🎊</span>
-                  </div>
-                )}
-              </div>
-
-              <div className={classes.statsGrid}>
-                <div className={classes.statCard}>
-                  <div className={classes.statLabel}>📅 Mood Entries</div>
-                  <div className={classes.statValue}>{dailyData.length}</div>
-                </div>
-                <div className={classes.statCard}>
-                  <div className={classes.statLabel}>🧠 Insight</div>
-                  <div className={classes.statValue}>
-                    {mainData[0]?.matchedTitle || "—"}
-                  </div>
-                </div>
-                <div className={classes.statCard}>
-                  <div className={classes.statLabel}>📋 Plan</div>
-                  <div className={classes.statValue}>
-                    {planData ? "✅" : "❌"}
-                  </div>
-                </div>
-              </div>
-
               <div className={classes.sectionGrid}>
-                <SectionCard
-                  icon="📅"
-                  title="Mood Check-Ins"
-                  description="Track your emotional trends with daily mood quizzes."
-                  onClick={() => setSection("daily")}
-                  className={`${classes.sectionCard} ${classes.insight}`}
-                  variant="insight"
-                />
-                <SectionCard
-                  icon="🧠"
-                  title="General Insights"
-                  description="Insights from the general wellness quiz."
-                  onClick={() => setSection("main")}
-                  className={`${classes.sectionCard} ${classes.insight}`}
-                  variant="insight"
-                />
-                <SectionCard
-                  icon="📋"
-                  title="Your Plan"
-                  description="Personalized plan from quizzes."
-                  onClick={() => setSection("plan")}
-                  className={`${classes.sectionCard} ${classes.insight}`}
-                  variant="insight"
-                />
+                {/* Mood Card */}
+                <div className={classes.cardWrapper}>
+                  <div className={classes.innerStatBadge}>
+                    📅 <strong>{dailyData.length}</strong>
+                  </div>
+
+                  <SectionCard
+                    icon="📅"
+                    title="Mood Check-Ins"
+                    description="Track your emotional trends with daily mood quizzes."
+                    onClick={() => setSection("daily")}
+                    className={`${classes.sectionCard} ${classes.insight}`}
+                    variant="insight"
+                  />
+                </div>
+
+                {/* Insight Card */}
+                <div className={classes.cardWrapper}>
+                  <div className={classes.innerStatBadge}>
+                    🧠 <strong>{mainData[0]?.matchedTitle || "—"}</strong>
+                  </div>
+
+                  <SectionCard
+                    icon="🧠"
+                    title="General Insights"
+                    description="Insights from the general wellness quiz."
+                    onClick={() => setSection("main")}
+                    className={`${classes.sectionCard} ${classes.insight}`}
+                    variant="insight"
+                  />
+                </div>
+
+                {/* Plan Card */}
+                <div className={classes.cardWrapper}>
+                  <div className={classes.innerStatBadge}>
+                    📋 <strong>{planData ? "✅ Active" : "❌ None"}</strong>
+                  </div>
+
+                  <SectionCard
+                    icon="📋"
+                    title="Your Plan"
+                    description="Personalized plan from quizzes."
+                    onClick={() => setSection("plan")}
+                    className={`${classes.sectionCard} ${classes.insight}`}
+                    variant="insight"
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -429,9 +451,7 @@ export default function DashboardPage() {
                     >
                       ❌
                     </button>
-                    {activeQuiz === "fitness" ||
-                      "mindfulness" ||
-                      ("nourish" && <MultiStartQuiz />)}
+                    {activeQuiz && <MultiStartQuiz />}
                   </div>
                 </div>
               )}

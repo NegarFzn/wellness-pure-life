@@ -12,8 +12,8 @@ export default async function handler(req, res) {
     return res.status(405).end("Method Not Allowed");
   }
 
-  let { uid, email, password, name } = req.body;
-  console.log("📨 Incoming checkout session for:", { uid, email });
+  let { uid, email, password, name, plan } = req.body;
+  console.log("📨 Incoming checkout session for:", { uid, email, plan });
 
   try {
     // Signup if no uid and valid email + password are provided
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
           email,
           password: hashedPassword,
           name,
-          isVerified: false, 
+          isVerified: false,
           isPremium: false,
           createdAt: new Date().toISOString(),
         });
@@ -47,12 +47,20 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing uid or email" });
     }
 
+    // Decide the correct price ID based on selected plan
+    const priceId =
+      plan === "yearly"
+        ? "price_1SWbHQLUvW2lwD1sx8T2pEQu" // ✅ Replace with your actual yearly price ID
+        : "price_1RVwPlLUvW2lwD1s0Q0gAK3a"; // ✅ Monthly price ID
+
+        console.log("Using price:", priceId);
+
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       payment_method_types: ["card"],
       line_items: [
         {
-          price: "price_1RGsNpFkW4K3pwedXi2EiUuB",
+          price: priceId,
           quantity: 1,
         },
       ],

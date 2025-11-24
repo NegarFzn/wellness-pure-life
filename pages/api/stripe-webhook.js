@@ -1,14 +1,6 @@
 import { buffer } from "micro";
 import Stripe from "stripe";
 import { firestore } from "../../utils/firebaseAdmin"; // Updated to use admin SDK
-import {
-  doc,
-  updateDoc,
-  getDocs,
-  collection,
-  query,
-  where,
-} from "firebase/firestore";
 
 export const config = {
   api: {
@@ -53,6 +45,8 @@ export default async function handler(req, res) {
         const userRef = firestore.doc(`users/${uid}`);
         await userRef.update({
           isPremium: true,
+          planType: session.mode || "subscription",
+
           upgradedAt: new Date().toISOString(),
         });
         console.log("🌟 Premium granted via UID.");
@@ -64,13 +58,12 @@ export default async function handler(req, res) {
         const q = firestore.collection("users").where("email", "==", email);
         const snapshot = await q.get();
         if (!snapshot.empty) {
-          snapshot.forEach(async (docSnap) => {
+          for (const docSnap of snapshot.docs) {
             await docSnap.ref.update({
               isPremium: true,
               upgradedAt: new Date().toISOString(),
             });
-            console.log("🌟 Premium granted via email.");
-          });
+          }
         } else {
           console.warn("⚠️ No user found with this email:", email);
         }

@@ -20,9 +20,9 @@ export default function PremiumCallout({ category, onDismiss }) {
           >
             📋 Learn More
           </button>
-          <button onClick={onDismiss} className={classes.dismissButton}>
+         {/*  <button onClick={onDismiss} className={classes.dismissButton}>
             🔕 Remind Me Later
-          </button>
+          </button> */}
         </div>
       </div>
 

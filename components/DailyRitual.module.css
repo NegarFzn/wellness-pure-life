@@ -1,0 +1,147 @@
+/* ========== Layout Container ========== */
+
+.container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 18px 18px 20px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #f4f9ff 0%, #eef5ff 100%);
+  box-shadow: 0 15px 40px rgba(0, 60, 140, 0.07),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Locked / Completed Premium Look */
+.lockedBox {
+  background: linear-gradient(180deg, #f0f7ff 0%, #e8f1ff 100%);
+}
+
+/* ========== Titles ========== */
+
+.title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1e293b;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+/* ========== Ritual Text ========== */
+
+.ritualText {
+  font-size: 0.95rem;
+  color: #334155;
+  text-align: center;
+  line-height: 1.45;
+  margin-top: 2px;
+}
+
+/* Premium message */
+
+.premiumText {
+  font-size: 0.9rem;
+  color: #475569;
+  text-align: center;
+}
+
+/* ========== Button ========== */
+
+.completeBtn {
+  align-self: center;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  background: rgba(59, 130, 246, 0.08);
+  color: #1e40af;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.completeBtn:hover {
+  background: rgba(59, 130, 246, 0.15);
+  transform: translateY(-0.5px);
+}
+
+.completeBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* ========== Progress Bar ========== */
+
+.progressBarWrap {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: #dbeafe;
+  overflow: hidden;
+  margin-top: 6px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.progressBarFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #22c55e 0%, #4ade80 100%);
+  transition: width 0.4s ease;
+}
+
+/* ========== Streak Text ========== */
+
+.streak {
+  font-size: 0.88rem;
+  color: #1e293b;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 2px;
+}
+
+/* ========== Badges ========== */
+
+.badges {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.badge {
+  background: linear-gradient(90deg, #fde68a 0%, #facc15 100%);
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(251, 191, 36, 0.45);
+}
+
+/* ========== Responsive Tweaks ========== */
+
+@media (max-width: 480px) {
+  .container {
+    padding: 14px 14px 16px;
+    border-radius: 16px;
+  }
+
+  .title {
+    font-size: 0.95rem;
+  }
+
+  .ritualText {
+    font-size: 0.88rem;
+  }
+
+  .upgradeBtn {
+    font-size: 0.86rem;
+    padding: 10px 12px;
+  }
+}
