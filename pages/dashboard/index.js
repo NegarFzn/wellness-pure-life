@@ -156,9 +156,12 @@ export default function DashboardPage() {
               </div>
 
               <div className={classes.heroMeta}>
-                <span>Email: {user?.email}</span>
                 <span>
-                  Status: {user?.emailVerified ? "✅ Verified" : "Unverified"}
+                  <strong>Email:</strong> {user?.email}
+                </span>
+                <span>
+                  <strong>Status:</strong>{" "}
+                  {user?.emailVerified ? "✅ Verified" : "⚠️ Unverified"}
                 </span>
               </div>
 
@@ -169,48 +172,60 @@ export default function DashboardPage() {
 
               <div className={classes.quickActions}>
                 <Link href="/mindfulness">
-                  <button>🧠 Mind</button>
+                  <button className={classes.actionBtn}>🧠 Mind</button>
                 </Link>
+
                 <Link href="/fitness">
-                  <button>💪 Body</button>
+                  <button className={classes.actionBtn}>💪 Body</button>
                 </Link>
+
                 <Link href="/nourish">
-                  <button>🥗 Nutrition</button>
+                  <button className={classes.actionBtn}>🥗 Nutrition</button>
                 </Link>
               </div>
             </div>
 
             {/* RIGHT SIDE — Ritual Card */}
             <div className={classes.heroRight}>
-              <DailyRitual isPremium={user?.isPremium} />
+              <div className={classes.ritualCardWrapper}>
+                <DailyRitual isPremium={user?.isPremium} />
+              </div>
             </div>
           </div>
 
-          {/* Tabs stay full width below */}
-          <div className={classes.tabBar}>
-            {["overview", "daily", "main", "plan", user?.isPremium && "premium"]
-              .filter(Boolean)
-              .map((s) => (
-                <button
-                  key={s}
-                  onClick={() =>
-                    setSection((prev) => (prev === s ? "overview" : s))
-                  }
-                  className={`${classes.tabButton} ${
-                    section === s ? classes.activeTab : ""
-                  }`}
-                >
-                  {s === "overview"
-                    ? "🏠 Overview"
-                    : s === "daily"
-                    ? "📅 Mood Check-Ins"
-                    : s === "main"
-                    ? "🧠 General Insights"
-                    : s === "plan"
-                    ? "📋 Your Plan"
-                    : "✨ Premium"}
-                </button>
-              ))}
+          {/* Tabs */}
+          <div className={classes.tabBarWrapper}>
+            <div className={classes.tabBar}>
+              {[
+                "overview",
+                "daily",
+                "main",
+                "plan",
+                user?.isPremium && "premium",
+              ]
+                .filter(Boolean)
+                .map((s) => (
+                  <button
+                    key={s}
+                    onClick={() =>
+                      setSection((prev) => (prev === s ? "overview" : s))
+                    }
+                    className={`${classes.tabButton} ${
+                      section === s ? classes.activeTab : ""
+                    }`}
+                  >
+                    {s === "overview"
+                      ? "🏠 Overview"
+                      : s === "daily"
+                      ? "📅 Mood Check-Ins"
+                      : s === "main"
+                      ? "🧠 General Insights"
+                      : s === "plan"
+                      ? "📋 Your Plan"
+                      : "✨ Premium"}
+                  </button>
+                ))}
+            </div>
           </div>
         </div>
 

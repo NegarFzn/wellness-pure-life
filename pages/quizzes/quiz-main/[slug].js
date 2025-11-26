@@ -261,6 +261,40 @@ export default function QuizPage() {
             </div>
           </div>
         )}
+        <div className={classes.softPremiumBox}>
+          <h4 className={classes.softPremiumTitle}>
+            ✨ Turn your results into a structured plan
+          </h4>
+
+          <p className={classes.softPremiumText}>
+            Your results are complete. Premium helps you turn them into a clear
+            weekly action plan with reminders, progress tracking, and guided
+            structure.
+          </p>
+
+          <div className={classes.planButtonGroup}>
+            <button
+              className={classes.softPremiumButton}
+              onClick={() => router.push("/fitness")}
+            >
+              Create My Fitness Plan
+            </button>
+
+            <button
+              className={classes.softPremiumButton}
+              onClick={() => router.push("/mindfulness")}
+            >
+              Create My Mindfulness Plan
+            </button>
+
+            <button
+              className={classes.softPremiumButton}
+              onClick={() => router.push("/nourish")}
+            >
+              Create My Nourish Plan
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );

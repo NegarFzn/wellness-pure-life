@@ -242,6 +242,7 @@ export default function Home() {
 
       <main className={classes.container}>
         <DailyList />
+
         <KeyFeatures />
         <Subscribe />
         <QuizCard />

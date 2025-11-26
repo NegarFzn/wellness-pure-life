@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import PremiumCallout from "../../PremiumButton/PremiumCallout";
+import PremiumButton from "../../PremiumButton/PremiumButton";
 import ShareButton from "../../UI/ShareButton";
 import classes from "./PlanSummary.module.css";
 import Button from "../../UI/button";
@@ -17,13 +17,17 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
   const [isSending, setIsSending] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
-  const saveCalled = useRef(false); // 🔒 lock to avoid duplicate save
+  const saveCalled = useRef(false);
 
   const category = slug?.replace("-plan", "");
   const finalAnswers = loadedAnswers || answers;
 
-  // ⏬ Build label map from provided questions
+  // ✅ Premium flag
+  const isPremium = !!session?.user?.isPremium;
+
+  /* -------------------- Label map -------------------- */
   useEffect(() => {
     if (questions.length > 0) {
       const map = {};
@@ -38,12 +42,12 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
 
   const formatLabel = (val) => labelMap[val] || val;
 
-  // ✅ Save answers (only once, at the end)
+  /* -------------------- Save answers -------------------- */
   useEffect(() => {
     if (status !== "authenticated" || !session?.user?.email || !answers) return;
-    if (saveCalled.current) return; // ⛔ already saved once
+    if (saveCalled.current) return;
 
-    saveCalled.current = true; // mark as saved
+    saveCalled.current = true;
 
     const save = async () => {
       try {
@@ -62,7 +66,6 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
         const data = await res.json();
         setSubmitted(true);
         setMatchedPlan(data.matchedPlan || null);
-        console.log("✅ Plan saved:", data);
       } catch (err) {
         console.error("❌ Failed to save quiz result:", err);
       }
@@ -71,7 +74,7 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
     save();
   }, [answers, status, slug, session?.user?.email]);
 
-  // ✅ Load saved plan (so we can display matched structure/summary)
+  /* -------------------- Load saved plan -------------------- */
   useEffect(() => {
     if (status !== "authenticated" || !slug || !session?.user?.email) return;
 
@@ -95,7 +98,7 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
     fetchSavedPlan();
   }, [session?.user?.email, status, slug]);
 
-  // ✅ Check premium reminder
+  /* -------------------- Premium reminder -------------------- */
   useEffect(() => {
     const checkShouldShowPremium = async () => {
       if (session?.user && !session.user.isPremium) {
@@ -104,7 +107,6 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
           const data = await res.json();
           setShowPremium(data.show);
         } catch (err) {
-          console.error("❌ Failed to check premium reminder:", err);
           setShowPremium(false);
         }
       }
@@ -113,7 +115,7 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
     checkShouldShowPremium();
   }, [session?.user, session?.user?.isPremium, category]);
 
-  // ✅ Email plan
+  /* -------------------- Email plan -------------------- */
   const sendPlanToEmail = async () => {
     setIsSending(true);
     setToastMsg("");
@@ -138,7 +140,6 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
         setToastMsg("❌ Failed to send email: " + data.error);
       }
     } catch (err) {
-      console.error("❌ Email send error:", err);
       setToastMsg("❌ Failed to send email.");
     } finally {
       setIsSending(false);
@@ -157,81 +158,128 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
         <p className={classes.subheading}>{matchedPlan.summary}</p>
       )}
 
-      <div className={classes.actionsRow}>
-        <div className={classes.utilityButtons}>
-          <button
-            className={`${classes.utilityButton} ${classes.secondaryButton}`}
-            onClick={() => window.print()}
-          >
-            🖨️ Print
-          </button>
-
-          <ShareButton
-            title="My Personalized Wellness Plan"
-            text="Check out my personalized wellness plan based on my preferences at Wellness Pure Life."
-            url={`https://wellnesspurelife.com${router.asPath}`}
-          />
-
-          {session?.user?.email && (
+      {/* ✅ UTILITY BUTTONS – PREMIUM ONLY */}
+      {isPremium && (
+        <div className={classes.actionsRow}>
+          <div className={classes.utilityButtons}>
             <button
               className={`${classes.utilityButton} ${classes.secondaryButton}`}
-              disabled={isSending || emailSent}
-              onClick={sendPlanToEmail}
+              onClick={() => window.print()}
             >
-              {isSending
-                ? "Sending..."
-                : emailSent
-                ? "✅ Sent"
-                : "📧 Send to Email"}
+              🖨️ Print
             </button>
-          )}
-        </div>
-      </div>
 
-      <div className={classes.summaryList}>
-        {questions.map((q) => (
-          <div key={q.key} style={{ marginBottom: "0.5rem" }}>
-            <p>
-              <strong>{q.question}</strong>:{" "}
-              {formatLabel(finalAnswers[q.key]) || "N/A"}
-            </p>
+            <ShareButton
+              title="My Personalized Wellness Plan"
+              text="Check out my personalized wellness plan based on my preferences at Wellness Pure Life."
+              url={`https://wellnesspurelife.com${router.asPath}`}
+            />
+
+            {session?.user?.email && (
+              <button
+                className={`${classes.utilityButton} ${classes.secondaryButton}`}
+                disabled={isSending || emailSent}
+                onClick={sendPlanToEmail}
+              >
+                {isSending
+                  ? "Sending..."
+                  : emailSent
+                  ? "✅ Sent"
+                  : "📧 Send to Email"}
+              </button>
+            )}
           </div>
-        ))}
-      </div>
-
-      {matchedPlan?.structure && (
-        <div style={{ marginTop: "1rem" }}>
-          <strong>Plan Structure:</strong>
-          <ul>
-            {matchedPlan.structure.map((s, i) => (
-              <li key={i}>{s}</li>
-            ))}
-          </ul>
         </div>
       )}
 
-      {!session?.user && (
-        <p style={{ marginTop: "1rem" }}>
-          Want to save this plan permanently?{" "}
-          <Button size="sm" onClick={() => router.push("/login")}>
-            Log in or Sign up
-          </Button>
-        </p>
+      {/* ✅ PREMIUM ONLY CONTENT */}
+      {isPremium && (
+        <>
+          <div className={classes.summaryList}>
+            {questions.map((q) => (
+              <div key={q.key} style={{ marginBottom: "0.5rem" }}>
+                <p>
+                  <strong>{q.question}</strong>:{" "}
+                  {formatLabel(finalAnswers[q.key]) || "N/A"}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {matchedPlan?.structure && (
+            <div style={{ marginTop: "1rem" }}>
+              <strong>Plan Structure:</strong>
+              <ul>
+                {matchedPlan.structure.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
       )}
 
-      {session?.user && !session.user.isPremium && showPremium && (
-        <PremiumCallout
-          category={category}
-          onDismiss={async () => {
-            await fetch(`/api/premium-reminder?category=${category}`, {
-              method: "POST",
-            });
-            setShowPremium(false);
-          }}
-        />
+      {/* ✅ PREMIUM SOFT TRIGGER */}
+      {!isPremium && session?.user && (
+        <>
+          <div className={classes.lockPreviewBox}>
+            <h3 className={classes.lockTitle}>
+              ✨ Your personalized plan is ready
+            </h3>
+
+            <p className={classes.lockText}>
+              You can preview your plan now, and unlock the full detailed
+              version anytime you feel ready.
+            </p>
+
+            <button
+              className={classes.unlockButton}
+              onClick={() => setShowPremiumModal(true)}
+            >
+              Preview My Plan
+            </button>
+          </div>
+
+          {/* ✅ SOFT PREMIUM MODAL */}
+          {showPremiumModal && (
+            <div
+              className={classes.modalOverlay}
+              onClick={() => setShowPremiumModal(false)}
+            >
+              <div
+                className={classes.modalBox}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h3 className={classes.modalTitle}>
+                  ✨ Your full wellness plan is available
+                </h3>
+
+                <p className={classes.modalText}>
+                  Your personalized plan is ready. Premium members can unlock
+                  full guidance, advanced progress tracking, and expert-level
+                  features at any time.
+                </p>
+
+                <div className={classes.modalAction}>
+                  <PremiumButton category={category} />
+                </div>
+
+                <button
+                  className={classes.modalClose}
+                  onClick={() => setShowPremiumModal(false)}
+                >
+                  View basic version for now
+                </button>
+              </div>
+            </div>
+          )}
+        </>
       )}
+
+      {/* ✅ REMOVE EXTRA CALLOUT (CLEANER CONVERSION FLOW) */}
 
       {toastMsg && <div className={classes.toastBox}>{toastMsg}</div>}
+
       {submitted && (
         <p className={classes.successMessage}>✔️ Your plan has been saved.</p>
       )}

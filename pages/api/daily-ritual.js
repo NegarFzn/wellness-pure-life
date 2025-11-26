@@ -27,6 +27,8 @@ export default async function handler(req, res) {
         .toArray();
 
       let sent = 0;
+  
+
 
       for (const user of users) {
         const ritual = await db

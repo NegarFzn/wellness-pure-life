@@ -167,6 +167,68 @@
   transition: all 0.6s ease-in-out;
 }
 
+/* Soft Premium Box */
+.softPremiumBox {
+  margin-top: 2rem;
+  padding: 1.6rem 1.4rem;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  text-align: center;
+}
+
+/* Title */
+.softPremiumTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.6rem;
+}
+
+/* Description text */
+.softPremiumText {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #6b7280;
+  margin-bottom: 1.4rem;
+  padding: 0 0.4rem;
+}
+
+/* Button */
+.planButtonGroup {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* Mobile wrap */
+  margin-top: 16px;
+}
+
+.softPremiumButton {
+  border: none;
+  border-radius: 14px;
+  padding: 10px 18px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease-in-out;
+
+  /* Smart blended gradient */
+  background: linear-gradient(135deg, #5b6cff, #7b5cff);
+  box-shadow: 0 6px 16px rgba(91, 108, 255, 0.35);
+}
+
+.softPremiumButton:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 10px 22px rgba(91, 108, 255, 0.45);
+}
+
+.softPremiumButton:active {
+  transform: scale(0.98);
+}
+
 /* Fade-in Delays for Staggered Animation */
 .fadeDelay0 {
   animation-delay: 0s;
@@ -237,5 +299,27 @@
   .resultDescription,
   .resultList {
     font-size: 0.95rem;
+  }
+
+  .planButtonGroup {
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .softPremiumButton {
+    padding: 9px 14px;
+    font-size: 13.5px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .planButtonGroup {
+    grid-template-columns: 1fr;
+  }
+
+  .planButtonGroup button:last-child {
+    grid-column: span 1;
   }
 }

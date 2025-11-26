@@ -7,27 +7,39 @@ export default function PremiumCallout({ category, onDismiss }) {
 
   return (
     <div className={classes.premiumWrapper}>
+      {/* Header Block */}
       <div className={classes.premiumHeader}>
-        <span className={classes.premiumBadge}>✨ Premium</span>
+        <span className={classes.premiumBadge}>✨ Premium Access</span>
+
+        <h2 className={classes.premiumTitle}>
+          Unlock Your Full Wellness System
+        </h2>
+
         <p className={classes.premiumText}>
-          <strong>Unlock Premium</strong> to access your full weekly schedule,
-          personalized workouts, and exclusive expert guidance.
+          Get full access to your personalized plans, AI-powered tools,
+          exclusive expert insights, and long-term progress tracking.
         </p>
+
         <div className={classes.premiumActions}>
           <button
             onClick={() => setShowModal(true)}
             className={classes.learnMoreButton}
           >
-            📋 Learn More
+            📘 See What You Get
           </button>
-         {/*  <button onClick={onDismiss} className={classes.dismissButton}>
-            🔕 Remind Me Later
-          </button> */}
+
+          {onDismiss && (
+            <button onClick={onDismiss} className={classes.dismissButton}>
+              Remind Me Later
+            </button>
+          )}
         </div>
       </div>
 
+      {/* Main CTA */}
       <PremiumButton category={category} />
 
+      {/* Modal */}
       {showModal && (
         <div
           className={classes.modalOverlay}
@@ -37,15 +49,17 @@ export default function PremiumCallout({ category, onDismiss }) {
             className={classes.modalContent}
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className={classes.modalTitle}>What's Included in Premium</h3>
+            <h3 className={classes.modalTitle}>What You Unlock With Premium</h3>
+
             <ul className={classes.modalList}>
-              <li>📅 Weekly structured fitness schedule</li>
-              <li>🧠 Mindfulness routines and reminders</li>
-              <li>🍎 Personalized nutrition insights</li>
-              <li>📈 Progress tracking & analytics</li>
-              <li>💬 Expert tips curated weekly</li>
-              <li>🔓 Access to all future premium features</li>
+              <li>✅ Full weekly personalized schedules</li>
+              <li>✅ AI-powered workout & recovery plans</li>
+              <li>✅ Custom mindfulness + stress management</li>
+              <li>✅ Smart nutrition insights</li>
+              <li>✅ Progress analytics & performance reports</li>
+              <li>✅ Priority access to new tools</li>
             </ul>
+
             <button
               className={classes.modalClose}
               onClick={() => setShowModal(false)}
