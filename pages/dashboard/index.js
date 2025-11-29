@@ -5,7 +5,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import DailyQuizAnalysis from "../../components/Quiz/DailyQuiz/DailyQuizAnalysis";
 import QuizCard from "../../components/QuizCard/QuizCard";
-import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz.js";
+import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz"
 import DailyRitual from "../../components/DailyRitual";
 import classes from "./index.module.css";
 
@@ -466,7 +466,9 @@ export default function DashboardPage() {
                     >
                       ❌
                     </button>
-                    {activeQuiz && <MultiStartQuiz />}
+                    {activeQuiz && (
+                      <MultiStartQuiz slug={`${activeQuiz}-plan`} />
+                    )}
                   </div>
                 </div>
               )}

@@ -1,0 +1,42 @@
+.cta {
+  background: linear-gradient(135deg, #6d5dfc, #a78bfa);
+  border-radius: 28px;
+  padding: 3.5rem 2rem;
+  margin-top: 4rem;
+  text-align: center;
+  color: white;
+}
+
+.inner {
+  max-width: 720px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.text {
+  font-size: 1.05rem;
+  opacity: 0.95;
+}
+
+.button {
+  margin-top: 1.2rem;
+  background: white;
+  color: #6d5dfc;
+  padding: 0.9rem 2rem;
+  border-radius: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+}

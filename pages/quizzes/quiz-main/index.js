@@ -24,13 +24,20 @@ export default function QuizMainPage() {
     fetch("/api/quiz/quiz-main?mode=questions")
       .then((res) => res.json())
       .then((data) => {
+        const normalizeCategory = (cat) => {
+          if (!cat) return "";
+          if (cat === "nourish") return "nutrition";
+          return cat.toLowerCase();
+        };
+
         const quizzes = Array.isArray(data)
           ? data.map((q) => ({
               title: q.title || q.slug,
               slug: q.slug,
-              category: q.category || q.slug, // ✅ Include category for filtering
+              category: normalizeCategory(q.category),
             }))
           : [];
+
         setQuizzes(quizzes);
       })
       .catch((err) => {
@@ -51,10 +58,19 @@ export default function QuizMainPage() {
   };
 
   const filteredQuizzes = quizzes.filter((quiz) => {
+    // Special cases based on slug
+    if (activeCategory === "stress-check") {
+      return quiz.slug === "stress-check";
+    }
+
+    if (activeCategory === "life-balance") {
+      return quiz.slug === "life-balance";
+    }
+
+    // Normal category filtering
     const categoryMatch =
       activeCategory === "all" ||
-      (quiz.category &&
-        quiz.category.toLowerCase() === activeCategory.toLowerCase());
+      quiz.category === activeCategory.toLowerCase();
 
     const titleMatch = (quiz.title || "")
       .toLowerCase()

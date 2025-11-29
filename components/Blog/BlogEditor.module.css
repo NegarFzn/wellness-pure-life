@@ -1,0 +1,125 @@
+.editorContainer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.06);
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.2rem;
+}
+
+.field label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 0.4rem;
+}
+
+.field input {
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  padding: 0 16px;
+  font-size: 1rem;
+  background-color: #f8fafc;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #6366f1;
+  background: #ffffff;
+}
+
+.editorWrap {
+  margin-top: 1.5rem;
+}
+
+.editorWrap label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.saveBtn {
+  margin-top: 2.4rem;
+  width: 100%;
+  height: 52px;
+  border-radius: 16px;
+  border: none;
+  font-size: 1.05rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.saveBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.25);
+}
+
+@media (max-width: 768px) {
+  .editorContainer {
+    max-width: 100%;
+    margin: 0;
+    padding: 2rem 1rem 3rem;
+    border-radius: 18px;
+  }
+
+  .heading {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .field input {
+    height: 46px;
+    font-size: 0.95rem;
+  }
+
+  .editorWrap .ql-container {
+    min-height: 260px;
+    border-radius: 14px;
+  }
+
+  .saveBtn {
+    height: 50px;
+    font-size: 1rem;
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .editorContainer {
+    padding: 1.6rem 0.9rem 2.5rem;
+  }
+
+  .heading {
+    font-size: 1.45rem;
+  }
+
+  .field input {
+    height: 44px;
+    padding: 0 14px;
+  }
+
+  .saveBtn {
+    height: 48px;
+    font-size: 0.95rem;
+  }
+}

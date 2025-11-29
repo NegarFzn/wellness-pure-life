@@ -155,7 +155,7 @@ export default function MultiStartQuiz({ slug }) {
               className={classes.primaryCta}
               disabled={!goal}
             >
-              {goal ? "Continue – Get My Plan →" : "Start the Quiz – It’s Free"}
+              {goal ? "Continue – Get My Plan →" : "Start the Quiz"}
             </button>
           </div>
 

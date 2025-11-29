@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
+import MultiStartQuiz from "../../../components/Quiz/QuizPlan/1_StartQuiz"
 import classes from "./QuizPage.module.css";
 
 // Optional: key normalization map (only if needed across quizzes)
@@ -14,12 +16,27 @@ export default function QuizPage() {
   const { slug } = router.query;
 
   const [quiz, setQuiz] = useState(null);
+  const [activeQuiz, setActiveQuiz] = useState(null);
   const [answers, setAnswers] = useState({});
   const [email, setEmail] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [inlineError, setInlineError] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const planTypes = [
+    { type: "fitness", label: "💪 Fitness Plan" },
+    { type: "mindfulness", label: "🧘 Mindfulness Plan" },
+    { type: "nourish", label: "🥗 Nourish Plan" },
+  ];
+
+  const handleQuizOpen = (type) => {
+    setActiveQuiz(type); // triggers useEffect
+  };
+
+  const closeQuizModal = () => {
+    setActiveQuiz(null);
+  };
 
   // 🔹 Auto-fill email from session
   useEffect(() => {
@@ -87,6 +104,24 @@ export default function QuizPage() {
     }
 
     const normalizedAnswers = normalizeAnswers(answers);
+
+    // Try login silently
+    const login = await signIn("credentials", {
+      redirect: false,
+      email: trimmedEmail,
+    });
+
+    // Check login success
+    if (login?.error) {
+      console.log("Login failed:", login.error);
+    } else {
+      setIsAuthenticated(true);
+    }
+
+    await signIn("credentials", {
+      redirect: false,
+      email: trimmedEmail,
+    });
 
     try {
       const res = await fetch("/api/quiz/quiz-main", {
@@ -272,28 +307,43 @@ export default function QuizPage() {
             structure.
           </p>
 
-          <div className={classes.planButtonGroup}>
-            <button
-              className={classes.softPremiumButton}
-              onClick={() => router.push("/fitness")}
-            >
-              Create My Fitness Plan
-            </button>
-
-            <button
-              className={classes.softPremiumButton}
-              onClick={() => router.push("/mindfulness")}
-            >
-              Create My Mindfulness Plan
-            </button>
-
-            <button
-              className={classes.softPremiumButton}
-              onClick={() => router.push("/nourish")}
-            >
-              Create My Nourish Plan
-            </button>
+          <div className={classes.noPlan}>
+            <p className={classes.noPlanText}>
+              💡 Want to improve your wellness? Retake any plan quiz below:
+            </p>
+            <div className={classes.planLinksGrid}>
+              {planTypes.map(({ type, label }) => (
+                <button
+                  key={type}
+                  onClick={() => handleQuizOpen(type)}
+                  className={classes.takePlanLink}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
+
+          {/* ✅ Modal for MultiStartQuiz */}
+          {activeQuiz && (
+            <div
+              className={classes.modalOverlay}
+              onClick={() => closeQuizModal()}
+            >
+              <div
+                className={classes.modalContent}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  className={classes.closeModal}
+                  onClick={() => closeQuizModal()}
+                >
+                  ❌
+                </button>
+                {activeQuiz && <MultiStartQuiz slug={`${activeQuiz}-plan`} />}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

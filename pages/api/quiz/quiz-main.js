@@ -10,13 +10,12 @@ export default async function handler(req, res) {
   let client;
 
   try {
-    client = await MongoClient.connect(uri, { useUnifiedTopology: true });
+    client = await MongoClient.connect(uri);
     const db = client.db(dbName);
     const method = req.method.toUpperCase();
 
     // ────────────────────────────────────────────────
-    // ✅ GET (mode=questions): Return all quiz questions
-    // http://localhost:3000/api/quiz/quiz-main?mode=questions
+    // ✅ GET (mode=questions)
     // ────────────────────────────────────────────────
     if (method === "GET" && req.query.mode === "questions") {
       const quizzes = await db
@@ -26,8 +25,8 @@ export default async function handler(req, res) {
       return res.status(200).json(quizzes);
     }
 
-    // ✅ GET (mode=email): Return saved quizzes for a specific user
-    // http://localhost:3000/api/quiz/quiz-main?email=someone@example.com
+    // ────────────────────────────────────────────────
+    // ✅ GET (mode=saved)
     // ────────────────────────────────────────────────
     if (method === "GET" && req.query.mode === "saved") {
       const email = req.query.email?.trim();
@@ -45,69 +44,104 @@ export default async function handler(req, res) {
     }
 
     // ────────────────────────────────────────────────
-    // ✅ GET (with answers): Return matched recommendation
-    // http://localhost:3000/api/quiz/quiz-main?slug=fitness&goal=Lose%20weight&activityLevel=Sedentary&location=Home&frequency=2
+    // ✅ GET (match by answers)
     // ────────────────────────────────────────────────
-    if (method === "GET") {
+    if (method === "GET" && !req.query.mode) {
       const { slug, ...queryParams } = req.query;
 
-      if (!slug || Object.keys(queryParams).length === 0) {
+      if (!slug) {
         return res
           .status(400)
           .json({ error: "Missing 'slug' or answer parameters." });
       }
 
-      // Normalize and extract key-value pairs
-      const keysObject = {};
+      const query = {
+        slug: slug.trim().toLowerCase(),
+      };
+
+      // ✅ Dynamic key matching
       for (const key in queryParams) {
         const raw = queryParams[key];
         const value = Array.isArray(raw) ? raw[0] : raw;
-        keysObject[key] = value?.trim?.();
+        if (value) {
+          query[`keys.${key}`] = value.trim();
+        }
       }
 
-      const rec = await db.collection(recommendationsCollection).findOne({
-        slug: slug.trim().toLowerCase(),
-        keys: keysObject,
-      });
+      let rec = await db.collection(recommendationsCollection).findOne(query);
 
+      // ✅ Fallback by slug only
       if (!rec) {
-        return res.status(404).json({ error: "No recommendation found." });
+        rec = await db
+          .collection(recommendationsCollection)
+          .findOne({ slug: query.slug });
       }
 
-      const { _id, ...cleaned } = rec;
-      return res.status(200).json(cleaned);
+      // ✅ Default fallback
+      if (!rec) {
+        rec = {
+          title: "Personalized Guidance",
+          description: "General recommendations based on your profile.",
+          values: [
+            "Stay consistent with healthy habits",
+            "Focus on small improvements",
+            "Build daily routines",
+          ],
+        };
+      }
+
+      return res.status(200).json(rec);
     }
 
     // ────────────────────────────────────────────────
-    // ✅ POST: Save answers and return matched recommendation
+    // ✅ POST
     // ────────────────────────────────────────────────
     if (method === "POST") {
       const { slug, answers, email } = req.body;
 
-      if (
-        !slug ||
-        typeof slug !== "string" ||
-        !answers ||
-        typeof answers !== "object"
-      ) {
+      if (!slug || typeof slug !== "string" || !answers) {
         return res
           .status(400)
           .json({ error: "Missing or invalid 'slug' or 'answers'." });
       }
 
-      const rec = await db.collection(recommendationsCollection).findOne({
+      const baseQuery = {
         slug: slug.trim().toLowerCase(),
-        keys: answers,
-      });
+      };
+
+      const query = { ...baseQuery };
+
+      for (const [key, value] of Object.entries(answers)) {
+        query[`keys.${key}`] = value;
+      }
+
+      let rec = await db.collection(recommendationsCollection).findOne(query);
+
+      // ✅ Fallbacks
+      if (!rec) {
+        rec = await db.collection(recommendationsCollection).findOne(baseQuery);
+      }
+
+      if (!rec) {
+        rec = {
+          title: "Personalized Guidance",
+          description: "General recommendations based on your profile.",
+          values: [
+            "Build small daily habits",
+            "Stay consistent",
+            "Track your progress",
+          ],
+        };
+      }
 
       const saveDoc = {
-        slug: slug.trim().toLowerCase(),
+        slug: baseQuery.slug,
         email: email?.trim() || null,
         answers,
         savedAt: new Date(),
-        matchedTitle: rec?.title || null,
-        matchedDescription: rec?.description || null,
-        matchedValues: rec?.values || null,
+        matchedTitle: rec.title,
+        matchedDescription: rec.description,
+        matchedValues: rec.values,
       };
 
       await db.collection(savedCollection).insertOne(saveDoc);
@@ -118,13 +152,13 @@ export default async function handler(req, res) {
       });
     }
 
-    // ────────────────────────────────────────────────
-    // ❌ Unsupported HTTP Method
-    // ────────────────────────────────────────────────
     return res.status(405).json({ error: `Method ${method} not allowed.` });
   } catch (error) {
     console.error("❌ API error:", error);
-    return res.status(500).json({ error: "Internal server error." });
+    return res.status(500).json({
+      error: "Internal server error",
+      detail: error.message,
+    });
   } finally {
     if (client) await client.close();
   }

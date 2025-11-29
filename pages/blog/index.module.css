@@ -1,0 +1,108 @@
+/* --------------------------------------------- */
+/* PAGE WRAPPER                                  */
+/* --------------------------------------------- */
+
+.page {
+  max-width: 1200px;
+  margin: auto;
+  padding: 3rem 1.6rem 5rem;
+}
+
+/* --------------------------------------------- */
+/* HEADER SECTION                                 */
+/* --------------------------------------------- */
+
+.header {
+  text-align: center;
+  margin-bottom: 3.4rem;
+}
+
+.heading {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.8rem;
+}
+
+.subheading {
+  font-size: 1.15rem;
+  color: #6b7280;
+  max-width: 680px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* --------------------------------------------- */
+/* STATUS STATES (loading / empty)                */
+/* --------------------------------------------- */
+
+.statusWrap {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.statusText {
+  font-size: 1rem;
+  color: #9ca3af;
+}
+
+/* --------------------------------------------- */
+/* BLOG GRID                                      */
+/* --------------------------------------------- */
+
+.gridWrapper {
+  margin-bottom: 4rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.4rem 2rem;
+  align-items: stretch;
+}
+
+/* --------------------------------------------- */
+/* RESPONSIVE DESIGN                              */
+/* --------------------------------------------- */
+
+/* Tablets */
+@media (max-width: 900px) {
+  .heading {
+    font-size: 2.3rem;
+  }
+
+  .subheading {
+    font-size: 1.05rem;
+  }
+
+  .grid {
+    gap: 2rem 1.6rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .page {
+    padding: 2rem 1.2rem 4rem;
+  }
+
+  .header {
+    margin-bottom: 2.4rem;
+  }
+
+  .heading {
+    font-size: 2rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .subheading {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+}
