@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
 import { signIn } from "next-auth/react";
-import MultiStartQuiz from "../../../components/Quiz/QuizPlan/1_StartQuiz"
+import MultiStartQuiz from "../../../components/Quiz/QuizPlan/1_StartQuiz";
 import classes from "./QuizPage.module.css";
 
 // Optional: key normalization map (only if needed across quizzes)
@@ -296,6 +296,22 @@ export default function QuizPage() {
             </div>
           </div>
         )}
+
+        {/* 📘 Blog CTA */}
+        <div className={classes.blogCtaWrap}>
+          <p className={classes.premiumNote}>
+            ✨ Want deeper guidance? <br />
+            <span>
+              Full access to all personalized wellness guides is part of our
+              Premium Membership. You can continue exploring the free version,
+              or upgrade anytime you feel ready.
+            </span>
+          </p>
+
+          <a href="/blog" className={classes.blogCta}>
+            Explore More Wellness Guides →
+          </a>
+        </div>
         <div className={classes.softPremiumBox}>
           <h4 className={classes.softPremiumTitle}>
             ✨ Turn your results into a structured plan

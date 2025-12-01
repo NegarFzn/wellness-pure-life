@@ -357,6 +357,46 @@ export default function Header({ weather }) {
                   <Weather />
                 </div>
               </li>
+              <li className={classes.profileNavItem}>
+                {user ? (
+                  <div className={classes.profileWrapper}>
+                    <button className={classes.profileButton}>
+                      <FiUser size={18} style={{ marginRight: "0.4rem" }} />
+                      <span className={classes.profileName}>
+                        {user?.name?.split(" ")[0] || "Account"}
+                      </span>
+                    </button>
+
+                    <div className={classes.dropdownContent}>
+                      <Link href="/dashboard" className={classes.dropdownLink}>
+                        <FiUser size={16} /> Profile
+                      </Link>
+                      <button
+                        onClick={() =>
+                          signOut({
+                            callbackUrl: "https://wellnesspurelife.com/",
+                          })
+                        }
+                        className={classes.logoutLink}
+                      >
+                        <FiLogOut size={16} /> Logout
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={classes.authButtons}>
+                    <button
+                      onClick={openSignup}
+                      className={classes.authMiniBtn}
+                    >
+                      Sign Up
+                    </button>
+                    <button onClick={openLogin} className={classes.authMiniBtn}>
+                      Login
+                    </button>
+                  </div>
+                )}
+              </li>
 
               {/* existing auth/profile <li> block stays exactly as it is */}
               {/* ... your signup/login/profile li from before ... */}

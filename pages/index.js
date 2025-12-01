@@ -11,6 +11,7 @@ import DailyList from "../components/DailyList/DailyList";
 import ResetPassword from "../components/Auth/ResetPassword";
 import ResendVerificationModal from "../components/Auth/ResendVerificationModal";
 import QuizCard from "../components/QuizCard/QuizCard";
+import HomeBlogCTA from "../components/TopPages/HomeBlogCTA";
 import classes from "./index.module.css";
 
 export default function Home() {
@@ -246,6 +247,7 @@ export default function Home() {
         <KeyFeatures />
         <Subscribe />
         <QuizCard />
+         <HomeBlogCTA />
         {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
             <h2 className={classes.newsHeading}>

@@ -251,6 +251,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <FaQuestionCircle className={classes.icon} />
+                <Link href="/blog" className={classes.link}>
+                  Blog
+                </Link>
+              </li>
+              <li>
                 <FaCookieBite className={classes.icon} />
                 <span
                   onClick={() => {

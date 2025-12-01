@@ -276,7 +276,21 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
         </>
       )}
 
-      {/* ✅ REMOVE EXTRA CALLOUT (CLEANER CONVERSION FLOW) */}
+      {/* 📘 Blog CTA */}
+      <div className={classes.blogCtaWrap}>
+        <p className={classes.premiumNote}>
+          ✨ Want deeper guidance? <br />
+          <span>
+            Full access to all personalized wellness guides is part of our
+            Premium Membership. You can continue exploring the free version, or
+            upgrade anytime you feel ready.
+          </span>
+        </p>
+
+        <a href="/blog" className={classes.blogCta}>
+          Explore More Wellness Guides →
+        </a>
+      </div>
 
       {toastMsg && <div className={classes.toastBox}>{toastMsg}</div>}
 
