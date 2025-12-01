@@ -25,7 +25,7 @@ export default async function handler(req, res) {
         .collection("blog_posts")
         .find({ type: "blog", slug: { $ne: slug } })
         .sort({ createdAt: -1 })
-        .limit(5)
+        .limit(14)
         .project({
           slug: 1,
           title: 1,

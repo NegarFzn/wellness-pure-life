@@ -41,6 +41,16 @@ export default function MobileNav({
           ))}
           <li>
             <Link
+              href="/blog"
+              className={classes.mobileNavLink}
+              onClick={closeMenu}
+            >
+              Blog
+            </Link>
+          </li>
+
+          <li>
+            <Link
               href="/news"
               className={classes.mobileNavLink}
               onClick={closeMenu}

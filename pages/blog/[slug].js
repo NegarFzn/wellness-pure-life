@@ -21,10 +21,8 @@ export default function BlogPost() {
 
   if (!post) return null;
 
-  const validImage =
-    post.image &&
-    post.image.startsWith("http") &&
-    !post.image.includes("your-image.jpg");
+ const validImage = Boolean(post.image);
+
 
   // Remove HTML tags for JSON-LD
   const cleanContent =
@@ -208,7 +206,6 @@ export default function BlogPost() {
             </div>
           </div>
         )}
-
         <BlogCTA />
       </article>
     </>
