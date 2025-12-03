@@ -67,6 +67,16 @@ export default function MobileNav({
               Contact
             </Link>
           </li>
+          <li>
+            <Link
+              href="/premium"
+              className={classes.mobileNavLink}
+              onClick={closeMenu}
+            >
+              Premium
+            </Link>
+          </li>
+          
           <li className={classes.mobileWeather}>
             {weather ? (
               <>

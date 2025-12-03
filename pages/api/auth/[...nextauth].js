@@ -3,6 +3,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { firestore } from "../../../utils/firebaseAdmin"; // Admin SDK
 
+// 🔥 FIX: Normalize Firestore values (string → boolean)
+function normalizeIsPremium(value) {
+  if (value === true) return true;
+  if (value === "true") return true;
+  if (value === 1) return true;
+  return false;
+}
+
 export default NextAuth({
   providers: [
     CredentialsProvider({
@@ -21,13 +29,14 @@ export default NextAuth({
           const userQuery = firestore
             .collection("users")
             .where("email", "==", email);
-          const snapshot = await userQuery.get();
 
+          const snapshot = await userQuery.get();
           if (snapshot.empty) return null;
 
           const userDoc = snapshot.docs[0];
           const user = userDoc.data();
 
+          // Validate password
           if (password) {
             const isValid = await bcrypt.compare(password, user.password);
             if (!isValid) return null;
@@ -37,7 +46,7 @@ export default NextAuth({
             id: userDoc.id,
             email: user.email,
             name: user.name || null,
-            isPremium: user.isPremium || false,
+            isPremium: normalizeIsPremium(user.isPremium), // 🔥 FIXED
           };
         } catch (err) {
           console.error("❌ Firebase Admin Auth error:", err);
@@ -46,24 +55,28 @@ export default NextAuth({
       },
     }),
   ],
+
   session: {
     strategy: "jwt",
     maxAge: 24 * 60 * 60, // 1 day
   },
+
   jwt: {
     maxAge: 24 * 60 * 60,
   },
+
   callbacks: {
     async jwt({ token, user, trigger, session }) {
+      // On login
       if (user) {
-        token.id = user.id; // Firestore doc ID
-        token.uid = user.id; // 🔥 Add this line
+        token.id = user.id;
+        token.uid = user.id;
         token.email = user.email;
         token.name = user.name;
-   
-    
+        token.isPremium = normalizeIsPremium(user.isPremium); // 🔥 FIXED
       }
 
+      // Refresh token from Firestore
       if (token.id) {
         try {
           const userDoc = await firestore
@@ -73,7 +86,7 @@ export default NextAuth({
 
           const userData = userDoc.data();
 
-          token.isPremium = userData?.isPremium || false;
+          token.isPremium = normalizeIsPremium(userData?.isPremium); // 🔥 FIXED
           token.emailVerified = userData?.isVerified || false;
         } catch (err) {
           console.error("❌ Firebase Admin Auth error:", err);
@@ -82,8 +95,9 @@ export default NextAuth({
         }
       }
 
+      // If session updated manually
       if (trigger === "update" && session?.isPremium !== undefined) {
-        token.isPremium = session.isPremium;
+        token.isPremium = normalizeIsPremium(session.isPremium); // 🔥 FIXED
       }
 
       return token;
@@ -91,13 +105,17 @@ export default NextAuth({
 
     async session({ session, token }) {
       session.user.id = token.id;
-      session.user.uid = token.uid; // 🔥 Add this line
+      session.user.uid = token.uid;
       session.user.email = token.email;
       session.user.name = token.name;
-      session.user.isPremium = token.isPremium;
+
+      // 🔥 FIX: Guarantee true boolean always
+      session.user.isPremium = normalizeIsPremium(token.isPremium);
+
       session.user.emailVerified = token.emailVerified;
       return session;
     },
   },
+
   secret: process.env.NEXTAUTH_SECRET,
 });

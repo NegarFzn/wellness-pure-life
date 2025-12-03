@@ -10,7 +10,7 @@ export default function PremiumButton() {
 
   const handleUpgrade = () => {
     closeChat();
-    router.push("/premium");
+    router.push("/upgrade");
   };
 
   return (

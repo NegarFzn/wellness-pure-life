@@ -324,6 +324,9 @@ export default function Header({ weather }) {
               <li>
                 <NavLink href="/contact">Contact</NavLink>
               </li>
+              <li>
+                <NavLink href="/premium">Premium</NavLink>
+              </li>
 
               {/* weather + auth/profile part stays the same */}
               <li

@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import PremiumButton from "../../PremiumButton/PremiumButton";
 import ShareButton from "../../UI/ShareButton";
 import classes from "./PlanSummary.module.css";
-import Button from "../../UI/button";
 
 export default function MultiPlanSummary({ answers, questions = [], slug }) {
   const [showPremium, setShowPremium] = useState(true);
@@ -221,59 +220,20 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
 
       {/* ✅ PREMIUM SOFT TRIGGER */}
       {!isPremium && session?.user && (
-        <>
-          <div className={classes.lockPreviewBox}>
-            <h3 className={classes.lockTitle}>
-              ✨ Your personalized plan is ready
-            </h3>
+        <div className={classes.strictLockBox}>
+          <h3 className={classes.lockTitle}>Premium Required</h3>
 
-            <p className={classes.lockText}>
-              You can preview your plan now, and unlock the full detailed
-              version anytime you feel ready.
-            </p>
+          <p className={classes.lockText}>
+            Your personalized fitness plan is ready. Upgrade to Premium to
+            unlock the full detailed version.
+          </p>
 
-            <button
-              className={classes.unlockButton}
-              onClick={() => setShowPremiumModal(true)}
-            >
-              Preview My Plan
-            </button>
-          </div>
+          <PremiumButton category={category} />
 
-          {/* ✅ SOFT PREMIUM MODAL */}
-          {showPremiumModal && (
-            <div
-              className={classes.modalOverlay}
-              onClick={() => setShowPremiumModal(false)}
-            >
-              <div
-                className={classes.modalBox}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <h3 className={classes.modalTitle}>
-                  ✨ Your full wellness plan is available
-                </h3>
-
-                <p className={classes.modalText}>
-                  Your personalized plan is ready. Premium members can unlock
-                  full guidance, advanced progress tracking, and expert-level
-                  features at any time.
-                </p>
-
-                <div className={classes.modalAction}>
-                  <PremiumButton category={category} />
-                </div>
-
-                <button
-                  className={classes.modalClose}
-                  onClick={() => setShowPremiumModal(false)}
-                >
-                  View basic version for now
-                </button>
-              </div>
-            </div>
-          )}
-        </>
+          <p className={classes.lockNote}>
+            You can explore our free wellness guides anytime.
+          </p>
+        </div>
       )}
 
       {/* 📘 Blog CTA */}
