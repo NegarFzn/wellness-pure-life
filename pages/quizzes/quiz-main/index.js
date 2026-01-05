@@ -1,15 +1,24 @@
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import DailyRitual from "../../../components/DailyRitual";
+import MultiStartQuiz from "../../../components/Quiz/QuizPlan/1_StartQuiz";
 import classes from "./index.module.css";
 
 export default function QuizMainPage() {
+  const { data: session } = useSession();
+  const user = session?.user;
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+
+  // ✅ MODAL STATE
+  const [activeQuiz, setActiveQuiz] = useState(null);
+  const closeQuizModal = () => setActiveQuiz(null);
 
   const categories = [
     { label: "All", value: "all", icon: "🌍" },
@@ -58,16 +67,9 @@ export default function QuizMainPage() {
   };
 
   const filteredQuizzes = quizzes.filter((quiz) => {
-    // Special cases based on slug
-    if (activeCategory === "stress-check") {
-      return quiz.slug === "stress-check";
-    }
+    if (activeCategory === "stress-check") return quiz.slug === "stress-check";
+    if (activeCategory === "life-balance") return quiz.slug === "life-balance";
 
-    if (activeCategory === "life-balance") {
-      return quiz.slug === "life-balance";
-    }
-
-    // Normal category filtering
     const categoryMatch =
       activeCategory === "all" ||
       quiz.category === activeCategory.toLowerCase();
@@ -89,51 +91,34 @@ export default function QuizMainPage() {
           name="description"
           content="Browse all wellness quizzes on fitness, mindfulness, nutrition, stress and balance. Discover insights tailored to your lifestyle."
         />
-
-        {/* Open Graph for sharing */}
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Wellness Pure Life" />
-        <meta
-          property="og:title"
-          content="All Wellness Quizzes | Wellness Pure Life"
-        />
-        <meta
-          property="og:description"
-          content="Browse all wellness quizzes on fitness, mindfulness, nutrition, stress and balance. Discover insights tailored to your lifestyle."
-        />
-        <meta
-          property="og:image"
-          content="https://wellnesspurelife.com/images/logo.jpg"
-        />
-        <meta
-          property="og:url"
-          content="https://wellnesspurelife.com/quizzes/quiz-main"
-        />
-
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="All Wellness Quizzes | Wellness Pure Life"
-        />
-        <meta
-          name="twitter:description"
-          content="Browse all wellness quizzes on fitness, mindfulness, nutrition, stress and balance. Discover insights tailored to your lifestyle."
-        />
-        <meta
-          name="twitter:image"
-          content="https://wellnesspurelife.com/images/logo.jpg"
-        />
-
-        {/* Canonical */}
         <link
           rel="canonical"
           href="https://wellnesspurelife.com/quizzes/quiz-main"
         />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>{" "}
+      </Head>
+
       <div className={classes.container}>
-        <h1 className={classes.heading}>📝 All Quizzes</h1>
+        {/* ✅ BLOCK 1 — PREMIUM ENGINE HERO */}
+        <section className={classes.premiumHero}>
+          <h1>Your Personalized AI Wellness System</h1>
+          <p>
+            Build your weekly wellness plan, daily rituals, and long-term
+            balance based on your real lifestyle.
+          </p>
+
+          <div className={classes.heroButtons}>
+            <Link href="/plan/weekly-plan" className={classes.primaryCta}>
+              Build My Weekly Plan
+            </Link>
+
+            <Link href="/sample/weekly-plan" className={classes.secondaryCta}>
+              View Sample Plan
+            </Link>
+          </div>
+        </section>
+
+        {/* ✅ BLOCK 2 — FREE QUIZ DISCOVERY */}
+        <h2 className={classes.heading}>Explore Your Wellness Profile</h2>
 
         <div className={classes.stickyBar}>
           <input
@@ -202,19 +187,76 @@ export default function QuizMainPage() {
                 </li>
               ))}
             </ul>
-
-            {showClear && (
-              <button
-                className={classes.clearFilters}
-                onClick={() => {
-                  setSearchTerm("");
-                  setActiveCategory("all");
-                }}
-              >
-                🔄 Clear Filters
-              </button>
-            )}
           </>
+        )}
+
+        {/* ✅ BLOCK 3 — PLAN BRIDGE (MODAL-BASED) */}
+        <section className={classes.planBridgePremium}>
+          <p className={classes.planBridgeTitle}>
+            💡 Want to improve your wellness? Retake any plan quiz below:
+          </p>
+
+          <div className={classes.planButtonsRow}>
+            <button
+              className={classes.planButtonFitness}
+              onClick={() => setActiveQuiz("fitness")}
+            >
+              💪 Fitness Plan
+            </button>
+
+            <button
+              className={classes.planButtonMind}
+              onClick={() => setActiveQuiz("mindfulness")}
+            >
+              🧘 Mindfulness Plan
+            </button>
+          </div>
+
+          <div className={classes.planButtonsRowSingle}>
+            <button
+              className={classes.planButtonNourish}
+              onClick={() => setActiveQuiz("nourish")}
+            >
+              🥗 Nourish Plan
+            </button>
+          </div>
+        </section>
+        {/* ✅ BLOCK 4 — DAILY RITUAL (REAL COMPONENT, PREMIUM-AWARE) */}
+        <section className={classes.dailyRitualWrapper}>
+          <h3 className={classes.dailyRitualTitle}>Your Daily Ritual System</h3>
+
+          <DailyRitual isPremium={user?.isPremium} />
+        </section>
+
+        {/* ✅ BLOCK 5 — BLOG SUPPORT */}
+        <section className={classes.blogSupport}>
+          <p>Want to learn while deciding?</p>
+
+          <Link href="/blog" className={classes.textLink}>
+            Explore Wellness Guides →
+          </Link>
+        </section>
+
+        {/* ✅ ✅ PLAN QUIZ MODAL */}
+        {activeQuiz && (
+          <div
+            className={classes.modalOverlay}
+            onClick={() => closeQuizModal()}
+          >
+            <div
+              className={classes.modalContent}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className={classes.closeModal}
+                onClick={() => closeQuizModal()}
+              >
+                ❌
+              </button>
+
+              <MultiStartQuiz slug={`${activeQuiz}-plan`} />
+            </div>
+          </div>
         )}
       </div>
     </>

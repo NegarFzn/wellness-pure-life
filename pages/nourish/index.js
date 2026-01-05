@@ -10,7 +10,7 @@ import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
 import NourishHighlights from "../../components/TopPages/NourishHighlights";
 import classes from "./index.module.css";
 import NourishList from "../../components/nourish/nourish-list";
-import ChallengeBox from "../../components/ChallengeBox/ChallengeBox";
+import ChallengeCard from "../../components/ChallengeCard/ChallengeCard";
 
 function NourishPage(props) {
   const [showButton, setShowButton] = useState(false);
@@ -325,11 +325,11 @@ function NourishPage(props) {
           <div className={classes.challengeHeader}>
             Start Your Nourish Journey
           </div>
-          <ChallengeBox
+          <ChallengeCard
             title="Nourish Your Body in 21 Days"
             description="Enjoy daily nutrition goals, simple recipes, and mindful eating habits that help you feel lighter, healthier, and more energized — one bite at a time."
-            href="/challenge/21-days-nourish/1"
-            color="#fbc02d" // Sunny yellow for warmth and vitality
+            href="/challenges/21-days-nourish/1"
+            color="#009B77" // Sunny yellow for warmth and vitality
           />
         </section>
 

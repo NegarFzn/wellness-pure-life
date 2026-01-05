@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { getSession } from "next-auth/react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import MultiStartQuiz from "../../../components/Quiz/QuizPlan/1_StartQuiz";
 import classes from "./QuizPage.module.css";
+import Subscribe from "../../../components/Subscribe/subscribe";
 
 // Optional: key normalization map (only if needed across quizzes)
 const keyMap = {
-  time: "timeOfDay", // Fix mismatch between frontend & DB keys
+  time: "timeOfDay",
 };
 
 export default function QuizPage() {
   const router = useRouter();
   const { slug } = router.query;
+
+  // ✅ LIVE SESSION FROM NEXTAUTH
+  const { data: session } = useSession();
+  const user = session?.user;
 
   const [quiz, setQuiz] = useState(null);
   const [activeQuiz, setActiveQuiz] = useState(null);
@@ -23,6 +27,9 @@ export default function QuizPage() {
   const [error, setError] = useState(null);
   const [inlineError, setInlineError] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [isSent, setIsSent] = useState(false);
+  
 
   const planTypes = [
     { type: "fitness", label: "💪 Fitness Plan" },
@@ -31,22 +38,22 @@ export default function QuizPage() {
   ];
 
   const handleQuizOpen = (type) => {
-    setActiveQuiz(type); // triggers useEffect
+    setActiveQuiz(type);
   };
 
   const closeQuizModal = () => {
     setActiveQuiz(null);
   };
 
-  // 🔹 Auto-fill email from session
+  // ✅ AUTO SYNC AUTH STATE FROM NEXTAUTH
   useEffect(() => {
-    getSession().then((session) => {
-      if (session?.user?.email) {
-        setEmail(session.user.email);
-        setIsAuthenticated(true);
-      }
-    });
-  }, []);
+    if (session?.user?.email) {
+      setEmail(session.user.email);
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, [session]);
 
   // 🔹 Load quiz by slug
   useEffect(() => {
@@ -92,7 +99,6 @@ export default function QuizPage() {
 
     const trimmedEmail = email?.trim();
 
-    // Validation
     if (!quiz || quiz.questions.some((q) => !answers[q.key])) {
       setInlineError("⚠️ Please answer all questions before submitting.");
       return;
@@ -105,23 +111,15 @@ export default function QuizPage() {
 
     const normalizedAnswers = normalizeAnswers(answers);
 
-    // Try login silently
+    // ✅ SILENT AUTH (UNCHANGED)
     const login = await signIn("credentials", {
       redirect: false,
       email: trimmedEmail,
     });
 
-    // Check login success
-    if (login?.error) {
-      console.log("Login failed:", login.error);
-    } else {
+    if (!login?.error) {
       setIsAuthenticated(true);
     }
-
-    await signIn("credentials", {
-      redirect: false,
-      email: trimmedEmail,
-    });
 
     try {
       const res = await fetch("/api/quiz/quiz-main", {
@@ -142,14 +140,52 @@ export default function QuizPage() {
     }
   };
 
-  // 🔹 Error screen
   if (error) {
     return <div className={classes.error}>{error}</div>;
   }
 
-  // 🔹 Loading
   if (!quiz) {
     return <div className={classes.loading}>⏳ Loading quiz...</div>;
+  }
+
+  async function handleSendEmail() {
+    setIsSending(true);
+    setIsSent(false);
+
+    const finalEmail = user?.email || email?.trim() || result?.email;
+
+    if (!finalEmail) {
+      alert("Email is missing. Please login or enter your email.");
+      setIsSending(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/quiz/quiz-main?mode=send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: finalEmail,
+          slug,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setIsSending(false);
+        setIsSent(true);
+        setTimeout(() => setIsSent(false), 3000);
+      } else {
+        setIsSending(false);
+        alert(data.error || "Email sending failed.");
+      }
+    } catch (err) {
+      setIsSending(false);
+      alert("Network error. Please try again.");
+    }
   }
 
   return (
@@ -164,67 +200,11 @@ export default function QuizPage() {
           name="description"
           content={
             quiz?.description ||
-            "Discover personalized wellness tips with our interactive quiz. Tailored fitness, nutrition, and mindfulness guidance for a better life."
+            "Discover personalized wellness tips with our interactive quiz."
           }
         />
+      </Head>
 
-        {/* Open Graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Wellness Pure Life" />
-        <meta
-          property="og:title"
-          content={
-            quiz?.title
-              ? `${quiz.title} – Wellness Pure Life Quiz`
-              : "Wellness Quiz – Wellness Pure Life"
-          }
-        />
-        <meta
-          property="og:description"
-          content={
-            quiz?.description ||
-            "Discover personalized wellness tips with our interactive quiz. Tailored fitness, nutrition, and mindfulness guidance for a better life."
-          }
-        />
-        <meta
-          property="og:image"
-          content="https://wellnesspurelife.com/images/social-card.jpg"
-        />
-        <meta
-          property="og:url"
-          content={`https://wellnesspurelife.com/quizzes/quiz-main/${slug}`}
-        />
-
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content={
-            quiz?.title
-              ? `${quiz.title} – Wellness Pure Life Quiz`
-              : "Wellness Quiz – Wellness Pure Life"
-          }
-        />
-        <meta
-          name="twitter:description"
-          content={
-            quiz?.description ||
-            "Discover personalized wellness tips with our interactive quiz. Tailored fitness, nutrition, and mindfulness guidance for a better life."
-          }
-        />
-        <meta
-          name="twitter:image"
-          content="https://wellnesspurelife.com/images/social-card.jpg"
-        />
-
-        {/* Extra */}
-        <meta name="robots" content="index, follow" />
-        <link
-          rel="canonical"
-          href={`https://wellnesspurelife.com/quizzes/quiz-main/${slug}`}
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>{" "}
       <div className={classes.container}>
         <h1 className={classes.title}>{quiz.title || slug}</h1>
 
@@ -294,39 +274,76 @@ export default function QuizPage() {
                 <p>No matching recommendation found for your responses.</p>
               )}
             </div>
+            {/* ✅ PREMIUM SEND EMAIL BUTTON */}
+            <button
+              className={`${classes.sendEmailButton} ${
+                isSent ? classes.sent : ""
+              } ${isSending ? classes.sending : ""}`}
+              onClick={handleSendEmail}
+              disabled={isSending || isSent}
+            >
+              <span className={classes.emailIconWrap}>
+                {!isSending && !isSent && (
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                    <polyline points="3,5 12,13 21,5" />
+                  </svg>
+                )}
+
+                {isSending && <span className={classes.spinner}></span>}
+
+                {isSent && (
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#10b981"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="4 12 10 17 20 6" />
+                  </svg>
+                )}
+              </span>
+
+              <span className={classes.emailButtonText}>
+                {!isSending && !isSent && "Send My Results to Email"}
+                {isSending && <span className={classes.spinner}></span>}
+                {isSent && "Sent Successfully"}
+              </span>
+            </button>
           </div>
         )}
 
-        {/* 📘 Blog CTA */}
         <div className={classes.blogCtaWrap}>
-          <p className={classes.premiumNote}>
-            ✨ Want deeper guidance? <br />
-            <span>
-              Full access to all personalized wellness guides is part of our
-              Premium Membership. You can continue exploring the free version,
-              or upgrade anytime you feel ready.
-            </span>
-          </p>
-
           <a href="/blog" className={classes.blogCta}>
             Explore More Wellness Guides →
           </a>
         </div>
+
+        {/* =========================
+            EMAIL CAPTURE — FREE QUIZ
+        ========================== */}
+
+        {result && <Subscribe />}
+
         <div className={classes.softPremiumBox}>
           <h4 className={classes.softPremiumTitle}>
             ✨ Turn your results into a structured plan
           </h4>
 
-          <p className={classes.softPremiumText}>
-            Your results are complete. Premium helps you turn them into a clear
-            weekly action plan with reminders, progress tracking, and guided
-            structure.
-          </p>
-
           <div className={classes.noPlan}>
-            <p className={classes.noPlanText}>
-              💡 Want to improve your wellness? Retake any plan quiz below:
-            </p>
             <div className={classes.planLinksGrid}>
               {planTypes.map(({ type, label }) => (
                 <button
@@ -340,7 +357,6 @@ export default function QuizPage() {
             </div>
           </div>
 
-          {/* ✅ Modal for MultiStartQuiz */}
           {activeQuiz && (
             <div
               className={classes.modalOverlay}
@@ -356,7 +372,7 @@ export default function QuizPage() {
                 >
                   ❌
                 </button>
-                {activeQuiz && <MultiStartQuiz slug={`${activeQuiz}-plan`} />}
+                <MultiStartQuiz slug={`${activeQuiz}-plan`} />
               </div>
             </div>
           )}

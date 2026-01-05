@@ -1,18 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";  // <-- FIX
 import classes from "./nav-link.module.css";
 
 export default function NavLink({ href, children }) {
-  const path = usePathname();
+  const router = useRouter();
+  const pathname = router.pathname || "";
 
-  const isActive = path ? path.startsWith(href) : false;
+  const isActive =
+    pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <Link
       href={href}
-      className={isActive ? `${classes.active} ${classes.link}` : classes.link}
+      className={`${classes.link} ${isActive ? classes.active : ""}`}
     >
       {children}
     </Link>

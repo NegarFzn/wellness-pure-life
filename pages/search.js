@@ -87,7 +87,7 @@ export default function SearchPage() {
         />
         <meta property="og:url" content="https://wellnesspurelife.com/search" />
         <meta name="twitter:card" content="summary_large_image" />
-        <link rel="icon" href="/logo.jpg" />
+        <link rel="icon" href="/logo.png" />
         <link rel="canonical" href="https://wellnesspurelife.com/search" />
       </Head>{" "}
       <div className={classes.pageWrapper}>

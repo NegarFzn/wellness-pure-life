@@ -1,56 +1,255 @@
-.card {
-  background: #ffffff;
-  border-radius: 14px;
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+.dayCard {
+  background: var(--cream);
+  border-radius: 22px;
+  padding: 0;
   overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.header {
-  width: 100%;
-  border: none;
-  background: #f8fafc;
-  padding: 1rem 1.2rem;
+.dayCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.09);
+}
+
+/* ---------------- Mood Colors ---------------- */
+
+.mood_sand { background: #f7efe3; }
+.mood_rose { background: #fdeff5; }
+.mood_fog { background: #eef1ff; }
+.mood_sage { background: #e9f5ef; }
+
+/* ---------------- Header ---------------- */
+
+.details summary {
+  list-style: none;
+}
+
+.details summary::-webkit-details-marker {
+  display: none;
+}
+
+.dayHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 14px;
+  padding: 1.4rem 1.6rem;
   cursor: pointer;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-dark);
 }
 
-.label {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: #111827;
+.dayCircle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--fog);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #3a4b8f;
 }
 
-.icon {
+.dayLabel {
   font-size: 1.3rem;
-  color: #64748b;
 }
 
-.body {
-  padding: 1.2rem 1.3rem 1.5rem;
-  animation: fadeIn 0.25s ease;
+.dateLabel {
+  font-size: 0.9rem;
+  color: #6b7280;
 }
 
-.title {
-  font-size: 1rem;
-  margin-bottom: 0.4rem;
-  color: #334155;
+/* ---------------- Sections ---------------- */
+
+.section {
+  background: var(--sand, #f5ede0);
+  padding: 1.1rem 1.2rem;
+  border-radius: 14px;
+  margin: 1rem 1.6rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.description {
+.sectionTitle {
+  margin: 0 0 0.4rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.sectionText {
   font-size: 0.95rem;
-  color: #475569;
+  color: #374151;
+  line-height: 1.5;
 }
 
-.meta {
-  margin-top: 0.5rem;
+/* ---------------- Day Period Colors ---------------- */
+
+.morning {
+  background: #fff3cf;
+}
+
+.midday {
+  background: #e4f1ff;
+}
+
+.evening {
+  background: #ede9fe;
+}
+
+/* ---------------- Section Header ---------------- */
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ---------------- Titles ---------------- */
+
+.itemTitle {
+  font-weight: 600;
+  margin-top: 0.6rem;
+  margin-bottom: 0.2rem;
+}
+
+/* ---------------- Duration Badge ---------------- */
+
+.durationBadge {
+  background: #dde7ff;
+  color: #2b3b80;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 0.4rem;
+}
+
+/* ---------------- Check Button ---------------- */
+
+.checkButton {
+  border: none;
+  padding: 6px 14px;
+  border-radius: 10px;
+  cursor: pointer;
   font-size: 0.85rem;
-  color: #64748b;
+  font-weight: 600;
+  background: #e5e7eb;
+  color: #374151;
+  transition: 0.2s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+.checkButton:hover {
+  background: #d4d6da;
+}
+
+.checkOn {
+  background: #7cc5a3 !important;
+  color: white !important;
+  box-shadow: 0 4px 10px rgba(124, 197, 163, 0.28);
+}
+
+/* ---------------- Mentor Tip ---------------- */
+
+.mentorBox {
+  border-radius: 14px;
+  background: #fff7cc;
+  border-left: 4px solid #f6c453;
+  padding: 0.8rem 1rem;
+  margin: 1rem 1.6rem;
+  font-size: 0.95rem;
+}
+
+/* ---------------- Quote ---------------- */
+
+.quoteBox {
+  padding: 1rem 1.6rem 1.6rem 1.6rem;
+  background: #f8f5ff;
+  border-left: 4px solid #bda9ff;
+  margin-top: 1rem;
+}
+
+.quoteText {
+  font-style: italic;
+  color: #4b5563;
+  margin-bottom: 0.4rem;
+}
+
+.quoteAuthor {
+  text-align: right;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 640px) {
+  .dayCard {
+    border-radius: 18px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  }
+
+  .dayHeader {
+    padding: 1.05rem 1.1rem;
+    font-size: 1rem;
+    gap: 10px;
+  }
+
+  .dayCircle {
+    width: 30px;
+    height: 30px;
+    font-size: 0.85rem;
+  }
+
+  .dayLabel {
+    font-size: 1.05rem;
+  }
+
+  .dateLabel {
+    font-size: 0.8rem;
+  }
+
+  .section {
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+  }
+
+  .sectionTitle {
+    font-size: 1rem;
+  }
+
+  .sectionText {
+    font-size: 0.9rem;
+  }
+
+  .durationBadge {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+
+  .checkButton {
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+
+  .mentorBox {
+    margin: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .quoteBox {
+    padding: 0.9rem 1rem 1.2rem 1rem;
+  }
+
+  .quoteText {
+    font-size: 0.9rem;
+  }
+
+  .quoteAuthor {
+    font-size: 0.8rem;
+  }
 }

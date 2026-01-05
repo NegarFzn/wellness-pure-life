@@ -1,49 +1,60 @@
+// pages/api/premium-reminder.js
 import { getSession } from "next-auth/react";
-import { firestore } from "../../utils/firebaseAdmin";
+import { connectToDatabase } from "../../utils/mongodb";
 
 export default async function handler(req, res) {
   const session = await getSession({ req });
   const email = session?.user?.email;
   const category = req.query.category || "fitness";
 
-  if (!email) return res.status(200).json({ show: true }); // Show for guests
+  // Guests must always see the premium reminder
+  if (!email) return res.status(200).json({ show: true });
 
-  // 🔍 Find the document where email matches
-  const querySnapshot = await firestore
-    .collection("users")
-    .where("email", "==", email)
-    .limit(1)
-    .get();
+  const { db } = await connectToDatabase();
+  const users = db.collection("users");
 
-  if (querySnapshot.empty) {
-    return res.status(404).json({ error: "User not found" });
+  // Find user in MongoDB (source of truth)
+  const user = await users.findOne({ email });
+
+  if (!user) {
+    return res.status(200).json({ show: true });
   }
 
-  const userDoc = querySnapshot.docs[0];
-  const userRef = firestore.collection("users").doc(userDoc.id);
-  const userData = userDoc.data();
-
+  // Category-specific dismissal key
   const fieldKey = `premiumDismissedAt_${category}`;
 
+  // -------------------------
+  // POST → User clicked “Not now”
+  // -------------------------
   if (req.method === "POST") {
-    await userRef.set(
+    await users.updateOne(
+      { email },
       {
-        [fieldKey]: new Date().toISOString(),
-      },
-      { merge: true }
+        $set: {
+          [fieldKey]: new Date(),
+          updatedAt: new Date(),
+        },
+      }
     );
+
     return res.status(200).json({ ok: true });
   }
 
+  // -------------------------
+  // GET → Check if reminder should show
+  // -------------------------
   if (req.method === "GET") {
-    const last = userData?.[fieldKey];
+    const lastDismissed = user[fieldKey];
+
     const remindInDays = 3;
 
     const shouldShow =
-      !last || new Date(last).getTime() + remindInDays * 86400000 < Date.now();
+      !lastDismissed ||
+      new Date(lastDismissed).getTime() + remindInDays * 24 * 60 * 60 * 1000 <
+        Date.now();
 
     return res.status(200).json({ show: shouldShow });
   }
 
-  res.status(405).end(); // Unsupported method
+  return res.status(405).end();
 }

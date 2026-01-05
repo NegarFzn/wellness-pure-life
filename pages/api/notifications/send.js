@@ -1,5 +1,5 @@
 import { Expo } from "expo-server-sdk";
-import { firestore } from "../../../utils/firebaseAdmin";
+import { connectToDatabase } from "../../../utils/mongodb";
 
 const expo = new Expo();
 
@@ -9,19 +9,23 @@ export default async function handler(req, res) {
   }
 
   try {
-    const snapshot = await firestore
-      .collection("users")
-      .where("pushToken", "!=", null)
-      .get();
+    const { db } = await connectToDatabase();
+    const collection = db.collection("users");
 
-    if (snapshot.empty) {
+    // Fetch users with a registered push token
+    const users = await collection
+      .find({ pushToken: { $exists: true, $ne: null } })
+      .toArray();
+
+    if (users.length === 0) {
       return res.status(404).json({ message: "No users with push tokens" });
     }
 
     const messages = [];
 
-    snapshot.forEach((doc) => {
-      const { pushToken, name } = doc.data();
+    for (const user of users) {
+      const { pushToken, name } = user;
+
       if (Expo.isExpoPushToken(pushToken)) {
         messages.push({
           to: pushToken,
@@ -30,7 +34,7 @@ export default async function handler(req, res) {
           body: `Hey ${name || "there"}, time for your next workout!`,
         });
       }
-    });
+    }
 
     const chunks = expo.chunkPushNotifications(messages);
     const tickets = [];
@@ -40,9 +44,12 @@ export default async function handler(req, res) {
       tickets.push(...ticketChunk);
     }
 
-    res.status(200).json({ message: "Push notifications sent", tickets });
+    return res.status(200).json({
+      message: "Push notifications sent",
+      tickets,
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to send notifications" });
+    console.error("❌ Push notification error:", err);
+    return res.status(500).json({ message: "Failed to send notifications" });
   }
 }

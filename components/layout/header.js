@@ -8,7 +8,7 @@ import { useUI } from "../../context/UIContext";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import { toast } from "react-toastify";
-import logoImg from "../../public/images/logo.jpg";
+import logoImg from "../../public/images/logo.png";
 import { FiUser, FiLogOut } from "react-icons/fi";
 import ChallengeBox from "./ChallengeBox";
 import TopicsColumn from "./TopicsColumn";
@@ -235,7 +235,7 @@ export default function Header({ weather }) {
           <div className={classes.searchContainer}>
             <input
               type="text"
-              placeholder="Search wellness topics..."
+              placeholder="Find your personalized wellness plan…"
               className={classes.searchInput}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -324,7 +324,7 @@ export default function Header({ weather }) {
               <li>
                 <NavLink href="/contact">Contact</NavLink>
               </li>
-              <li>
+              <li className={classes.premiumNavItem}>
                 <NavLink href="/premium">Premium</NavLink>
               </li>
 

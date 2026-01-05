@@ -1,60 +1,48 @@
-import OpenAI, { AzureOpenAI } from "openai";
+// utils/ai.js
+import OpenAI from "openai";
 
-const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
-const azureApiKey = process.env.AZURE_OPENAI_API_KEY;
-const deployment = process.env.AZURE_OPENAI_DEPLOYMENT_NAME;
-const apiVersion = process.env.AZURE_OPENAI_API_VERSION || "2024-04-01-preview";
-const openaiApiKey = process.env.OPENAI_API_KEY;
+const apiKey = process.env.AZURE_OPENAI_API_KEY;
+const baseURL = process.env.AZURE_OPENAI_ENDPOINT;
 
-const useAzure = !!endpoint && !!azureApiKey && !!deployment;
+if (!apiKey) throw new Error("Missing AZURE_OPENAI_API_KEY");
+if (!baseURL) throw new Error("Missing AZURE_OPENAI_ENDPOINT");
 
-let aiClient = null;
-
-if (useAzure) {
-  try {
-    aiClient = new AzureOpenAI({
-      endpoint,
-      apiKey: azureApiKey,
-      deployment,
-      apiVersion,
-    });
-  } catch (error) {
-    console.error("❌ Failed to initialize Azure OpenAI client:", error);
-  }
-} else if (openaiApiKey) {
-  try {
-    aiClient = new OpenAI({ apiKey: openaiApiKey });
-  } catch (error) {
-    console.error("❌ Failed to initialize OpenAI client:", error);
-  }
-}
+// Azure client (no apiVersion added)
+export const aiClient = new OpenAI({
+  apiKey,
+  baseURL, // you are already setting it in env
+});
 
 export async function getAIChatCompletion(
   messages,
   {
-    temperature = 0.5,
-    maxTokens = 500,
+    model = "gpt-4o",
+    temperature = 0.7,
+    maxTokens = 1000,
     topP = 0.9,
-    frequencyPenalty = 0.5,
   } = {}
 ) {
-  if (!messages || !Array.isArray(messages)) {
-    throw new Error("Missing or invalid 'messages'");
+  if (!Array.isArray(messages)) {
+    throw new Error("Messages must be an array");
   }
 
-  if (!aiClient) {
-    throw new Error("No valid AI client configuration found.");
+  try {
+    const input = messages.map((m) => ({
+  role: m.role,
+  content: m.content   // plain string only
+}));
+
+    const response = await aiClient.responses.create({
+      model,
+      input,
+      temperature,
+      top_p: topP,
+      max_output_tokens: maxTokens,
+    });
+
+    return response.output_text?.trim() || "";
+  } catch (err) {
+    console.error("❌ OpenAI API Error:", err.response?.data || err);
+    throw new Error("AI generation failed");
   }
-
-  const payload = {
-    messages,
-    temperature,
-    max_tokens: maxTokens,
-    top_p: topP,
-    frequency_penalty: frequencyPenalty,
-    model: useAzure ? undefined : "gpt-4",
-  };
-
-  const response = await aiClient.chat.completions.create(payload);
-  return response.choices?.[0]?.message?.content?.trim();
 }

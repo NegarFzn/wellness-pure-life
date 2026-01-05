@@ -1,5 +1,8 @@
+"use client";
+
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import classes from "./header.module.css";
 
 export default function MobileNav({
@@ -11,13 +14,14 @@ export default function MobileNav({
   user,
 }) {
   const [activeMobileSection, setActiveMobileSection] = useState(null);
+  const router = useRouter();
 
   const handleSurprise = () => {
     const topics = topicsMap[activeMobileSection] || [];
     if (topics.length > 0) {
       const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-      if (randomTopic) {
-        window.location.href = randomTopic.href;
+      if (randomTopic?.href) {
+        router.push(randomTopic.href);
       }
     }
     setActiveMobileSection(null);
@@ -25,48 +29,35 @@ export default function MobileNav({
   };
 
   return (
-    <nav className={classes.mobileNav}>
+    <nav className={classes.mobileNav} aria-label="Mobile navigation">
       {!activeMobileSection ? (
         <ul className={classes.topLevelNav}>
           {navItems.map((label) => (
             <li key={label}>
               <button
+                type="button"
                 className={classes.navButton}
                 onClick={() => setActiveMobileSection(label)}
+                aria-expanded={activeMobileSection === label}
               >
                 {label}
                 <span className={classes.arrow}>›</span>
               </button>
             </li>
           ))}
-          <li>
-            <Link
-              href="/blog"
-              className={classes.mobileNavLink}
-              onClick={closeMenu}
-            >
-              Blog
-            </Link>
-          </li>
 
-          <li>
-            <Link
-              href="/news"
-              className={classes.mobileNavLink}
-              onClick={closeMenu}
-            >
-              News
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/contact"
-              className={classes.mobileNavLink}
-              onClick={closeMenu}
-            >
-              Contact
-            </Link>
-          </li>
+          {["blog", "news", "contact"].map((item) => (
+            <li key={item}>
+              <Link
+                href={`/${item}`}
+                className={classes.mobileNavLink}
+                onClick={closeMenu}
+              >
+                {item.charAt(0).toUpperCase() + item.slice(1)}
+              </Link>
+            </li>
+          ))}
+
           <li>
             <Link
               href="/premium"
@@ -76,13 +67,13 @@ export default function MobileNav({
               Premium
             </Link>
           </li>
-          
+
           <li className={classes.mobileWeather}>
             {weather ? (
               <>
                 <img
                   src={weather.current.condition.icon}
-                  alt="Weather icon"
+                  alt={weather.current.condition.text}
                   className={classes.weatherIcon}
                 />
                 <div className={classes.weatherText}>
@@ -93,18 +84,20 @@ export default function MobileNav({
                 </div>
               </>
             ) : (
-              <div className={classes.weatherText}>Loading...</div>
+              <div className={classes.weatherText}>Loading weather…</div>
             )}
           </li>
         </ul>
       ) : (
         <div className={classes.mobileSublist}>
           <button
+            type="button"
             className={classes.backButton}
             onClick={() => setActiveMobileSection(null)}
           >
             ‹ Back
           </button>
+
           <ul>
             <li>
               <Link
@@ -118,6 +111,7 @@ export default function MobileNav({
                 {activeMobileSection}
               </Link>
             </li>
+
             {(topicsMap[activeMobileSection] || []).map((item, i) => (
               <li key={i}>
                 <Link
@@ -132,55 +126,38 @@ export default function MobileNav({
                 </Link>
               </li>
             ))}
-            <li>
-              <Link
-                href={`/${activeMobileSection.toLowerCase()}`}
-                className={classes.mobileNavLink}
-                onClick={() => {
-                  setActiveMobileSection(null);
-                  closeMenu();
-                }}
-              >
-                Browse all {activeMobileSection.toLowerCase()} topics →
-              </Link>
-            </li>
+
             <li>
               <button
+                type="button"
                 className={classes.surpriseButton}
                 onClick={handleSurprise}
               >
                 Surprise Me
               </button>
             </li>
+
             <li className={classes.premiumBox}>
               <div className={classes.premiumInner}>
                 <div>
-                  <span role="img" aria-label="fire">
-                    🔥
-                  </span>{" "}
-                  <strong>7-Day Challenge</strong>
+                  🔥 <strong>7-Day Challenge</strong>
                 </div>
+
                 {user?.isPremium ? (
                   <Link
                     href="/challenge"
                     className={classes.premiumActiveLink}
-                    onClick={() => {
-                      setActiveMobileSection(null);
-                      closeMenu();
-                    }}
+                    onClick={closeMenu}
                   >
                     Start Challenge →
                   </Link>
                 ) : (
                   <>
-                    <div>This challenge is available for Premium members.</div>
+                    <div>Available for Premium members.</div>
                     <Link
-                      href="/upgrade"
+                      href="/premium"
                       className={classes.premiumLink}
-                      onClick={() => {
-                        setActiveMobileSection(null);
-                        closeMenu();
-                      }}
+                      onClick={closeMenu}
                     >
                       Upgrade to Premium →
                     </Link>

@@ -1,83 +1,253 @@
+// pages/plan/weekly-plan.js
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { toast } from "react-hot-toast";
+import PlanHistoryModal from "../../components/Plan/PlanHistoryModal";
 import WeeklyPlan from "../../components/Plan/WeeklyPlan";
 import classes from "./weekly-plan.module.css";
+
+const HISTORY_KEY = "wpl_weekly_history";
+const PROGRESS_KEY = "wpl_weekly_progress";
+
+
 
 export default function WeeklyPlanPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-
   const [plan, setPlan] = useState(null);
+  const [weekSummary, setWeekSummary] = useState("");
+  const [updatedAt, setUpdatedAt] = useState(null);
   const [loading, setLoading] = useState(true);
   const [regenerating, setRegenerating] = useState(false);
+  const [modalState, setModalState] = useState(null);
+  const [progress, setProgress] = useState({}); // { Monday: { fitness: true, ... }, ... }
+  const [showHistory, setShowHistory] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [sending, setSending] = useState(false);
 
+  function isWeekFinished(updatedAt) {
+    if (!updatedAt) return true;
+
+    const updated = new Date(updatedAt);
+    const now = new Date();
+
+    // Normalize time to midnight so partial days are not counted
+    const updatedMid = new Date(
+      updated.getFullYear(),
+      updated.getMonth(),
+      updated.getDate()
+    );
+    const nowMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    const diffDays = Math.round((nowMid - updatedMid) / (1000 * 60 * 60 * 24));
+
+    return diffDays >= 7;
+  }
+
+  const loadProgressFromStorage = (weekId) => {
+    try {
+      const raw = window.localStorage.getItem(PROGRESS_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      if (parsed.weekId !== weekId) return {};
+      return parsed.data || {};
+    } catch {
+      return {};
+    }
+  };
+
+  const saveProgressToStorage = (weekId, data) => {
+    try {
+      const payload = { weekId, data };
+      window.localStorage.setItem(PROGRESS_KEY, JSON.stringify(payload));
+    } catch {
+      // ignore
+    }
+  };
+
+  const getWeekId = (dt) => dt || "unknown_week";
+
+  // ---------- API calls ----------
 
   const loadWeeklyPlan = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
       const res = await fetch("/api/plan/weekly");
       const data = await res.json();
-      setPlan(data.error ? null : data.plan); // FIXED
+      if (!res.ok) throw new Error(data.error || "Failed to load plan");
+
+      const p = data.plan || null;
+      const weekId = getWeekId(data.updatedAt);
+
+      // FIX: normalize weeklyPlan shape (supports old history & restored plans)
+      const normalized = p?.days ? p.days : p;
+      setPlan(normalized);
+
+      setWeekSummary(data.weekSummary || "");
+      setUpdatedAt(data.updatedAt || null);
+
+      if (typeof window !== "undefined" && p) {
+        const stored = loadProgressFromStorage(weekId);
+        setProgress(stored);
+      }
     } catch (err) {
-      console.error("Load Weekly Plan Error:", err);
+      console.error("Load plan error:", err);
       setPlan(null);
+      setWeekSummary("");
+      setUpdatedAt(null);
+      setProgress({});
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const regeneratePlan = async () => {
-    setRegenerating(true);
     try {
-      const res = await fetch("/api/plan/weekly?regen=1", { method: "POST" });
+      setRegenerating(true);
+
+      // Request a new plan from API (this writes history in MongoDB)
+      const res = await fetch("/api/plan/weekly", { method: "POST" });
       const data = await res.json();
-      setPlan(data.plan); // FIXED
+      if (!res.ok) throw new Error(data.error || "Failed to regenerate plan");
+
+      // Load newest active plan from database
+      await loadWeeklyPlan();
+
+      // 🔥 Load updated MongoDB history
+      await loadHistory();
+
+      setModalState("success");
+
+      // Reset progress for new week
+      const weekId = getWeekId(data.updatedAt);
+      if (typeof window !== "undefined") {
+        saveProgressToStorage(weekId, {});
+      }
     } catch (err) {
-      console.error("Regenerate Weekly Error:", err);
+      console.error("Regenerate error:", err);
+    } finally {
+      setRegenerating(false);
     }
-    setRegenerating(false);
   };
 
-  // Load weekly plan only if authenticated AND premium
+  const loadHistory = async (page = 1) => {
+    try {
+      setHistoryLoading(true);
+
+      const res = await fetch(`/api/plan/history?page=${page}`);
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to load history");
+      }
+
+      setHistory(data.items || []);
+    } catch (err) {
+      console.error("Load history error:", err);
+      setHistory([]);
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
+  // ---------- progress toggle ----------
+
+  const toggleProgress = (day, key) => {
+    const weekId = getWeekId(updatedAt);
+    setProgress((prev) => {
+      const forDay = prev[day] || {};
+      const updated = {
+        ...prev,
+        [day]: {
+          ...forDay,
+          [key]: !forDay[key],
+        },
+      };
+      if (typeof window !== "undefined") {
+        saveProgressToStorage(weekId, updated);
+      }
+      return updated;
+    });
+  };
+
+  // ---------- effects ----------
+
   useEffect(() => {
     if (status === "authenticated" && session?.user?.isPremium) {
       loadWeeklyPlan();
     }
   }, [status, session]);
 
-  // ---------------------------
-  // AUTH CHECK FLOW (CRITICAL)
-  // ---------------------------
+  // ---------- permission gates ----------
 
-  // 1. Session still loading – do NOT render anything else
   if (status === "loading") {
     return <p className={classes.loading}>Checking your session…</p>;
   }
 
-  // 2. No session – user must sign in
+  // If user is NOT logged in
   if (!session) {
     return (
       <div className={classes.lockWrap}>
-        <h2 className={classes.lockTitle}>Weekly Plan</h2>
-        <p className={classes.lockText}>Please sign in to continue.</p>
+        <h2 className={classes.lockTitle}>Your Weekly Wellness Plan</h2>
+
+        <p className={classes.lockText}>
+          Please sign in to view your personalized weekly plan.
+        </p>
+
         <button
-          onClick={() => router.push("/auth")}
+          onClick={() => router.push("/login")}
           className={classes.lockButton}
         >
           Sign In
         </button>
+
+        <p className={classes.hintText}>
+          Don’t have an account yet?{" "}
+          <span
+            className={classes.hintLink}
+            onClick={() => router.push("/signup")}
+          >
+            Create one for free
+          </span>
+          .
+        </p>
       </div>
     );
   }
 
-  // 3. Session exists but NOT premium – show upgrade screen
+  if (!session.user?.isPremium) {
+    return (
+      <div className={classes.lockWrap}>
+        <h2 className={classes.lockTitle}>Premium Feature</h2>
+
+        <p className={classes.lockText}>
+          Your personalized weekly plan is available for Premium members.
+        </p>
+
+        <button
+          onClick={() => router.push("/premium")}
+          className={classes.lockButton}
+        >
+          Upgrade to Premium
+        </button>
+
+        <p className={classes.hintText}>
+          Premium gives you full access to weekly plans, daily rituals, sleep
+          reset, stress protocol, premium workouts and your AI coach.
+        </p>
+      </div>
+    );
+  }
+
   if (!session.user?.isPremium) {
     return (
       <div className={classes.lockWrap}>
         <h2 className={classes.lockTitle}>Weekly Plan is a Premium Feature</h2>
         <p className={classes.lockText}>
-          Unlock your personalized weekly fitness, mindfulness, and nutrition
+          Unlock your personalized weekly fitness, mindfulness and nutrition
           plan.
         </p>
         <button
@@ -90,39 +260,223 @@ export default function WeeklyPlanPage() {
     );
   }
 
-  // ---------------------------
-  // PREMIUM USER MAIN PAGE
-  // ---------------------------
+  // ---------- print handler ----------
+
+  const handlePrint = () => {
+    if (typeof window !== "undefined") {
+      window.print();
+    }
+  };
+
+  async function handleSendEmail() {
+    try {
+      const res = await fetch("/api/plan/weekly?action=email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error || "Failed to send weekly plan email.");
+        return;
+      }
+
+      toast.success("📩 Your weekly plan has been sent to your email.");
+    } catch (error) {
+      toast.error("Network error while sending email.");
+    }
+  }
+
+  const scrollToToday = () => {
+    const today = new Date().toLocaleString("en-US", { weekday: "long" });
+    const el = document.getElementById(`day-${today}`);
+
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <>
       <Head>
         <title>Your Weekly Plan | Wellness Pure Life</title>
       </Head>
 
+      {/* MAIN PAGE */}
       <div className={classes.page}>
         <h1 className={classes.title}>Your Weekly Wellness Plan</h1>
         <p className={classes.subtitle}>Fitness • Mindfulness • Nutrition</p>
 
-        <button
-          onClick={regeneratePlan}
-          className={classes.regenButton}
-          disabled={regenerating}
-        >
-          {regenerating ? "Updating…" : "Regenerate Weekly Plan"}
-        </button>
+        {weekSummary && <p className={classes.summary}>{weekSummary}</p>}
+
+        {updatedAt && (
+          <p className={classes.updated}>
+            Last updated:{" "}
+            {new Date(updatedAt).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </p>
+        )}
+
+        <div className={classes.buttonRow}>
+          <button
+            onClick={() => {
+              if (!isWeekFinished(updatedAt)) {
+                // Week is still in progress → show warning modal
+                setModalState("warning");
+              } else {
+                // Week finished → regenerate and then show success modal
+                regeneratePlan().then(() => {
+                  setModalState("success");
+                });
+              }
+            }}
+            className={`${classes.regenButton} ${
+              isWeekFinished(updatedAt) ? classes.regenGlow : ""
+            }`}
+            disabled={regenerating}
+          >
+            {regenerating ? "Updating…" : "Regenerate Weekly Plan"}
+          </button>
+
+          <button
+            type="button"
+            className={classes.historyButton}
+            onClick={() => {
+              if (!showHistory) {
+                loadHistory(); // load when opening
+              }
+              setShowHistory((prev) => !prev);
+            }}
+          >
+            {showHistory ? "Close History" : "📜 View History"}
+          </button>
+          <button
+            className={classes.favButton}
+            onClick={() => router.push("/plan/weekly_plan_favorites")}
+          >
+            ⭐ View Favorites
+          </button>
+
+          <button
+            type="button"
+            className={classes.printButton}
+            onClick={handlePrint}
+          >
+            Print / Save as PDF
+          </button>
+          <button
+            className={classes.buttonWeeklyEmail}
+            onClick={handleSendEmail}
+          >
+            Send to Email
+          </button>
+        </div>
 
         {loading ? (
           <p className={classes.loading}>Loading your plan…</p>
         ) : !plan ? (
-          <p className={classes.loading}>No weekly plan available.</p>
+          <p className={classes.empty}>No weekly plan available.</p>
         ) : (
           <div className={classes.days}>
-            {Object.entries(plan).map(([day, data]) => (
-              <WeeklyPlan key={day} day={day} data={data} />
+            {[
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday",
+            ].map((day) => (
+              <div key={day} id={`day-${day}`}>
+                <WeeklyPlan
+                  day={day}
+                  data={plan?.[day] || null}
+                  dayProgress={progress[day]}
+                  toggleProgress={toggleProgress}
+                  updatedAt={updatedAt}
+                />
+              </div>
             ))}
           </div>
         )}
       </div>
+      {modalState && (
+        <div className={classes.overlay}>
+          <div
+            className={`${classes.modalBase} ${
+              modalState === "success"
+                ? classes.successModal
+                : classes.warningModal
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* WARNING STATE */}
+            {modalState === "warning" && (
+              <>
+                <h2 className={classes.modalTitle}>Week Not Finished Yet</h2>
+
+                <p className={classes.modalText}>
+                  Your current weekly plan is still in progress. Before
+                  generating a new plan, please complete the remaining days.
+                </p>
+
+                <div className={classes.modalActions}>
+                  <button
+                    className={classes.cancelBtn}
+                    onClick={() => setModalState(null)}
+                  >
+                    Keep Current Plan
+                  </button>
+
+                  <button
+                    className={classes.confirmBtn}
+                    onClick={() => {
+                      setModalState(null);
+                      scrollToToday(); // scrolls user to remaining days
+                    }}
+                  >
+                    View Remaining Days
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* SUCCESS STATE */}
+            {modalState === "success" && (
+              <>
+                <h2 className={classes.modalTitle}>Plan Updated</h2>
+
+                <p className={classes.modalText}>
+                  Your weekly plan has been beautifully refreshed. Enjoy a newly
+                  crafted 7-day journey of personalized fitness, mindfulness,
+                  and nourishment designed exclusively for you.
+                </p>
+
+                <div className={classes.modalActions}>
+                  <button
+                    className={classes.confirmBtn}
+                    onClick={() => setModalState(null)}
+                  >
+                    Continue
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* 📘 HISTORY MODAL — Insert this EXACTLY here */}
+      <PlanHistoryModal
+        show={showHistory}
+        onClose={() => setShowHistory(false)}
+        history={history}
+        loading={historyLoading}
+      />
     </>
   );
 }

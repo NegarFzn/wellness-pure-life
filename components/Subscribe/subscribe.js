@@ -1,13 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { useSession } from "next-auth/react";
 import classes from "./subscribe.module.css";
 
 export default function Subscribe() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { data: session } = useSession();
+  const [emailStatus, setEmailStatus] = useState(null);
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      setEmail(session.user.email);
+    }
+    if (session?.user?.name) {
+      setName(session.user.name);
+    }
+  }, [session]);
 
   const handleInitialClick = () => {
     setShowForm(true);
@@ -16,117 +28,170 @@ export default function Subscribe() {
   const handleSubscribe = async (e) => {
     e.preventDefault();
 
+    // Email validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setMessage("Please enter a valid email address.");
+      setEmailStatus("error");
       return;
     }
 
+    // Name validation
     if (!name.trim()) {
-      setMessage("Please enter your name.");
+      setEmailStatus("error");
       return;
     }
 
-    setMessage("⏳ Subscribing...");
+    setLoading(true);
+    setEmailStatus(null);
 
     try {
       const res = await fetch("/api/auth/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name }),
+        body: JSON.stringify({
+          email,
+          name,
+          source: "static-subscribe",
+        }),
       });
 
       const result = await res.json();
 
-      if (res.status === 201) {
-        setEmail("");
-        setName("");
+      // Already subscribed case
+      if (res.ok && result.message?.toLowerCase().includes("already")) {
+        setEmailStatus("already");
         setSubscribed(true);
         setShowForm(false);
-        setMessage("✅ Thank you for subscribing!");
-        toast.success("Thank you for subscribing!");
-      } else if (res.status === 409) {
+        toast.success("You are already part of the journey.");
+      }
+
+      // New subscriber case
+      else if (res.ok) {
+        setEmailStatus("success");
         setSubscribed(true);
         setShowForm(false);
         setEmail("");
         setName("");
-        setMessage(
-          "✅ You're already on our list! Thanks for staying connected with Wellness Pure Life 💚"
-        );
-        toast.success("You're already subscribed.");
-      } else {
-        setMessage(result.message || "Something went wrong.");
-        toast.error(result.message || "Something went wrong.");
+        toast.success("Your premium wellness journey has begun.");
+      }
+
+      // Any server error
+      else {
+        setEmailStatus("error");
+        toast.error(result.message || "Subscription failed.");
       }
     } catch (err) {
       console.error("Subscription error:", err);
-      setMessage("❌ Error connecting to server.");
-      toast.error("Error connecting to server.");
+      setEmailStatus("error");
+      toast.error("Server connection error.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <section className={classes.newsletter}>
-      <div className={classes.textBlock}>
-        <h2>Stay Inspired, Stay Healthy</h2>
-        {!subscribed && (
-          <p>Get weekly wellness tips and updates — straight to your inbox!</p>
+      <div className={classes.glassCard}>
+        <div className={classes.textBlock}>
+          <h2>Unlock Your Personalized Wellness Journey</h2>
+
+          {!subscribed && (
+            <p>
+              Receive your private 7-day transformation experience — crafted for
+              your body, mind, and lifestyle.
+            </p>
+          )}
+
+          {/* ========== SUCCESS MESSAGE ========== */}
+          {subscribed && emailStatus === "success" && (
+            <div className={classes.successBox}>
+              <div className={classes.checkmark}>✓</div>
+              <p className={classes.emailStatusSuccess}>
+                ✅ Your free 7-day wellness plan is on its way. Please check
+                your inbox.
+              </p>
+            </div>
+          )}
+
+          {/* ========== ALREADY SUBSCRIBED MESSAGE ========== */}
+          {subscribed && emailStatus === "already" && (
+            <p className={classes.emailStatusInfo}>
+              ℹ️ You’re already enrolled in the free 7-day journey. Your next
+              email is on the way.
+            </p>
+          )}
+        </div>
+
+        {/* ========== SHOW CTA BEFORE FORM ========== */}
+        {!showForm && !subscribed && (
+          <button
+            onClick={handleInitialClick}
+            className={classes.subscribeButton}
+            aria-label="Subscribe to premium wellness funnel"
+          >
+            Start My Free 7-Day Plan
+          </button>
         )}
-        {subscribed && (
-          <p>
-            {message.includes("already")
-              ? "✅ You're already on our list!💚"
-              : "✅ Thank you for subscribing!"}
-          </p>
+        <div className={classes.freeBadge}>
+          ✅ Free • No Credit Card Required • Cancel Anytime
+        </div>
+
+        {/* ========== FORM ========== */}
+        {showForm && (
+          <form className={classes.newsletterForm} onSubmit={handleSubscribe}>
+            <input
+              type="text"
+              name="name"
+              placeholder="Your full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)} // ALWAYS EDITABLE
+              required
+              disabled={loading} // NOT locked by session
+            />
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Your private email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={loading || !!session?.user?.email}
+            />
+
+            <button
+              type="submit"
+              className={`${classes.subscribeButton} ${
+                loading ? classes.loading : ""
+              }`}
+              disabled={loading}
+            >
+              {loading ? (
+                <span className={classes.spinner}></span>
+              ) : (
+                "Start Free 7-Day Journey"
+              )}
+            </button>
+
+            {emailStatus === "error" && (
+              <p className={classes.errorMessage}>
+                ❌ Something went wrong. Please try again.
+              </p>
+            )}
+          </form>
+        )}
+
+        {/* ========== FINAL DISABLED BUTTON AFTER SUBSCRIBED ========== */}
+        {subscribed && !showForm && (
+          <div className={classes.subscribedContainer}>
+            <button
+              className={`${classes.subscribeButton} ${classes.subscribed}`}
+              disabled
+            >
+              Free Access Activated
+            </button>
+          </div>
         )}
       </div>
-
-      {!showForm && !subscribed && (
-        <button
-          onClick={handleInitialClick}
-          className={classes.subscribeButton}
-          aria-label="Subscribe to weekly wellness tips"
-        >
-          Subscribe
-        </button>
-      )}
-
-      {showForm && (
-        <form className={classes.newsletterForm} onSubmit={handleSubscribe}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Your full name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Your email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <button type="submit" className={classes.subscribeButton}>
-            Subscribe
-          </button>
-          {message && <p className={classes.errorMessage}>{message}</p>}
-        </form>
-      )}
-
-      {subscribed && !showForm && (
-        <div className={classes.subscribedContainer}>
-          <button
-            className={`${classes.subscribeButton} ${
-              subscribed ? classes.subscribed : ""
-            }`}
-            disabled
-          >
-            Subscribed
-          </button>
-        </div>
-      )}
     </section>
   );
 }

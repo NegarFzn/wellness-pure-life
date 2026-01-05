@@ -1,81 +1,108 @@
 // pages/api/create-checkout-session.js
 import Stripe from "stripe";
 import bcrypt from "bcryptjs";
-import { firestore } from "../../utils/firebaseAdmin";
+import { connectToDatabase } from "../../utils/mongodb";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    console.log("❌ Invalid method");
     res.setHeader("Allow", "POST");
     return res.status(405).end("Method Not Allowed");
   }
 
-  let { uid, email, password, name, plan } = req.body;
-  console.log("📨 Incoming checkout session for:", { uid, email, plan });
+  let { uid, email, password, name, plan, source, quizType, primaryGoal, utm } =
+    req.body;
 
   try {
-    // Signup if no uid and valid email + password are provided
-    if (!uid && email && password) {
-      const userQuery = await firestore
-        .collection("users")
-        .where("email", "==", email)
-        .get();
+    // ----------------------------------------------------------
+    // 1) MONGODB → SIGNUP IF password is provided
+    // ----------------------------------------------------------
+    const { db } = await connectToDatabase();
+    const users = db.collection("users");
 
-      if (userQuery.empty) {
+    if (!uid && email && password) {
+      const existing = await users.findOne({ email });
+
+      if (!existing) {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const userRef = await firestore.collection("users").add({
+
+        const insertResult = await users.insertOne({
           email,
           password: hashedPassword,
-          name,
+          name: name || "",
           isVerified: false,
           isPremium: false,
-          createdAt: new Date().toISOString(),
+          createdAt: new Date(),
         });
-        uid = userRef.id;
-        console.log("✅ User signed up:", uid);
+
+        uid = insertResult.insertedId.toString();
       } else {
-        const existingUser = userQuery.docs[0];
-        uid = existingUser.id;
-        console.log("⚠️ User already exists, using existing UID:", uid);
+        uid = existing._id.toString();
       }
     }
 
-    if (!uid || !email) {
-      console.error("❌ Missing uid or email in request:", { uid, email });
-      return res.status(400).json({ error: "Missing uid or email" });
+    if (!email) {
+      return res.status(400).json({ error: "Missing email" });
     }
 
-    // Decide the correct price ID based on selected plan
+    // ----------------------------------------------------------
+    // 2) MONGODB → Ensure user exists & update metadata
+    // ----------------------------------------------------------
+    await users.updateOne(
+      { email },
+      {
+        $setOnInsert: {
+          email,
+          name: name || "",
+          createdAt: new Date(),
+        },
+        $set: {
+          leadSource: source || "checkout",
+          quizType: quizType || null,
+          primaryGoal: primaryGoal || null,
+          utm: utm || null,
+          updatedAt: new Date(),
+        },
+      },
+      { upsert: true }
+    );
+
+    // ----------------------------------------------------------
+    // 3) STRIPE: Select pricing (yearly / monthly)
+    // ----------------------------------------------------------
     const priceId =
       plan === "yearly"
-        ? "price_1SWbHQLUvW2lwD1sx8T2pEQu" // ✅ Replace with your actual yearly price ID
-        : "price_1RVwPlLUvW2lwD1s0Q0gAK3a"; // ✅ Monthly price ID
+        ? "price_1Sm2bxLUvW2lwD1sfea1Q4Wo"
+        : "price_1Sm2bILUvW2lwD1sQwCVUq0X";
 
-        console.log("Using price:", priceId);
-
+    // ----------------------------------------------------------
+    // 4) STRIPE: Create Checkout Session
+    // ----------------------------------------------------------
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       payment_method_types: ["card"],
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
+      line_items: [{ price: priceId, quantity: 1 }],
+
       customer_email: email,
+      client_reference_id: email,
+
       metadata: {
-        uid: uid,
+        uid: uid || "",
+        email,
+        priceId,
+        source: source || "",
+        quizType: quizType || "",
+        primaryGoal: primaryGoal || "",
       },
+
       success_url: `${req.headers.origin}/premium-confirmed?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.origin}/`,
     });
 
-    console.log("✅ Stripe session created:", session.id);
-    res.status(200).json({ url: session.url });
+    return res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error("❌ Stripe or Firestore Error:", err.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("❌ create-checkout-session error:", err);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 }

@@ -89,6 +89,33 @@ p a:active {
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
+/************************************
+ * BRAND COLOR PALETTE (PREMIUM)
+ ************************************/
+:root {
+  /* Wellness Primary Gradient */
+  --wpl-primary: #6D28D9;
+  --wpl-primary-mid: #7C3AED;
+  --wpl-primary-light: #818CF8;
+
+  /* Persian Green + Persian Blue */
+  --persian-green: #009688;
+  --persian-blue: #1C39BB;
+
+  /* Soft Wellness Colors */
+  --wellness-cream: #FDFCF9;
+  --wellness-gray: #F3F4F6;
+  --wellness-dark: #1F2937;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.12);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.14);
+  --shadow-lg: 0 8px 22px rgba(0,0,0,0.18);
+
+  /* Transitions */
+  --transition: 0.25s ease;
+}
+
 
 
 @media (prefers-color-scheme: dark) {

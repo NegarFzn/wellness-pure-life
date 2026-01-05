@@ -1,4 +1,5 @@
-import { firestore } from "../../../utils/firebaseAdmin";
+import { connectToDatabase } from "../../../utils/mongodb";
+import { ObjectId } from "mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -12,11 +13,23 @@ export default async function handler(req, res) {
   }
 
   try {
-    const userRef = firestore.collection("users").doc(userId);
-    await userRef.update({ pushToken: token });
-    res.status(200).json({ message: "Token saved successfully" });
+    const { db } = await connectToDatabase();
+    const collection = db.collection("users");
+
+    // Convert userId to ObjectId
+    const filter = { _id: new ObjectId(userId) };
+
+    const updateResult = await collection.updateOne(filter, {
+      $set: { pushToken: token },
+    });
+
+    if (updateResult.matchedCount === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ message: "Token saved successfully" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to save token" });
+    console.error("❌ Failed to save token:", err);
+    return res.status(500).json({ message: "Failed to save token" });
   }
 }

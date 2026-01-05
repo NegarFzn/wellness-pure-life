@@ -5,8 +5,9 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import DailyQuizAnalysis from "../../components/Quiz/DailyQuiz/DailyQuizAnalysis";
 import QuizCard from "../../components/QuizCard/QuizCard";
-import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz"
+import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
 import DailyRitual from "../../components/DailyRitual";
+import WeeklyPlanCard from "../../components/Plan/WeeklyPlanCard";
 import classes from "./index.module.css";
 
 const planTypes = [
@@ -285,6 +286,7 @@ export default function DashboardPage() {
           )}
 
           {section === "daily" && <DailyQuizAnalysis />}
+          <WeeklyPlanCard />
 
           {section === "main" && (
             <div

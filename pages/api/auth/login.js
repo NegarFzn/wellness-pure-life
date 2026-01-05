@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { firestore } from "../../../utils/firebaseAdmin";
+import { connectToDatabase } from "../../../utils/mongodb";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_default_secret"; // ideally store in .env
 
@@ -16,33 +16,34 @@ export default async function handler(req, res) {
   }
 
   try {
-    const usersRef = firestore.collection("users");
-    const snapshot = await usersRef
-      .where("email", "==", email.toLowerCase())
-      .limit(1)
-      .get();
+    const { db } = await connectToDatabase();
 
-    if (snapshot.empty) {
+    // Replace Firestore lookup with MongoDB lookup
+    const user = await db.collection("users").findOne({
+      email: email.toLowerCase(),
+    });
+
+    if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const userDoc = snapshot.docs[0];
-    const user = userDoc.data();
-
-    const isValid = await bcrypt.compare(password, user.password);
+    // Compare password
+    const isValid = await bcrypt.compare(password, user.password || "");
     if (!isValid) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    // Require verified email (same as before)
     if (!user.isVerified) {
-      return res
-        .status(403)
-        .json({ message: "Please verify your email before logging in." });
+      return res.status(403).json({
+        message: "Please verify your email before logging in.",
+      });
     }
 
+    // Generate JWT exactly the same way, but using MongoDB _id
     const token = jwt.sign(
       {
-        id: userDoc.id,
+        id: user._id.toString(),
         email: user.email,
         name: user.name,
         isPremium: user.isPremium || false,
@@ -53,7 +54,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({ token });
   } catch (err) {
-    console.error(err);
+    console.error("❌ Login Error:", err);
     res.status(500).json({ message: "Login failed. Please try again later." });
   }
 }

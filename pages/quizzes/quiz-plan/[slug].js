@@ -196,7 +196,7 @@ export default function MultiPlanPage() {
                 name: "Wellness Pure Life",
                 logo: {
                   "@type": "ImageObject",
-                  url: "https://wellnesspurelife.com/images/logo.jpg",
+                  url: "https://wellnesspurelife.com/images/logo.png",
                 },
               },
               datePublished: new Date().toISOString(),

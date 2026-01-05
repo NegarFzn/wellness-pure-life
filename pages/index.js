@@ -1,17 +1,18 @@
-// pages/index.js
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import { fetchNews } from "../utils/fetch";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import Subscribe from "../components/Subscribe/subscribe";
 import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
 import DailyList from "../components/DailyList/DailyList";
 import ResetPassword from "../components/Auth/ResetPassword";
 import ResendVerificationModal from "../components/Auth/ResendVerificationModal";
-import QuizCard from "../components/QuizCard/QuizCard";
+import QuizCard from "../components/Quiz/QuizCard/QuizCard";
 import HomeBlogCTA from "../components/TopPages/HomeBlogCTA";
+import WeeklyPlanCard from "../components/Plan/WeeklyPlanCard";
+import DailyRoutineCard from "../components/Plan/DailyRoutineCard";
 import classes from "./index.module.css";
 
 export default function Home() {
@@ -26,6 +27,9 @@ export default function Home() {
   const [verifyStatus, setVerifyStatus] = useState(null);
   const router = useRouter();
   const { verifyToken, resetToken } = router.query;
+  const { data: session, status } = useSession();
+  const user = session?.user;
+  const loading = status === "loading";
 
   useEffect(() => {
     const getNews = async () => {
@@ -209,7 +213,7 @@ export default function Home() {
                 name: "Wellness Pure Life",
                 logo: {
                   "@type": "ImageObject",
-                  url: "https://wellnesspurelife.com/images/logo.jpg",
+                  url: "https://wellnesspurelife.com/images/logo.png",
                 },
               },
             }),
@@ -243,11 +247,12 @@ export default function Home() {
 
       <main className={classes.container}>
         <DailyList />
-
         <KeyFeatures />
-        <Subscribe />
+        <WeeklyPlanCard />
+        <DailyRoutineCard />
+        {!loading && !user?.isPremium && <Subscribe />}
         <QuizCard />
-         <HomeBlogCTA />
+        <HomeBlogCTA />
         {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
             <h2 className={classes.newsHeading}>

@@ -1,0 +1,323 @@
+/* ------------------------------- */
+/* BACKDROP (Glass Blur Overlay)  */
+/* ------------------------------- */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+/* ------------------------------- */
+/* MODAL CARD                      */
+/* ------------------------------- */
+.modal {
+  width: 100%;
+  max-width: 620px;
+  max-height: 80vh;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(18px);
+  border-radius: 24px;
+  padding: 24px 24px 18px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.32);
+  position: relative;
+  overflow-y: auto;
+  animation: fadeIn 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------------------------------- */
+/* CLOSE BUTTON                    */
+/* ------------------------------- */
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(243, 244, 246, 0.7);
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.25s ease;
+}
+
+.closeButton:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* ------------------------------- */
+/* HEADINGS                        */
+/* ------------------------------- */
+.title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #111827;
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* ------------------------------- */
+/* EMPTY / LOADING TEXT            */
+/* ------------------------------- */
+.loading,
+.empty {
+  padding: 24px 0;
+  font-size: 0.98rem;
+  color: #9ca3af;
+  text-align: center;
+}
+
+/* ------------------------------- */
+/* HISTORY LIST                    */
+/* ------------------------------- */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
+/* ------------------------------- */
+/* EACH HISTORY ITEM (Gradient)    */
+/* ------------------------------- */
+.item {
+  border-radius: 18px;
+  padding: 16px 18px 18px;
+  background: linear-gradient(
+    135deg,
+    rgba(236, 252, 203, 0.85),
+    rgba(219, 234, 254, 0.8)
+  );
+  margin-bottom: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(6px);
+}
+
+/* ------------------------------- */
+/* META DATES                      */
+/* ------------------------------- */
+.meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.date {
+  font-weight: 600;
+  color: #374151;
+}
+
+.saved {
+  font-style: italic;
+}
+
+/* ------------------------------- */
+/* SUMMARY TEXT                    */
+/* ------------------------------- */
+.summary {
+  font-size: 0.93rem;
+  color: #111827;
+  line-height: 1.48;
+}
+
+/* ------------------------------- */
+/* ACTION BUTTON ROW               */
+/* ------------------------------- */
+.actionsRow {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* ------------------------------- */
+/* RESTORE BUTTON (Purple Pill)    */
+/* ------------------------------- */
+.restoreButton {
+  background: #6c63ff;
+  color: #fff;
+  padding: 9px 18px;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 8px rgba(108, 99, 255, 0.3);
+}
+
+.restoreButton:hover {
+  background: #5a53e6;
+  box-shadow: 0 6px 14px rgba(108, 99, 255, 0.45);
+}
+
+/* ------------------------------- */
+/* FAVORITE BUTTON (Red Pill)      */
+/* ------------------------------- */
+.favoriteButton {
+  background: #ff7b7b;
+  color: #fff;
+  padding: 9px 18px;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 8px rgba(255, 123, 123, 0.3);
+}
+
+.favoriteButton:hover {
+  background: #e56a6a;
+  box-shadow: 0 6px 14px rgba(255, 123, 123, 0.45);
+}
+
+.favoriteDone {
+  background: #16a34a !important; /* green */
+  color: #fff !important;
+  box-shadow: 0 3px 8px rgba(22, 163, 74, 0.35) !important;
+}
+
+.favoriteDone:hover {
+  background: #15803d !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.45) !important;
+}
+
+.wpl-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: white;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 9999;
+}
+
+.wpl-toast-success {
+  background: #4ade80; /* green */
+}
+
+.wpl-toast-error {
+  background: #f87171; /* red */
+}
+
+.wpl-toast.show {
+  opacity: 1;
+  transform: translate(-50%, -10px);
+}
+
+@media (max-width: 640px) {
+  .modalOverlay {
+    padding: 12px;
+  }
+
+  .modal {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 18px;
+    padding: 18px 16px 14px;
+  }
+
+  .closeButton {
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+  }
+
+  .title {
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 0.88rem;
+    margin-bottom: 16px;
+  }
+
+  .loading,
+  .empty {
+    padding: 18px 0;
+    font-size: 0.9rem;
+  }
+
+  .list {
+    padding-right: 2px;
+  }
+
+  .item {
+    padding: 14px 14px 16px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+  }
+
+  .meta {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+  }
+
+  .date {
+    font-size: 0.75rem;
+  }
+
+  .summary {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .actionsRow {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .restoreButton,
+  .favoriteButton {
+    width: 100%;
+    padding: 11px 16px;
+    font-size: 0.95rem;
+  }
+
+  .wpl-toast {
+    bottom: 24px;
+    font-size: 0.88rem;
+    padding: 10px 18px;
+    border-radius: 10px;
+  }
+}

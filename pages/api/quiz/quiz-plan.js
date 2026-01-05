@@ -1,12 +1,17 @@
 import { MongoClient } from "mongodb";
+import { sendEmail } from "../../../utils/email";
+import { generateQuizPlanEmail } from "../../../emails/contentGenerator";
 
 const uri = process.env.MONGODB_URI;
 const dbName = "wellnesspurelife";
+
 const questionsCollection = "quiz_plan_questions";
 const recommendationsCollection = "quiz_plan_recommendations";
 const savedCollection = "quiz_plan_saved";
 
-// 🔧 normalize answers to strings
+// -----------------------------
+// Utility helpers
+// -----------------------------
 function normalize(obj) {
   const norm = {};
   for (const k in obj) {
@@ -15,7 +20,6 @@ function normalize(obj) {
   return norm;
 }
 
-// 🔧 build MongoDB query from keys
 function buildQuery(slug, answers) {
   const normalized = normalize(answers);
   return {
@@ -26,7 +30,9 @@ function buildQuery(slug, answers) {
   };
 }
 
-
+// -----------------------------
+// MAIN HANDLER
+// -----------------------------
 export default async function handler(req, res) {
   let client;
 
@@ -35,23 +41,71 @@ export default async function handler(req, res) {
     const db = client.db(dbName);
     const method = req.method.toUpperCase();
 
-    // ───────────────────────────────
-    // ✅ GET (mode=questions)
-    // ───────────────────────────────
+    //
+    // ================================================
+    // 1) SEND EMAIL (POST mode=email)
+    // ================================================
+    //
+    if (method === "POST" && req.query.mode === "email") {
+      const { email, name, answers, category, matchedPlan } = req.body;
+
+      if (!email || !category || !answers) {
+        return res.status(400).json({ error: "Missing or invalid fields" });
+      }
+
+      try {
+        const normalizedCategory = category.replace(/-plan$/, "").toLowerCase();
+
+        const displayAnswers = Object.fromEntries(
+          Object.entries(answers).map(([k, v]) => {
+            if (typeof v === "string") {
+              return [
+                k,
+                v.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+              ];
+            }
+            return [k, v];
+          })
+        );
+
+        const { subject, body: htmlBody } = generateQuizPlanEmail({
+          name: (name || email?.split("@")[0] || "User").trim(),
+          category: normalizedCategory,
+          matchedPlan: matchedPlan || {}, // <-- SAFETY FIX
+          displayAnswers,
+        });
+
+        await sendEmail(email, subject, htmlBody);
+
+        return res.status(200).json({ message: "Email sent successfully." });
+      } catch (err) {
+        console.error("❌ Email send failed:", err.message, err);
+        return res.status(500).json({ error: "Email send failed." });
+      }
+    }
+
+    //
+    // ================================================
+    // 2) GET QUESTIONS
+    // ================================================
+    //
     if (method === "GET" && req.query.mode === "questions") {
       const quizzes = await db
         .collection(questionsCollection)
         .find({}, { projection: { _id: 0 } })
         .toArray();
+
       return res.status(200).json(quizzes);
     }
 
-    // ✅ GET (mode=history): all saved plans for a user
+    //
+    // ================================================
+    // 3) GET HISTORY
+    // ================================================
+    //
     if (method === "GET" && req.query.mode === "history") {
       const email = req.query.email?.trim();
-      if (!email) {
-        return res.status(400).json({ error: "Missing 'email' parameter." });
-      }
+      if (!email) return res.status(400).json({ error: "Missing email" });
 
       const plans = await db
         .collection(savedCollection)
@@ -62,7 +116,11 @@ export default async function handler(req, res) {
       return res.status(200).json({ history: plans });
     }
 
-    // ✅ GET (by slug and email): load latest saved plan
+    //
+    // ================================================
+    // 4) GET LATEST SAVED PLAN (slug + email)
+    // ================================================
+    //
     if (
       method === "GET" &&
       req.query.slug &&
@@ -76,25 +134,34 @@ export default async function handler(req, res) {
         .collection(savedCollection)
         .findOne({ slug, email }, { sort: { savedAt: -1 } });
 
-      if (!result) {
-        return res.status(404).json({ error: "No saved plan found." });
-      }
+      if (!result)
+        return res.status(404).json({ error: "No saved plan found" });
 
       const { _id, ...cleaned } = result;
-      return res.status(200).json(cleaned); // ❌ Do not re-match
+      return res.status(200).json(cleaned);
     }
 
-    // ✅ GET (with answers in query params): dynamic match
-    if (method === "GET") {
+    //
+    // ================================================
+    // 5) GET MATCHED PLAN (dynamic based on answers)
+    // ================================================
+    //
+    if (
+      method === "GET" &&
+      !req.query.mode && // NOT questions or history or others
+      req.query.slug && // require slug
+      Object.keys(req.query).length > 1
+    ) {
       const { slug, ...queryParams } = req.query;
 
       if (!slug || Object.keys(queryParams).length === 0) {
         return res
           .status(400)
-          .json({ error: "Missing 'slug' or answer parameters." });
+          .json({ error: "Missing slug or answer parameters" });
       }
 
       const query = buildQuery(slug, queryParams);
+
       const match = await db
         .collection(recommendationsCollection)
         .findOne(query);
@@ -102,47 +169,40 @@ export default async function handler(req, res) {
       if (!match) {
         return res
           .status(404)
-          .json({ error: `No matching plan found for slug ${slug}.` });
+          .json({ error: `No matching plan found for slug ${slug}` });
       }
 
       const { _id, ...cleaned } = match;
       return res.status(200).json(cleaned);
     }
 
-    // ✅ POST: save answers and matched plan
-    if (method === "POST") {
+    //
+    // ================================================
+    // 6) SAVE PLAN (POST)
+    // ================================================
+    //
+    if (method === "POST" && (!req.query.mode || req.query.mode === "save")) {
       const { slug, answers, email } = req.body;
-      console.log(slug, answers)
 
-      if (
-        !slug ||
-        typeof slug !== "string" ||
-        !answers ||
-        typeof answers !== "object"
-      ) {
+      if (!slug || typeof slug !== "string" || !answers) {
         return res
           .status(400)
-          .json({ error: "Missing or invalid 'slug' or 'answers'." });
+          .json({ error: "Missing or invalid slug or answers" });
       }
 
       const normalizedSlug = slug.trim().toLowerCase();
       const query = buildQuery(normalizedSlug, answers);
-      console.log(normalizedSlug, query)
 
       const match = await db
         .collection(recommendationsCollection)
         .findOne(query);
-
-      console.log(match)
-
-
 
       const saveDoc = {
         slug: normalizedSlug,
         email: email?.trim() || null,
         answers,
         savedAt: new Date(),
-        matchedPlan: match?.plan || null,
+        matchedPlan: match?.plan || match || null,
       };
 
       await db.collection(savedCollection).insertOne(saveDoc);
@@ -153,11 +213,15 @@ export default async function handler(req, res) {
       });
     }
 
-    // ❌ Unsupported
-    return res.status(405).json({ error: `Method ${method} not allowed.` });
+    //
+    // ================================================
+    // 7) UNSUPPORTED METHOD
+    // ================================================
+    //
+    return res.status(405).json({ error: `Method ${method} not allowed` });
   } catch (error) {
     console.error("❌ API error:", error);
-    return res.status(500).json({ error: "Internal server error." });
+    return res.status(500).json({ error: "Internal server error" });
   } finally {
     if (client) await client.close();
   }

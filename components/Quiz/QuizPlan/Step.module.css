@@ -18,6 +18,152 @@
   margin-bottom: 2rem;
 }
 
+/* ───────────────────────────────────────────────────────────── */
+/* PREMIUM MODAL OVERLAY */
+/* ───────────────────────────────────────────────────────────── */
+
+.premiumOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+  animation: fadeInOverlay 0.25s ease;
+}
+
+/* Overlay Fade-in Animation */
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────── */
+/* PREMIUM MODAL CONTAINER */
+/* ───────────────────────────────────────────────────────────── */
+
+.premiumModal {
+  background: #ffffff;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 18px;
+  padding: 28px 26px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  animation: fadeInModal 0.25s ease;
+}
+
+/* Modal Fade-in Animation */
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ───────────────────────────────────────────────────────────── */
+/* CLOSE BUTTON */
+/* ───────────────────────────────────────────────────────────── */
+
+.premiumClose {
+  position: absolute;
+  right: 16px;
+  top: 12px;
+  font-size: 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.premiumClose:hover {
+  color: #374151;
+}
+
+/* ───────────────────────────────────────────────────────────── */
+/* ICON */
+/* ───────────────────────────────────────────────────────────── */
+
+.premiumIcon {
+  font-size: 32px;
+  margin-bottom: 14px;
+  color: #4f46e5;
+}
+
+/* ───────────────────────────────────────────────────────────── */
+/* TITLE */
+/* ───────────────────────────────────────────────────────────── */
+
+.premiumTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+/* ───────────────────────────────────────────────────────────── */
+/* DESCRIPTION */
+/* ───────────────────────────────────────────────────────────── */
+
+.premiumText {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* ───────────────────────────────────────────────────────────── */
+/* BUTTONS */
+/* ───────────────────────────────────────────────────────────── */
+
+.premiumButtonPrimary {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.premiumButtonPrimary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.premiumButtonSecondary {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.premiumButtonSecondary:hover {
+  background: #e5e7eb;
+}
+
+
 .button {
   display: inline-block;
   padding: 0.75rem 1.5rem;

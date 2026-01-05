@@ -1,8 +1,10 @@
 // pages/api/confirm-premium.js
-import { firestore } from "../../utils/firebaseAdmin";
 import Stripe from "stripe";
+import { connectToDatabase } from "../../utils/mongodb";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2022-11-15",
+});
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -16,19 +18,39 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Retrieve Stripe Checkout Session
     const session = await stripe.checkout.sessions.retrieve(session_id);
-    const uid = session.metadata?.uid;
 
-    if (!uid) {
+    // Extract user email from session
+    const email =
+      session?.customer_details?.email ||
+      session?.customer_email ||
+      session?.metadata?.email ||
+      null;
+
+    if (!email) {
       return res
         .status(400)
-        .json({ error: "UID not found in session metadata" });
+        .json({ error: "No email found in Stripe session" });
     }
 
-    await firestore.collection("users").doc(uid).update({
-      isPremium: true,
-      upgradedAt: new Date().toISOString(),
-    });
+    // MongoDB Connection
+    const { db } = await connectToDatabase();
+
+    // Update premium flag — safe & idempotent
+    await db.collection("users").updateOne(
+      { email },
+      {
+        $set: {
+          isPremium: true,
+          premium: {
+            status: "active",
+            upgradedAt: new Date(),
+            sessionId: session.id,
+          },
+        },
+      }
+    );
 
     return res.status(200).json({ success: true });
   } catch (error) {

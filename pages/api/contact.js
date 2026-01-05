@@ -1,5 +1,5 @@
-import { sendEmail } from "../../utils/email"; // adjust path as needed
-import { createContactEmail } from "../../emails/emailCreator"; // adjust path as needed
+import { sendEmail } from "../../utils/email"; 
+import { createContactEmail } from "../../emails/emailCreator";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -14,7 +14,13 @@ export default async function handler(req, res) {
 
   try {
     const { subject, body } = createContactEmail(name, email, message);
-    await sendEmail(process.env.RECEIVER_EMAIL, subject, body);
+
+    // IMPORTANT: sendEmail expects POSITONAL ARGUMENTS (email, subject, body)
+    await sendEmail(
+      process.env.RECEIVER_EMAIL,  // recipient email address
+      subject,                    // subject
+      body                        // html body
+    );
 
     return res.status(200).json({ message: "Message sent successfully!" });
   } catch (error) {

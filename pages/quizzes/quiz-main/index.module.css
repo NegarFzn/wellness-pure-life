@@ -1,298 +1,418 @@
 /* =====================
-  Container & Heading
+  Page Container
 ===================== */
 .container {
-  max-width: 1080px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 1.5rem 1.5rem 2rem; /* tighter top padding */
+  padding: 3rem 1.5rem 5rem;
   text-align: center;
-}
-
-.heading {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin: 1rem 0 1.25rem; /* reduced gap above/below */
-  color: #222;
-  font-family: "Inter", sans-serif;
-}
-
-/* =============================
-  Sticky Search + Filter Wrapper
-============================= */
-.stickyBar {
-  position: sticky;
-  top: 76px; /* adjust for your header */
-  z-index: 20;
-  background: #fff;
-  padding: 0.85rem 1rem 0.75rem; /* compact vertical padding */
-  margin: 0 auto 1rem; /* smaller gap below controls */
-  border: 1px solid #eee;
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.stickyBar.scrolled {
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-  border-color: #e6e6e6;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f8fb 100%);
 }
 
 /* =====================
-  Search Input Styling
+  Premium Hero
+===================== */
+.premiumHero {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+  padding: 3.5rem 2rem;
+  border-radius: 32px;
+  margin-bottom: 3.5rem;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+}
+
+.premiumHero h1 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.premiumHero p {
+  font-size: 1.1rem;
+  color: #d1d5db;
+  margin-bottom: 2rem;
+}
+
+.heroButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryCta {
+  background: linear-gradient(180deg, #22c55e, #16a34a);
+  color: white;
+  padding: 0.9rem 1.8rem;
+  border-radius: 999px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+.primaryCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(34, 197, 94, 0.5);
+}
+
+.secondaryCta {
+  background: white;
+  color: #0f172a;
+  padding: 0.9rem 1.8rem;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+.secondaryCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+}
+
+/* =====================
+  Heading
+===================== */
+.heading {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 3rem 0 1.5rem;
+  color: #111;
+}
+
+/* =====================
+  Sticky Search Bar
+===================== */
+.stickyBar {
+  position: sticky;
+  top: 90px;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  padding: 1.2rem;
+  margin: 0 auto 2.5rem;
+  border-radius: 30px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08);
+}
+
+/* =====================
+  Search Input
 ===================== */
 .searchInput {
   width: 100%;
-  padding: 0.6rem 1rem;
-  margin: 0 0 0.75rem; /* tighter spacing to pill row */
-  border: 1px solid #ddd;
+  padding: 0.85rem 1.2rem;
+  margin-bottom: 1rem;
   border-radius: 999px;
+  border: 1px solid #e5e7eb;
   font-size: 1rem;
-  font-family: "Inter", sans-serif;
-  transition: all 0.2s ease;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
-}
-
-.searchRow {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
 }
 
 .searchInput:focus {
   outline: none;
-  border-color: #bbb;
-  background-color: #fdfdfd;
-  box-shadow: 0 0 0 3px rgba(0, 150, 255, 0.1);
+  border-color: #111;
 }
 
 /* =====================
-  Category Filter Bar
-  (now inside stickyBar; no sticky here)
+  Category Bar
 ===================== */
 .categoryBar {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.7rem;
   justify-content: center;
-  flex-wrap: nowrap;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
-  padding: 0; /* remove extra padding (gap fix) */
-  margin: 0; /* remove extra margin (gap fix) */
-  border: 0; /* no inner border */
-  box-shadow: none; /* shadow is on .stickyBar only */
 }
 
 .categoryButton {
-  flex: 0 0 auto;
-  scroll-snap-align: start;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  padding: 0.5rem 0.9rem;
+  padding: 0.5rem 1.1rem;
   border-radius: 999px;
-  border: 1px solid #eee;
-  background: #f7f7f8;
-  color: #444;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
-  font-family: "Inter", sans-serif;
-  white-space: nowrap;
+  transition: 0.25s ease;
 }
 
 .categoryButton:hover {
-  background: #f0f2f6;
-  border-color: #e6e6e6;
-}
-
-.categoryButton:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 120, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 .active {
-  background: linear-gradient(180deg, #222, #2c2c2c);
-  color: #fff;
-  border-color: #1a1a1a;
-}
-
-.categoryButton::before {
-  content: attr(data-icon);
-  font-size: 1.05rem;
-  margin-right: 0.15rem;
-}
-
-.clearFilters {
-  margin: 1.2rem auto;
-  display: inline-block;
-  background: none;
-  border: none;
-  color: #444;
-  font-size: 0.95rem;
-  text-decoration: underline;
-  cursor: pointer;
-  font-family: "Inter", sans-serif;
-  transition: color 0.2s ease;
-}
-
-.clearFilters:hover {
-  color: #111;
-}
-
-.searchHighlight {
-  font-size: 1rem;
-  color: #555;
-  margin: 1rem 0 0.5rem;
-  font-family: "Inter", sans-serif;
+  background: #111;
+  color: white;
+  border-color: #111;
 }
 
 /* =====================
-  Quiz List
+  Search Highlight
+===================== */
+.searchHighlight {
+  font-size: 1.05rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+/* =====================
+  Horizontal Quiz Carousel
 ===================== */
 .quizList {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 1.25rem; /* slightly tighter column gap */
-  list-style: none;
-  padding: 0;
-  margin: 0 auto;
-  justify-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.6rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 1rem 0 2rem;
+  scrollbar-width: none;
 }
 
-/* =====================
-  Quiz Item Card
-===================== */
+.quizList::-webkit-scrollbar {
+  display: none;
+}
+
 .quizItem {
-  background-color: #fff;
-  border-radius: 18px;
-  border: 1px solid #e9e9e9;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  width: 100%;
-  max-width: 200px;
-  min-height: 178px; /* uniform height for alignment */
+  flex: 0 0 260px;
+  scroll-snap-align: center;
+  background: linear-gradient(180deg, #ffffff, #f3f4f6);
+  border-radius: 26px;
+  border: 1px solid rgba(229, 231, 235, 0.9);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.09);
+  transition: 0.35s ease;
+  min-height: 210px;
 }
 
 .quizItem:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-  border-color: #e2e2e2;
+  transform: translateY(-6px);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.15);
 }
 
-/* =====================
-  Link Content Inside
-===================== */
 .quizLink {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem 1.2rem;
   text-decoration: none;
   color: inherit;
-  padding: 1.4rem 1rem; /* slightly tighter for card height control */
-  height: 100%;
 }
 
-/* =====================
-  Icon (Emoji)
-===================== */
 .icon {
-  font-size: 2.2rem;
-  margin-bottom: 0.55rem;
-  transition: transform 0.2s ease-in-out;
+  font-size: 2.8rem;
+  margin-bottom: 0.8rem;
 }
 
-.quizItem:hover .icon {
-  transform: scale(1.1);
-}
-
-/* =====================
-  Title
-===================== */
 .quizTitle {
-  font-size: 1.02rem;
-  font-weight: 700; /* stronger weight for readability */
-  color: #2e2e2e;
-  font-family: "Inter", sans-serif;
-  line-height: 1.35;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #111;
 }
 
 /* =====================
-  Loading / Empty Text
+  Empty / Loading
 ===================== */
 .loading,
 .emptyMessage {
-  font-size: 1.12rem;
-  color: #707070;
-  margin: 1.25rem 0 0; /* tighter spacing */
-  font-family: "Inter", sans-serif;
+  font-size: 1.15rem;
+  color: #777;
+  margin-top: 2rem;
+}
+
+.clearFilters {
+  margin-top: 1.5rem;
+  background: none;
+  border: none;
+  font-weight: 700;
+  color: #444;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ==================================================
+  ✅ PREMIUM PLAN QUIZ BRIDGE (NEW – REPLACES OLD)
+================================================== */
+.planBridgePremium {
+  margin-top: 4rem;
+  padding: 2.8rem 2rem;
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border-radius: 32px;
+  border: 1.5px solid #fde68a;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+}
+
+.planBridgeTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #7c2d12;
+  margin-bottom: 2rem;
+}
+
+.planButtonsRow {
+  display: flex;
+  justify-content: center;
+  gap: 1.3rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.planButtonsRowSingle {
+  display: flex;
+  justify-content: center;
+}
+
+.planButtonFitness,
+.planButtonMind,
+.planButtonNourish {
+  padding: 0.9rem 2.4rem;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+  min-width: 210px;
+}
+
+.planButtonFitness {
+  background: linear-gradient(135deg, #4f46e5, #60a5fa);
+}
+
+.planButtonMind {
+  background: linear-gradient(135deg, #6366f1, #38bdf8);
+}
+
+.planButtonNourish {
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+  margin-top: 0.2rem;
+}
+
+.planButtonFitness:hover,
+.planButtonMind:hover,
+.planButtonNourish:hover {
+  transform: translateY(-2px);
 }
 
 /* =====================
-  Mobile Optimizations
+  Daily Ritual Presale
 ===================== */
-@media (max-width: 768px) {
-  .heading {
-    font-size: 2.1rem;
-    margin: 0.75rem 0 1rem;
-  }
+/* =====================
+  ✅ DAILY RITUAL REAL BLOCK
+===================== */
+.dailyRitualWrapper {
+  margin-top: 3.5rem;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #f8fafc, #eef2ff);
+  border-radius: 32px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08);
+}
 
-  .quizList {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1rem;
-  }
+.dailyRitualTitle {
+  font-size: 1.9rem;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+  color: #111;
+}
 
-  .icon {
-    font-size: 2rem;
-  }
+/* =====================
+  Blog Support
+===================== */
+.blogSupport {
+  margin-top: 3.5rem;
+  color: #666;
+}
 
-  .quizTitle {
-    font-size: 0.98rem;
+.textLink {
+  font-weight: 800;
+  color: #111;
+  text-decoration: none;
+}
+
+.textLink:hover {
+  text-decoration: underline;
+}
+
+/* =====================
+  ✅ PLAN MODAL STYLES
+===================== */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modalContent {
+  background: white;
+  width: 95%;
+  max-width: 780px;
+  border-radius: 26px;
+  padding: 2rem;
+  position: relative;
+  animation: modalPop 0.25s ease;
+}
+
+.closeModal {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+@keyframes modalPop {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 
-@media (max-width: 480px) {
-  .container {
-    padding: 1rem 1rem 1.5rem;
-  }
-
-  .quizList {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 0.4rem;
-    gap: 0.85rem; /* tighter row gap on mobile */
+/* =====================
+  Mobile Optimization
+===================== */
+@media (max-width: 768px) {
+  .premiumHero h1 {
+    font-size: 2rem;
   }
 
   .quizItem {
-    flex: 0 0 auto;
-    scroll-snap-align: center;
-    margin-right: 0.5rem;
-    max-width: 168px; /* a touch wider for better legibility */
-    min-height: 170px;
+    flex: 0 0 85vw;
   }
 
-  .quizLink {
-    padding: 1.1rem 0.6rem;
+  .planButtonsRow {
+    flex-direction: column;
   }
 
-  .icon {
-    font-size: 1.85rem;
+  .planButtonFitness,
+  .planButtonMind,
+  .planButtonNourish {
+    width: 100%;
+    max-width: 340px;
+  }
+}
+
+@media (max-width: 420px) {
+  .quizItem {
+    flex: 0 0 90vw;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .dailyRitualWrapper {
+    padding: 2.3rem 1.6rem;
   }
 
-  .quizTitle {
-    font-size: 0.95rem;
-  }
-
-  .categoryButton {
-    font-size: 0.9rem;
-    padding: 0.45rem 0.8rem;
-  }
-
-  .categoryButton::before {
-    font-size: 0.98rem;
+  .dailyRitualTitle {
+    font-size: 1.6rem;
   }
 }

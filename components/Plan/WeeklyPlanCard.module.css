@@ -1,0 +1,193 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 2.4rem 2.8rem;
+  border-radius: 32px;
+  margin-top: 3rem;
+  background: linear-gradient(135deg, #f6f3ff 0%, #faf5ff 45%, #f0f3ff 100%);
+  border: 1px solid rgba(120, 98, 255, 0.16);
+  box-shadow: 0 6px 18px rgba(90, 78, 255, 0.04),
+    0 14px 34px rgba(90, 78, 255, 0.09);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  background: linear-gradient(135deg, #f3efff 0%, #f8f1ff 45%, #e8ebff 100%);
+  box-shadow: 0 10px 24px rgba(90, 78, 255, 0.06),
+    0 20px 40px rgba(90, 78, 255, 0.13);
+}
+
+/* ICON */
+.iconWrap {
+  width: 70px;
+  height: 70px;
+  border-radius: 20px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04), 0 8px 20px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease;
+}
+
+.card:hover .iconWrap {
+  transform: scale(1.05);
+}
+
+.icon {
+  width: 34px;
+  height: 34px;
+  color: #6c5ce7;
+}
+
+/* CONTENT */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 0.7rem;
+  letter-spacing: -0.2px;
+}
+
+.desc {
+  font-size: 1.08rem;
+  color: #565a6e;
+  margin-bottom: 1.6rem;
+  max-width: 610px;
+  line-height: 1.55;
+}
+
+/* BUTTON */
+.button {
+  width: fit-content; /* <— prevents stretching */
+  display: inline-flex; /* <— keeps icon + text aligned */
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.8rem;
+  background: #6c5ce7;
+  color: white;
+  font-size: 0.95rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.button:hover {
+  background: linear-gradient(135deg, #5d4ee0 0%, #6a54ec 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(108, 92, 231, 0.3),
+    0 4px 10px rgba(108, 92, 231, 0.15);
+}
+
+.buttonIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.label {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #6c5ce7;
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+}
+
+/* STATUS / TRUST LINE */
+.meta {
+  font-size: 0.75rem;
+  color: #8b8fa6;
+  margin-bottom: 1.2rem;
+  line-height: 1.4;
+}
+
+/* PREMIUM BADGE */
+.premiumBadge {
+  display: inline-block;
+  margin-top: 0.9rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #facc15, #f97316);
+  color: #1a1a1a;
+  letter-spacing: 0.05em;
+}
+/* MOBILE */
+@media (max-width: 640px) {
+  .card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.4rem;
+    padding: 1.6rem 1.4rem;
+    margin-top: 2rem;
+    border-radius: 22px;
+  }
+
+  .iconWrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+  }
+
+  .icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .content {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 1.35rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .desc {
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+    max-width: 100%;
+    line-height: 1.5;
+  }
+
+  .button {
+    width: 100%;
+    justify-content: center;
+    padding: 0.85rem 1.4rem;
+    font-size: 0.95rem;
+    border-radius: 12px;
+  }
+
+  .buttonIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .label {
+    font-size: 0.7rem;
+  }
+
+  .meta {
+    font-size: 0.72rem;
+    margin-bottom: 1rem;
+  }
+
+  .premiumBadge {
+    font-size: 0.68rem;
+  }
+}

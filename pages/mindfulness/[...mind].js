@@ -92,7 +92,7 @@ function MindfulnessDetailPage(props) {
                 name: "Wellness Pure Life",
                 logo: {
                   "@type": "ImageObject",
-                  url: "https://wellnesspurelife.com/logo.jpg",
+                  url: "https://wellnesspurelife.com/logo.png",
                 },
               },
               mainEntityOfPage: {

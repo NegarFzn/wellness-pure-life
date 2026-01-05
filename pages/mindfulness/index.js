@@ -10,7 +10,7 @@ import MindfulnessHighlights from "../../components/TopPages/MindfulnessHighligh
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
 import classes from "./index.module.css";
 import MindfulnessList from "../../components/mindfulness/mindfulness-list";
-import ChallengeBox from "../../components/ChallengeBox/ChallengeBox";
+import ChallengeCard from "../../components/ChallengeCard/ChallengeCard";
 
 function MindfulnessPage(props) {
   const [showButton, setShowButton] = useState(false);
@@ -426,11 +426,11 @@ function MindfulnessPage(props) {
           <div className={classes.challengeHeader}>
             Start Your Mindfullness Journey
           </div>
-          <ChallengeBox
+          <ChallengeCard
             title="Unlock Calm in 21 Days"
             description="Discover daily micro-practices to ease your mind, reduce stress, and build lasting peace — in just a few mindful minutes each day."
-            href="/challenge/21-days-mindfulness/1"
-            color="#4caf50"
+            href="/challenges/21-days-mindfulness/1"
+           
           />
         </section>
 

@@ -1,0 +1,147 @@
+/* WRAPPER */
+.wrapper {
+  text-decoration: none !important;
+  display: block;
+  width: 100%;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.wrapper:visited,
+.wrapper:active,
+.wrapper:hover {
+  text-decoration: none !important;
+}
+
+/* CARD */
+.card {
+  background: #ffffff;
+  padding: 26px 28px;
+  border-radius: 18px;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06), 0 12px 32px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+
+  transition: all 0.28s ease;
+}
+
+.wrapper:hover .card {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08), 0 16px 36px rgba(0, 0, 0, 0.05);
+}
+
+/* BADGE */
+.badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+color: #1C39BB;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* TITLE */
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 10px;
+  line-height: 1.25;
+}
+
+/* DESCRIPTION */
+.description {
+  font-size: 15px;
+  line-height: 1.58;
+  color: #4b5563;
+  margin: 0 0 22px;
+}
+
+/* CTA */
+.cta {
+  font-size: 15px;
+  font-weight: 600;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  /* Emerald color */
+  color: #10B981 !important;
+  text-decoration: none !important;
+
+  transition: all 0.25s ease;
+}
+
+.wrapper:hover .cta {
+  transform: translateX(4px);
+  opacity: 0.85;
+}
+
+/* =========================================
+   📱 MOBILE STYLES (small screens)
+   ========================================= */
+@media (max-width: 640px) {
+  .card {
+    padding: 20px 22px;
+    border-radius: 16px;
+
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), 0 10px 24px rgba(0, 0, 0, 0.04);
+  }
+
+  .badge {
+    padding: 5px 12px;
+    font-size: 11px;
+    margin-bottom: 14px;
+  }
+
+  .title {
+    font-size: 19px;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .description {
+    font-size: 14px;
+    margin-bottom: 18px;
+    line-height: 1.55;
+  }
+
+  .cta {
+    font-size: 14px;
+  }
+
+  /* Hover animations disabled for mobile for cleaner UX */
+  .wrapper:hover .card {
+    transform: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), 0 10px 24px rgba(0, 0, 0, 0.04);
+  }
+
+  .wrapper:hover .cta {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   📱 ULTRA-SMALL DEVICES (iPhone SE)
+   ========================================= */
+@media (max-width: 380px) {
+  .card {
+    padding: 18px 18px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .description {
+    font-size: 13.5px;
+  }
+
+  .cta {
+    font-size: 13.5px;
+  }
+}

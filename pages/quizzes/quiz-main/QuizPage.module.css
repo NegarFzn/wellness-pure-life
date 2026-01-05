@@ -1,254 +1,257 @@
 .container {
-  max-width: 680px;
+  max-width: 740px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 2.5rem 1.4rem 3.5rem;
   font-family: "Inter", sans-serif;
-  background: #fefefe;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+  background: linear-gradient(180deg, #ffffff, #f6f7fb);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
 }
 
+/* ================= TITLE ================= */
 .title {
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   text-align: center;
-  color: #333;
-  margin-bottom: 1.5rem;
+  color: #0f172a;
+  margin-bottom: 2.2rem;
+  letter-spacing: -0.3px;
 }
 
+/* ================= QUESTIONS ================= */
 .questionBlock {
-  background: #ffffff;
-  padding: 1.2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1.5rem;
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  padding: 1.6rem 1.4rem;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+  margin-bottom: 2rem;
   animation: fadeIn 0.8s ease forwards;
   opacity: 0;
   transform: translateY(10px);
 }
 
 .questionText {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.8rem;
-  color: #444;
+  font-size: 1.12rem;
+  font-weight: 700;
+  margin-bottom: 1.1rem;
+  color: #111827;
 }
 
+/* ================= OPTIONS ================= */
 .optionLabel {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.6rem;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
   cursor: pointer;
-  font-size: 1rem;
-  color: #222;
+  font-size: 1.02rem;
+  color: #1f2937;
+  padding: 0.4rem 0.3rem;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.optionLabel:hover {
+  background: #f1f5f9;
 }
 
 .optionLabel input[type="radio"] {
-  accent-color: #4caf50;
+  accent-color: #4f46e5;
   width: 18px;
   height: 18px;
 }
 
+/* ================= EMAIL ================= */
 .emailInput {
   width: 100%;
-  padding: 0.9rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
   font-size: 1rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  transition: border-color 0.3s;
+  margin-top: 2rem;
+  margin-bottom: 1.2rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .emailInput:focus {
-  border-color: #4caf50;
+  border-color: #6366f1;
   outline: none;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
 }
 
+/* ================= SUBMIT ================= */
 .submitButton {
-  background: linear-gradient(135deg, #4caf50, #81c784);
+  background: linear-gradient(135deg, #4f46e5, #38bdf8);
   color: white;
-  font-weight: 600;
+  font-weight: 700;
   border: none;
   padding: 1rem 1.5rem;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 16px;
   font-size: 1.1rem;
   cursor: pointer;
-  margin-top: 1rem;
-  transition: background 0.3s;
+  margin-top: 1.2rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 14px 30px rgba(59, 130, 246, 0.35);
 }
 
 .submitButton:hover {
-  background: linear-gradient(135deg, #388e3c, #66bb6a);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.45);
 }
 
+/* ================= RESULT ================= */
 .resultBox {
-  background-color: #e8f5e9;
-  border: 1px solid #c8e6c9;
-  border-radius: 10px;
-  padding: 2rem;
-  margin-top: 2rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  background: linear-gradient(180deg, #ecfdf5, #d1fae5);
+  border: 1px solid #a7f3d0;
+  border-radius: 18px;
+  padding: 2.2rem;
+  margin-top: 2.5rem;
+  box-shadow: 0 10px 26px rgba(16, 185, 129, 0.15);
   animation: fadeIn 0.6s ease-out;
 }
 
 .resultTitle {
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin-bottom: 1.25rem;
+  font-size: 1.9rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
   text-align: center;
-  color: #2e7d32;
+  color: #065f46;
 }
 
 .resultContent {
-  border-top: 1px solid #a5d6a7;
-  padding-top: 1.5rem;
+  border-top: 1px solid #6ee7b7;
+  padding-top: 1.6rem;
 }
 
 .resultDescription {
   font-size: 1.05rem;
-  margin: 0.5rem 0;
-  line-height: 1.6;
-  color: #333;
+  margin: 0.7rem 0;
+  line-height: 1.65;
+  color: #064e3b;
 }
 
 .resultList {
-  padding-left: 1.2rem;
-  margin-top: 1rem;
-  font-size: 1rem;
+  padding-left: 1.3rem;
+  margin-top: 1.2rem;
+  font-size: 1.05rem;
 }
 
 .resultList li {
-  margin-bottom: 0.6rem;
-  line-height: 1.4;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* ================= STATES ================= */
 .error {
-  color: #d32f2f;
-  background: #ffebee;
-  padding: 1rem;
-  border-radius: 8px;
-  font-weight: bold;
-  margin: 1rem;
+  color: #991b1b;
+  background: #fee2e2;
+  padding: 1.1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  margin: 1.2rem;
   text-align: center;
 }
 
 .loading {
-  color: #555;
+  color: #334155;
   font-size: 1.2rem;
   text-align: center;
-  padding: 2rem;
+  padding: 2.5rem;
 }
 
 .inlineError {
-  color: #d32f2f;
-  background-color: #fdecea;
-  border: 1px solid #f5c6cb;
-  padding: 10px 12px;
-  border-radius: 6px;
-  margin: 1rem 0;
-  font-weight: 500;
-}
-
-.animateOnScroll {
-  transition: all 0.6s ease-in-out;
-}
-
-/* Soft Premium Box */
-.softPremiumBox {
-  margin-top: 2rem;
-  padding: 1.6rem 1.4rem;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-  border-radius: 20px;
-  text-align: center;
-}
-
-/* Title */
-.softPremiumTitle {
-  font-size: 1.2rem;
+  color: #991b1b;
+  background-color: #ffebee;
+  border: 1px solid #fecaca;
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin: 1.2rem 0;
   font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 0.6rem;
 }
 
-/* Description text */
+/* ================= PREMIUM BOX ================= */
+.softPremiumBox {
+  margin-top: 3rem;
+  padding: 2.6rem 1.6rem;
+  background: linear-gradient(180deg, #f8fafc, #eef2ff);
+  border: 1px solid #e0e7ff;
+  border-radius: 26px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(79, 70, 229, 0.12);
+}
+
+.softPremiumTitle {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 0.8rem;
+}
+
 .softPremiumText {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: #6b7280;
-  margin-bottom: 1.4rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #475569;
+  margin-bottom: 1.8rem;
   padding: 0 0.4rem;
 }
 
-/* Button */
-
+/* ================= PLAN BUTTONS ================= */
 .noPlan {
-  background: #fff7ed;
+  background: linear-gradient(180deg, #fff7ed, #ffedd5);
   border: 1px solid #fde68a;
-  border-radius: 1rem;
-  padding: 2rem;
-  margin-top: 2.5rem;
-  text-align: center;
-  box-shadow: 0 4px 16px rgba(251, 191, 36, 0.1);
+  border-radius: 22px;
+  padding: 2.4rem 1.8rem;
+  margin-top: 2.4rem;
+  box-shadow: 0 16px 48px rgba(251, 191, 36, 0.18);
 }
+
 .noPlanText {
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 1.3rem;
   color: #92400e;
 }
+
 .planLinksGrid {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
 .takePlanLink {
+  min-width: 210px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1.1rem;
-  font-weight: 600;
+  gap: 0.55rem;
+  padding: 0.85rem 1.7rem;
+  font-size: 1.05rem;
+  font-weight: 700;
   border-radius: 9999px;
   background: linear-gradient(135deg, #4f46e5, #38bdf8);
   color: white;
   border: none;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 14px 32px rgba(79, 70, 229, 0.35);
+  transition: all 0.25s ease;
   text-decoration: none;
-  white-space: nowrap;
 }
+
 .takePlanLink:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 46px rgba(79, 70, 229, 0.45);
 }
 
 .takePlanLink:active {
   transform: translateY(0);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
+/* ================= MODAL ================= */
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(15, 23, 42, 0.6);
   z-index: 1000;
   display: flex;
   justify-content: center;
@@ -256,37 +259,65 @@
 }
 
 .modalContent {
-  padding: 2rem;
-  border-radius: 1rem;
-  max-width: 90%;
-  max-height: 90%;
+  padding: 2.4rem;
+  border-radius: 26px;
+  max-width: 92%;
+  max-height: 92%;
   overflow-y: auto;
-  z-index: 1001;
+  background: white;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
   position: relative;
 }
 
 .closeModal {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  width: 1.75rem;
-  height: 1.75rem;
-  font-size: 1rem;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.1rem;
   background: transparent;
-  color: #94a3b8; /* subtle slate gray */
+  color: #94a3b8;
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  transition: color 0.2s ease, transform 0.2s ease;
-  z-index: 1002;
+  transition: all 0.2s ease;
 }
 
 .closeModal:hover {
-  color: #ef4444; /* soft red on hover */
+  color: #ef4444;
   transform: rotate(90deg);
 }
 
-/* Fade-in Delays for Staggered Animation */
+/* ================= BLOG CTA ================= */
+.blogCtaWrap {
+  margin-top: 2.8rem;
+  text-align: center;
+}
+
+.blogCta {
+  display: inline-block;
+  padding: 1rem 2.4rem;
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 1.05rem;
+  transition: 0.25s ease;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+}
+
+.blogCta:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* ================= ANIMATION ================= */
+.animateOnScroll {
+  transition: all 0.6s ease-in-out;
+}
+
 .fadeDelay0 {
   animation-delay: 0s;
 }
@@ -307,125 +338,222 @@
   }
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
+/* =========================
+   EMAIL CAPTURE — FREE QUIZ
+========================= */
 
-/* === BLOG CTA (Desktop + Mobile) === */
-.blogCtaWrap {
-  margin-top: 2.5rem;
+.emailCaptureWrap {
+  max-width: 620px;
+  margin: 2.5rem auto;
+  padding: 2.2rem 2rem;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #f6f7ff, #fdfbff);
+  box-shadow: 0 10px 30px rgba(90, 78, 255, 0.12);
   text-align: center;
 }
 
-.blogCta {
-  display: inline-block;
-  padding: 1rem 1.8rem;
-  background: #0b0b0b;
-  color: #ffffff;
-  font-weight: 600;
-  border-radius: 12px;
-  text-decoration: none;
-  font-size: 1.1rem;
-  transition: 0.3s ease;
-  width: auto;
+.emailTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+  color: #2d2b6f;
 }
 
-/* Hover (desktop only) */
-.blogCta:hover {
-  opacity: 0.85;
+.emailSubtext {
+  font-size: 0.95rem;
+  color: #5a5f7a;
+  line-height: 1.5;
+  margin-bottom: 1.4rem;
+}
+
+.emailForm {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.emailInput {
+  flex: 1;
+  min-width: 240px;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #cfd3ff;
+  font-size: 0.95rem;
+}
+
+.emailButton {
+  padding: 0.75rem 1.6rem;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #6c5ce7, #8e7bff);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.emailButton:hover {
   transform: translateY(-2px);
 }
 
-/* 📱 Mobile Adjustments */
+.emailTrust {
+  font-size: 0.75rem;
+  color: #777;
+  margin-top: 0.9rem;
+}
+
+.emailStatusSuccess {
+  margin-top: 1rem;
+  color: #16a34a;
+  font-weight: 600;
+}
+
+/* Base */
+.sendEmailButton {
+  width: 100%;
+  max-width: 360px;
+  margin: 22px auto;
+  padding: 12px 18px;
+
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05), 0 0 0 5px rgba(79, 209, 197, 0.1);
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sendEmailButton:hover:not(.sending):not(.sent) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08), 0 0 0 6px rgba(79, 209, 197, 0.14);
+}
+
+.sendEmailButton:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+
+/* Icon wrapper */
+.emailIconWrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #f8fafc, #e2e8f0);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.06);
+
+  transition: all 0.3s;
+}
+
+/* Spinner */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 3px solid #cbd5e1;
+  border-top-color: #0ea5e9;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* SENT STATE */
+.sent {
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.15),
+    0 0 0 6px rgba(16, 185, 129, 0.2) !important;
+  color: #065f46;
+}
+
+/* glow on icon */
+.sent .emailIconWrap {
+  background: linear-gradient(180deg, #d1fae5, #a7f3d0);
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.05), 0 0 12px rgba(16, 185, 129, 0.45);
+}
+
+/* Text */
+.emailButtonText {
+  font-size: 15px;
+  color: inherit;
+  white-space: nowrap;
+}
+
+/* Sending state */
+.sending {
+  opacity: 0.8;
+}
+
+/* ================= MOBILE ================= */
 @media (max-width: 600px) {
   .container {
-    padding: 1rem 1rem 2rem;
+    padding: 1.4rem 1rem 2.5rem;
   }
 
   .title {
-    font-size: 1.5rem;
-  }
-
-  .questionBlock {
-    padding: 1rem;
-  }
-
-  .questionText {
-    font-size: 1rem;
-  }
-
-  .optionLabel {
-    font-size: 0.95rem;
+    font-size: 1.6rem;
   }
 
   .submitButton {
     font-size: 1rem;
-    padding: 0.9rem 1.2rem;
-  }
-
-  .resultBox {
-    padding: 1.2rem;
   }
 
   .resultTitle {
-    font-size: 1.3rem;
+    font-size: 1.45rem;
   }
 
-  .resultDescription,
-  .resultList {
-    font-size: 0.95rem;
-  }
-
-  .planButtonGroup {
-    flex-direction: row;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .softPremiumButton {
-    padding: 9px 14px;
-    font-size: 13.5px;
-    border-radius: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .planButtonGroup {
-    grid-template-columns: 1fr;
-  }
-
-  .planButtonGroup button:last-child {
-    grid-column: span 1;
+  .takePlanLink {
+    width: 100%;
+    max-width: 320px;
   }
 }
 
 @media (max-width: 640px) {
-  .blogCtaWrap {
-    margin-top: 1.8rem;
-    text-align: center;
-    padding: 0 1rem;
+  .emailForm {
+    flex-direction: column;
   }
 
-  .premiumNote {
-    font-size: 0.9rem;
-    line-height: 1.45;
-    margin-bottom: 1rem;
-    padding: 0 0.5rem;
-  }
-
-  .blogCta {
+  .emailButton {
     width: 100%;
-    display: block;
-    text-align: center;
-    padding: 1rem 1.2rem;
-    font-size: 1rem;
-    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sendEmailButton {
+    max-width: 100%;
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+
+  .emailIconWrap {
+    width: 28px;
+    height: 28px;
+  }
+
+  .emailButtonText {
+    font-size: 14px;
   }
 }

@@ -1,16 +1,18 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { firestore } from "../../../utils/firebaseAdmin";
+import { connectToDatabase } from "../../../utils/mongodb";
 
-// Normalize premium values
+/* ------------------------------------------
+   NORMALIZE PREMIUM FLAG
+------------------------------------------- */
 function normalizeIsPremium(value) {
-  if (value === true) return true;
-  if (value === "true") return true;
-  if (value === 1) return true;
-  return false;
+  return value === true || value === "true" || value === 1;
 }
 
+/* ------------------------------------------
+   NEXTAUTH CONFIG
+------------------------------------------- */
 export const authOptions = {
   providers: [
     CredentialsProvider({
@@ -19,45 +21,49 @@ export const authOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
+
       async authorize(credentials) {
         const email = credentials.email?.trim().toLowerCase();
         const password = credentials.password?.trim();
-        if (!email) return null;
+
+        // Require both email + password
+        if (!email || !password) return null;
 
         try {
-          const snapshot = await firestore
-            .collection("users")
-            .where("email", "==", email)
-            .get();
+          const { db } = await connectToDatabase();
+          const user = await db.collection("users").findOne({ email });
 
-          if (snapshot.empty) return null;
+          if (!user) return null;
 
-          const userDoc = snapshot.docs[0];
-          const user = userDoc.data();
+          // User must have a password in DB
+          if (!user.password) return null;
 
           // Validate password
-          if (password) {
-            const isValid = await bcrypt.compare(password, user.password);
-            if (!isValid) return null;
-          }
+          const valid = await bcrypt.compare(password, user.password);
+          if (!valid) return null;
 
+          // Return into JWT
           return {
-            id: userDoc.id,
+            id: user._id.toString(),
             email: user.email,
             name: user.name || null,
-            isPremium: normalizeIsPremium(user.isPremium),
+             isPremium: normalizeIsPremium(user.isPremium), 
+            emailVerified: user.isVerified || false,
           };
         } catch (err) {
-          console.error("❌ Firebase Admin Auth error:", err);
+          console.error("❌ MongoDB Auth Error:", err);
           return null;
         }
       },
     }),
   ],
 
+  /* ------------------------------------------
+     SESSION & JWT
+  ------------------------------------------- */
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60,
+    maxAge: 24 * 60 * 60, // 24 hours
   },
 
   jwt: {
@@ -65,42 +71,48 @@ export const authOptions = {
   },
 
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    /* ------------------------------------------
+       JWT: Add user, refresh premium from Mongo
+    ------------------------------------------- */
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.uid = user.id;
         token.email = user.email;
         token.name = user.name;
-        token.isPremium = normalizeIsPremium(user.isPremium);
+        token.emailVerified = user.emailVerified;
       }
 
-      if (token.id) {
+      // Refresh premium status from MongoDB every request
+      if (token.email) {
         try {
-          const userDoc = await firestore.collection("users").doc(token.id).get();
-          const userData = userDoc.data();
-          token.isPremium = normalizeIsPremium(userData?.isPremium);
-          token.emailVerified = userData?.isVerified || false;
-        } catch (err) {
-          console.error("❌ Firebase Admin Auth error:", err);
-          token.isPremium = false;
-          token.emailVerified = false;
-        }
-      }
+          const { db } = await connectToDatabase();
+          const mongoUser = await db.collection("users").findOne({
+            email: token.email,
+          });
 
-      if (trigger === "update" && session?.isPremium !== undefined) {
-        token.isPremium = normalizeIsPremium(session.isPremium);
+          if (mongoUser) {
+            token.isPremium = normalizeIsPremium(mongoUser.isPremium);
+          }
+        } catch (err) {
+          console.error("❌ MongoDB premium lookup error:", err);
+        }
       }
 
       return token;
     },
 
+    /* ------------------------------------------
+       SESSION: Expose token to client
+    ------------------------------------------- */
     async session({ session, token }) {
+      if (!session.user) session.user = {};
+
       session.user.id = token.id;
-      session.user.uid = token.uid;
       session.user.email = token.email;
       session.user.name = token.name;
       session.user.isPremium = normalizeIsPremium(token.isPremium);
-      session.user.emailVerified = token.emailVerified;
+      session.user.emailVerified = token.emailVerified ?? false;
+
       return session;
     },
   },
@@ -108,5 +120,4 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-// REQUIRED
 export default NextAuth(authOptions);

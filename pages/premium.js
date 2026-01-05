@@ -3,13 +3,61 @@ import Link from "next/link";
 import classes from "./premium.module.css";
 
 export default function PremiumPage() {
+  const features = [
+    {
+      title: "Sleep Reset",
+      desc: "Fall asleep faster, wake up less at night, and restore deep, restorative sleep.",
+      sampleType: null,
+    },
+    {
+      title: "Stress Reset",
+      desc: "Rapidly calm emotional overload, anxiety, and physical tension.",
+      sampleType: null,
+    },
+    {
+      title: "Daily Rituals Pro",
+      desc: "Morning, midday, and evening rituals for clarity, calm, and steady energy.",
+      sampleType: "daily",
+    },
+    {
+      title: "Weekly Wellness Plan",
+      desc: "A full 7-day structure based on your quiz answers — movement, recovery, and focus.",
+      sampleType: "weekly",
+    },
+    {
+      title: "AI Wellness Coach",
+      desc: "Instant guidance for routines, sleep, stress, habits, and nutrition.",
+      sampleType: null,
+    },
+    {
+      title: "Habit & Progress Tracking",
+      desc: "Build consistency with streaks for sleep, movement, hydration, and rituals.",
+      sampleType: null,
+    },
+    {
+      title: "Easy Nutrition Structure",
+      desc: "Simple meals, weekly guidance, smart snack ideas, and hydration planning.",
+      sampleType: null,
+    },
+    {
+      title: "Premium Workouts",
+      desc: "Strength, mobility, low-impact, and fat-burning routines.",
+      sampleType: null,
+    },
+    {
+      title: "Premium Articles",
+      desc: "Deep, structured wellness education for long-term understanding and growth.",
+      sampleType: null,
+    },
+  ];
+
   return (
     <>
       <Head>
         <title>Wellness Pure Life Pro | Premium Membership</title>
         <meta
           name="description"
-          content="Unlock your personalized wellness system with Premium: weekly plans, rituals, workouts, sleep programs, nutrition, and your AI wellness coach."
+          content="Unlock your personalized wellness system with Premium: weekly plans, daily rituals, sleep reset, stress reset, AI coaching, workouts, and nutrition."
         />
       </Head>
 
@@ -24,6 +72,7 @@ export default function PremiumPage() {
             Wellness Pure Life <span>Pro</span>
           </h1>
 
+          {/* ✅ SHORT, PREMIUM, NON-HYPED SUBTITLE */}
           <p className={classes.subtitle}>
             A vibrant, structured, science-based system to boost your energy,
             improve your mood, strengthen your body, and help you live with
@@ -31,8 +80,8 @@ export default function PremiumPage() {
           </p>
 
           <ul className={classes.heroList}>
-            <li>Weekly personalized plan</li>
-            <li>Premium workouts & rituals</li>
+            <li>Personalized weekly plan</li>
+            <li>Daily rituals & routines</li>
             <li>AI wellness coach</li>
             <li>Sleep & stress reset</li>
             <li>Nutrition structure</li>
@@ -53,53 +102,34 @@ export default function PremiumPage() {
           <header className={classes.sectionHeader}>
             <h2 className={classes.sectionTitle}>What’s Inside Premium</h2>
             <p className={classes.sectionSubtitle}>
-              A complete, colorful wellness system designed to support your mind
-              and body every day.
+              A complete wellness system designed to support your mind and body
+              every day.
             </p>
           </header>
 
           <div className={classes.featureGrid}>
-            {[
-              {
-                title: "Personalized Weekly Wellness Plan",
-                desc: "A weekly plan based on your quiz answers — movement, rituals, recovery, and focus tasks.",
-              },
-              {
-                title: "Daily Rituals Pro",
-                desc: "Advanced morning, evening, breathing, focus and stress rituals that fit real life.",
-              },
-              {
-                title: "Premium Workouts",
-                desc: "Strength, mobility, low-impact, fat-burning routines with colorful illustrations.",
-              },
-              {
-                title: "AI Wellness Coach",
-                desc: "Ask about routines, sleep, stress, habits, nutrition — get tailored guidance instantly.",
-              },
-              {
-                title: "Sleep Reset Program",
-                desc: "A calming 7-day system for deep, restorative sleep and more stable energy.",
-              },
-              {
-                title: "Stress Calm Protocol",
-                desc: "Somatic techniques + breathing sequences + rapid tension release methods.",
-              },
-              {
-                title: "Easy Nutrition Structure",
-                desc: "Simple meals, weekly guidance, smart snack ideas, hydration plan.",
-              },
-              {
-                title: "Habit & Progress Tracking",
-                desc: "Track sleep, movement, hydration, rituals — build consistency effortlessly.",
-              },
-              {
-                title: "Premium Articles",
-                desc: "Deep, structured wellness education that helps you understand your mind & body.",
-              },
-            ].map((f, i) => (
+            {features.map((f, i) => (
               <div key={i} className={classes.featureCard}>
                 <h3>{f.title}</h3>
                 <p>{f.desc}</p>
+
+                {f.sampleType === "weekly" && (
+                  <Link
+                    href="/sample/weekly-plan"
+                    className={classes.sampleButton}
+                  >
+                    See Sample Weekly Plan
+                  </Link>
+                )}
+
+                {f.sampleType === "daily" && (
+                  <Link
+                    href="/sample/daily-routine"
+                    className={classes.sampleButton}
+                  >
+                    See Sample Daily Routine
+                  </Link>
+                )}
               </div>
             ))}
           </div>
@@ -128,12 +158,12 @@ export default function PremiumPage() {
                   ["Blog articles", "✔", "✔"],
                   ["Basic workouts", "✔", "✔"],
                   ["Standard rituals", "✔", "✔"],
-                  ["Weekly personalized plan", "✖", "✔"],
+                  ["Weekly wellness plan", "✖", "✔"],
                   ["Daily Rituals Pro", "✖", "✔"],
                   ["Premium workouts", "✖", "✔"],
-                  ["Sleep reset program", "✖", "✔"],
-                  ["Stress calm program", "✖", "✔"],
-                  ["Easy nutrition guide", "✖", "✔"],
+                  ["Sleep Reset", "✖", "✔"],
+                  ["Stress Reset", "✖", "✔"],
+                  ["Easy nutrition structure", "✖", "✔"],
                   ["AI wellness coach", "✖", "✔"],
                   ["Premium articles", "✖", "✔"],
                 ].map(([feat, free, prem], i) => (
@@ -169,7 +199,7 @@ export default function PremiumPage() {
                 <li>Perfect for trying it out</li>
               </ul>
               <Link
-                href="/checkout?plan=monthly"
+                href="/upgrade"
                 className={classes.primaryButton}
               >
                 Start Monthly
@@ -188,11 +218,83 @@ export default function PremiumPage() {
                 <li>Designed for long-term progress</li>
               </ul>
               <Link
-                href="/checkout?plan=yearly"
+                href="/upgrade"
                 className={classes.primaryButton}
               >
                 Start Yearly
               </Link>
+            </div>
+          </div>
+        </section>
+        {/* GUARANTEE SECTION */}
+        {/* GUARANTEE SECTION */}
+        <section className={classes.guarantee}>
+          <div className={classes.guaranteeCard}>
+            {/* ✅ ICON + TITLE ROW */}
+            <div className={classes.guaranteeHeader}>
+              <span className={classes.guaranteeIcon}>✅</span>
+              <h3 className={classes.guaranteeTitle}>
+                7-Day Satisfaction Guarantee
+              </h3>
+            </div>
+
+            <p className={classes.guaranteeText}>
+              Try the full Premium system with complete peace of mind. If within
+              the first 7 days you feel no improvement in your sleep, stress,
+              focus, or energy, you can cancel with one click — no questions
+              asked.
+            </p>
+
+            <p className={classes.guaranteeNote}>
+              We offer this because we are confident in the real-world impact of
+              this system when used consistently.
+            </p>
+          </div>
+        </section>
+
+        {/* TRANSFORMATION SECTION */}
+        <section className={classes.section}>
+          <header className={classes.sectionHeader}>
+            <h2 className={classes.sectionTitle}>
+              What Changes After You Go Premium
+            </h2>
+            <p className={classes.sectionSubtitle}>
+              This is not just access to features. It is a shift in how your
+              body and mind function daily.
+            </p>
+          </header>
+
+          <div className={classes.transformationGrid}>
+            <div className={classes.transformationCard}>
+              <h3>Daily</h3>
+              <p>
+                You stop waking up scattered and emotionally overloaded. Your
+                day starts with structure, clarity, and calm intention.
+              </p>
+            </div>
+
+            <div className={classes.transformationCard}>
+              <h3>Weekly</h3>
+              <p>
+                You stop improvising your life. You follow a calm, intelligent
+                weekly structure that removes decision fatigue.
+              </p>
+            </div>
+
+            <div className={classes.transformationCard}>
+              <h3>Emotional</h3>
+              <p>
+                Stress no longer controls your nervous system. You learn how to
+                regulate emotions instead of fighting them.
+              </p>
+            </div>
+
+            <div className={classes.transformationCard}>
+              <h3>Energy</h3>
+              <p>
+                You stop burning yourself out and begin recovering deeply.
+                Energy becomes stable instead of chaotic.
+              </p>
             </div>
           </div>
         </section>

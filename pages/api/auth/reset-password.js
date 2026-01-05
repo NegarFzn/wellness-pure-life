@@ -1,78 +1,93 @@
-import { firestore, FieldValue } from "../../../utils/firebaseAdmin";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import { sendEmail } from "../../../utils/email";
 import { createPasswordResetEmail } from "../../../emails/emailCreator";
+import { connectToDatabase } from "../../../utils/mongodb";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).end();
+  if (req.method !== "POST") return res.status(405).end("Method Not Allowed");
 
   const { email, token, password } = req.body;
-  const usersRef = firestore.collection("users");
 
-  // ✅ Case 1: Send password reset email
+  const { db } = await connectToDatabase();
+  const users = db.collection("users");
+
+  /* -------------------------------------------------------
+     CASE 1 — REQUEST RESET EMAIL
+  ------------------------------------------------------- */
   if (email && !token && !password) {
-    const snapshot = await usersRef.where("email", "==", email).limit(1).get();
-    if (snapshot.empty) {
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const user = await users.findOne({ email: normalizedEmail });
+
+    if (!user) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
 
-    const userDoc = snapshot.docs[0];
     const resetToken = uuidv4();
-    const expires = Date.now() + 15 * 60 * 1000;
+    const expires = Date.now() + 15 * 60 * 1000; // 15 minutes
 
-    await userDoc.ref.update({ resetToken, resetTokenExpires: expires });
+    await users.updateOne(
+      { _id: user._id },
+      {
+        $set: {
+          resetToken,
+          resetTokenExpires: expires,
+        },
+      }
+    );
 
-    const userName = userDoc.data().name || "";
-    const { subject, body } = createPasswordResetEmail(userName, resetToken);
+    const { subject, body } = createPasswordResetEmail(user.name || "", resetToken);
 
     try {
-      await sendEmail(email, subject, body);
+      await sendEmail(normalizedEmail, subject, body);
       return res.status(200).json({ success: true });
     } catch (err) {
-      console.error(err);
+      console.error("❌ Email send error:", err);
       return res
         .status(500)
         .json({ success: false, message: "Failed to send reset email" });
     }
   }
 
-  // ✅ Case 2: Update password using token
+  /* -------------------------------------------------------
+     CASE 2 — RESET PASSWORD USING TOKEN
+  ------------------------------------------------------- */
   if (token && password) {
-    const snapshot = await usersRef
-      .where("resetToken", "==", token)
-      .limit(1)
-      .get();
-    if (snapshot.empty) {
+    const user = await users.findOne({ resetToken: token });
+
+    if (!user) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid or expired token" });
     }
 
-    const userDoc = snapshot.docs[0];
-    const userData = userDoc.data();
-
-    if (
-      !userData.resetTokenExpires ||
-      userData.resetTokenExpires < Date.now()
-    ) {
-      return res.status(400).json({ success: false, message: "Token expired" });
+    if (!user.resetTokenExpires || user.resetTokenExpires < Date.now()) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Token expired" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    await userDoc.ref.update({
-      password: hashedPassword,
-      resetToken: FieldValue.delete(),
-      resetTokenExpires: FieldValue.delete(),
-    });
+    await users.updateOne(
+      { _id: user._id },
+      {
+        $set: { password: hashedPassword },
+        $unset: { resetToken: "", resetTokenExpires: "" },
+      }
+    );
 
-    return res
-      .status(200)
-      .json({ success: true, message: "Password reset successful" });
+    return res.status(200).json({
+      success: true,
+      message: "Password reset successful",
+    });
   }
 
+  /* -------------------------------------------------------
+     INVALID REQUEST
+  ------------------------------------------------------- */
   return res.status(400).json({ success: false, message: "Invalid request" });
 }

@@ -1,21 +1,26 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../pages/api/auth/[...nextauth]";
+import { getToken } from "next-auth/jwt";
+import { NextResponse } from "next/server";
 
-export async function requirePremium(ctx) {
-  const session = await getServerSession(ctx.req, ctx.res, authOptions);
+export async function middleware(req) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  if (!session?.user?.isPremium) {
-    return {
-      redirect: {
-        destination: "/premium",
-        permanent: false,
-      },
-    };
+  if (!token) {
+    return NextResponse.redirect(new URL("/auth", req.url));
   }
 
-  return {
-    props: {
-      session,
-    },
-  };
+  if (!token.isPremium) {
+    return NextResponse.redirect(new URL("/premium", req.url));
+  }
+
+  return NextResponse.next();
 }
+
+export const config = {
+  matcher: [
+    "/plan/weekly-plan",
+    "/plan/daily-routine",
+    "/programs/:path*",
+    "/meditations/:path*",
+    "/rituals/advanced",
+  ],
+};

@@ -1,0 +1,214 @@
+import { useState } from "react";
+import PlanPreviewModal from "./PlanPreviewModal";
+import classes from "./PlanHistoryModal.module.css";
+
+export default function PlanHistoryModal({ show, onClose, history, loading }) {
+  const [previewPlan, setPreviewPlan] = useState(null);
+  const [favoritedIds, setFavoritedIds] = useState({});
+
+  if (!show) return null;
+
+  /* -----------------------------
+     RESTORE FROM PREVIEW
+  ----------------------------- */
+  const handleRestoreFromPreview = async (item) => {
+    try {
+      const res = await fetch("/api/plan/restore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ planToRestore: item }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setPreviewPlan(null);
+        onClose();
+        onClose();
+        setPreviewPlan(null);
+      } else {
+        alert(data.error || "Failed to restore plan");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to restore plan");
+    }
+  };
+
+  /* -----------------------------
+     TOAST
+  ----------------------------- */
+  const showToast = (message, type = "success") => {
+    const toast = document.createElement("div");
+    toast.className = `wpl-toast wpl-toast-${type}`;
+    toast.innerText = message;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.classList.add("show"), 10);
+    setTimeout(() => {
+      toast.classList.remove("show");
+      setTimeout(() => toast.remove(), 300);
+    }, 1000);
+  };
+
+  /* -----------------------------
+     FAVORITE PLAN
+  ----------------------------- */
+  const handleFavorite = async (itemRaw) => {
+    // Normalize the ID consistently
+    const id =
+      itemRaw._id?.$oid ||
+      itemRaw._id?.toString?.() ||
+      itemRaw._id ||
+      itemRaw.id ||
+      itemRaw.planId ||
+      itemRaw.savedAt;
+
+    // ⭐ Prepare clean plan object WITH _id included
+    const safeItem = {
+      ...itemRaw,
+      _id: String(id),
+    };
+
+    // ⭐ 1. Optimistic UI
+    setFavoritedIds((prev) => ({ ...prev, [id]: true }));
+
+    try {
+      const res = await fetch("/api/plan/favorites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: safeItem }), // now valid
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // Revert optimistic UI
+        setFavoritedIds((prev) => {
+          const copy = { ...prev };
+          delete copy[id];
+          return copy;
+        });
+
+        if (data.error === "already_favorite") {
+          showToast("This plan is already in your favorites ❤️", "error");
+        } else {
+          showToast(data.error || "Failed to save favorite", "error");
+        }
+        return;
+      }
+
+      showToast("Added to favorites ❤️", "success");
+    } catch (err) {
+      console.error(err);
+
+      // Revert optimistic UI on error
+      setFavoritedIds((prev) => {
+        const copy = { ...prev };
+        delete copy[id];
+        return copy;
+      });
+
+      showToast("Failed to save favorite", "error");
+    }
+  };
+
+  /* -----------------------------
+     RENDER
+  ----------------------------- */
+  return (
+    <div className={classes.modalOverlay} onClick={onClose}>
+      <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
+        <button className={classes.closeButton} onClick={onClose}>
+          ✕
+        </button>
+
+        <h2 className={classes.title}>Previous Weekly Plans</h2>
+        <p className={classes.subtitle}>
+          View, restore, or favorite your past weekly plans.
+        </p>
+
+        {loading ? (
+          <p className={classes.loading}>Loading history…</p>
+        ) : history.length === 0 ? (
+          <p className={classes.empty}>No previous weekly plans saved yet.</p>
+        ) : (
+          <ul className={classes.list}>
+            {history.map((itemRaw) => {
+              const id =
+                itemRaw._id?.$oid ||
+                itemRaw._id?.toString?.() ||
+                itemRaw._id ||
+                itemRaw.id ||
+                itemRaw.planId ||
+                itemRaw.savedAt; // fallback but unique
+
+              const item = { ...itemRaw, _id: String(id) };
+
+              return (
+                <li key={item._id} className={classes.item}>
+                  {/* Meta dates */}
+                  <div className={classes.meta}>
+                    <span className={classes.date}>
+                      {item.updatedAt
+                        ? new Date(item.updatedAt).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : "Unknown date"}
+                    </span>
+
+                    <span className={classes.saved}>
+                      saved{" "}
+                      {item.savedAt
+                        ? new Date(item.savedAt).toLocaleString("en-US")
+                        : ""}
+                    </span>
+                  </div>
+
+                  {/* Summary */}
+                  {item.weekSummary && (
+                    <p className={classes.summary}>{item.weekSummary}</p>
+                  )}
+
+                  {/* Buttons */}
+                  <div className={classes.actionsRow}>
+                    <button
+                      className={classes.restoreButton}
+                      onClick={() => setPreviewPlan(item)}
+                    >
+                      Preview Plan
+                    </button>
+
+                    <button
+                      className={
+                        item.isFavorite || favoritedIds[item._id]
+                          ? `${classes.favoriteButton} ${classes.favoriteDone}`
+                          : classes.favoriteButton
+                      }
+                      onClick={() => handleFavorite(item)}
+                    >
+                      {item.isFavorite || favoritedIds[item._id]
+                        ? "✓ Favorited"
+                        : "❤️ Favorite"}
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+
+        {/* Preview Modal */}
+        {previewPlan && (
+          <PlanPreviewModal
+            plan={previewPlan}
+            onClose={() => setPreviewPlan(null)}
+            onConfirm={() => handleRestoreFromPreview(previewPlan)}
+          />
+        )}
+      </div>
+    </div>
+  );
+}

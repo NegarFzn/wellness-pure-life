@@ -1,42 +1,53 @@
-import { firestore, admin } from "../../../utils/firebaseAdmin"; // ensure 'admin' is exported
+import { connectToDatabase } from "../../../utils/mongodb";
 import { sendEmail } from "../../../utils/email";
-import { createVerificationEmail } from "../../../emails/emailCreator";
+import { createVerificationEmail, createWelcomeEmail } from "../../../emails/emailCreator";
 import crypto from "crypto";
 
 // 72 hours in milliseconds
 const TOKEN_LIFETIME = 72 * 60 * 60 * 1000;
 
 export default async function handler(req, res) {
+  /* ------------------------------------------
+     VERIFY EMAIL (GET)
+  ------------------------------------------- */
   if (req.method === "GET") {
     const { token } = req.query;
     if (!token) return res.status(400).json({ message: "Missing token" });
 
     try {
-      const querySnap = await firestore
-        .collection("users")
-        .where("verificationToken", "==", token)
-        .limit(1)
-        .get();
+      const { db } = await connectToDatabase();
 
-      if (querySnap.empty) {
+      // Find user with this verification token
+      const user = await db.collection("users").findOne({
+        verificationToken: token,
+      });
+
+      if (!user) {
         return res.status(400).json({ message: "Invalid or expired token" });
       }
 
-      const userDoc = querySnap.docs[0];
-      const user = userDoc.data();
+      const expiresAt = user.verificationExpiresAt
+        ? new Date(user.verificationExpiresAt).getTime()
+        : 0;
 
-      const expiresAt = user.verificationExpiresAt.toDate().getTime(); // Firestore Timestamp to JS Date
       const now = Date.now();
 
       if (now > expiresAt) {
         return res.status(400).json({ message: "Token expired" });
       }
 
-      await userDoc.ref.update({
-        isVerified: true,
-        verificationToken: null,
-        verificationExpiresAt: null,
-      });
+      // Update user
+      await db.collection("users").updateOne(
+        { _id: user._id },
+        {
+          $set: { isVerified: true },
+          $unset: { verificationToken: "", verificationExpiresAt: "" },
+        }
+      );
+
+      // AFTER updating user as verified
+      const { subject, body } = createWelcomeEmail(user.name || "Member");
+      await sendEmail(user.email, subject, body);
 
       return res.status(200).json({
         message: "✅ Email verified successfully",
@@ -50,23 +61,21 @@ export default async function handler(req, res) {
     }
   }
 
+  /* ------------------------------------------
+     RESEND VERIFICATION EMAIL (POST)
+  ------------------------------------------- */
   if (req.method === "POST") {
     const { email } = req.body;
     if (!email) return res.status(400).json({ message: "Email is required" });
 
     try {
-      const querySnap = await firestore
-        .collection("users")
-        .where("email", "==", email)
-        .limit(1)
-        .get();
+      const { db } = await connectToDatabase();
 
-      if (querySnap.empty) {
+      const user = await db.collection("users").findOne({ email });
+
+      if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-
-      const userDoc = querySnap.docs[0];
-      const user = userDoc.data();
 
       if (user.isVerified) {
         return res.status(400).json({ message: "User already verified" });
@@ -74,16 +83,21 @@ export default async function handler(req, res) {
 
       const token = crypto.randomBytes(32).toString("hex");
 
-      const expiresAt = admin.firestore.Timestamp.fromDate(
-        new Date(Date.now() + TOKEN_LIFETIME)
+      const expiresAt = new Date(Date.now() + TOKEN_LIFETIME);
+
+      // Update token + expiration
+      await db.collection("users").updateOne(
+        { _id: user._id },
+        {
+          $set: {
+            verificationToken: token,
+            verificationExpiresAt: expiresAt,
+          },
+        }
       );
 
-      await userDoc.ref.update({
-        verificationToken: token,
-        verificationExpiresAt: expiresAt,
-      });
-
-      const { subject, body } = createVerificationEmail(user.name, token);
+      // Send email
+      const { subject, body } = createVerificationEmail(user.name || "", token);
       await sendEmail(email, subject, body);
 
       return res.status(200).json({ message: "✅ Verification email sent" });

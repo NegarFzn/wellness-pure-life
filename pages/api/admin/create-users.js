@@ -1,5 +1,5 @@
-import { firestore } from "../../../utils/firebaseAdmin";
 import bcrypt from "bcryptjs";
+import { connectToDatabase } from "../../../utils/mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -22,20 +22,21 @@ export default async function handler(req, res) {
   ];
 
   try {
-    for (const user of users) {
-      const existing = await firestore
-        .collection("users")
-        .where("email", "==", user.email)
-        .get();
+    const { db } = await connectToDatabase();
+    const collection = db.collection("users");
 
-      if (!existing.empty) {
+    for (const user of users) {
+      // Check if user exists
+      const existing = await collection.findOne({ email: user.email });
+
+      if (existing) {
         console.log(`⚠️ Skipped existing user: ${user.email}`);
         continue;
       }
 
       const hashedPassword = await bcrypt.hash(user.password, 12);
 
-      await firestore.collection("users").add({
+      await collection.insertOne({
         name: user.name,
         email: user.email,
         password: hashedPassword,

@@ -10,7 +10,7 @@ import classes from "./index.module.css";
 import FitnessList from "../../components/fitness/fitness-list";
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz.js";
 import FitnessHighlights from "../../components/TopPages/FitnessHighlights.js";
-import ChallengeBox from "../../components/ChallengeBox/ChallengeBox.js";
+import ChallengeCard from "../../components/ChallengeCard/ChallengeCard.js";
 
 function FitnessPage(props) {
   const [showButton, setShowButton] = useState(false);
@@ -285,11 +285,11 @@ function FitnessPage(props) {
           <div className={classes.challengeHeader}>
             Start Your Fitness Journey
           </div>
-          <ChallengeBox
+          <ChallengeCard
             title="Get Strong in 21 Days"
             description="Follow daily strength-boosting moves and energizing tips to build lean muscle, gain power, and stay motivated — all in just 10 minutes a day."
-            href="/challenge/21-days-fitness/1"
-            color="#ffa743ff"
+            href="/challenges/21-days-fitness/1"
+           
           />
         </section>
 

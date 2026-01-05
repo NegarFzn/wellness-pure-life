@@ -90,7 +90,7 @@ export default function PremiumPage() {
                   checked={plan === "monthly"}
                   onChange={() => setPlan("monthly")}
                 />
-                Monthly – $5 / month
+                Monthly – $9.99 / month
               </label>
 
               <label>
@@ -100,7 +100,7 @@ export default function PremiumPage() {
                   checked={plan === "yearly"}
                   onChange={() => setPlan("yearly")}
                 />
-                Yearly – $39 / year (Save 35%)
+                Yearly – $79 / year (Save 35%)
               </label>
             </div>
 

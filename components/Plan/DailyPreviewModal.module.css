@@ -1,0 +1,177 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 70;
+}
+
+.modal {
+  width: 100%;
+  max-width: 720px;
+  max-height: 80vh;
+  background: #f9fafb;
+  border-radius: 24px;
+  padding: 22px 24px 18px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.32);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #111827;
+}
+
+.summary {
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin-bottom: 14px;
+}
+
+.daysScroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.dayCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 10px 12px 12px;
+  margin-bottom: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.dayHeader {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+  color: #1f2937;
+}
+
+.line {
+  font-size: 0.88rem;
+  color: #4b5563;
+}
+
+.label {
+  font-weight: 600;
+  color: #111827;
+}
+
+.actionsRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.cancelButton {
+  background: #e5e7eb;
+  color: #374151;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.confirmButton {
+  background: #10b981;
+  color: #fff;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(16, 185, 129, 0.35);
+  transition: all 0.25s ease;
+}
+
+.confirmButton:hover {
+  background: #059669;
+  box-shadow: 0 6px 14px rgba(16, 185, 129, 0.5);
+}
+
+@media (max-width: 640px) {
+  .overlay {
+    padding: 12px;
+  }
+
+  .modal {
+    max-height: 92vh;
+    border-radius: 18px;
+    padding: 18px 16px 16px;
+  }
+
+  .closeButton {
+    top: 12px;
+    right: 14px;
+    font-size: 1.1rem;
+  }
+
+  .title {
+    font-size: 1.15rem;
+    margin-bottom: 4px;
+  }
+
+  .summary {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+
+  .daysScroll {
+    padding-right: 2px;
+  }
+
+  .dayCard {
+    padding: 8px 10px 10px;
+    border-radius: 14px;
+    margin-bottom: 6px;
+  }
+
+  .dayHeader {
+    font-size: 0.9rem;
+  }
+
+  .line {
+    font-size: 0.84rem;
+  }
+
+  .actionsRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .cancelButton,
+  .confirmButton {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 0.95rem;
+  }
+
+  .confirmButton {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+  }
+}

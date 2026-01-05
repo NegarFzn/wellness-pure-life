@@ -16,14 +16,9 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
   const [isSending, setIsSending] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
-
   const saveCalled = useRef(false);
-
   const category = slug?.replace("-plan", "");
   const finalAnswers = loadedAnswers || answers;
-
-  // ✅ Premium flag
   const isPremium = !!session?.user?.isPremium;
 
   /* -------------------- Label map -------------------- */
@@ -64,7 +59,7 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
 
         const data = await res.json();
         setSubmitted(true);
-        setMatchedPlan(data.matchedPlan || null);
+        setMatchedPlan(data.result?.matchedPlan  || null);
       } catch (err) {
         console.error("❌ Failed to save quiz result:", err);
       }
@@ -88,7 +83,7 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
 
         const data = await res.json();
         setLoadedAnswers(data.answers);
-        setMatchedPlan(data.matchedPlan);
+        setMatchedPlan(data.matchedPlan || null);
       } catch (err) {
         console.error("❌ Failed to fetch saved plan:", err);
       }
@@ -120,11 +115,14 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
     setToastMsg("");
 
     try {
-      const res = await fetch("/api/quiz/sendEmail-plan", {
+      console.log("DEBUG-EMAIL matchedPlan =", matchedPlan);
+
+      const res = await fetch("/api/quiz/quiz-plan?mode=email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: session.user.email,
+           name: session.user.name,
           answers: finalAnswers,
           category,
           matchedPlan,
@@ -146,117 +144,276 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
     }
   };
 
+  // ---------------------------------------------------------
+  // DYNAMIC FREE RECOMMENDATION ENGINE (QUIZ-MAIN)
+  // ---------------------------------------------------------
+  const generateFreeRecommendations = (answers) => {
+    if (!answers) return [];
+
+    const recs = [];
+    const goal = answers.goal;
+    const challenge = answers.challenge;
+    const energy = answers.energy;
+    const activity = answers.activityLevel;
+    const mood = answers.mood;
+
+    // -----------------------------
+    // RULE 1 — Stress / Overwhelm
+    // -----------------------------
+    if (
+      mood === "stressed" ||
+      challenge === "stress" ||
+      challenge === "anxiety"
+    ) {
+      recs.push({
+        title: "🧘 Calm Mind & Stress Check",
+        slug: "stress-check",
+        description: "Reduce stress and discover techniques to calm your mind.",
+        score: 10,
+      });
+    }
+
+    // -----------------------------
+    // RULE 2 — Low Energy / Fatigue
+    // -----------------------------
+    if (challenge === "low_energy" || energy === "low") {
+      recs.push({
+        title: "🌅 Morning Rituals for Energy",
+        slug: "morning-energy",
+        description: "Boost energy naturally with simple morning practices.",
+        score: 9,
+      });
+    }
+
+    // -----------------------------
+    // RULE 3 — Stiffness / Mobility / Desk Life
+    // -----------------------------
+    if (
+      challenge === "stiffness" ||
+      activity === "sedentary" ||
+      goal === "flexibility"
+    ) {
+      recs.push({
+        title: "🤸 10-Minute Mobility Flow",
+        slug: "mobility",
+        description:
+          "Improve mobility and reduce tension with short movements.",
+        score: 9,
+      });
+    }
+
+    // -----------------------------
+    // RULE 4 — Muscle Building
+    // -----------------------------
+    if (goal === "build_muscle") {
+      recs.push({
+        title: "💪 How to Build Muscle Safely",
+        slug: "build-muscle",
+        description:
+          "Learn the fundamentals of safe, effective strength building.",
+        score: 9,
+      });
+    }
+
+    // -----------------------------
+    // RULE 5 — Weight Loss
+    // -----------------------------
+    if (goal === "lose_weight") {
+      recs.push({
+        title: "🔥 Smart Eating Habits",
+        slug: "nutrition",
+        description:
+          "Discover eating patterns that support balanced weight loss.",
+        score: 8,
+      });
+    }
+
+    // -----------------------------
+    // RULE 6 — Life Balance
+    // -----------------------------
+    if (challenge === "time_management" || mood === "overwhelmed") {
+      recs.push({
+        title: "⚖ Life Balance Quiz",
+        slug: "life-balance",
+        description:
+          "Check your balance between work, rest, habits, and wellbeing.",
+        score: 8,
+      });
+    }
+
+    // If no rules matched, fall back to general wellness quizzes
+    if (!recs || recs.length === 0) {
+      return [
+        {
+          title: "🧘 Calm Mind & Stress Check",
+          slug: "stress-check",
+          description: "Reset your mind with quick mindfulness insights.",
+        },
+        {
+          title: "🍽 Nutrition Habits Quiz",
+          slug: "nutrition",
+          description: "Discover how to improve your daily eating habits.",
+        },
+        {
+          title: "⚖ Life Balance Quiz",
+          slug: "life-balance",
+          description: "Evaluate your lifestyle balance.",
+        },
+      ];
+    }
+
+    // Sort by score, highest first
+    recs.sort((a, b) => b.score - a.score);
+
+    // Return first 3 unique quizzes
+    const unique = [];
+    const used = new Set();
+
+    for (let r of recs) {
+      if (!used.has(r.slug)) {
+        unique.push(r);
+        used.add(r.slug);
+      }
+      if (unique.length === 3) break;
+    }
+
+    return unique;
+  };
+
+  const freeRecs = generateFreeRecommendations(finalAnswers);
+  // ⛔ Prevent freeRecs from running before answers exist
+  if (!finalAnswers || Object.keys(finalAnswers).length === 0) {
+    return (
+      <div className={classes.pageBg}>
+        <div className={classes.container}>
+          <p>Loading your personalized plan...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={classes.container}>
-      <h2 className={classes.heading}>
-        Your Personalized{" "}
-        {category?.charAt(0).toUpperCase() + category?.slice(1)} Plan
-      </h2>
+    <div className={classes.pageBg}>
+      <div className={classes.container}>
+        {/* HEADER */}
+        <h2 className={classes.title}>
+          Your Personalized{" "}
+          {category?.charAt(0).toUpperCase() + category?.slice(1)} Plan
+        </h2>
 
-      {matchedPlan?.summary && (
-        <p className={classes.subheading}>{matchedPlan.summary}</p>
-      )}
+        {matchedPlan?.summary && (
+          <p className={classes.subtitle}>{matchedPlan.summary}</p>
+        )}
 
-      {/* ✅ UTILITY BUTTONS – PREMIUM ONLY */}
-      {isPremium && (
-        <div className={classes.actionsRow}>
-          <div className={classes.utilityButtons}>
-            <button
-              className={`${classes.utilityButton} ${classes.secondaryButton}`}
-              onClick={() => window.print()}
-            >
-              🖨️ Print
-            </button>
-
-            <ShareButton
-              title="My Personalized Wellness Plan"
-              text="Check out my personalized wellness plan based on my preferences at Wellness Pure Life."
-              url={`https://wellnesspurelife.com${router.asPath}`}
-            />
-
-            {session?.user?.email && (
+        {/* PREMIUM UTILITY BUTTONS */}
+        {isPremium && (
+          <div className={classes.actionsRow}>
+            <div className={classes.utilityButtons}>
               <button
                 className={`${classes.utilityButton} ${classes.secondaryButton}`}
-                disabled={isSending || emailSent}
-                onClick={sendPlanToEmail}
+                onClick={() => window.print()}
               >
-                {isSending
-                  ? "Sending..."
-                  : emailSent
-                  ? "✅ Sent"
-                  : "📧 Send to Email"}
+                🖨️ Print
               </button>
-            )}
-          </div>
-        </div>
-      )}
 
-      {/* ✅ PREMIUM ONLY CONTENT */}
-      {isPremium && (
-        <>
-          <div className={classes.summaryList}>
-            {questions.map((q) => (
-              <div key={q.key} style={{ marginBottom: "0.5rem" }}>
-                <p>
-                  <strong>{q.question}</strong>:{" "}
-                  {formatLabel(finalAnswers[q.key]) || "N/A"}
-                </p>
-              </div>
-            ))}
-          </div>
+              <ShareButton
+                title="My Personalized Wellness Plan"
+                text="Check out my personalized wellness plan based on my preferences at Wellness Pure Life."
+                url={`https://wellnesspurelife.com${router.asPath}`}
+              />
 
-          {matchedPlan?.structure && (
-            <div style={{ marginTop: "1rem" }}>
-              <strong>Plan Structure:</strong>
+              {session?.user?.email && (
+                <button
+                  className={`${classes.utilityButton} ${classes.secondaryButton}`}
+                  disabled={isSending || !finalAnswers}
+                  onClick={sendPlanToEmail}
+                >
+                  {isSending
+                    ? "Sending..."
+                    : emailSent
+                    ? "✅ Sent"
+                    : "📧 Send to Email"}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* PREMIUM CONTENT */}
+        {isPremium && (
+          <>
+            {/* SUMMARY CARD */}
+            <div className={classes.summaryCard}>
+              <h3>Your Profile Summary</h3>
               <ul>
-                {matchedPlan.structure.map((s, i) => (
-                  <li key={i}>{s}</li>
+                {questions.map((q) => (
+                  <li key={q.key}>
+                    <strong>{q.question}</strong>:{" "}
+                    {formatLabel(finalAnswers[q.key]) || "N/A"}
+                  </li>
                 ))}
               </ul>
             </div>
-          )}
-        </>
-      )}
 
-      {/* ✅ PREMIUM SOFT TRIGGER */}
-      {!isPremium && session?.user && (
-        <div className={classes.strictLockBox}>
-          <h3 className={classes.lockTitle}>Premium Required</h3>
+            {/* STRUCTURE */}
+            {matchedPlan?.structure && (
+              <div className={classes.structureCard}>
+                <h3>Plan Structure</h3>
+                <ul>
+                  {matchedPlan.structure.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
+        )}
 
-          <p className={classes.lockText}>
-            Your personalized fitness plan is ready. Upgrade to Premium to
-            unlock the full detailed version.
-          </p>
+        {/* PREMIUM SOFT TRIGGER */}
+        {!isPremium && session?.user && (
+          <div className={classes.premiumCard}>
+            <h3 className={classes.premiumTitle}>
+              Unlock Your Full Fitness Plan
+            </h3>
 
-          <PremiumButton category={category} />
+            <p className={classes.premiumText}>
+              Access your complete structured weekly plan, detailed routines,
+              progression guidance, and personalized recommendations.
+            </p>
 
-          <p className={classes.lockNote}>
-            You can explore our free wellness guides anytime.
+            <PremiumButton category={category} />
+
+            <p className={classes.premiumNote}>
+              No commitment — continue using the free version anytime.
+            </p>
+          </div>
+        )}
+
+        {/* FREE CONTENT — DYNAMIC NEXT STEPS */}
+        <div className={`${classes.freeSection} ${classes.fadeIn}`}>
+          <h4 className={classes.freeTitle}>
+            Continue Your Wellness Journey (Free)
+          </h4>
+
+          {freeRecs.map((rec, i) => (
+            <a
+              key={i}
+              href={`/quizzes/quiz-main/${rec.slug}`}
+              className={classes.freeCard}
+            >
+              <div className={classes.freeCardTitle}>{rec.title} →</div>
+
+              <p className={classes.freeDescription}>{rec.description}</p>
+            </a>
+          ))}
+
+          <p className={classes.freeCaption}>
+            These suggestions are personalized based on your answers.
           </p>
         </div>
-      )}
 
-      {/* 📘 Blog CTA */}
-      <div className={classes.blogCtaWrap}>
-        <p className={classes.premiumNote}>
-          ✨ Want deeper guidance? <br />
-          <span>
-            Full access to all personalized wellness guides is part of our
-            Premium Membership. You can continue exploring the free version, or
-            upgrade anytime you feel ready.
-          </span>
-        </p>
-
-        <a href="/blog" className={classes.blogCta}>
-          Explore More Wellness Guides →
-        </a>
+        {toastMsg && <div className={classes.toastBox}>{toastMsg}</div>}
       </div>
-
-      {toastMsg && <div className={classes.toastBox}>{toastMsg}</div>}
-
-      {submitted && (
-        <p className={classes.successMessage}>✔️ Your plan has been saved.</p>
-      )}
     </div>
   );
 }
