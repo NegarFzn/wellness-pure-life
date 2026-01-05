@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import DailyQuizAnalysis from "../../components/Quiz/DailyQuiz/DailyQuizAnalysis";
-import QuizCard from "../../components/QuizCard/QuizCard";
+import QuizCard from "../../components/Quiz/QuizCard/QuizCard";
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
 import DailyRitual from "../../components/DailyRitual";
 import WeeklyPlanCard from "../../components/Plan/WeeklyPlanCard";

@@ -1,1354 +1,375 @@
-/* === Header Layout === */
-.header {
+/* ================================
+   PREMIUM WELLNESS HEADER STYLES
+   ================================ */
+
+/* OUTER FIXED HEADER */
+.headerOuter {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5000;
+
+  background: linear-gradient(
+    90deg,
+    #d7d2ff 0%,
+    #a7bafc 40%,
+    #7cc9f8 100%
+  );
+
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* MAIN CONTAINER */
+.headerContainer {
+  max-width: 1320px;
+  margin: 0 auto;
+  height: 78px;
+
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 1rem 1.25rem;
-  background: linear-gradient(90deg, #1c192c, #3c394d);
+  justify-content: space-between;
+
+  padding: 0 1.8rem;
+}
+
+/* LOGO + BRAND */
+.logoBlock {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+}
+
+.logoImage {
+  border-radius: 12%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.brand {
+  font-size: 1.28rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+
+/* =======================
+   DESKTOP NAVIGATION
+   ======================= */
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+}
+
+.navItem {
+  position: relative;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+
+  padding: 0.3rem;
+  transition: opacity 0.2s ease;
+}
+
+.navButton:hover {
+  opacity: 0.8;
+}
+
+.navLink {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  opacity: 0.8;
+}
+
+/* =======================
+   DROPDOWN MENU
+   ======================= */
+
+.dropdownMenu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+
+  background: white;
+  padding: 0.7rem 0;
+  border-radius: 12px;
+
+  width: 200px;
+
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+
+  transition: all 0.25s ease;
+}
+
+.showDropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdownItem {
+  padding: 0.65rem 1rem;
+  display: block;
+
+  text-decoration: none;
+  color: #333;
+  font-size: 0.95rem;
+
+  transition: background 0.2s ease;
+}
+
+.dropdownItem:hover {
+  background: #eef1ff;
+}
+
+/* =======================
+   RIGHT CONTROLS
+   ======================= */
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* SEARCH ICON */
+.searchIcon {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: white;
+  transition: opacity 0.2s ease;
+}
+
+.searchIcon:hover {
+  opacity: 0.75;
+}
+
+/* PREMIUM BUTTON */
+.premiumButton {
+  padding: 0.55rem 1.2rem;
+  border-radius: 30px;
+
+  background: linear-gradient(135deg, #ff9dcf, #ff6fb1);
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+
+  box-shadow: 0 3px 12px rgba(255, 90, 150, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.premiumButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(255, 90, 150, 0.45);
+}
+
+/* AUTH BUTTONS */
+.authButtons {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.authButtons button {
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.authButtons button:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* =======================
+   USER MENU
+   ======================= */
+
+.userMenuWrapper {
+  position: relative;
+}
+
+.userMenuButton {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.userMenuWrapper:hover .dropdownMenu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* =======================
+   MOBILE HAMBURGER
+   ======================= */
+
+.mobileHamburger {
+  display: none;
+  background: none;
+  color: white;
+  font-size: 1.6rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* =======================
+   SEARCH MODAL
+   ======================= */
+
+.searchModalOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 3000;
-  gap: 0.5rem;
-  flex-wrap: nowrap;
-  overflow: visible;
-  box-sizing: border-box;
-   min-height: 75px; 
-}
+  height: 100%;
 
-.logo {
-  padding: 0;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  white-space: nowrap;
-}
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
 
-
-.logo img {
-  height: 40px;
-  width: auto;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center;
-  filter: drop-shadow(0 0 0.5rem rgba(146, 145, 148, 0.5));
-  transition: transform 0.4s ease;
-}
-
-.logo img:hover {
-  transform: rotate(360deg);
-}
-
-.logo,
-.logo * {
-  text-decoration: none !important;
-}
-
-
-.brandName {
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 2rem;
-  font-weight: bold;
-  color: white;
-  text-decoration: none;
-  font-family: "Poppins", sans-serif;
-  transition: color 0.3s ease, transform 0.2s ease;
-}
-
-.brandName:active,
-.brandName:visited,
-.brandName:hover {
-  color: white;
-  transform: scale(1.05);
-}
-
-.fullName {
-  display: inline;
-  font-size:28px;
-}
-
-.shortName {
-  display: none;
-}
-
-.nav {
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-  align-items: center;
-  overflow-x: auto;
-  overflow: visible !important;
-    min-width: 0;
-}
-
-.nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.1rem;
-  font-size: 1.2rem;
-  font-weight: lighter;
-  overflow: visible !important;
+
+  z-index: 6000;
 }
 
-.nav ul li {
-  display: flex;
-  align-items: center;
-  padding: 0;
-  margin: 0 4px;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
-}
-
-.nav ul li:hover {
-  background-color: #374151;
-  cursor: pointer;
-}
-
-.nav a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.navBtn {
-  margin-left: 5px;
-  padding: 9px 16px;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.95rem;
-  white-space: nowrap;
-  margin: 0;
-}
-
-.navBtn:hover {
-  background: #2563eb;
-}
-
-.userControls {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* === Profile Dropdown === */
-.profileDropdown {
-  position: relative;
-  display: inline-block;
-  padding-bottom: 4px;
-}
-
-.profileWrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.profileWrapper:hover .dropdownContent {
-  display: block;
-}
-
-.profileButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: transparent;
-  border: none;
-  color: #f3f4f6;
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 0.4rem 0.8rem;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.15s ease;
-  font-family: "Poppins", sans-serif;
-}
-
-.profileButton:hover {
-  background-color: #374151;
-  transform: translateY(-1px);
-}
-
-.profileButton span {
-  max-width: 120px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.profileLink {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #fff;
-  text-decoration: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  transition: background 0.3s ease;
-}
-
-.profileLink:hover {
-  background-color: rgba(59, 130, 246, 0.2); /* subtle blue hover */
-}
-
-.dropdownContent {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: #111827;
-  border-radius: 12px;
-  min-width: 160px;
-  overflow: hidden;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1001;
-  margin-top: 0;
-  transition: opacity 0.2s ease;
-}
-
-.dropdownLink,
-.logoutLink {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #f3f4f6;
-  padding: 0.75rem 1rem;
-  text-decoration: none;
-  font-size: 1rem;
-  font-family: inherit;
-  font-weight: 400;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
-  border-radius: 8px;
-  cursor: pointer; /* ✅ moved up to avoid override */
-}
-
-.dropdownLink:hover,
-.logoutLink:hover {
-  background-color: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-  cursor: pointer; /* ✅ ensure it's not lost */
-}
-
-.dropdownLink:active,
-.logoutLink:active {
-  transform: scale(0.97);
-  background-color: rgba(255, 255, 255, 0.12);
-}
-
-/* === Weather === */
-
-.weatherDropdownParent {
-  position: relative;
-  display: inline-block;
-}
-
-.weatherButton {
-  display: flex;
-  align-items: center;
-  padding: 0.4rem 0.6rem;
-  border-radius: 6px;
-  background-color: transparent;
-  color: #fff;
-  opacity: 0.75;
-  font-size: 0.8rem;
-  gap: 0.4rem;
-  height: 40px;
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-.weatherButton:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Light hover on dark bg */
-  opacity: 1;
-}
-
-.weatherMegaDropdown {
-  position: absolute;
-  top: 110%;
-  right: 0;
-  background: transparent; /* unified card look */
-  box-shadow: none;
-  padding: 0;
-  border-radius: 0;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  z-index: 999;
-}
-
-.weatherMegaDropdown.show {
-  opacity: 1;
-  visibility: visible;
-}
-
-.weatherInfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  padding: 14px;
-  max-width: 300px;
-  margin: 0 auto;
-  font-family: "Poppins", sans-serif;
-}
-
-.weatherIcon {
-  width: 18px;
-  height: 18px;
-}
-
-.weatherText {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-  font-size: 0.7rem;
-}
-
-.weatherText span:first-child {
-  font-weight: 500;
-}
-
-.weatherText span:last-child {
-  color: white;
-  font-size: 0.65rem;
-  margin-top: 2px; /* ✅ Add vertical spacing */
-}
-
-.pendingVerify {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.4rem 0.8rem !important;
-  background: #fef3c7;
-  color: #92400e;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  white-space: nowrap;
-  margin-left: 0.25rem;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.pendingVerify:hover {
-  color: white;
-  text-decoration: none;
-  transform: scale(1.03);
-}
-
-.pendingText {
-  font-size: 0.9rem;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  color: #92400e;
-}
-
-.pendingText:hover {
-  color: white;
-}
-
-.pendingTextIcon {
-  display: inline-block;
-  animation: iconBounce 1.2s ease-in-out infinite;
-}
-
-.desktopNavList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.1rem;
-  font-size: 1.2rem;
-  font-weight: lighter;
-}
-
-@keyframes iconBounce {
-  0%,
-  100% {
-    transform: translateY(2px);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
-}
-
-.desktopNavList li:not(.premiumNavItem) > a {
-  opacity: 0.78;
-  transition: opacity 0.2s ease;
-}
-
-.desktopNavList li:not(.premiumNavItem) > a:hover {
-  opacity: 1;
-}
-
-.premiumNavItem a:hover {
-  box-shadow: 0 0 0 4px rgba(47, 158, 136, 0.25),
-    0 10px 28px rgba(30, 58, 138, 0.45);
-}
-
-.verifiedPendingResent {
-  background-color: #d4edda !important;
-  border-color: #c3e6cb !important;
-  color: #155724 !important;
-}
-
-.challengeWrapper {
-  margin-top: auto;
-  align-self: stretch;
-}
-
-/* === Dropdown Parent === */
-.dropdownParent {
-  position: relative;
-  z-index: 3000;
-}
-
-.dropdownToggle {
-  padding: 0.4rem 0.8rem;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 1rem;
-  border-radius: 10px;
-  background-color: transparent;
-  transition: background-color 0.2s ease;
-}
-
-.nav ul li,
-.nav a,
-.dropdownToggle {
-  font-family: "Poppins", sans-serif;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: white;
-  text-decoration: none;
-}
-
-.dropdownMenu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #1e293b;
-  flex-direction: column;
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  padding: 0.75rem 0;
-  min-width: 240px;
-  z-index: 999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.dropdownParent:hover .dropdownMenu {
-  display: flex;
-  opacity: 1;
-  transform: translate(-50%, 0);
-  pointer-events: auto;
-}
-
-.dropdownMenu li {
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  color: #f9fafb;
-  white-space: nowrap;
-  transition: background-color 0.2s ease;
-}
-
-.dropdownMenu a {
-  color: white;
-  text-decoration: none;
-  display: block;
-  width: 100%;
-}
-
-/* === Mega Dropdown === */
-.megaDropdown {
-  transform: translateX(-50%) scale(0.98);
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  background-color: #f9fafb;
-
-  padding: 1rem;
-  min-width: 800px;
-  min-height: 100px;
-  border-radius: 12px;
-  display: none;
-  gap: 2rem;
-  z-index: 2000;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.megaDropdown.show {
-  transform: translateX(-50%) scale(1);
-  display: flex;
-}
-
-/* === Columns === */
-.megaRightColumn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 100%;
-  gap: 1rem;
-  padding: 0.04rem;
-  align-items: flex-start;
-}
-
-.megaRightColumn h4 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #1f2937; /* Tailwind’s gray-800 */
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 0.5rem;
-}
-
-.megaRightColumn h4 a {
-  color: #1f2937;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.megaRightColumn ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-height: 360px;
-  overflow-y: auto;
-}
-
-.megaRightColumn li {
-  background-color: #ffffff;
-  color: #1a1a1a;
-  padding: 10px 16px;
+.searchModal {
+  background: white;
+  padding: 1.4rem;
+  width: 90%;
+  max-width: 480px;
   border-radius: 14px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
 }
 
-.megaRightColumn ul li a {
-  color: #1f2937;
-  font-weight: 600;
-  opacity: 1;
-  text-decoration: none;
-}
-
-.badge {
-  background-color: #fde68a;
-  color: #92400e;
-  font-size: 0.7rem;
-  font-weight: bold;
-  padding: 2px 6px;
-  border-radius: 6px;
-  margin-left: 0.5rem;
-}
-
-.categoryTag {
-  font-size: 0.65rem;
-  background: #d1fae5;
-  color: #065f46;
-  padding: 2px 6px;
-  border-radius: 6px;
-  margin-left: 0.4rem;
-}
-
-.readTime {
-  font-size: 0.65rem;
-  color: #6b7280;
-  margin-left: 0.4rem;
-}
-
-.dropdownLinkUnified {
-  text-decoration: none;
-  display: block;
-  color: inherit;
-}
-
-.dropdownLinkUnified:hover {
-  background-color: #f0f0f0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 10px;
-  font-weight: 500;
-}
-
-/* === Nav Content Loading State === */
-/* === Nav Content Loading State === */
-.megaColumn ul li em,
-.spotlightItem em {
-  color: #666;
-  font-style: italic;
-  font-size: 0.95rem;
-  opacity: 0.8;
-}
-
-/* === Optional Shimmer === */
-.loadingShimmer {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
-  background-size: 400% 100%;
-  animation: shimmer 1.4s ease infinite;
-  border-radius: 4px;
-  min-height: 1rem;
+.searchModalInput {
   width: 100%;
+  padding: 0.9rem 1rem;
+  font-size: 1rem;
+
+  border-radius: 8px;
+  border: 1px solid #ddd;
 }
 
-.searchContainer {
+/* =======================
+   MOBILE NAV OVERLAY
+   ======================= */
+
+.mobileNavOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+  z-index: 6000;
+
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+
   display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 9999px;
-  padding: 0 6px;
-  height: 34px;
-  max-width: 240px;
-}
-
-.searchInput {
-  all: unset;
-  flex: 1;
-  color: #fff;
-  font-size: 0.85rem;
-  padding-left: 6px; /* slight spacing from left */
-}
-
-.searchButton {
-  background: var(--primary-accent, #a8d5ba);
-  border: none;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.searchContainer:focus-within {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: var(--primary-accent, #a8d5ba);
-  box-shadow: 0 0 0 2px var(--primary-accent, #a8d5ba);
-}
-
-.searchInput::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.searchButton:hover {
-  background: var(--hover-bg, #8acbb0);
-}
-
-.searchButton:focus {
-  outline: 1px solid var(--primary-accent, #a8d5ba);
-  outline-offset: 2px;
-}
-
-/* Hamburger icon for small screens */
-.rightControls {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end; /* 🔑 keeps auth on the right */
-  gap: 0.6rem;
-  white-space: nowrap; /* 🔑 prevents Login / Sign Up breaking lines */
-  flex-shrink: 0;
-  
-}
-
-.authButtons {
-  display: flex;
-  gap: 0.5rem; /* nice spacing between buttons */
-  justify-content: center;
-  flex-wrap: nowrap; /* prevent wrapping */
-}
-
-.authMiniBtn {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.3rem 0.9rem; /* slightly larger padding for desktop */
-  font-size: 0.9rem; /* clear readable size on desktop */
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap; /* prevent text from wrapping */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  transition: background 0.3s ease;
-}
-
-.authMiniBtn:first-child {
-  background: linear-gradient(135deg, #1e3a8a, #2f9e88);
-  color: #fff;
-  border-radius: 999px;
-  padding: 0.45rem 0.9rem;
-  font-weight: 600;
-}
-
-.authMiniBtn:last-child {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-}
-
-.desktopOnly {
-  display: none !important;
-}
-
-.mobileOnly {
-  display: flex !important;
-}
-
-.authMiniBtn:hover {
-  background-color: #2563eb;
-}
-
-.hamburger {
-  font-size: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.mobileOnly {
-  display: none !important;
+  justify-content: flex-end;
 }
 
 .mobileNav {
-  display: none;
+  width: 260px;
+  height: 100%;
+  background: white;
+  padding: 2rem 1.4rem;
+  position: relative;
+
+  box-shadow: -4px 0 14px rgba(0, 0, 0, 0.12);
 }
 
-.premiumActiveLink {
-  color: #ffffff; /* bright white text for max contrast */
-  font-weight: bold;
+.mobileClose {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.mobileNavItem {
+  display: block;
+  padding: 0.9rem 0;
+  font-size: 1.05rem;
+
+  color: #333;
   text-decoration: none;
 }
 
-.premiumActiveLink:hover {
-  text-decoration: underline;
+.mobileNavItem:hover {
+  color: #5a4fff;
 }
 
-/* === hamburger menu === */
+.mobileNavPremium {
+  display: block;
+  margin-top: 1rem;
 
-@keyframes shimmer {
-  0% {
-    background-position: -400px 0;
-  }
-  100% {
-    background-position: 400px 0;
-  }
-}
+  padding: 0.8rem 1rem;
+  text-align: center;
 
-.premiumNavItem a {
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
+  background: linear-gradient(135deg, #ff9dcf, #ff6fb1);
+  color: white;
+  border-radius: 30px;
   font-weight: 600;
-  color: #ffffff !important;
-  background: linear-gradient(135deg, #1e3a8a, #2f9e88);
-  box-shadow: 0 6px 18px rgba(30, 58, 138, 0.35);
-  transition: all 0.25s ease;
+  text-decoration: none;
 }
 
-.premiumNavItem a:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 26px rgba(30, 58, 138, 0.45);
-}
+/* =======================
+   RESPONSIVE RULES
+   ======================= */
 
-/* === Responsive === */
-@media (max-width: 768px) {
-  .desktopNavList {
-    display: none;
-  }
-
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* or rgba(0,0,0,0) for invisible */
-    z-index: 999;
-  }
-
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    padding: 0.4rem 0.6rem;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    flex-shrink: 1;
-  }
-
-  .logo img {
-    height: 22px;
-    width: 22px;
-  }
-
-  .fullName {
-    display: inline;
-  }
-
-  .shortName {
-    display: none;
-  }
-
-  .hamburger {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    z-index: 3100;
-  }
-
+@media (max-width: 960px) {
   .nav {
     display: none;
-    flex-direction: column;
-    width: 100%;
-    background: linear-gradient(90deg, #1c192c, #3c394d);
-    position: absolute;
-    top: 100%;
-    left: 0;
-    padding: 1rem 0;
-    z-index: 3000;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s ease, padding 0.3s ease;
   }
 
-  .showNav {
-    display: flex;
-    max-height: 1000px;
-  }
-
-  .nav ul {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 1rem 0;
-    width: 100%;
-  }
-
-  .nav ul li {
-    padding: 0.25rem 0;
-    font-size: 1rem;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    width: 100%;
-  }
-
-  .nav ul li:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-  }
-
-  .mobileOnly {
-    display: flex !important;
-    width: 100%;
-    justify-content: center;
-    margin-top: 0.75rem;
-  }
-
-  .desktopOnly {
-    display: none !important;
-  }
-
-  .searchContainer {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 9999px;
-    padding: 0.3rem 0.5rem;
-    width: 90%;
-    margin: 1rem auto 0.5rem;
-    transition: all 0.3s ease;
-  }
-
-  .searchInput {
-    flex: 1;
-    background: transparent;
-    border: none;
-    padding: 0.5rem;
-    font-size: 1rem;
-    color: #fff;
-    outline: none;
-  }
-
-  .searchInput::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-  }
-
-  .searchButton {
-    background: var(--primary-accent, #a8d5ba);
-    border: none;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    color: #000;
-  }
-
-  .searchButton:hover {
-    background: var(--hover-bg, #8acbb0);
-  }
-
-  .searchButton:focus {
-    outline: 2px solid var(--primary-accent, #a8d5ba);
-    outline-offset: 2px;
-  }
-
-  .dropdownParent:hover .megaDropdown {
-    display: none; /* disable hover-trigger on mobile */
-  }
-
-  .megaDropdown,
-  .weatherMegaDropdown {
-    flex-direction: column;
-    width: 100%;
-    padding: 0.5rem;
-    background: var(--primary-bg);
-    box-shadow: none;
-    border-radius: 0;
-  }
-
-  .megaDropdown > *,
-  .megaRightColumn,
-  .weatherMegaDropdown > * {
-    width: 100%;
-  }
-
-  .megaRightColumn {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .topicsWrapper,
-  .spotlightWrapper,
-  .challengeWrapper {
-    width: 100%;
-  }
-
-  .challengeWrapper {
-    background: linear-gradient(90deg, #f9fefc 0%, #e6f4f1 100%);
-    padding: 1rem;
-    text-align: center;
-    border: none;
-  }
-
-  .surpriseBtn {
-    width: 100%;
-    border-radius: 9999px;
-    padding: 0.75rem;
-    font-size: 1rem;
+  .premiumButton {
+    display: none;
   }
 
   .authButtons {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-  }
-
-  .authMiniBtn {
-    white-space: nowrap;
-    font-size: 0.8rem;
-    background: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 0.4rem 0.7rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .authMiniBtn:hover {
-    background: #2563eb;
-  }
-
-  .navBtn {
-    display: block;
-    width: 90%;
-    max-width: 160px;
-    margin: 0.5rem auto;
-    padding: 0.6rem 1rem;
-    font-size: 1rem;
-    border-radius: 8px;
-  }
-
-  .logoutLink {
-    font-size: 0.95rem;
-    padding: 0.6rem 1rem;
-  }
-
-  .weatherInfo {
-    margin: 1rem 0 1.5rem;
-    flex-direction: column;
-    align-items: center;
-    font-size: 0.9rem;
-  }
-
-  .megaColumn {
-    width: 100%;
-  }
-
-  .challengeBox {
-    width: 100%;
-    margin-top: 1rem;
-  }
-
-  .topLevelNav {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .navButton {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-align: left;
-    color: #fff;
-  }
-
-  .arrow {
-    font-size: 1.5rem;
-    margin-left: 0.5rem;
-  }
-
-  .navButton:hover,
-  .navButton:focus {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-  }
-
-  .mobileSublist {
-    background: #1c1c2c;
-    padding: 1rem 0;
-  }
-
-  .backButton {
-    display: block;
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    background: none;
-    border: none;
-    text-align: left;
-    color: #fff;
-    cursor: pointer;
-  }
-
-  .mobileSublist ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .mobileSublist li {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .mainSectionLink {
-    display: block;
-    padding: 1rem;
-    text-decoration: none;
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.25rem;
-  }
-
-  .mainSectionLink:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-  }
-
-  .mobileNavLink {
-    display: block;
-    padding: 1rem;
-    text-decoration: none;
-    color: #fff;
-    font-weight: 600;
-  }
-
-  .mobileNavLink:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-  }
-  .mobileWeather {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 8px;
-    width: 80%;
-    margin: 0.5rem auto;
-  }
-
-  .weatherIcon {
-    width: 30px;
-    height: 30px;
-    margin-bottom: 0.6rem;
-  }
-
-  .weatherText {
-    text-align: center;
-    color: #ffffff;
-  }
-
-  .weatherTemp {
-    font-size: 0.85rem;
-    font-weight: 400;
-    opacity: 0.85;
-    color: #eee;
-  }
-
-  .weatherTime {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #a8d5ba;
-  }
-
-  .mobileNav {
-    display: block;
-  }
-
-  .surpriseButton {
-    display: block;
-    width: 100%;
-    padding: 12px 16px;
-    background: linear-gradient(
-      90deg,
-      #3b82f6,
-      #60a5fa
-    ); /* nice blue gradient */
-    color: #fff;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    text-align: center;
-    margin-top: 8px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-
-  .surpriseButton:hover {
-    background: linear-gradient(90deg, #2563eb, #3b82f6); /* darker on hover */
-  }
-
-  .premiumBox {
-    background: linear-gradient(135deg, #3b82f6, #60a5fa, #7dd3fc);
-    border-radius: 12px;
-    padding: 12px;
-    margin-top: 12px;
-    color: #fff;
-    text-align: left;
-  }
-
-  .premiumInner div {
-    margin-bottom: 4px;
-  }
-
-  .premiumLink {
-    font-weight: bold;
-    color: #fff;
-    text-decoration: underline;
-  }
-
-  .premiumLink:hover {
-    color: #facc15; /* gold/yellow on hover */
-  }
-
-  .verifyNotice {
-    display: inline-block; /* show only on mobile */
-  }
-
-  .rightControls {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem; /* small gap between button & hamburger */
-  }
-
-  .pendingVerify {
-    font-size: 0.8rem;
-    padding: 0.3rem 0.4rem !important;
-  }
-
-  .pendingText:hover {
-    color: black;
-  }
-
-  .premiumNavItem {
-    margin-top: 0.75rem;
-  }
-
-  .premiumNavItem a {
-    display: block;
-    width: 100%;
-    max-width: 280px;
-    margin: 0.75rem auto 0;
-    padding: 0.7rem 1.2rem;
-    border-radius: 999px;
-
-    font-size: 1rem;
-    font-weight: 700;
-    text-align: center;
-    letter-spacing: 0.2px;
-
-    color: #ffffff !important;
-    background: linear-gradient(135deg, #1e3a8a, #2f9e88);
-
-    box-shadow:
-      0 10px 28px rgba(30, 58, 138, 0.45),
-      inset 0 1px 0 rgba(255, 255, 255, 0.18);
-
-    transition: transform 0.2s ease, box-shadow 0.25s ease;
-  }
-
-  .premiumNavItem a:active {
-    transform: scale(0.96);
-    box-shadow:
-      0 6px 18px rgba(30, 58, 138, 0.35),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  }
-}
-
-@media (max-width: 1024px) {
-  .header {
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem;
-  }
-
-  .logo {
-    padding: 0;
-    gap: 0.5rem;
-  }
-
-  .brandName {
-    font-size: 1.2rem;
-    white-space: nowrap;
-  }
-
-  .nav {
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .nav ul {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-    font-size: 1rem;
-  }
-
-  .nav ul li {
-    padding: 0.3rem 0.5rem;
-  }
-
-  .navBtn {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-  }
-
-  .logoutDesktop {
-    display: flex;
-    align-items: center;
-  }
-
-  .searchContainer {
-    width: 100%;
-    justify-content: center;
-    margin: 0.5rem 0;
-  }
-
-  .searchInput {
-    width: 70%;
-    font-size: 1rem;
-  }
-
-  .searchButton {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 431px) {
-  .fullName {
     display: none;
   }
 
-  .shortName {
-    display: inline;
-  }
-
-  .authMiniBtn {
-    padding: 6px 10px;
-    font-size: 0.85rem;
-  }
-}
-
-@media (min-width: 769px) {
-  .pendingVerify:hover {
-    background: #fde68a;
-  }
-}
-
-
-@media (min-width: 1025px) {
-  .header {
-    padding: 0.75rem 1.25rem;
+  .mobileHamburger {
+    display: block;
   }
 }
