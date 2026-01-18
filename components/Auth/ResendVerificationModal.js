@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./ResendVerificationModal.module.css";
 
 export default function ResendVerificationModal({
@@ -8,20 +10,42 @@ export default function ResendVerificationModal({
   result,
   onClose,
 }) {
+  // 👉 Track when modal appears
+  useEffect(() => {
+    gaEvent("auth_verification_modal_view", { message });
+  }, []); // fires only once when modal opens
+
   return (
     <div className={classes.modalOverlay}>
       <div className={classes.modalContent}>
-        <button onClick={onClose} className={classes.closeButton}>
+        <button
+          onClick={() => {
+            gaEvent("auth_verification_modal_close"); // 👉 ADD
+            onClose();
+          }}
+          className={classes.closeButton}
+        >
           ×
         </button>
         <h3>❌ {message}</h3>
-        <form onSubmit={onSubmit} className={classes.form}>
+        <form
+          onSubmit={(e) => {
+            gaEvent("auth_verification_resend_submit", {
+              email,
+            }); // 👉 ADD
+            onSubmit(e);
+          }}
+          className={classes.form}
+        >
           <input
             type="email"
             placeholder="Enter your email"
             required
             value={email}
-            onChange={onEmailChange}
+            onChange={(e) => {
+              gaEvent("auth_verification_email_input"); // 👉 ADD (fires once per change)
+              onEmailChange(e);
+            }}
             className={classes.input}
           />
           <button

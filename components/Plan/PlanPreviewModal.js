@@ -1,8 +1,13 @@
-// components/Plan/PlanPreviewModal.js
+import { gaEvent } from "../../lib/gtag";
 import classes from "./PlanPreviewModal.module.css";
 
 export default function PlanPreviewModal({ plan, onClose, onConfirm }) {
   if (!plan) return null;
+
+  // 🔥 Track modal opened (correct format)
+  gaEvent("weekly_plan_preview_open", {
+    has_summary: !!plan.weekSummary,
+  });
 
   const weekSummary = plan.weekSummary || "";
   const days = plan.weeklyPlan?.days ? plan.weeklyPlan.days : plan.weeklyPlan;
@@ -15,6 +20,7 @@ export default function PlanPreviewModal({ plan, onClose, onConfirm }) {
         </button>
 
         <h3 className={classes.title}>Preview Weekly Plan</h3>
+
         {weekSummary && <p className={classes.summary}>{weekSummary}</p>}
 
         <div className={classes.daysScroll}>
@@ -29,24 +35,28 @@ export default function PlanPreviewModal({ plan, onClose, onConfirm }) {
                     {dayData.theme}
                   </p>
                 )}
+
                 {dayData.focus && (
                   <p className={classes.line}>
                     <span className={classes.label}>Focus:</span>{" "}
                     {dayData.focus}
                   </p>
                 )}
+
                 {dayData.fitness?.title && (
                   <p className={classes.line}>
                     <span className={classes.label}>Fitness:</span>{" "}
                     {dayData.fitness.title}
                   </p>
                 )}
+
                 {dayData.mindfulness?.title && (
                   <p className={classes.line}>
                     <span className={classes.label}>Mindfulness:</span>{" "}
                     {dayData.mindfulness.title}
                   </p>
                 )}
+
                 {dayData.nourish?.title && (
                   <p className={classes.line}>
                     <span className={classes.label}>Nourish:</span>{" "}
@@ -61,7 +71,18 @@ export default function PlanPreviewModal({ plan, onClose, onConfirm }) {
           <button className={classes.cancelButton} onClick={onClose}>
             Cancel
           </button>
-          <button className={classes.confirmButton} onClick={onConfirm}>
+
+          <button
+            className={classes.confirmButton}
+            onClick={() => {
+              // 🔥 Correct confirm event
+              gaEvent("weekly_plan_preview_confirm", {
+                action: "set_as_current",
+              });
+
+              onConfirm();
+            }}
+          >
             Set as Current Plan
           </button>
         </div>

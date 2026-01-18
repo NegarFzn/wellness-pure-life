@@ -1,8 +1,12 @@
-// components/Plan/DailyPreviewModal.js
+import { gaEvent } from "../../lib/gtag";
 import classes from "./DailyPreviewModal.module.css";
 
 export default function DailyPreviewModal({ routine, onClose, onConfirm }) {
   if (!routine) return null;
+
+  gaEvent("daily_routine_preview_open", {
+    has_summary: !!routine.daySummary,
+  });
 
   const daySummary = routine.daySummary || "";
 
@@ -71,7 +75,15 @@ export default function DailyPreviewModal({ routine, onClose, onConfirm }) {
           <button className={classes.cancelButton} onClick={onClose}>
             Cancel
           </button>
-          <button className={classes.confirmButton} onClick={onConfirm}>
+          <button
+            className={classes.confirmButton}
+            onClick={() => {
+              gaEvent("daily_routine_preview_confirm", {
+                action: "set_as_today",
+              });
+              onConfirm();
+            }}
+          >
             Set as Today’s Routine
           </button>
         </div>

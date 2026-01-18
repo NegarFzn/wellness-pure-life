@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./header.module.css";
 
 export default function MobileNav({
@@ -17,6 +18,10 @@ export default function MobileNav({
   const router = useRouter();
 
   const handleSurprise = () => {
+    gaEvent("mobile_nav_surprise_click", {
+      section: activeMobileSection,
+    });
+
     const topics = topicsMap[activeMobileSection] || [];
     if (topics.length > 0) {
       const randomTopic = topics[Math.floor(Math.random() * topics.length)];
@@ -37,7 +42,10 @@ export default function MobileNav({
               <button
                 type="button"
                 className={classes.navButton}
-                onClick={() => setActiveMobileSection(label)}
+                onClick={() => {
+                  gaEvent("mobile_nav_section_open", { label });
+                  setActiveMobileSection(label);
+                }}
                 aria-expanded={activeMobileSection === label}
               >
                 {label}
@@ -51,7 +59,10 @@ export default function MobileNav({
               <Link
                 href={`/${item}`}
                 className={classes.mobileNavLink}
-                onClick={closeMenu}
+                onClick={() => {
+                  gaEvent("mobile_nav_link_click", { item });
+                  closeMenu();
+                }}
               >
                 {item.charAt(0).toUpperCase() + item.slice(1)}
               </Link>
@@ -62,7 +73,10 @@ export default function MobileNav({
             <Link
               href="/premium"
               className={classes.mobileNavLink}
-              onClick={closeMenu}
+              onClick={() => {
+                gaEvent("mobile_nav_premium_click");
+                closeMenu();
+              }}
             >
               Premium
             </Link>
@@ -75,8 +89,20 @@ export default function MobileNav({
                   src={weather.current.condition.icon}
                   alt={weather.current.condition.text}
                   className={classes.weatherIcon}
+                  onClick={() =>
+                    gaEvent("mobile_nav_weather_click", {
+                      temp: weather.current.temp_c,
+                    })
+                  }
                 />
-                <div className={classes.weatherText}>
+                <div
+                  className={classes.weatherText}
+                  onClick={() =>
+                    gaEvent("mobile_nav_weather_click", {
+                      temp: weather.current.temp_c,
+                    })
+                  }
+                >
                   <div className={classes.weatherTemp}>
                     {weather.current.temp_c}°C
                   </div>
@@ -93,7 +119,12 @@ export default function MobileNav({
           <button
             type="button"
             className={classes.backButton}
-            onClick={() => setActiveMobileSection(null)}
+            onClick={() => {
+              gaEvent("mobile_nav_back_click", {
+                from: activeMobileSection,
+              });
+              setActiveMobileSection(null);
+            }}
           >
             ‹ Back
           </button>
@@ -104,6 +135,9 @@ export default function MobileNav({
                 href={`/${activeMobileSection.toLowerCase()}`}
                 className={classes.mainSectionLink}
                 onClick={() => {
+                  gaEvent("mobile_nav_section_main_click", {
+                    section: activeMobileSection,
+                  });
                   setActiveMobileSection(null);
                   closeMenu();
                 }}
@@ -118,6 +152,10 @@ export default function MobileNav({
                   href={item.href}
                   className={classes.mobileNavLink}
                   onClick={() => {
+                    gaEvent("mobile_nav_topic_click", {
+                      section: activeMobileSection,
+                      topic: item.text,
+                    });
                     setActiveMobileSection(null);
                     closeMenu();
                   }}
@@ -147,7 +185,10 @@ export default function MobileNav({
                   <Link
                     href="/challenge"
                     className={classes.premiumActiveLink}
-                    onClick={closeMenu}
+                    onClick={() => {
+                      gaEvent("mobile_nav_challenge_click");
+                      closeMenu();
+                    }}
                   >
                     Start Challenge →
                   </Link>
@@ -157,7 +198,10 @@ export default function MobileNav({
                     <Link
                       href="/premium"
                       className={classes.premiumLink}
-                      onClick={closeMenu}
+                      onClick={() => {
+                        gaEvent("mobile_nav_challenge_upgrade_click");
+                        closeMenu();
+                      }}
                     >
                       Upgrade to Premium →
                     </Link>

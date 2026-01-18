@@ -6,14 +6,39 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          {/* ======================== */}
           {/* ✅ Google AdSense */}
+          {/* ======================== */}
           <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6324625824043093"
             crossOrigin="anonymous"
           ></script>
 
+          {/* ======================== */}
+          {/* ✅ Google Analytics (GA4) */}
+          {/* ======================== */}
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=G-BW68Y2E49W`}
+          />
+
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-BW68Y2E49W', {
+                page_path: window.location.pathname,
+              });
+            `,
+            }}
+          />
+
+          {/* ======================== */}
           {/* ✅ SEO Meta Tags */}
+          {/* ======================== */}
           <meta name="robots" content="index, follow" />
           <meta
             name="description"
@@ -26,7 +51,9 @@ class MyDocument extends Document {
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
-          {/* ✅ Open Graph (Social Sharing) */}
+          {/* ======================== */}
+          {/* ✅ Open Graph */}
+          {/* ======================== */}
           <meta
             property="og:title"
             content="Wellness Pure Life – Personalized Wellness Plans"
@@ -42,7 +69,9 @@ class MyDocument extends Document {
           <meta property="og:url" content="https://wellnesspurelife.com" />
           <meta property="og:type" content="website" />
 
-          {/* ✅ Twitter Card Metadata */}
+          {/* ======================== */}
+          {/* ✅ Twitter Card */}
+          {/* ======================== */}
           <meta name="twitter:card" content="summary_large_image" />
           <meta
             name="twitter:title"
@@ -57,7 +86,7 @@ class MyDocument extends Document {
             content="https://wellnesspurelife.com/og-image.jpg"
           />
 
-          {/* Optional: favicon or other link tags */}
+          {/* Optional: favicon */}
           {/* <link rel="icon" href="/favicon.ico" /> */}
         </Head>
         <body>

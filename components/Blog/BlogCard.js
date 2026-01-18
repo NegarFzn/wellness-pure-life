@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./BlogCard.module.css";
 
 export default function BlogCard({ post }) {
@@ -25,7 +26,16 @@ export default function BlogCard({ post }) {
 
         {post.excerpt && <p className={classes.excerpt}>{post.excerpt}</p>}
 
-        <Link href={`/blog/${post.slug}`} className={classes.readBtn}>
+        <Link
+          href={`/blog/${post.slug}`}
+          className={classes.readBtn}
+          onClick={() =>
+            gaEvent("blog_article_card_click", {
+              title: post.title,
+              slug: post.slug,
+            })
+          }
+        >
           Read Article →
         </Link>
       </div>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./ChallengeBox.module.css";
 
 export default function ChallengeBox({ onLinkClick }) {
@@ -29,6 +30,8 @@ export default function ChallengeBox({ onLinkClick }) {
   }, [session]);
 
   const handleSeeFullChallenge = () => {
+    gaEvent("challenge_open_full");
+
     const dropdown = document.querySelector(`.${classes.megaDropdown}`);
     if (dropdown) dropdown.style.display = "none";
     if (onLinkClick) onLinkClick();
@@ -37,6 +40,8 @@ export default function ChallengeBox({ onLinkClick }) {
 
   const handleNewTip = async () => {
     if (typeof window === "undefined") return;
+
+    gaEvent("challenge_new_tip");
 
     setChallengeText("Loading...");
 
@@ -73,10 +78,12 @@ export default function ChallengeBox({ onLinkClick }) {
           <span className={classes.challengeIcon}>🔥</span>
           <h5 className={classes.challengeTitle}>7-Day Challenge</h5>
         </div>
+
         {isPremium ? (
           <>
             <p className={classes.challengeDay}>Day {dayNumber} of 7</p>
             <p className={classes.challengeText}>{challengeText}</p>
+
             <Link href="/challenge" legacyBehavior>
               <a
                 className={classes.challengeLink}
@@ -85,6 +92,7 @@ export default function ChallengeBox({ onLinkClick }) {
                 See Full Challenge →
               </a>
             </Link>
+
             <button
               onClick={handleNewTip}
               className={classes.refreshButton}
@@ -98,15 +106,18 @@ export default function ChallengeBox({ onLinkClick }) {
             <p className={classes.challengeText}>
               This challenge is available for Premium members.
             </p>
+
             <Link href="/upgrade" legacyBehavior>
               <a
                 className={classes.challengeLink}
                 onClick={() => {
+                  gaEvent("challenge_upgrade_click");
+
                   const dropdown = document.querySelector(
                     `.${classes.megaDropdown}`
                   );
                   if (dropdown) dropdown.style.display = "none";
-                  if (onLinkClick) onLinkClick(); // THIS closes dropdown via parent state
+                  if (onLinkClick) onLinkClick();
                 }}
               >
                 Upgrade to Premium →

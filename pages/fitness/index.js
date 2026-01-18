@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { gaEvent } from "../../lib/gtag";
 import { motion } from "framer-motion";
 import fitnessHeader from "/public/images/fitness_header.jpg";
 import classes from "./index.module.css";
@@ -189,11 +190,12 @@ function FitnessPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              onClick={() =>
+              onClick={() => {
+                gaEvent("fitness_pillar_click", { pillar: "Cardio" });
                 document
                   .getElementById("cardio")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               <span>💓</span>
               <h3>Cardio</h3>
@@ -205,11 +207,12 @@ function FitnessPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              onClick={() =>
+              onClick={() => {
+                gaEvent("fitness_pillar_click", { pillar: "Resistance" });
                 document
                   .getElementById("resistanceTraining")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               <span>💪</span>
               <h3>Resistance</h3>
@@ -221,11 +224,12 @@ function FitnessPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              onClick={() =>
+              onClick={() => {
+                gaEvent("fitness_pillar_click", { pillar: "Recovery" });
                 document
                   .getElementById("restAndRecovery")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               <span>🛌</span>
               <h3>Recovery</h3>
@@ -237,11 +241,12 @@ function FitnessPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              onClick={() =>
+              onClick={() => {
+                gaEvent("fitness_pillar_click", { pillar: "Flexibility" });
                 document
                   .getElementById("yoga")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               <span>🧘</span>
               <h3>Flexibility</h3>
@@ -289,7 +294,6 @@ function FitnessPage(props) {
             title="Get Strong in 21 Days"
             description="Follow daily strength-boosting moves and energizing tips to build lean muscle, gain power, and stay motivated — all in just 10 minutes a day."
             href="/challenges/21-days-fitness/1"
-           
           />
         </section>
 
@@ -302,6 +306,9 @@ function FitnessPage(props) {
                   className={classes.subnavLink}
                   href={`#${c.key}`}
                   data-key={c.key}
+                  onClick={() =>
+                    gaEvent("fitness_subnav_click", { section: c.title })
+                  }
                 >
                   {c.title}
                 </a>
@@ -331,7 +338,10 @@ function FitnessPage(props) {
 
         {showButton && (
           <button
-            onClick={scrollToTop}
+            onClick={() => {
+              gaEvent("fitness_back_to_top");
+              scrollToTop();
+            }}
             className={classes.backToTop}
             aria-label="Back to top"
           >

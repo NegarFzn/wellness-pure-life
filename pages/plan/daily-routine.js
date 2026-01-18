@@ -6,6 +6,8 @@ import Head from "next/head";
 import { toast } from "react-hot-toast";
 import DailyHistoryModal from "../../components/Plan/DailyHistoryModal";
 import DailyRoutine from "../../components/Plan/DailyRoutine";
+import ShareButton from "../../components/UI/ShareButton";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./daily-routine.module.css";
 
 const PROGRESS_KEY = "wpl_daily_progress";
@@ -163,6 +165,7 @@ export default function DailyRoutinePage() {
       await loadHistory();
 
       setModalState("success");
+      gaEvent("daily_routine_regenerate_success");
 
       const dayId = getDayId(data.updatedAt);
       if (typeof window !== "undefined") {
@@ -218,6 +221,9 @@ export default function DailyRoutinePage() {
   useEffect(() => {
     if (status === "authenticated" && session?.user?.isPremium) {
       loadDailyRoutine();
+      gaEvent("daily_routine_page_view", {
+        user: session?.user?.email || "anonymous",
+      });
     }
   }, [status, session]);
 
@@ -290,6 +296,8 @@ export default function DailyRoutinePage() {
   };
 
   async function handleSendEmail() {
+    gaEvent("daily_routine_email_send_click");
+
     try {
       const res = await fetch("/api/plan/daily?action=email", {
         method: "POST",
@@ -342,10 +350,16 @@ export default function DailyRoutinePage() {
         <div className={classes.buttonRow}>
           <button
             onClick={() => {
+              // 🔥 GA EVENT — track every regenerate click
+              gaEvent("daily_routine_regenerate_click", {
+                allowed: isDayFinished(updatedAt),
+              });
+
               if (!isDayFinished(updatedAt)) {
                 setModalState("warning");
                 return; // ⛔ fully blocks regeneration
               }
+
               regenerateRoutine(); // ✅ only runs when day is finished
             }}
             className={`${classes.regenButton} ${
@@ -360,6 +374,11 @@ export default function DailyRoutinePage() {
             type="button"
             className={classes.historyButton}
             onClick={() => {
+              // 🔥 GA EVENT — track open/close of history
+              gaEvent("daily_routine_history_button_click", {
+                open: !showHistory, // true = opening, false = closing
+              });
+
               if (!showHistory) {
                 loadHistory();
               }
@@ -371,7 +390,10 @@ export default function DailyRoutinePage() {
 
           <button
             className={classes.favButton}
-            onClick={() => router.push("/plan/daily_routine_favorites")}
+            onClick={() => {
+              gaEvent("daily_routine_print_click");
+              handlePrint();
+            }}
           >
             ⭐ View Favorites
           </button>
@@ -389,6 +411,19 @@ export default function DailyRoutinePage() {
           >
             Send to Email
           </button>
+          <ShareButton
+            title="My Personalized Daily Plan"
+            text="Check out my personalized Daily plan based on my preferences at Wellness Pure Life."
+            url={`https://wellnesspurelife.com${router.asPath}`}
+            onShare={() =>
+              gaEvent({
+                action: "daily_plan_share",
+                params: {
+                  user: session?.user?.email || "anonymous",
+                },
+              })
+            }
+          />
         </div>
         {dailyQuote?.quote && (
           <div className={classes.quoteBox}>

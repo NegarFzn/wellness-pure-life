@@ -1,3 +1,5 @@
+import { gaEvent } from "../../lib/gtag";
+import { useEffect } from "react";
 import classes from "./WeeklyPlan.module.css";
 
 export default function WeeklyPlan({
@@ -56,6 +58,13 @@ export default function WeeklyPlan({
     ? classes["mood_" + data.moodColor.toLowerCase()]
     : "";
 
+  useEffect(() => {
+    gaEvent("weekly_plan_day_view", {
+      day,
+      mood_color: data?.moodColor || "none",
+    });
+  }, [day]);
+
   return (
     <div
       className={classes.dayCard}
@@ -64,7 +73,16 @@ export default function WeeklyPlan({
         transition: "background-color 0.3s ease",
       }}
     >
-      <details className={classes.details} open>
+      <details
+        className={classes.details}
+        open
+        onToggle={(e) => {
+          gaEvent("weekly_plan_day_toggle", {
+            day,
+            is_open: e.target.open,
+          });
+        }}
+      >
         <summary className={classes.dayHeader}>
           <span className={classes.dayCircle}>{day.charAt(0)}</span>
 
@@ -104,7 +122,15 @@ export default function WeeklyPlan({
               className={`${classes.checkButton} ${
                 dayProgress?.fitness ? classes.checkOn : ""
               }`}
-              onClick={() => toggleProgress(day, "fitness")}
+              onClick={() => {
+                gaEvent("weekly_plan_progress_toggle", {
+                  day,
+                  section: "fitness",
+                  new_state: !dayProgress?.fitness,
+                });
+
+                toggleProgress(day, "fitness");
+              }}
             >
               {dayProgress?.fitness ? "Done" : "Mark done"}
             </button>
@@ -137,7 +163,18 @@ export default function WeeklyPlan({
               className={`${classes.checkButton} ${
                 dayProgress?.mindfulness ? classes.checkOn : ""
               }`}
-              onClick={() => toggleProgress(day, "mindfulness")}
+              onClick={() => {
+                gaEvent({
+                  action: "weekly_plan_progress_toggle",
+                  params: {
+                    day,
+                    section: "mindfulness",
+                    new_state: !dayProgress?.mindfulness,
+                  },
+                });
+
+                toggleProgress(day, "mindfulness");
+              }}
             >
               {dayProgress?.mindfulness ? "Done" : "Mark done"}
             </button>
@@ -161,7 +198,18 @@ export default function WeeklyPlan({
               className={`${classes.checkButton} ${
                 dayProgress?.nourish ? classes.checkOn : ""
               }`}
-              onClick={() => toggleProgress(day, "nourish")}
+              onClick={() => {
+                gaEvent({
+                  action: "weekly_plan_progress_toggle",
+                  params: {
+                    day,
+                    section: "nourish",
+                    new_state: !dayProgress?.nourish,
+                  },
+                });
+
+                toggleProgress(day, "nourish");
+              }}
             >
               {dayProgress?.nourish ? "Done" : "Mark done"}
             </button>
@@ -189,7 +237,18 @@ export default function WeeklyPlan({
               className={`${classes.checkButton} ${
                 dayProgress?.evening ? classes.checkOn : ""
               }`}
-              onClick={() => toggleProgress(day, "evening")}
+              onClick={() => {
+                gaEvent({
+                  action: "weekly_plan_progress_toggle",
+                  params: {
+                    day,
+                    section: "evening",
+                    new_state: !dayProgress?.evening,
+                  },
+                });
+
+                toggleProgress(day, "evening");
+              }}
             >
               {dayProgress?.evening ? "Done" : "Mark done"}
             </button>

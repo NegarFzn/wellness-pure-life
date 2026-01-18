@@ -1,7 +1,8 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classes from "./Step.module.css";
+import { gaEvent } from "../../../lib/gtag";
 
 export default function MultiSummaryStep({
   onBack,
@@ -10,6 +11,22 @@ export default function MultiSummaryStep({
   slug,
   questions = [],
 }) {
+  // ===============================
+  // Fire event when Summary loads
+  // ===============================
+  useEffect(() => {
+    gaEvent("quiz_summary_view", { slug });
+  }, [slug]);
+
+  useEffect(() => {
+    if (!answers) return;
+
+    gaEvent("quiz_summary_answers_loaded", {
+      slug,
+      totalAnswers: Object.keys(answers).length,
+    });
+  }, [answers, slug]);
+
   const getLabelForValue = (questionKey, value) => {
     const question = questions.find((q) => q.key === questionKey);
     if (!question) return value;
@@ -39,31 +56,35 @@ export default function MultiSummaryStep({
 
   const [showPremiumModal, setShowPremiumModal] = useState(false);
 
-  /** ✓ FIXED LOGIC  
-   Premium → go next  
-   Non Premium → show modal  
-   Not logged → show modal  
-  */
+  // ===============================
+  // When user clicks Continue
+  // ===============================
   const handleContinueClick = () => {
+    gaEvent("quiz_summary_continue", { slug });
+
     if (session?.user?.isPremium) {
-      // Premium user → finish quiz normally
+      // Premium user → go next
       onNext();
       return;
     }
 
     // Not premium → show modal
     setShowPremiumModal(true);
+
+    gaEvent("quiz_premium_gate_view", { slug });
   };
 
-  /** When user clicks "Upgrade" inside modal */
+  // ===============================
+  // User clicks Upgrade
+  // ===============================
   const handleUnlock = () => {
-    // If user is logged in but not premium → go premium page
+    gaEvent("quiz_premium_upgrade_click", { slug });
+
     if (session && !session.user?.isPremium) {
       router.push("/premium");
       return;
     }
 
-    // If user not logged in → also go premium page
     if (!session) {
       router.push("/premium");
       return;
@@ -82,11 +103,16 @@ export default function MultiSummaryStep({
       </ul>
 
       <div className={classes.navigation}>
-        <button onClick={onBack} className={classes.button}>
+        <button
+          onClick={() => {
+            gaEvent("quiz_summary_back_click", { slug });
+            onBack();
+          }}
+          className={classes.button}
+        >
           Back
         </button>
 
-        {/* NOW CORRECT: checks premium before opening modal */}
         <button onClick={handleContinueClick} className={classes.button}>
           Continue →
         </button>
@@ -98,7 +124,10 @@ export default function MultiSummaryStep({
           <div className={classes.premiumModal}>
             <button
               className={classes.premiumClose}
-              onClick={() => setShowPremiumModal(false)}
+              onClick={() => {
+                setShowPremiumModal(false);
+                gaEvent("quiz_premium_later_click", { slug });
+              }}
             >
               ×
             </button>
@@ -123,7 +152,10 @@ export default function MultiSummaryStep({
 
             <button
               className={classes.premiumButtonSecondary}
-              onClick={() => setShowPremiumModal(false)}
+              onClick={() => {
+                setShowPremiumModal(false);
+                trackEvent("quiz_premium_later_click", { slug });
+              }}
             >
               Maybe Later
             </button>

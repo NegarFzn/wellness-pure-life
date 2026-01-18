@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./DailyRoutineCard.module.css";
 import { FiSun, FiArrowRightCircle } from "react-icons/fi";
 
@@ -17,6 +19,14 @@ export default function DailyRoutineCard({ className = "" }) {
     : "View Today’s Routine";
 
   const handleClick = () => {
+    gaEvent("daily_routine_card_click", {
+      status: !isAuthenticated
+        ? "not_authenticated"
+        : !isPremium
+        ? "not_premium"
+        : "premium",
+    });
+
     if (!isAuthenticated) {
       router.push("/login");
       return;
@@ -29,6 +39,13 @@ export default function DailyRoutineCard({ className = "" }) {
 
     router.push("/plan/daily-routine");
   };
+
+  useEffect(() => {
+    gaEvent("daily_routine_card_view", {
+      is_authenticated: !!session,
+      is_premium: session?.user?.isPremium === true,
+    });
+  }, [session]);
 
   return (
     <div className={`${classes.card} ${className}`} onClick={handleClick}>
@@ -53,12 +70,25 @@ export default function DailyRoutineCard({ className = "" }) {
         </p>
 
         {/* ✅ CTA */}
-        <button className={classes.button}>
+        <button
+          className={classes.button}
+          onClick={(e) => {
+            e.stopPropagation(); // prevents the whole card click from overriding
+
+            gaEvent("daily_routine_card_cta_click", {
+              status: !isAuthenticated
+                ? "not_authenticated"
+                : !isPremium
+                ? "not_premium"
+                : "premium",
+            });
+
+            handleClick(); // continue original flow
+          }}
+        >
           <span>{buttonText}</span>
           <FiArrowRightCircle className={classes.buttonIcon} />
         </button>
-
-      
       </div>
     </div>
   );

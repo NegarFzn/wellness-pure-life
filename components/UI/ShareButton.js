@@ -1,7 +1,13 @@
+import { gaEvent } from "../../lib/gtag";
 import classes from "./ShareButton.module.css";
 
 export default function ShareButton({ url = "", title, text }) {
   const handleShare = async () => {
+    gaEvent("share_button_click", {
+      url: url || window.location.href,
+      title: title || null,
+    });
+
     try {
       if (navigator.share) {
         await navigator.share({

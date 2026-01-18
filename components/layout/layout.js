@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Header from "./header";
+import { gaEvent } from "../../lib/gtag";
 import Footer from "./footer";
 
 const Layout = ({ children }) => {
@@ -22,6 +23,10 @@ const Layout = ({ children }) => {
     }
 
     fetchWeather();
+  }, []);
+
+  useEffect(() => {
+    gaEvent("layout_loaded");
   }, []);
 
   return (

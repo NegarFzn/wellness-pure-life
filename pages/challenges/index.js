@@ -11,6 +11,8 @@ export default function ChallengePage() {
   const [completedKey, setCompletedKey] = useState("completedDays_default");
   const [showResetModal, setShowResetModal] = useState(false);
 
+  
+
   const handleResetProgress = () => {
     const storedStart = localStorage.getItem("challengeStartDate");
     if (storedStart) {

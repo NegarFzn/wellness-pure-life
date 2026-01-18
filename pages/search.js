@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Fuse from "fuse.js";
 import { motion } from "framer-motion";
+import { gaEvent } from "../lib/gtag";
 import fitness from "../data/fitness.json";
 import mindfulness from "../data/mindfulness.json";
 import nourish from "../data/nourish.json";
@@ -15,6 +16,12 @@ export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [suggestion, setSuggestion] = useState("");
+
+  useEffect(() => {
+    if (q) {
+      gaEvent("search_page_view", { query: q });
+    }
+  }, [q]);
 
   const allTitles = [
     ...Object.values(fitness)
@@ -124,6 +131,12 @@ export default function SearchPage() {
                   Did you mean:{" "}
                   <Link
                     href={`/search?q=${encodeURIComponent(suggestion)}`}
+                    onClick={() =>
+                      gaEvent("search_suggestion_click", {
+                        original_query: query,
+                        suggestion,
+                      })
+                    }
                     className={classes.suggestionLink}
                   >
                     {suggestion}

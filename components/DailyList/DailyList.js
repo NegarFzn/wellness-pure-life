@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { gaEvent } from "../../lib/gtag";
 import fitnessData from "../../data/fitness.json";
 import mindfulnessData from "../../data/mindfulness.json";
 import nourishData from "../../data/nourish.json";
@@ -34,6 +35,10 @@ export default function DailyList() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
+    gaEvent("daily_list_view");
+  }, []);
+
+  useEffect(() => {
     const shuffled = shuffle(allItems);
     setTodayItems(shuffled.slice(0, 50));
   }, []);
@@ -59,6 +64,12 @@ export default function DailyList() {
         if (maxVisibleEntry) {
           const index = [...cards].indexOf(maxVisibleEntry.target);
           setActiveIndex(index);
+
+          gaEvent("daily_list_card_view", {
+            index,
+            type: todayItems[index]?.type,
+            title: todayItems[index]?.title,
+          });
         }
       },
       { root: container, threshold: 0.6 }
@@ -133,7 +144,17 @@ export default function DailyList() {
                 : NourishItem;
 
             return (
-              <div className={classes.cardWrapper} key={item.id}>
+              <div
+                className={classes.cardWrapper}
+                key={item.id}
+                onClick={() =>
+                  gaEvent("daily_list_item_click", {
+                    id: item.id,
+                    type: item.type,
+                    title: item.title,
+                  })
+                }
+              >
                 <Component {...item} />
               </div>
             );
@@ -153,13 +174,19 @@ export default function DailyList() {
 
         <div className={classes.arrows}>
           <button
-            onClick={() => scrollCards("left")}
+            onClick={() => {
+              gaEvent("daily_list_arrow_click", { direction: "left" });
+              scrollCards("left");
+            }}
             className={classes.arrowBtn}
           >
             ◀
           </button>
           <button
-            onClick={() => scrollCards("right")}
+            onClick={() => {
+              gaEvent("daily_list_arrow_click", { direction: "right" });
+              scrollCards("right");
+            }}
             className={classes.arrowBtn}
           >
             ▶

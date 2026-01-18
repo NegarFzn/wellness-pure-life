@@ -13,6 +13,13 @@ export default function Subscribe() {
   const [emailStatus, setEmailStatus] = useState(null);
 
   useEffect(() => {
+    gaEvent("subscribe_page_view", {
+      category: "subscribe",
+      label: "static_subscribe_section",
+    });
+  }, []);
+
+  useEffect(() => {
     if (session?.user?.email) {
       setEmail(session.user.email);
     }
@@ -22,11 +29,19 @@ export default function Subscribe() {
   }, [session]);
 
   const handleInitialClick = () => {
+    gaEvent("subscribe_cta_click", {
+      category: "subscribe",
+      label: "start_7day_plan",
+    });
     setShowForm(true);
   };
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
+    gaEvent("subscribe_attempt", {
+      category: "subscribe",
+      label: "form_submit",
+    });
 
     // Email validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {

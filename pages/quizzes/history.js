@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { useUI } from "../../context/UIContext";
 import { useRouter } from "next/router";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./history.module.css";
 import {
   BarChart,
@@ -30,12 +31,20 @@ export default function QuizHistory() {
   const router = useRouter();
 
   useEffect(() => {
+    if (status === "authenticated") {
+      gaEvent("quiz_daily_history_page_loaded", {
+        user: session?.user?.email || "anonymous",
+      });
+    }
     const fetchDailyHistory = async () => {
       try {
         const res = await fetch("/api/quiz/quiz-daily?mode=history");
         const data = await res.json();
         const dailyHistory = Array.isArray(data.history) ? data.history : [];
         setHistory(dailyHistory);
+        gaEvent("quiz_daily_history_fetched", {
+          count: dailyHistory.length,
+        });
       } catch (err) {
         console.error("Failed to fetch daily history:", err);
         setHistory([]);
@@ -137,6 +146,9 @@ export default function QuizHistory() {
 
   const handleTypeClick = (type) => {
     setSelectedType((prev) => (prev === type ? null : type));
+    gaEvent("quiz_daily_filter_type", {
+      type: type || "all",
+    });
   };
 
   return (
@@ -153,7 +165,10 @@ export default function QuizHistory() {
           type="text"
           placeholder="Search quizzes by title..."
           value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          onChange={(e) => {
+            setFilter(e.target.value);
+            gaEvent("quiz_daily_history_search", { query: e.target.value });
+          }}
           className={classes.filterInput}
         />
 

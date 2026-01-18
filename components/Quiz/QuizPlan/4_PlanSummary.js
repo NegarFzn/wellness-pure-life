@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import PremiumButton from "../../PremiumButton/PremiumButton";
 import ShareButton from "../../UI/ShareButton";
+import { gaEvent } from "../../../lib/gtag";
 import classes from "./PlanSummary.module.css";
 
 export default function MultiPlanSummary({ answers, questions = [], slug }) {
@@ -20,6 +21,12 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
   const category = slug?.replace("-plan", "");
   const finalAnswers = loadedAnswers || answers;
   const isPremium = !!session?.user?.isPremium;
+
+  useEffect(() => {
+    if (!session?.user?.isPremium) {
+      gaEvent("premium_upsell_shown", { slug, category });
+    }
+  }, [session?.user?.isPremium, slug, category]);
 
   /* -------------------- Label map -------------------- */
   useEffect(() => {
@@ -59,7 +66,7 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
 
         const data = await res.json();
         setSubmitted(true);
-        setMatchedPlan(data.result?.matchedPlan  || null);
+        setMatchedPlan(data.result?.matchedPlan || null);
       } catch (err) {
         console.error("❌ Failed to save quiz result:", err);
       }
@@ -92,6 +99,17 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
     fetchSavedPlan();
   }, [session?.user?.email, status, slug]);
 
+  useEffect(() => {
+    if (!matchedPlan) return;
+
+    gaEvent("quiz_completed", {
+      slug,
+      category,
+      plan_type: matchedPlan?.type || "default",
+      plan_id: matchedPlan?.id || null,
+    });
+  }, [matchedPlan]);
+
   /* -------------------- Premium reminder -------------------- */
   useEffect(() => {
     const checkShouldShowPremium = async () => {
@@ -122,7 +140,7 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: session.user.email,
-           name: session.user.name,
+          name: session.user.name,
           answers: finalAnswers,
           category,
           matchedPlan,
@@ -133,6 +151,12 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
       if (res.ok) {
         setToastMsg("📧 Plan sent to your email.");
         setEmailSent(true);
+
+        gaEvent("quiz_plan_emailed", {
+          slug,
+          category,
+          email: session.user.email,
+        });
       } else {
         setToastMsg("❌ Failed to send email: " + data.error);
       }
@@ -292,6 +316,19 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
     );
   }
 
+  useEffect(() => {
+    if (!finalAnswers) return;
+
+    Object.entries(finalAnswers).forEach(([key, value]) => {
+      gaEvent("quiz_question_answered", {
+        slug,
+        category,
+        question_key: key,
+        answer_value: value,
+      });
+    });
+  }, [finalAnswers]);
+
   return (
     <div className={classes.pageBg}>
       <div className={classes.container}>
@@ -381,7 +418,12 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
               progression guidance, and personalized recommendations.
             </p>
 
-            <PremiumButton category={category} />
+            <PremiumButton
+              category={category}
+              onClick={() =>
+                gaEvent("premium_upgrade_click", { slug, category })
+              }
+            />
 
             <p className={classes.premiumNote}>
               No commitment — continue using the free version anytime.
@@ -400,6 +442,13 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
               key={i}
               href={`/quizzes/quiz-main/${rec.slug}`}
               className={classes.freeCard}
+              onClick={() =>
+                gaEvent("free_recommendation_click", {
+                  slug,
+                  category,
+                  next_quiz: rec.slug,
+                })
+              }
             >
               <div className={classes.freeCardTitle}>{rec.title} →</div>
 

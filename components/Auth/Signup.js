@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./Signup.module.css";
 
 export default function Signup({
@@ -23,6 +24,8 @@ export default function Signup({
       setConfirmPassword("");
       setError("");
       setSuccess(false);
+    } else {
+      gaEvent("auth_signup_view"); // TRACK SIGNUP VIEW
     }
   }, [isOpen]);
 
@@ -30,10 +33,13 @@ export default function Signup({
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    gaEvent("auth_signup_submit", { email }); // TRACK SUBMIT
+
     setError("");
     setSuccess(false);
 
     if (password !== confirmPassword) {
+      gaEvent("auth_signup_password_mismatch"); // 👉 ADDED
       setError("Passwords do not match");
       return;
     }
@@ -56,8 +62,9 @@ export default function Signup({
 
       if (!res.ok) throw new Error(data.message || "Signup failed");
 
-      // ✅ Don't attempt login yet — email verification required
       setSuccess(true);
+      gaEvent("auth_signup_success", { email }); // TRACK SUCCESS
+
       setTimeout(() => {
         const successMsg = document.querySelector(`.${classes.success}`);
         if (successMsg) successMsg.classList.add(classes.successFlash);
@@ -65,6 +72,11 @@ export default function Signup({
 
       if (onSignupComplete) onSignupComplete();
     } catch (err) {
+      gaEvent("auth_signup_error", {
+        email,
+        error: err.message,
+      }); // TRACK ERROR
+
       if (err.message.includes("Email already in use")) {
         setError(
           <>
@@ -73,6 +85,7 @@ export default function Signup({
               type="button"
               className={classes.linkButton}
               onClick={() => {
+                gaEvent("auth_signup_switch_to_login"); // 👉 ADDED
                 onClose();
                 if (switchToLogin) switchToLogin();
               }}
@@ -92,58 +105,83 @@ export default function Signup({
     <div
       className={classes.overlay}
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget) {
+          gaEvent("auth_signup_modal_close"); // 👉 ADDED
+          onClose();
+        }
       }}
     >
       <div className={classes.modal}>
-        <button className={classes.close} onClick={onClose}>
+        <button
+          className={classes.close}
+          onClick={() => {
+            gaEvent("auth_signup_modal_close"); // 👉 ADDED
+            onClose();
+          }}
+        >
           &times;
         </button>
+
         <h2 className={classes.title}>Join Wellness Pure Life</h2>
         <p className={classes.subtitle}>
           Get free access to our weekly wellness tips 🌿
         </p>
+
         <form onSubmit={handleSignup} className={classes.form}>
           <input
             type="text"
             placeholder="Name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+              gaEvent("auth_signup_name_input"); // 👉 ADDED
+            }}
             required
             className={classes.input}
           />
+
           <input
             type="email"
             placeholder="Your Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              gaEvent("auth_signup_email_input"); // 👉 ADDED
+            }}
             required
             className={classes.input}
           />
+
           <input
             type="password"
             placeholder="Create Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              gaEvent("auth_signup_password_input"); // 👉 ADDED
+            }}
             required
             className={classes.input}
           />
+
           <input
             type="password"
             placeholder="Confirm Password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) => {
+              setConfirmPassword(e.target.value);
+              gaEvent("auth_signup_confirm_password_input"); // 👉 ADDED
+            }}
             required
             className={classes.input}
           />
-          <button
-            type="submit"
-            className={classes.button}
-            disabled={success} // disable after success
-          >
+
+          <button type="submit" className={classes.button} disabled={success}>
             {success ? "✅ Signed Up" : "Sign Up Free"}
           </button>
+
           {error && <p className={classes.error}>{error}</p>}
+
           {success && (
             <p className={`${classes.success} ${classes.attention}`}>
               <span role="img" aria-label="email" className={classes.emailIcon}>

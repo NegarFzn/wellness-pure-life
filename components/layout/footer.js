@@ -2,16 +2,13 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import {
   FaEnvelope,
-  FaBrain,
-  FaAppleAlt,
-  FaDumbbell,
   FaGem,
-  FaRobot,
   FaLock,
   FaCookieBite,
   FaQuestionCircle,
 } from "react-icons/fa";
 import { useUI } from "../../context/UIContext";
+import { gaEvent } from "../../lib/gtag"; // <-- ADDED
 import classes from "./footer.module.css";
 
 export default function Footer() {
@@ -30,13 +27,18 @@ export default function Footer() {
   }, []);
 
   const toggleSection = (section) => {
+    gaEvent("footer_section_toggle", { section }); // <-- ANALYTIC
     setActiveSection(activeSection === section ? null : section);
   };
 
   const handleOpenChat = () => {
-    // simulate showing a premium modal instead of chat directly
+    gaEvent("footer_ai_click"); // <-- ANALYTIC
     setIsModalOpen(true);
     openChat();
+  };
+
+  const handleFooterLinkClick = (label) => {
+    gaEvent("footer_link_click", { label }); // <-- ANALYTIC
   };
 
   return (
@@ -58,6 +60,7 @@ export default function Footer() {
               <a
                 href="mailto:info@wellnesspurelife.com"
                 className={classes.link}
+                onClick={() => handleFooterLinkClick("email_info")}
               >
                 info@wellnesspurelife.com
               </a>
@@ -76,30 +79,37 @@ export default function Footer() {
                 <Link
                   href="/nourish/eating-with-intention-a-guide-to-mindful-nourishment"
                   className={classes.link}
+                  onClick={() => handleFooterLinkClick("mindful_nourishment")}
                 >
                   Mindful Nourishment
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="/nourish/targeted-nutrition-vitamins-and-minerals-for-specific-needs"
                   className={classes.link}
+                  onClick={() => handleFooterLinkClick("targeted_nutrition")}
                 >
                   Targeted Nutrition
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="/nourish/nourish-focus-discover-the-secrets-to-vibrant-living"
                   className={classes.link}
+                  onClick={() => handleFooterLinkClick("focus_balance")}
                 >
                   Focus & Balance
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="/nourish/top-picks-for-nourishment-curated-guides-and-tips"
                   className={classes.link}
+                  onClick={() => handleFooterLinkClick("curated_mindful_tips")}
                 >
                   Curated Mindful Tips
                 </Link>
@@ -119,27 +129,37 @@ export default function Footer() {
                 <Link
                   href="/nourish/superfood-benefits"
                   className={classes.link}
+                  onClick={() => handleFooterLinkClick("superfood_benefits")}
                 >
                   Superfood Benefits
                 </Link>
               </li>
+
               <li>
-                <Link href="/nourish/boost-your-diet" className={classes.link}>
+                <Link
+                  href="/nourish/boost-your-diet"
+                  className={classes.link}
+                  onClick={() => handleFooterLinkClick("boost_diet")}
+                >
                   Boost Your Diet
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="/nourish/powerful-ingredients"
                   className={classes.link}
+                  onClick={() => handleFooterLinkClick("powerful_ingredients")}
                 >
                   Powerful Ingredients
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="/nourish/eating-with-intention-a-guide-to-mindful-nourishment"
                   className={classes.link}
+                  onClick={() => handleFooterLinkClick("mindful_nourishment")}
                 >
                   Mindful Nourishment
                 </Link>
@@ -159,30 +179,37 @@ export default function Footer() {
                 <Link
                   href="/fitness/workouts-for-sculpting-every-inch-of-your-body"
                   className={classes.link}
+                  onClick={() => handleFooterLinkClick("full_body_sculpt")}
                 >
                   Full Body Sculpt
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="/fitness/effective-core-exercises-for-fitness-enthusiasts"
                   className={classes.link}
+                  onClick={() => handleFooterLinkClick("core_power_exercises")}
                 >
                   Core Power Exercises
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="/fitness/treadmill-vs-outdoor-running-weighing-the-options"
                   className={classes.link}
+                  onClick={() => handleFooterLinkClick("treadmill_vs_outdoor")}
                 >
                   Treadmill vs Outdoor
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="/fitness/exploring-the-8-limbs-of-yoga-for-a-holistic-understanding"
                   className={classes.link}
+                  onClick={() => handleFooterLinkClick("8_limbs_yoga")}
                 >
                   8 Limbs of Yoga
                 </Link>
@@ -200,10 +227,17 @@ export default function Footer() {
             <ul className={classes.linkList}>
               <li>
                 <FaGem className={classes.icon} />
-                <Link href="/upgrade" className={classes.link}>
+                <Link
+                  href="/upgrade"
+                  className={classes.link}
+                  onClick={() =>
+                    handleFooterLinkClick("upgrade_premium_footer")
+                  }
+                >
                   Upgrade to Premium
                 </Link>
               </li>
+
               <li>
                 <button onClick={handleOpenChat} className={classes.footerLink}>
                   <span className={classes.footerIcon}>🤖</span>
@@ -228,38 +262,64 @@ export default function Footer() {
             <ul className={classes.linkList}>
               <li>
                 <FaEnvelope className={classes.icon} />
-                <Link href="/contact" className={classes.link}>
+                <Link
+                  href="/contact"
+                  className={classes.link}
+                  onClick={() => handleFooterLinkClick("contact")}
+                >
                   Contact Us
                 </Link>
               </li>
+
               <li>
                 <FaLock className={classes.icon} />
-                <Link href="/privacy-policy" className={classes.link}>
+                <Link
+                  href="/privacy-policy"
+                  className={classes.link}
+                  onClick={() => handleFooterLinkClick("privacy_policy")}
+                >
                   Privacy Policy
                 </Link>
               </li>
+
               <li>
                 <FaCookieBite className={classes.icon} />
-                <Link href="/cookie-policy" className={classes.link}>
+                <Link
+                  href="/cookie-policy"
+                  className={classes.link}
+                  onClick={() => handleFooterLinkClick("cookie_policy")}
+                >
                   Cookie Policy
                 </Link>
               </li>
+
               <li>
                 <FaQuestionCircle className={classes.icon} />
-                <Link href="/faq" className={classes.link}>
+                <Link
+                  href="/faq"
+                  className={classes.link}
+                  onClick={() => handleFooterLinkClick("faq")}
+                >
                   FAQs
                 </Link>
               </li>
+
               <li>
                 <FaQuestionCircle className={classes.icon} />
-                <Link href="/blog" className={classes.link}>
+                <Link
+                  href="/blog"
+                  className={classes.link}
+                  onClick={() => handleFooterLinkClick("blog")}
+                >
                   Blog
                 </Link>
               </li>
+
               <li>
                 <FaCookieBite className={classes.icon} />
                 <span
                   onClick={() => {
+                    handleFooterLinkClick("change_cookie");
                     localStorage.removeItem("cookieConsent");
                     window.location.reload();
                   }}
@@ -271,13 +331,20 @@ export default function Footer() {
               </li>
             </ul>
           </section>
+
           {isMobile && (
             <section
               className={`${classes.footerSection} ${classes.footerAISection}`}
             >
               <ul className={classes.linkList}>
                 <li>
-                  <button onClick={openChat} className={classes.footerLink}>
+                  <button
+                    onClick={() => {
+                      gaEvent("footer_ai_click_mobile");
+                      openChat();
+                    }}
+                    className={classes.footerLink}
+                  >
                     🤖 <strong>AI Wellness Assistant</strong>
                   </button>
                 </li>
@@ -285,6 +352,7 @@ export default function Footer() {
             </section>
           )}
         </div>
+
         <div className={classes.footerBottom}>
           © {new Date().getFullYear()} WellnessPureLife. All rights reserved.
         </div>

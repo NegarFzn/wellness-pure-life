@@ -1,18 +1,26 @@
 import Link from "next/link";
+import { gaEvent } from "../../lib/gtag";  // ✅ analytics
 import classes from "./ChallengeCard.module.css";
 
 export default function ChallengeCard({
   title,
   description,
   href,
-  color = "#7A41FF", // default premium purple
+  color = "#7A41FF",
 }) {
   return (
-    <Link href={href} className={classes.wrapper}>
+    <Link
+      href={href}
+      className={classes.wrapper}
+      onClick={() =>
+        gaEvent("challenge_card_click", {
+          title,
+          href,
+        })
+      } // ✅ analytics event
+    >
       <div className={classes.card}>
-        <span className={classes.badge} >
-          Challenge
-        </span>
+        <span className={classes.badge}>Challenge</span>
 
         <h3 className={classes.title}>{title}</h3>
 

@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 import ChoiceStep from "./2_ChoiceStep";
 import MultiSummaryStep from "./3_SummaryStep";
 import MultiPlanSummary from "./4_PlanSummary";
+import { gaEvent } from "../../../lib/gtag";
+
 import classes from "./QuizEngine.module.css";
 
 export default function QuizEngine({
@@ -21,6 +23,13 @@ export default function QuizEngine({
 
   const updateAnswer = (stepKey, value) => {
     setAnswers((prev) => ({ ...prev, [stepKey]: value }));
+
+    // GA4: question answered event
+    gaEvent("quiz_question_answered", {
+      slug,
+      question_key: stepKey,
+      answer_value: value,
+    });
   };
 
   const nextStep = () => setCurrentStep((prev) => prev + 1);
@@ -90,6 +99,31 @@ export default function QuizEngine({
   ];
 
   const progress = ((currentStep + 1) / steps.length) * 100;
+
+  useEffect(() => {
+    if (questions.length === 0) return;
+
+    const isSummary = currentStep === questions.length;
+    const isPlan = currentStep === questions.length + 1;
+
+    let step_label = "question_step";
+    if (isSummary) step_label = "summary_step";
+    if (isPlan) step_label = "plan_step";
+
+    gaEvent("quiz_step", {
+      slug,
+      step_number: currentStep + 1,
+      total_steps: steps.length,
+      step_label,
+    });
+  }, [currentStep, slug]);
+
+  useEffect(() => {
+    // Fire ONLY when the user begins the quiz (step 0)
+    if (currentStep === 0) {
+      gaEvent("quiz_started", { slug });
+    }
+  }, [currentStep, slug]);
 
   return (
     <div className={classes.quizWrapper}>

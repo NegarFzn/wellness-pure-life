@@ -3,12 +3,23 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import BlogCTA from "../../components/Blog/BlogCTA";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./BlogPost.module.css";
 
 export default function BlogPost() {
   const { query } = useRouter();
   const { slug } = query;
   const [post, setPost] = useState(null);
+
+  // Analytics: Fire when the post is loaded
+  useEffect(() => {
+    if (!post) return;
+
+    gaEvent("blog_article_view", {
+      title: post.title,
+      slug: post.slug,
+    });
+  }, [post]);
 
   useEffect(() => {
     if (!slug) return;
@@ -21,8 +32,7 @@ export default function BlogPost() {
 
   if (!post) return null;
 
- const validImage = Boolean(post.image);
-
+  const validImage = Boolean(post.image);
 
   // Remove HTML tags for JSON-LD
   const cleanContent =
@@ -186,6 +196,12 @@ export default function BlogPost() {
                   key={index}
                   href={`/blog/${item.slug}`}
                   className={classes.recoCard}
+                  onClick={() =>
+                    gaEvent("blog_recommended_click", {
+                      sourcePost: post.slug,
+                      targetPost: item.slug,
+                    })
+                  }
                 >
                   <div className={classes.recoImageWrap}>
                     <Image

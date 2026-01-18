@@ -1,6 +1,8 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useUI } from "../../context/UIContext";
+import { useEffect } from "react";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./PremiumButton.module.css";
 
 export default function PremiumButton() {
@@ -8,9 +10,22 @@ export default function PremiumButton() {
   const router = useRouter();
   const { closeChat } = useUI();
 
+  // 👉 Track CTA impression
+  useEffect(() => {
+    gaEvent("premium_cta_view", {
+      page: router.pathname,
+    });
+  }, []);
+
   const handleUpgrade = () => {
+    // 👉 Track CTA click
+    gaEvent("premium_cta_click", {
+      page: router.pathname,
+      userPremium: session?.user?.isPremium === true,
+    });
+
     closeChat();
-    router.push("/premium");
+    router.push("/upgrade");
   };
 
   return (

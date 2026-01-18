@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { gaEvent } from "../../lib/gtag";
 import DailyPreviewModal from "./DailyPreviewModal";
 import classes from "./DailyHistoryModal.module.css";
 
@@ -6,12 +7,25 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
   const [previewRoutine, setPreviewRoutine] = useState(null);
   const [favoritedIds, setFavoritedIds] = useState({});
 
+  /* --------------------------------------------------
+     GA: Modal Open (correct placement — fires ONCE)
+  -------------------------------------------------- */
+  useEffect(() => {
+    if (show) {
+      gaEvent("daily_history_open");
+    }
+  }, [show]);
+
   if (!show) return null;
 
   /* -----------------------------
-     RESTORE FROM PREVIEW ✅ FIXED
+     RESTORE FROM PREVIEW
   ----------------------------- */
   const handleRestoreFromPreview = async (item) => {
+    gaEvent("daily_routine_restore", {
+      routine_id: item._id,
+    });
+
     try {
       const res = await fetch("/api/plan/restore", {
         method: "POST",
@@ -26,7 +40,7 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
 
       if (res.ok) {
         setPreviewRoutine(null);
-        onClose(); // ✅ only once
+        onClose();
       } else {
         alert(data.error || "Failed to restore routine");
       }
@@ -54,7 +68,7 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
   };
 
   /* -----------------------------
-     FAVORITE ROUTINE ✅ FIXED
+     FAVORITE ROUTINE
   ----------------------------- */
   const handleFavorite = async (itemRaw) => {
     const id =
@@ -69,6 +83,10 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
       ...itemRaw,
       _id: String(id),
     };
+
+    gaEvent("daily_routine_favorited", {
+      routine_id: id,
+    });
 
     // Optimistic UI
     setFavoritedIds((prev) => ({ ...prev, [id]: true }));
@@ -177,7 +195,12 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
                   <div className={classes.actionsRow}>
                     <button
                       className={classes.restoreButton}
-                      onClick={() => setPreviewRoutine(item)}
+                      onClick={() => {
+                        gaEvent("daily_history_preview_click", {
+                          routine_id: item._id,
+                        });
+                        setPreviewRoutine(item);
+                      }}
                     >
                       Preview Routine
                     </button>

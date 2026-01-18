@@ -2,11 +2,20 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import BlogCard from "../../components/Blog/BlogCard";
 import BlogCTA from "../../components/Blog/BlogCTA";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./index.module.css";
 
 export default function BlogPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+  gaEvent("blog_page_view", {
+    page_path: "/blog",
+  });
+}, []);
+
+
 
   useEffect(() => {
     fetch("/api/blog")

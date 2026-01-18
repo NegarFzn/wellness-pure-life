@@ -3,15 +3,14 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { gaEvent } from "../../lib/gtag";
 import { toast } from "react-hot-toast";
 import PlanHistoryModal from "../../components/Plan/PlanHistoryModal";
 import WeeklyPlan from "../../components/Plan/WeeklyPlan";
 import classes from "./weekly-plan.module.css";
-
+import ShareButton from "../../components/UI/ShareButton";
 const HISTORY_KEY = "wpl_weekly_history";
 const PROGRESS_KEY = "wpl_weekly_progress";
-
-
 
 export default function WeeklyPlanPage() {
   const { data: session, status } = useSession();
@@ -27,6 +26,15 @@ export default function WeeklyPlanPage() {
   const [history, setHistory] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    gaEvent({
+      action: "weekly_plan_page_view",
+      params: {
+        isPremium: session?.user?.isPremium || false,
+      },
+    });
+  }, [session]);
 
   function isWeekFinished(updatedAt) {
     if (!updatedAt) return true;
@@ -156,9 +164,28 @@ export default function WeeklyPlanPage() {
   // ---------- progress toggle ----------
 
   const toggleProgress = (day, key) => {
+    // GA4 tracking
+    gaEvent({
+      action: "weekly_plan_item_toggle",
+      params: {
+        day,
+        item: key,
+        new_value: !progress?.[day]?.[key] || false,
+      },
+    });
     const weekId = getWeekId(updatedAt);
     setProgress((prev) => {
       const forDay = prev[day] || {};
+      const newForDay = { ...forDay, [key]: !forDay[key] };
+
+      // If all tasks for the day are completed:
+      if (Object.values(newForDay).every((v) => v === true)) {
+        gaEvent({
+          action: "weekly_plan_day_completed",
+          params: { day },
+        });
+      }
+
       const updated = {
         ...prev,
         [day]: {
@@ -180,6 +207,16 @@ export default function WeeklyPlanPage() {
       loadWeeklyPlan();
     }
   }, [status, session]);
+
+  useEffect(() => {
+    if (showHistory) loadHistory();
+  }, [showHistory]);
+
+  useEffect(() => {
+    if (!loading && plan) {
+      scrollToToday();
+    }
+  }, [loading, plan]);
 
   // ---------- permission gates ----------
 
@@ -242,24 +279,6 @@ export default function WeeklyPlanPage() {
     );
   }
 
-  if (!session.user?.isPremium) {
-    return (
-      <div className={classes.lockWrap}>
-        <h2 className={classes.lockTitle}>Weekly Plan is a Premium Feature</h2>
-        <p className={classes.lockText}>
-          Unlock your personalized weekly fitness, mindfulness and nutrition
-          plan.
-        </p>
-        <button
-          onClick={() => router.push("/premium")}
-          className={classes.lockButton}
-        >
-          Upgrade to Premium
-        </button>
-      </div>
-    );
-  }
-
   // ---------- print handler ----------
 
   const handlePrint = () => {
@@ -270,6 +289,14 @@ export default function WeeklyPlanPage() {
 
   async function handleSendEmail() {
     try {
+      // 📌 GA TRACKING — must be FIRST line inside try {}
+      gaEvent({
+        action: "weekly_plan_email_click",
+        params: {
+          user_id: session?.user?.email || "unknown",
+        },
+      });
+
       const res = await fetch("/api/plan/weekly?action=email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -321,16 +348,39 @@ export default function WeeklyPlanPage() {
           </p>
         )}
 
+        {plan && (
+          <p className={classes.completion}>
+            {Math.round((Object.values(progress).flat().length / 28) * 100)}%
+            completed this week
+          </p>
+        )}
+
         <div className={classes.buttonRow}>
           <button
             onClick={() => {
+              // 🔥 GA4 tracking — must be FIRST LINE
+              gaEvent({
+                action: "weekly_plan_regenerate_click",
+                params: { isFinished: isWeekFinished(updatedAt) },
+              });
+
               if (!isWeekFinished(updatedAt)) {
-                // Week is still in progress → show warning modal
                 setModalState("warning");
+
+                // 🔥 Track regenerate "warning" result
+                gaEvent({
+                  action: "weekly_plan_regenerate_result",
+                  params: { status: "warning" },
+                });
               } else {
-                // Week finished → regenerate and then show success modal
                 regeneratePlan().then(() => {
                   setModalState("success");
+
+                  // 🔥 Track regenerate "success" result
+                  gaEvent({
+                    action: "weekly_plan_regenerate_result",
+                    params: { status: "success" },
+                  });
                 });
               }
             }}
@@ -347,8 +397,16 @@ export default function WeeklyPlanPage() {
             className={classes.historyButton}
             onClick={() => {
               if (!showHistory) {
-                loadHistory(); // load when opening
+                gaEvent({
+                  action: "weekly_plan_history_open",
+                  params: {
+                    count: history?.length || 0,
+                  },
+                });
+
+                loadHistory();
               }
+
               setShowHistory((prev) => !prev);
             }}
           >
@@ -374,6 +432,19 @@ export default function WeeklyPlanPage() {
           >
             Send to Email
           </button>
+          <ShareButton
+            title="My Personalized Weekly Plan"
+            text="Check out my personalized Weekly plan based on my preferences at Wellness Pure Life."
+            url={`https://wellnesspurelife.com${router.asPath}`}
+            onShare={() =>
+              gaEvent({
+                action: "weekly_plan_share",
+                params: {
+                  user: session?.user?.email || "anonymous",
+                },
+              })
+            }
+          />
         </div>
 
         {loading ? (

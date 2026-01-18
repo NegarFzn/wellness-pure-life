@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { signIn } from "next-auth/react";
+import { gaEvent } from "../../lib/gtag"; // 👉 ADDED
 import "react-toastify/dist/ReactToastify.css";
 import classes from "./Login.module.css";
 
@@ -18,6 +19,13 @@ export default function Login({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const router = useRouter();
+
+  // 👉 TRACK MODAL OPEN
+  useEffect(() => {
+    if (isOpen) {
+      gaEvent("auth_login_modal_view");
+    }
+  }, [isOpen]);
 
   // Show toast if redirected after verification (only once)
   useEffect(() => {
@@ -47,6 +55,12 @@ export default function Login({
     e.preventDefault();
     setError("");
 
+    // 👉 TRACK LOGIN CLICK
+    gaEvent("auth_login_attempt", {
+      email,
+      rememberMe,
+    });
+
     const res = await signIn("credentials", {
       redirect: false,
       email,
@@ -54,18 +68,29 @@ export default function Login({
     });
 
     if (res.ok) {
+      // 👉 TRACK SUCCESS
+      gaEvent("auth_login_success", {
+        email,
+      });
+
       localStorage.removeItem("justSignedUp");
       setSuccess(true);
       if (onLoginSuccess) onLoginSuccess();
       onClose();
       router.push("/dashboard");
     } else {
+      // 👉 TRACK FAILURE
+      gaEvent("auth_login_failed", {
+        email,
+      });
+
       setError(
         <>
           Invalid email or password.{" "}
           <button
             type="button"
             onClick={() => {
+              gaEvent("auth_login_switch_to_signup"); // 👉 ADDED
               onClose();
               if (switchToSignup) switchToSignup();
             }}
@@ -81,6 +106,11 @@ export default function Login({
   const handleResetPassword = async () => {
     setError(null);
 
+    // 👉 TRACK FORGOT PASSWORD CLICK
+    gaEvent("auth_forgot_password_click", {
+      email: email || "empty",
+    });
+
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setError("Please enter a valid email to reset your password.");
       return;
@@ -88,8 +118,20 @@ export default function Login({
 
     try {
       const res = await axios.post("/api/auth/reset-password", { email });
+
+      // 👉 TRACK RESET SENT
+      gaEvent("auth_reset_password_sent", {
+        email,
+      });
+
       toast.success("📬 Reset email sent. Check your inbox.");
     } catch (err) {
+      // 👉 TRACK RESET ERROR
+      gaEvent("auth_reset_password_error", {
+        email,
+        message: err?.response?.data?.message || "unknown",
+      });
+
       if (err?.response?.status === 404) {
         setError("This email is not registered. Please sign up first.");
       } else {
@@ -107,41 +149,66 @@ export default function Login({
     <div
       className={classes.overlay}
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget) {
+          gaEvent("auth_login_modal_close"); // 👉 ADDED
+          onClose();
+        }
       }}
     >
       <div className={classes.modal}>
-        <button className={classes.close} onClick={onClose}>
+        <button
+          className={classes.close}
+          onClick={() => {
+            gaEvent("auth_login_modal_close"); // 👉 ADDED
+            onClose();
+          }}
+        >
           &times;
         </button>
+
         <h2 className={classes.title}>Join Wellness Pure Life</h2>
         <p className={classes.subtitle}>
           Get free access to our weekly wellness tips 🌿
         </p>
+
         <form onSubmit={handleLogin} className={classes.form}>
           <h2 className={classes.title}>Login</h2>
+
           <input
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              gaEvent("auth_login_email_input"); // 👉 ADDED
+            }}
             required
             className={classes.input}
           />
+
           <input
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              gaEvent("auth_login_password_input"); // 👉 ADDED
+            }}
             required
             className={classes.input}
           />
+
           <div className={classes.checkboxRow}>
             <input
               type="checkbox"
               id="rememberMe"
               checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
+              onChange={(e) => {
+                setRememberMe(e.target.checked);
+                gaEvent("auth_login_remember_me_toggle", {
+                  checked: e.target.checked,
+                }); // 👉 ADDED
+              }}
             />
             <label htmlFor="rememberMe">Remember Me</label>
           </div>
@@ -149,6 +216,7 @@ export default function Login({
           <button type="submit" className={classes.button}>
             Login
           </button>
+
           <button
             type="button"
             onClick={handleResetPassword}
@@ -159,11 +227,13 @@ export default function Login({
 
           {error && <p className={classes.error}>{error}</p>}
           {success && <p className={classes.success}>✅ Login successful!</p>}
+
           <p className={classes.switchText}>
             Don't have an account?{" "}
             <button
               type="button"
               onClick={() => {
+                gaEvent("auth_login_switch_to_signup"); // 👉 ADDED
                 onClose();
                 if (switchToSignup) switchToSignup();
               }}

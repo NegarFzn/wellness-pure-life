@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./favorites.module.css";
 
 export default function FavoritesPage() {
@@ -25,6 +26,13 @@ export default function FavoritesPage() {
 
   // ------------------ SET AS CURRENT ------------------
   const setAsCurrent = async (fav) => {
+    gaEvent({
+      event: "favorite_set_as_current",
+      params: {
+        favorite_id: fav.favoriteId,
+      },
+    });
+
     try {
       // Use the full stored snapshot
       const res = await fetch("/api/plan/restore", {
@@ -48,6 +56,13 @@ export default function FavoritesPage() {
 
   // ------------------ REMOVE FAVORITE ------------------
   const removeFavorite = async (fav) => {
+    gaEvent({
+      event: "favorite_removed",
+      params: {
+        favorite_id: fav.favoriteId,
+      },
+    });
+
     try {
       const res = await fetch("/api/plan/favorites", {
         method: "DELETE",
@@ -72,6 +87,14 @@ export default function FavoritesPage() {
   useEffect(() => {
     if (status === "authenticated" && session?.user?.isPremium) {
       loadFavorites();
+
+      gaEvent({
+        event: "favorites_page_view",
+        params: {
+          user_id: session.user.id,
+          is_premium: true,
+        },
+      });
     }
   }, [status, session]);
 
@@ -81,6 +104,10 @@ export default function FavoritesPage() {
   }
 
   if (!session) {
+    gaEvent({
+      event: "favorites_page_locked_not_authenticated",
+    });
+
     return (
       <div className={classes.lockWrap}>
         <h2 className={classes.lockTitle}>Favorite Plans</h2>
@@ -98,6 +125,9 @@ export default function FavoritesPage() {
   }
 
   if (!session.user?.isPremium) {
+    gaEvent({
+      event: "favorites_page_locked_not_premium",
+    });
     return (
       <div className={classes.lockWrap}>
         <h2 className={classes.lockTitle}>Premium Feature</h2>
@@ -128,7 +158,10 @@ export default function FavoritesPage() {
         </p>
         <button
           className={classes.goWeeklyButton}
-          onClick={() => router.push("/plan/weekly-plan")}
+          onClick={() => {
+            gaEvent({ event: "go_to_weekly_plan_from_favorites" });
+            router.push("/plan/weekly-plan");
+          }}
         >
           Go to Your Current Weekly Plan
         </button>

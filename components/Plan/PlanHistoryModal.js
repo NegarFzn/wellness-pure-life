@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PlanPreviewModal from "./PlanPreviewModal";
+import { gaEvent } from "../../lib/gtag"; // ← ADD THIS at top
 import classes from "./PlanHistoryModal.module.css";
 
 export default function PlanHistoryModal({ show, onClose, history, loading }) {
@@ -7,6 +8,10 @@ export default function PlanHistoryModal({ show, onClose, history, loading }) {
   const [favoritedIds, setFavoritedIds] = useState({});
 
   if (!show) return null;
+
+  // 🔥 GA: history modal opened
+
+  gaEvent("weekly_plan_history_open", {});
 
   /* -----------------------------
      RESTORE FROM PREVIEW
@@ -176,7 +181,13 @@ export default function PlanHistoryModal({ show, onClose, history, loading }) {
                   <div className={classes.actionsRow}>
                     <button
                       className={classes.restoreButton}
-                      onClick={() => setPreviewPlan(item)}
+                      onClick={() => {
+                        gaEvent({
+                          event: "weekly_plan_history_preview_click",
+                          params: { plan_id: item._id },
+                        });
+                        setPreviewPlan(item);
+                      }}
                     >
                       Preview Plan
                     </button>

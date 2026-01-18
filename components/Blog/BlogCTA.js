@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./BlogCTA.module.css";
 
 export default function BlogCTA() {
@@ -14,9 +15,18 @@ export default function BlogCTA() {
           truly need. Explore at your own pace — no pressure.
         </p>
 
-        <Link href="/quizzes/quiz-main" className={classes.button}>
-          Take Free Quiz
-        </Link>
+      <Link
+  href="/quizzes/quiz-main"
+  className={classes.button}
+  onClick={() =>
+    gaEvent("blog_cta_quiz_click", {
+      location: "blog_bottom_cta",
+    })
+  }
+>
+  Take Free Quiz
+</Link>
+
       </div>
     </section>
   );

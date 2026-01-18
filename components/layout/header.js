@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import NavLink from "./nav-link";
 import { signOut, useSession } from "next-auth/react";
 import { useUI } from "../../context/UIContext";
+import { gaEvent } from "../../lib/gtag";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import { toast } from "react-toastify";
@@ -130,7 +131,11 @@ export default function Header({ weather }) {
   return (
     <>
       <header className={classes.header}>
-        <Link href="/" className={classes.logo}>
+        <Link
+          href="/"
+          className={classes.logo}
+          onClick={() => gaEvent("header_logo_click")}
+        >
           <Image src={logoImg} alt="Wellness Pure Life" priority />
           <span className={classes.brandName}>
             <span className={classes.fullName}>Wellness Pure Life</span>
@@ -149,15 +154,18 @@ export default function Header({ weather }) {
                   </span>
                 </button>
                 <div className={classes.dropdownContent}>
-                  <Link href="/dashboard" className={classes.dropdownLink}>
+                  <Link
+                    href="/dashboard"
+                    className={classes.dropdownLink}
+                    onClick={() => gaEvent("header_profile_click")}
+                  >
                     <FiUser size={16} /> Profile
                   </Link>
                   <button
-                    onClick={() =>
-                      signOut({
-                        callbackUrl: "https://wellnesspurelife.com/",
-                      })
-                    }
+                    onClick={() => {
+                      gaEvent("header_logout_click");
+                      signOut({ callbackUrl: "https://wellnesspurelife.com/" });
+                    }}
                     className={classes.logoutLink}
                   >
                     <FiLogOut size={16} /> Logout
@@ -222,7 +230,14 @@ export default function Header({ weather }) {
 
           <button
             className={`${classes.hamburger} ${classes.mobileOnly}`}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => {
+              setMobileMenuOpen(!mobileMenuOpen);
+              gaEvent(
+                mobileMenuOpen
+                  ? "header_mobile_menu_close"
+                  : "header_mobile_menu_open"
+              );
+            }}
             aria-label="Toggle menu"
           >
             ☰
@@ -241,6 +256,7 @@ export default function Header({ weather }) {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && searchQuery.trim()) {
+                  gaEvent("header_search", { query: searchQuery.trim() });
                   router.push(
                     `/search?q=${encodeURIComponent(searchQuery.trim())}`
                   );
@@ -251,6 +267,7 @@ export default function Header({ weather }) {
               className={classes.searchButton}
               onClick={() => {
                 if (searchQuery.trim()) {
+                  gaEvent("header_search", { query: searchQuery.trim() });
                   router.push(
                     `/search?q=${encodeURIComponent(searchQuery.trim())}`
                   );
@@ -281,7 +298,10 @@ export default function Header({ weather }) {
                   <Link
                     href={`/${label.toLowerCase()}`}
                     className={classes.dropdownToggle}
-                    onClick={() => handleDropdownToggle(label)}
+                    onClick={() => {
+                      handleDropdownToggle(label);
+                      gaEvent("header_nav_click", { label });
+                    }}
                   >
                     {label}
                   </Link>
@@ -389,12 +409,21 @@ export default function Header({ weather }) {
                 ) : (
                   <div className={classes.authButtons}>
                     <button
-                      onClick={openSignup}
+                      onClick={() => {
+                        gaEvent("header_signup_click");
+                        openSignup();
+                      }}
                       className={classes.authMiniBtn}
                     >
                       Sign Up
                     </button>
-                    <button onClick={openLogin} className={classes.authMiniBtn}>
+                    <button
+                      onClick={() => {
+                        gaEvent("header_login_click");
+                        openLogin();
+                      }}
+                      className={classes.authMiniBtn}
+                    >
                       Login
                     </button>
                   </div>

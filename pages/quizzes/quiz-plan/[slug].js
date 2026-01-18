@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import MultiPlanSummary from "../../../components/Quiz/QuizPlan/4_PlanSummary";
+import { gaEvent } from "../../../lib/gtag";
 import classes from "./PlanPage.module.css";
 
 export default function MultiPlanPage() {
@@ -17,6 +18,12 @@ export default function MultiPlanPage() {
 
   useEffect(() => {
     if (!slug || status === "loading") return;
+
+    // GA4 tracking — plan page loaded
+    gaEvent({
+      event: "plan_page_loaded",
+      params: { slug },
+    });
 
     const fetchPlanData = async () => {
       try {

@@ -1,9 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./PremiumCallout.module.css";
 import PremiumButton from "./PremiumButton.js";
 
 export default function PremiumCallout({ category, onDismiss }) {
   const [showModal, setShowModal] = useState(false);
+
+  // 👉 Fire impression event when shown
+  useEffect(() => {
+    gaEvent("premium_callout_view", {
+      category,
+    });
+  }, []);
 
   return (
     <div className={classes.premiumWrapper}>
@@ -22,14 +30,23 @@ export default function PremiumCallout({ category, onDismiss }) {
 
         <div className={classes.premiumActions}>
           <button
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              gaEvent("premium_callout_learn_more_click", { category });
+              setShowModal(true);
+            }}
             className={classes.learnMoreButton}
           >
             📘 See What You Get
           </button>
 
           {onDismiss && (
-            <button onClick={onDismiss} className={classes.dismissButton}>
+            <button
+              onClick={() => {
+                gaEvent("premium_callout_dismiss", { category });
+                onDismiss();
+              }}
+              className={classes.dismissButton}
+            >
               Remind Me Later
             </button>
           )}
@@ -43,7 +60,10 @@ export default function PremiumCallout({ category, onDismiss }) {
       {showModal && (
         <div
           className={classes.modalOverlay}
-          onClick={() => setShowModal(false)}
+          onClick={() => {
+            gaEvent("premium_callout_modal_close", { category });
+            setShowModal(false);
+          }}
         >
           <div
             className={classes.modalContent}
@@ -62,7 +82,10 @@ export default function PremiumCallout({ category, onDismiss }) {
 
             <button
               className={classes.modalClose}
-              onClick={() => setShowModal(false)}
+              onClick={() => {
+                gaEvent("premium_callout_modal_close", { category });
+                setShowModal(false);
+              }}
             >
               Close
             </button>

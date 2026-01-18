@@ -3,6 +3,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { signIn, useSession } from "next-auth/react";
 import MultiStartQuiz from "../../../components/Quiz/QuizPlan/1_StartQuiz";
+import { gaEvent } from "../../../lib/gtag";
+
 import classes from "./QuizPage.module.css";
 import Subscribe from "../../../components/Subscribe/subscribe";
 
@@ -29,7 +31,6 @@ export default function QuizPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isSent, setIsSent] = useState(false);
-  
 
   const planTypes = [
     { type: "fitness", label: "💪 Fitness Plan" },
@@ -37,7 +38,18 @@ export default function QuizPage() {
     { type: "nourish", label: "🥗 Nourish Plan" },
   ];
 
+  useEffect(() => {
+    if (!result) return;
+
+    gaEvent("quiz_recommendation_list_view", {
+      slug,
+      count: result?.matchedValues?.length || 0,
+    });
+  }, [result, slug]);
+
   const handleQuizOpen = (type) => {
+    gaEvent("plan_quiz_modal_open", { slug, plan_type: type });
+
     setActiveQuiz(type);
   };
 
@@ -72,8 +84,24 @@ export default function QuizPage() {
       .catch(() => setError("Failed to load quiz."));
   }, [slug]);
 
+  // 🔹 Track when the quiz is fully loaded
+  useEffect(() => {
+    if (!quiz || !slug) return;
+
+    gaEvent("quiz_main_loaded", {
+      slug,
+      number_of_questions: quiz?.questions?.length || 0,
+    });
+  }, [quiz, slug]);
+
   // 🔹 Track selection
   const handleChange = (key, value) => {
+    gaEvent("quiz_question_answered", {
+      slug,
+      question_key: key,
+      answer_value: value,
+    });
+
     setAnswers((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -96,6 +124,7 @@ export default function QuizPage() {
     setInlineError("");
     setError(null);
     setResult(null);
+    gaEvent("quiz_submit_clicked", { slug });
 
     const trimmedEmail = email?.trim();
 
@@ -127,14 +156,22 @@ export default function QuizPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           slug,
-          answers: normalizedAnswers,
+          answers: JSON.stringify(normalizedAnswers),
           email: trimmedEmail,
         }),
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Submission failed.");
-      setResult(data.result);
+      if (data.result) {
+        setResult(data.result);
+
+        gaEvent("quiz_completed", {
+          slug,
+          answers: normalizedAnswers,
+          email: trimmedEmail,
+        });
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -175,6 +212,8 @@ export default function QuizPage() {
       const data = await res.json();
 
       if (res.ok) {
+        gaEvent("quiz_email_sent", { slug, email: finalEmail });
+
         setIsSending(false);
         setIsSent(true);
         setTimeout(() => setIsSent(false), 3000);
@@ -187,6 +226,20 @@ export default function QuizPage() {
       alert("Network error. Please try again.");
     }
   }
+
+  useEffect(() => {
+    if (!slug || !quiz) return;
+    gaEvent("quiz_page_loaded", { slug });
+  }, [quiz, slug]);
+
+  useEffect(() => {
+    if (!result) return;
+
+    gaEvent("quiz_recommendation_viewed", {
+      slug,
+      title: result?.matchedTitle || "no_match",
+    });
+  }, [result]);
 
   return (
     <>
@@ -240,6 +293,7 @@ export default function QuizPage() {
                 className={classes.emailInput}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => gaEvent("quiz_email_input_focus", { slug })}
               />
             )}
 
@@ -327,7 +381,16 @@ export default function QuizPage() {
         )}
 
         <div className={classes.blogCtaWrap}>
-          <a href="/blog" className={classes.blogCta}>
+          <a
+            href="/blog"
+            className={classes.blogCta}
+            onClick={() =>
+              gaEvent({
+                event: "blog_support_click",
+                params: { from: "quiz-page" },
+              })
+            }
+          >
             Explore More Wellness Guides →
           </a>
         </div>

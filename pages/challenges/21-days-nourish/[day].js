@@ -4,7 +4,8 @@ import Link from "next/link";
 import { getSession } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { gaEvent } from "../../../lib/gtag";
 import PremiumButton from "../../../components/PremiumButton/PremiumButton";
 import ShareButton from "../../../components/UI/ShareButton";
 import ReactMarkdown from "react-markdown";
@@ -22,6 +23,13 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
   const currentDay = challenge.day;
   const progressPercent = (currentDay / 21) * 100;
   const isPremium = session?.user?.isPremium;
+
+  useEffect(() => {
+    gaEvent("challenge_page_view", {
+      category: "challenge",
+      label: `day_${currentDay}`,
+    });
+  }, []);
 
   return (
     <>
@@ -46,7 +54,7 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
         <meta property="og:description" content={challenge.title} />
         <meta
           property="og:url"
-          content={`https://wellnesspurelife.com/challenge/21-days-nourish/${currentDay}`}
+          content={`https://wellnesspurelife.com/challenges/21-days-nourish/${currentDay}`}
         />
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -116,6 +124,11 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
                 } ${sent ? classes.success : ""}`}
                 disabled={sending}
                 onClick={async () => {
+                  gaEvent("challenge_email_request", {
+                    category: "challenge",
+                    label: `day_${currentDay}`,
+                  });
+
                   setSending(true);
                   setSent(false);
 
@@ -196,9 +209,14 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
             {currentDay > 1 && (
               <button
                 className={classes.navLink}
-                onClick={() =>
-                  router.push(`/challenge/21-days-nourish/${currentDay - 1}`)
-                }
+                onClick={() => {
+                  gaEvent("challenge_previous_day", {
+                    category: "challenge",
+                    label: `from_day_${currentDay}`,
+                  });
+
+                  router.push(`/challenges/21-days-nourish/${currentDay - 1}`);
+                }}
               >
                 ← Previous
               </button>
@@ -207,6 +225,10 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
               <button
                 className={classes.navLink}
                 onClick={() => {
+                  gaEvent("challenge_next_attempt", {
+                    category: "challenge",
+                    label: `from_day_${currentDay}`,
+                  });
                   const nextDay = currentDay + 1;
                   const today = new Date();
                   const start = new Date(

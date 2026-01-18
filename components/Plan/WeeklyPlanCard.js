@@ -1,5 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./WeeklyPlanCard.module.css";
 import { FiCalendar, FiArrowRightCircle } from "react-icons/fi";
 
@@ -17,6 +19,13 @@ export default function WeeklyPlanCard({ className = "" }) {
     : "View My Weekly Plan";
 
   const handleClick = () => {
+    gaEvent("weekly_plan_card_click", {
+      status: !isAuthenticated
+        ? "not_authenticated"
+        : !isPremium
+        ? "not_premium"
+        : "premium",
+    });
     if (!isAuthenticated) {
       router.push("/login");
       return;
@@ -29,6 +38,13 @@ export default function WeeklyPlanCard({ className = "" }) {
 
     router.push("/plan/weekly-plan");
   };
+
+  useEffect(() => {
+    gaEvent("weekly_plan_card_view", {
+      is_authenticated: !!session,
+      is_premium: session?.user?.isPremium === true,
+    });
+  }, [session]);
 
   return (
     <div className={`${classes.card} ${className}`} onClick={handleClick}>
@@ -57,8 +73,6 @@ export default function WeeklyPlanCard({ className = "" }) {
           <span>{buttonText}</span>
           <FiArrowRightCircle className={classes.buttonIcon} />
         </button>
-
-        
       </div>
     </div>
   );

@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./premium-confirmed.module.css";
 
 export default function PremiumConfirmed() {
+  useEffect(() => {
+    gaEvent("premium_confirm_page_view");
+  }, []);
+
   const { update } = useSession();
   const router = useRouter();
   const [status, setStatus] = useState("loading");
@@ -14,6 +19,9 @@ export default function PremiumConfirmed() {
     const confirmUpgrade = async () => {
       const sessionId = router.query.session_id;
       if (!sessionId) return;
+      gaEvent("premium_confirm_start", {
+        session_id: sessionId,
+      });
 
       setStatus("updating");
 
@@ -30,10 +38,19 @@ export default function PremiumConfirmed() {
         await update(); // Refresh the NextAuth session to include isPremium
         setStatus("success");
 
+        gaEvent("premium_confirm_success", {
+          session_id: sessionId,
+        });
+
         setTimeout(() => {
           router.push("/dashboard"); // Redirect to premium feature page
         }, 3000);
       } catch (err) {
+        gaEvent("premium_confirm_error", {
+          error: err.message,
+          session_id: router.query.session_id || null,
+        });
+
         console.error("❌ Error upgrading to premium:", err.message);
         setStatus("error");
       }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./favorites.module.css";
 
 export default function DailyFavoritesPage() {
@@ -25,11 +26,19 @@ export default function DailyFavoritesPage() {
 
   // ------------------ SET AS CURRENT ------------------
   const setAsCurrent = async (fav) => {
+    gaEvent({
+      event: "daily_favorite_set_as_current",
+      params: { favorite_id: fav.favoriteId },
+    });
+
     try {
       const res = await fetch("/api/plan/restore", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ routineToRestore: fav.routine }),
+        body: JSON.stringify({
+          type: "daily",
+          favoriteId: fav.favoriteId, // CORRECT
+        }),
       });
 
       const data = await res.json();
@@ -47,6 +56,11 @@ export default function DailyFavoritesPage() {
 
   // ------------------ REMOVE FAVORITE ------------------
   const removeFavorite = async (fav) => {
+    gaEvent({
+      event: "daily_favorite_removed",
+      params: { favorite_id: fav.favoriteId },
+    });
+
     try {
       const res = await fetch("/api/plan/favorites", {
         method: "DELETE",
@@ -73,6 +87,10 @@ export default function DailyFavoritesPage() {
   // ------------------ EFFECT: LOAD ON AUTH ------------------
   useEffect(() => {
     if (status === "authenticated" && session?.user?.isPremium) {
+      gaEvent({
+        event: "daily_favorites_view",
+        params: { user: session?.user?.email || "anon" },
+      });
       loadFavorites();
     }
   }, [status, session]);
@@ -131,7 +149,15 @@ export default function DailyFavoritesPage() {
 
         <button
           className={classes.goWeeklyButton}
-          onClick={() => router.push("/plan/daily-routine")}
+          onClick={() => {
+            gaEvent({
+              event: "daily_favorites_go_to_routine",
+              params: {
+                user: session?.user?.email || "anonymous",
+              },
+            });
+            router.push("/plan/daily-routine");
+          }}
         >
           Go to Your Current Daily Routine
         </button>

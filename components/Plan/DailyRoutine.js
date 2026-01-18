@@ -1,3 +1,4 @@
+import { gaEvent } from "../../lib/gtag";
 import classes from "./DailyRoutine.module.css";
 
 export default function DailyRoutine({
@@ -14,7 +15,16 @@ export default function DailyRoutine({
 
   return (
     <div className={`${classes.dayCard} ${moodClass}`}>
-      <details className={classes.details} open>
+      <details
+        className={classes.details}
+        open
+        onToggle={(e) => {
+          gaEvent("daily_routine_toggle", {
+            block,
+            is_open: e.target.open,
+          });
+        }}
+      >
         <summary className={classes.dayHeader}>
           <span className={classes.dayCircle}>{block?.charAt(0) || "D"}</span>
 
@@ -55,7 +65,14 @@ export default function DailyRoutine({
               className={`${classes.checkButton} ${
                 blockProgress?.done ? classes.checkOn : ""
               }`}
-              onClick={() => toggleProgress(block, "done")}
+              onClick={() => {
+                gaEvent("daily_routine_mark_done", {
+                  block,
+                  new_value: !blockProgress?.done,
+                });
+
+                toggleProgress(block, "done");
+              }}
             >
               {blockProgress?.done ? "Done" : "Mark done"}
             </button>
@@ -66,13 +83,20 @@ export default function DailyRoutine({
           <p className={classes.sectionText}>{data.description}</p>
 
           {data.durationMinutes && (
-            <span className={classes.durationBadge}>
+            <span
+              className={classes.durationBadge}
+              onClick={() =>
+                gaEvent("daily_routine_duration_view", {
+                  block,
+                  minutes: data.durationMinutes,
+                })
+              }
+            >
               ⏱ {data.durationMinutes} min
             </span>
           )}
         </div>
 
-    
         {/* --------------------- POEM --------------------- */}
         {data.poem && (
           <div className={classes.quoteBox}>

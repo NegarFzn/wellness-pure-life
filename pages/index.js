@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { fetchNews } from "../utils/fetch";
 import Head from "next/head";
 import Link from "next/link";
+import { gaEvent } from "../lib/gtag";
 import Subscribe from "../components/Subscribe/subscribe";
 import KeyFeatures from "../components/KeyFeatures/KeyFeatures";
 import DailyList from "../components/DailyList/DailyList";
@@ -30,6 +31,10 @@ export default function Home() {
   const { data: session, status } = useSession();
   const user = session?.user;
   const loading = status === "loading";
+
+  useEffect(() => {
+    gaEvent("home_page_view");
+  }, []);
 
   useEffect(() => {
     const getNews = async () => {
@@ -274,6 +279,12 @@ export default function Home() {
                     <Link
                       href={`/news/${item.slug}`}
                       className={classes.readMore}
+                      onClick={() =>
+                        gaEvent("home_news_read_more_click", {
+                          slug: item.slug,
+                          title: item.title,
+                        })
+                      }
                     >
                       Read More →
                     </Link>
@@ -295,13 +306,19 @@ export default function Home() {
 
             <div className={classes.arrows}>
               <button
-                onClick={() => scrollNews("left")}
+                onClick={() => {
+                  gaEvent("home_news_slider_arrow", { direction: "left" });
+                  scrollNews("left");
+                }}
                 className={classes.arrowBtn}
               >
                 ◀
               </button>
               <button
-                onClick={() => scrollNews("right")}
+                onClick={() => {
+                  gaEvent("home_news_slider_arrow", { direction: "right" });
+                  scrollNews("right");
+                }}
                 className={classes.arrowBtn}
               >
                 ▶
@@ -311,7 +328,13 @@ export default function Home() {
         )}
 
         {showButton && (
-          <button onClick={scrollToTop} className={classes.backToTop}>
+          <button
+            onClick={() => {
+              gaEvent("home_scroll_to_top_click");
+              scrollToTop();
+            }}
+            className={classes.backToTop}
+          >
             ↑
           </button>
         )}

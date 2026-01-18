@@ -1,8 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
+import { trackQuizStart } from "../../../lib/quizEvents"; // GA4 tracking
+import { gaEvent } from "../../../lib/gtag"; // IMPORTANT: import gaEvent
 import classes from "./QuizCard.module.css";
 
 export default function QuizCard() {
+  const slug = "quiz-main"; // central quiz slug for consistency
+
+  const handleStartQuiz = () => {
+    // custom GA tracking
+    trackQuizStart(slug);
+
+    // GA4 direct event
+    gaEvent("quiz_card_start_clicked", { slug });
+  };
+
   return (
     <div className={classes.card}>
       <div className={classes.cardContent}>
@@ -31,7 +43,11 @@ export default function QuizCard() {
           </p>
         </div>
 
-        <Link href="/quizzes/quiz-main" className={classes.button}>
+        <Link
+          href="/quizzes/quiz-main"
+          onClick={handleStartQuiz}
+          className={classes.button}
+        >
           Start My Quiz
         </Link>
 

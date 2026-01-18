@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import DailyRitual from "../../../components/DailyRitual";
 import MultiStartQuiz from "../../../components/Quiz/QuizPlan/1_StartQuiz";
+import { gaEvent } from "../../../lib/gtag";
 import classes from "./index.module.css";
 
 export default function QuizMainPage() {
@@ -15,6 +16,10 @@ export default function QuizMainPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    gaEvent("quiz_list_view", { page: "quiz-main" });
+  }, []);
 
   // ✅ MODAL STATE
   const [activeQuiz, setActiveQuiz] = useState(null);
@@ -83,6 +88,12 @@ export default function QuizMainPage() {
 
   const showClear = searchTerm || activeCategory !== "all";
 
+  useEffect(() => {
+    gaEvent("daily_ritual_view", {
+      isPremium: user?.isPremium || false,
+    });
+  }, [user]);
+
   return (
     <>
       <Head>
@@ -126,7 +137,13 @@ export default function QuizMainPage() {
             placeholder="Search quizzes..."
             className={classes.searchInput}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              const term = e.target.value;
+
+              gaEvent("quiz_search", { term });
+
+              setSearchTerm(term);
+            }}
           />
 
           <div className={classes.categoryBar}>
@@ -136,7 +153,13 @@ export default function QuizMainPage() {
                 className={`${classes.categoryButton} ${
                   activeCategory === cat.value ? classes.active : ""
                 }`}
-                onClick={() => setActiveCategory(cat.value)}
+                onClick={() => {
+                  gaEvent("quiz_filter_category", {
+                    category: cat.value,
+                  });
+
+                  setActiveCategory(cat.value);
+                }}
               >
                 <span className={classes.categoryIcon}>{cat.icon}</span>
                 {cat.label}
@@ -162,6 +185,10 @@ export default function QuizMainPage() {
               <button
                 className={classes.clearFilters}
                 onClick={() => {
+                  gaEvent("quiz_filters_cleared", {
+                    from: "quiz-main",
+                  });
+
                   setSearchTerm("");
                   setActiveCategory("all");
                 }}
@@ -178,6 +205,13 @@ export default function QuizMainPage() {
                   <Link
                     href={`/quizzes/quiz-main/${quiz.slug}`}
                     className={classes.quizLink}
+                    onClick={() =>
+                      gaEvent("quiz_select", {
+                        slug: quiz.slug,
+                        title: quiz.title,
+                        category: quiz.category,
+                      })
+                    }
                   >
                     <span className={classes.icon}>
                       {getIconForSlug(quiz.slug)}
@@ -199,14 +233,24 @@ export default function QuizMainPage() {
           <div className={classes.planButtonsRow}>
             <button
               className={classes.planButtonFitness}
-              onClick={() => setActiveQuiz("fitness")}
+              onClick={() => {
+                gaEvent("plan_quiz_select", { slug: "fitness-plan" });
+
+                setActiveQuiz("fitness");
+              }}
             >
               💪 Fitness Plan
             </button>
 
             <button
               className={classes.planButtonMind}
-              onClick={() => setActiveQuiz("mindfulness")}
+              onClick={() => {
+                gaEvent("plan_quiz_select", {
+                  slug: "mindfulness-plan",
+                });
+
+                setActiveQuiz("mindfulness");
+              }}
             >
               🧘 Mindfulness Plan
             </button>
@@ -215,7 +259,13 @@ export default function QuizMainPage() {
           <div className={classes.planButtonsRowSingle}>
             <button
               className={classes.planButtonNourish}
-              onClick={() => setActiveQuiz("nourish")}
+              onClick={() => {
+                gaEvent("plan_quiz_select", {
+                  slug: "nourish-plan",
+                });
+
+                setActiveQuiz("nourish");
+              }}
             >
               🥗 Nourish Plan
             </button>
@@ -232,7 +282,15 @@ export default function QuizMainPage() {
         <section className={classes.blogSupport}>
           <p>Want to learn while deciding?</p>
 
-          <Link href="/blog" className={classes.textLink}>
+          <Link
+            href="/blog"
+            className={classes.textLink}
+            onClick={() =>
+              gaEvent("blog_support_click", {
+                from: "quiz-main",
+              })
+            }
+          >
             Explore Wellness Guides →
           </Link>
         </section>
