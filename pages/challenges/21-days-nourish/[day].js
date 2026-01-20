@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { connectToDatabase } from "../../../utils/mongodb";
 import Head from "next/head";
 import Link from "next/link";
 import { getSession } from "next-auth/react";
@@ -311,8 +311,7 @@ export async function getServerSideProps(context) {
     return { notFound: true };
   }
 
-  const client = await MongoClient.connect(process.env.MONGODB_URI);
-  const db = client.db();
+  const { db } = await connectToDatabase();
 
   let userStartDate = null;
   if (session?.user?.email) {
@@ -346,7 +345,6 @@ export async function getServerSideProps(context) {
 
   const collection = db.collection("challenges_21_nourish");
   const challenge = await collection.findOne({ day: dayNumber });
-  await client.close();
 
   if (!challenge && dayNumber <= 21) {
     return { notFound: true };
