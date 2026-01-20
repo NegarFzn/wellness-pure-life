@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import classes from "./Step.module.css";
-import { trackQuizAnswer } from "../../lib/quizEvents";
+import { trackQuizAnswer } from "../../../lib/quizEvents";
 import { gaEvent } from "../../../lib/gtag";
 
 export default function ChoiceStep({

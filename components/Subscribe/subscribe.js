@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { useSession } from "next-auth/react";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./subscribe.module.css";
 
 export default function Subscribe() {
