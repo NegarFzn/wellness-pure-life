@@ -128,6 +128,26 @@ export default function Header({ weather }) {
     fetchNavData();
   }, []);
 
+  const resendEmail = async () => {
+    const userEmail = user?.email;
+    if (!userEmail) return toast.error("User email not available.");
+
+    try {
+      const res = await fetch("/api/auth/emailverification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail }),
+      });
+
+      if (!res.ok) throw new Error("Request failed");
+
+      toast.success("Verification email resent.");
+    } catch (err) {
+      console.error("Resend error:", err);
+      toast.error("Failed to resend email.");
+    }
+  };
+
   return (
     <>
       <header className={classes.header}>
@@ -143,107 +163,6 @@ export default function Header({ weather }) {
           </span>
         </Link>
 
-        <div className={classes.rightControls}>
-          {user && (
-            <div className={`${classes.userControls} ${classes.mobileOnly}`}>
-              <div className={classes.profileWrapper}>
-                <button className={classes.profileButton}>
-                  <FiUser size={18} style={{ marginRight: "0.4rem" }} />
-                  <span className={classes.profileName}>
-                    {user?.name?.split(" ")[0] || "Account"}
-                  </span>
-                </button>
-                <div className={classes.dropdownContent}>
-                  <Link
-                    href="/dashboard"
-                    className={classes.dropdownLink}
-                    onClick={() => gaEvent("header_profile_click")}
-                  >
-                    <FiUser size={16} /> Profile
-                  </Link>
-                  <button
-                    onClick={() => {
-                      gaEvent("header_logout_click");
-                      signOut({ callbackUrl: "https://wellnesspurelife.com/" });
-                    }}
-                    className={classes.logoutLink}
-                  >
-                    <FiLogOut size={16} /> Logout
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-          {!user && status !== "loading" && (
-            <div className={`${classes.authButtons} ${classes.desktopOnly}`}>
-              <button onClick={openSignup} className={classes.authMiniBtn}>
-                Sign Up
-              </button>
-              <button onClick={openLogin} className={classes.authMiniBtn}>
-                Login
-              </button>
-            </div>
-          )}
-          {(user && !isVerified) || justSignedUp ? (
-            <button
-              className={`${classes.pendingVerify} ${
-                resent ? classes.verifiedPendingResent : ""
-              } ${classes.mobileOnly}`}
-              onClick={async () => {
-                const userEmail =
-                  user?.email || localStorage.getItem("justSignedUpEmail");
-                if (!userEmail) return toast.error("User email not available.");
-                try {
-                  const res = await fetch("/api/auth/emailverification", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email: userEmail }),
-                  });
-                  if (!res.ok) throw new Error("Request failed");
-                  toast.success("Verification email resent.");
-                  setResent(true);
-                } catch (err) {
-                  console.error("Resend error:", err);
-                  toast.error("❌ Failed to resend email. Please try again.");
-                }
-              }}
-            >
-              <span className={classes.pendingText}>
-                <span className={classes.pendingTextIcon}>📬</span>
-                Verify your email
-              </span>
-            </button>
-          ) : (
-            !user &&
-            status !== "loading" &&
-            !justSignedUp && (
-              <div className={`${classes.authButtons} ${classes.mobileOnly}`}>
-                <button onClick={openSignup} className={classes.authMiniBtn}>
-                  Sign Up
-                </button>
-                <button onClick={openLogin} className={classes.authMiniBtn}>
-                  Login
-                </button>
-              </div>
-            )
-          )}
-
-          <button
-            className={`${classes.hamburger} ${classes.mobileOnly}`}
-            onClick={() => {
-              setMobileMenuOpen(!mobileMenuOpen);
-              gaEvent(
-                mobileMenuOpen
-                  ? "header_mobile_menu_close"
-                  : "header_mobile_menu_open"
-              );
-            }}
-            aria-label="Toggle menu"
-          >
-            ☰
-          </button>
-        </div>
-
         <nav
           className={`${classes.nav} ${mobileMenuOpen ? classes.showNav : ""}`}
         >
@@ -258,7 +177,7 @@ export default function Header({ weather }) {
                 if (e.key === "Enter" && searchQuery.trim()) {
                   gaEvent("header_search", { query: searchQuery.trim() });
                   router.push(
-                    `/search?q=${encodeURIComponent(searchQuery.trim())}`
+                    `/search?q=${encodeURIComponent(searchQuery.trim())}`,
                   );
                 }
               }}
@@ -269,7 +188,7 @@ export default function Header({ weather }) {
                 if (searchQuery.trim()) {
                   gaEvent("header_search", { query: searchQuery.trim() });
                   router.push(
-                    `/search?q=${encodeURIComponent(searchQuery.trim())}`
+                    `/search?q=${encodeURIComponent(searchQuery.trim())}`,
                   );
                 }
               }}
@@ -381,6 +300,41 @@ export default function Header({ weather }) {
                 </div>
               </li>
               <li className={classes.profileNavItem}>
+                {user && !isVerified && (
+                  <div className={classes.verifyStickerWrapper}>
+                    <button
+                      className={classes.verifySticker}
+                      onClick={async () => {
+                        const userEmail = user?.email;
+                        if (!userEmail)
+                          return toast.error("User email not available.");
+
+                        try {
+                          const res = await fetch(
+                            "/api/auth/emailverification",
+                            {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ email: userEmail }),
+                            },
+                          );
+
+                          if (!res.ok) throw new Error("Failed");
+
+                          toast.success("Verification email sent.");
+                        } catch (err) {
+                          console.error(err);
+                          toast.error("Could not resend verification email.");
+                        }
+                      }}
+                    >
+                      📬
+                      <span className={classes.verifyTooltip}>
+                        Verify your email
+                      </span>
+                    </button>
+                  </div>
+                )}
                 {user ? (
                   <div className={classes.profileWrapper}>
                     <button className={classes.profileButton}>
@@ -406,28 +360,7 @@ export default function Header({ weather }) {
                       </button>
                     </div>
                   </div>
-                ) : (
-                  <div className={classes.authButtons}>
-                    <button
-                      onClick={() => {
-                        gaEvent("header_signup_click");
-                        openSignup();
-                      }}
-                      className={classes.authMiniBtn}
-                    >
-                      Sign Up
-                    </button>
-                    <button
-                      onClick={() => {
-                        gaEvent("header_login_click");
-                        openLogin();
-                      }}
-                      className={classes.authMiniBtn}
-                    >
-                      Login
-                    </button>
-                  </div>
-                )}
+                ) : null}
               </li>
 
               {/* existing auth/profile <li> block stays exactly as it is */}
@@ -435,6 +368,110 @@ export default function Header({ weather }) {
             </ul>
           )}
         </nav>
+        <div className={classes.rightControls}>
+          {/* MOBILE VERIFY ICON – identical to desktop */}
+          {user && !isVerified && (
+            <div
+              className={`${classes.verifyStickerWrapper} ${classes.mobileOnly}`}
+            >
+              <button
+                className={classes.verifySticker}
+                onClick={async () => {
+                  const userEmail = user?.email;
+                  if (!userEmail)
+                    return toast.error("User email not available.");
+
+                  try {
+                    const res = await fetch("/api/auth/emailverification", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ email: userEmail }),
+                    });
+
+                    if (!res.ok) throw new Error("Failed");
+                    toast.success("Verification email sent.");
+                  } catch (err) {
+                    toast.error("Could not resend verification email.");
+                  }
+                }}
+              >
+                📬
+                <span className={classes.verifyTooltip}>Verify your email</span>
+              </button>
+            </div>
+          )}
+
+          {user && (
+            <div className={`${classes.userControls} ${classes.mobileOnly}`}>
+              <div className={classes.profileWrapper}>
+                <button className={classes.profileButton}>
+                  <FiUser size={18} style={{ marginRight: "0.4rem" }} />
+                  <span className={classes.profileName}>
+                    {user?.name?.split(" ")[0] || "Account"}
+                  </span>
+                </button>
+                <div className={classes.dropdownContent}>
+                  <Link
+                    href="/dashboard"
+                    className={classes.dropdownLink}
+                    onClick={() => gaEvent("header_profile_click")}
+                  >
+                    <FiUser size={16} /> Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      gaEvent("header_logout_click");
+                      signOut({ callbackUrl: "https://wellnesspurelife.com/" });
+                    }}
+                    className={classes.logoutLink}
+                  >
+                    <FiLogOut size={16} /> Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* DESKTOP SIGNUP/LOGIN (only when not logged in) */}
+          {!user && status !== "loading" && (
+            <div className={`${classes.authButtons} ${classes.desktopOnly}`}>
+              <button onClick={openSignup} className={classes.authMiniBtn}>
+                Sign Up
+              </button>
+              <button onClick={openLogin} className={classes.authMiniBtn}>
+                Login
+              </button>
+            </div>
+          )}
+
+          {/* MOBILE SIGNUP/LOGIN (only when not logged in) */}
+          {!user && status !== "loading" && (
+            <div className={`${classes.authButtons} ${classes.mobileOnly}`}>
+              <button onClick={openSignup} className={classes.authMiniBtn}>
+                Sign Up
+              </button>
+              <button onClick={openLogin} className={classes.authMiniBtn}>
+                Login
+              </button>
+            </div>
+          )}
+
+          {/* MOBILE MENU ICON */}
+          <button
+            className={`${classes.hamburger} ${classes.mobileOnly}`}
+            onClick={() => {
+              setMobileMenuOpen(!mobileMenuOpen);
+              gaEvent(
+                mobileMenuOpen
+                  ? "header_mobile_menu_close"
+                  : "header_mobile_menu_open",
+              );
+            }}
+            aria-label="Toggle menu"
+          >
+            ☰
+          </button>
+        </div>
 
         {mobileMenuOpen && (
           <MobileNav

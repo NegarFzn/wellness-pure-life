@@ -27,7 +27,7 @@ export default function Home() {
   const [showResetModal, setShowResetModal] = useState(false);
   const [verifyStatus, setVerifyStatus] = useState(null);
   const router = useRouter();
-  const { verifyToken, resetToken } = router.query;
+  const { token, email, resetToken } = router.query;
   const { data: session, status } = useSession();
   const user = session?.user;
   const loading = status === "loading";
@@ -53,14 +53,15 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (verifyToken) {
+    if (token && email) {
       const verifyEmail = async () => {
         setVerifying(true);
         try {
           const res = await fetch(
-            `/api/auth/emailverification?token=${verifyToken}`
+            `/api/auth/emailverification?token=${token}&email=${email}`,
           );
           const data = await res.json();
+
           if (res.ok && data.success) {
             router.replace("/login?verified=true");
           } else {
@@ -73,9 +74,10 @@ export default function Home() {
           setVerifying(false);
         }
       };
+
       verifyEmail();
     }
-  }, [verifyToken]);
+  }, [token, email]);
 
   useEffect(() => {
     if (resetToken) {
@@ -101,7 +103,7 @@ export default function Home() {
       {
         root: container,
         threshold: 0.6,
-      }
+      },
     );
 
     cards.forEach((card) => observer.observe(card));
@@ -134,7 +136,7 @@ export default function Home() {
       setResendResult(
         res.ok
           ? "✅ A new verification link has been sent."
-          : `❌ ${data.message}`
+          : `❌ ${data.message}`,
       );
     } catch (err) {
       console.error("❌ Resend error:", err);

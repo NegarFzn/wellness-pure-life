@@ -46,8 +46,8 @@ export default async function handler(req, res) {
       name,
       email,
       password: hashedPassword,
-      isPremium: false,           // Default for NextAuth premium lookup
-      isVerified: false,         // Email verification flag
+      isPremium: false, // Default for NextAuth premium lookup
+      isVerified: false, // Email verification flag
       verificationToken,
       verificationExpiresAt,
       createdAt: new Date(),
@@ -56,7 +56,12 @@ export default async function handler(req, res) {
     /* ------------------------------------------
        4. SEND VERIFICATION EMAIL
     ------------------------------------------- */
-    const { subject, body } = createVerificationEmail(name, verificationToken);
+    const { subject, body } = createVerificationEmail(
+      name,
+      email,
+      verificationToken,
+    );
+
     await sendEmail(email, subject, body);
 
     return res.status(201).json({

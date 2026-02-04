@@ -1,7 +1,6 @@
 import { emailTemplate } from "./templates";
 import { marked } from "marked";
 
-
 // ============================================================
 // GLOBAL HELPER
 // ============================================================
@@ -314,7 +313,7 @@ export function createWelcomeEmail(name) {
   };
 }
 
-export function createVerificationEmail(name, token) {
+export function createVerificationEmail(name, email, token) {
   const subject = "Verify Your Wellness Pure Life Account";
 
   const baseUrl =
@@ -322,7 +321,7 @@ export function createVerificationEmail(name, token) {
       ? "http://localhost:3000"
       : "https://wellnesspurelife.com";
 
-  const verificationLink = `${baseUrl}/?verifyToken=${token}`;
+  const verificationLink = `${baseUrl}/verify?token=${token}&email=${encodeURIComponent(email)}`;
 
   const preheader =
     "Confirm your email to activate your personalized wellness experience.";
@@ -550,7 +549,7 @@ export function createContactEmail(name, email, message) {
       content,
       name,
       showCTA: false,
-    })?.length
+    })?.length,
   );
 
   return {
@@ -748,9 +747,6 @@ export function create21DaysFitnessChallengeEmail(name, day, challenge) {
   };
 }
 
-
-
-
 export function create21DaysMindfulnessChallengeEmail(name, day, challenge) {
   const subject = `Day ${day} – 21 Days of Mindfulness`;
 
@@ -840,8 +836,6 @@ export function create21DaysMindfulnessChallengeEmail(name, day, challenge) {
     }),
   };
 }
-
-
 
 export function create21DaysNourishChallengeEmail(name, day, challenge) {
   const subject = `Day ${day} – 21 Days of Nourish`;
@@ -1016,9 +1010,6 @@ export function createFitnessCompletionEmail(name) {
   };
 }
 
-
-
-
 export function createMindfulnessCompletionEmail(name) {
   const subject =
     "🎉 Congratulations! You’ve Completed the 21-Day Mindfulness Challenge";
@@ -1191,4 +1182,3 @@ export function createNourishCompletionEmail(name) {
     body: emailTemplate({ title: subject, content, name, showCTA: false }),
   };
 }
-

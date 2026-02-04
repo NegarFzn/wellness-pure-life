@@ -1,6 +1,9 @@
 import { connectToDatabase } from "../../../utils/mongodb";
 import { sendEmail } from "../../../utils/email";
-import { createVerificationEmail, createWelcomeEmail } from "../../../emails/emailCreator";
+import {
+  createVerificationEmail,
+  createWelcomeEmail,
+} from "../../../emails/emailCreator";
 import crypto from "crypto";
 
 // 72 hours in milliseconds
@@ -11,14 +14,20 @@ export default async function handler(req, res) {
      VERIFY EMAIL (GET)
   ------------------------------------------- */
   if (req.method === "GET") {
-    const { token } = req.query;
-    if (!token) return res.status(400).json({ message: "Missing token" });
+    // ⬅️ UPDATED: now expecting BOTH token + email
+    const { token, email } = req.query;
+
+    // ⬅️ UPDATED
+    if (!token || !email) {
+      return res.status(400).json({ message: "Missing token or email" });
+    }
 
     try {
       const { db } = await connectToDatabase();
 
-      // Find user with this verification token
+      // ⬅️ UPDATED: Find user using BOTH email + token
       const user = await db.collection("users").findOne({
+        email,
         verificationToken: token,
       });
 
@@ -42,7 +51,7 @@ export default async function handler(req, res) {
         {
           $set: { isVerified: true },
           $unset: { verificationToken: "", verificationExpiresAt: "" },
-        }
+        },
       );
 
       // AFTER updating user as verified
@@ -82,10 +91,8 @@ export default async function handler(req, res) {
       }
 
       const token = crypto.randomBytes(32).toString("hex");
-
       const expiresAt = new Date(Date.now() + TOKEN_LIFETIME);
 
-      // Update token + expiration
       await db.collection("users").updateOne(
         { _id: user._id },
         {
@@ -93,11 +100,16 @@ export default async function handler(req, res) {
             verificationToken: token,
             verificationExpiresAt: expiresAt,
           },
-        }
+        },
       );
 
-      // Send email
-      const { subject, body } = createVerificationEmail(user.name || "", token);
+      // ⬅️ UPDATED: Now passing user.email to createVerificationEmail
+      const { subject, body } = createVerificationEmail(
+        user.name || "",
+        user.email, // ⬅️ ADDED
+        token, // ⬅️ UNCHANGED
+      );
+
       await sendEmail(email, subject, body);
 
       return res.status(200).json({ message: "✅ Verification email sent" });

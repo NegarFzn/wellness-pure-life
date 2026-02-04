@@ -33,13 +33,6 @@ export default async function handler(req, res) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Require verified email (same as before)
-    if (!user.isVerified) {
-      return res.status(403).json({
-        message: "Please verify your email before logging in.",
-      });
-    }
-
     // Generate JWT exactly the same way, but using MongoDB _id
     const token = jwt.sign(
       {
@@ -47,9 +40,10 @@ export default async function handler(req, res) {
         email: user.email,
         name: user.name,
         isPremium: user.isPremium || false,
+        emailVerified: user.isVerified || false,
       },
       JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     res.status(200).json({ token });
