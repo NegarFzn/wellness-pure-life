@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PlanPreviewModal from "./PlanPreviewModal";
-import { gaEvent } from "../../lib/gtag"; // ← ADD THIS at top
+import { gaEvent } from "../../lib/gtag";
 import classes from "./PlanHistoryModal.module.css";
 
 export default function PlanHistoryModal({ show, onClose, history, loading }) {
@@ -9,14 +9,14 @@ export default function PlanHistoryModal({ show, onClose, history, loading }) {
 
   if (!show) return null;
 
-  // 🔥 GA: history modal opened
-
+  // MODAL OPEN
   gaEvent("weekly_plan_history_open", {});
+  gaEvent("key_weekly_plan_history_open", {});
 
-  /* -----------------------------
-     RESTORE FROM PREVIEW
-  ----------------------------- */
   const handleRestoreFromPreview = async (item) => {
+    gaEvent("weekly_plan_restore_click", { plan_id: item._id });
+    gaEvent("key_weekly_plan_restore_click", { plan_id: item._id });
+
     try {
       const res = await fetch("/api/plan/restore", {
         method: "POST",
@@ -26,29 +26,27 @@ export default function PlanHistoryModal({ show, onClose, history, loading }) {
 
       const data = await res.json();
       if (res.ok) {
+        gaEvent("weekly_plan_restore_success", { plan_id: item._id });
+        gaEvent("key_weekly_plan_restore_success", { plan_id: item._id });
+
         setPreviewPlan(null);
         onClose();
-        onClose();
-        setPreviewPlan(null);
       } else {
-        alert(data.error || "Failed to restore plan");
+        gaEvent("weekly_plan_restore_fail", { plan_id: item._id });
+        gaEvent("key_weekly_plan_restore_fail", { plan_id: item._id });
       }
     } catch (err) {
-      console.error(err);
-      alert("Failed to restore plan");
+      gaEvent("weekly_plan_restore_fail", { plan_id: item._id });
+      gaEvent("key_weekly_plan_restore_fail", { plan_id: item._id });
     }
   };
 
-  /* -----------------------------
-     TOAST
-  ----------------------------- */
   const showToast = (message, type = "success") => {
     const toast = document.createElement("div");
     toast.className = `wpl-toast wpl-toast-${type}`;
     toast.innerText = message;
 
     document.body.appendChild(toast);
-
     setTimeout(() => toast.classList.add("show"), 10);
     setTimeout(() => {
       toast.classList.remove("show");
@@ -56,11 +54,7 @@ export default function PlanHistoryModal({ show, onClose, history, loading }) {
     }, 1000);
   };
 
-  /* -----------------------------
-     FAVORITE PLAN
-  ----------------------------- */
   const handleFavorite = async (itemRaw) => {
-    // Normalize the ID consistently
     const id =
       itemRaw._id?.$oid ||
       itemRaw._id?.toString?.() ||
@@ -69,26 +63,27 @@ export default function PlanHistoryModal({ show, onClose, history, loading }) {
       itemRaw.planId ||
       itemRaw.savedAt;
 
-    // ⭐ Prepare clean plan object WITH _id included
-    const safeItem = {
-      ...itemRaw,
-      _id: String(id),
-    };
+    const safeItem = { ...itemRaw, _id: String(id) };
 
-    // ⭐ 1. Optimistic UI
+    // ANALYTICS
+    gaEvent("weekly_plan_favorite_click", { plan_id: id });
+    gaEvent("key_weekly_plan_favorite_click", { plan_id: id });
+
     setFavoritedIds((prev) => ({ ...prev, [id]: true }));
 
     try {
       const res = await fetch("/api/plan/favorites", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: safeItem }), // now valid
+        body: JSON.stringify({ plan: safeItem }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        // Revert optimistic UI
+        gaEvent("weekly_plan_favorite_fail", { plan_id: id });
+        gaEvent("key_weekly_plan_favorite_fail", { plan_id: id });
+
         setFavoritedIds((prev) => {
           const copy = { ...prev };
           delete copy[id];
@@ -103,11 +98,14 @@ export default function PlanHistoryModal({ show, onClose, history, loading }) {
         return;
       }
 
+      gaEvent("weekly_plan_favorite_success", { plan_id: id });
+      gaEvent("key_weekly_plan_favorite_success", { plan_id: id });
+
       showToast("Added to favorites ❤️", "success");
     } catch (err) {
-      console.error(err);
+      gaEvent("weekly_plan_favorite_fail", { plan_id: id });
+      gaEvent("key_weekly_plan_favorite_fail", { plan_id: id });
 
-      // Revert optimistic UI on error
       setFavoritedIds((prev) => {
         const copy = { ...prev };
         delete copy[id];
@@ -118,13 +116,24 @@ export default function PlanHistoryModal({ show, onClose, history, loading }) {
     }
   };
 
-  /* -----------------------------
-     RENDER
-  ----------------------------- */
   return (
-    <div className={classes.modalOverlay} onClick={onClose}>
+    <div
+      className={classes.modalOverlay}
+      onClick={() => {
+        gaEvent("weekly_plan_history_close", {});
+        gaEvent("key_weekly_plan_history_close", {});
+        onClose();
+      }}
+    >
       <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={classes.closeButton} onClick={onClose}>
+        <button
+          className={classes.closeButton}
+          onClick={() => {
+            gaEvent("weekly_plan_history_close", {});
+            gaEvent("key_weekly_plan_history_close", {});
+            onClose();
+          }}
+        >
           ✕
         </button>
 
@@ -146,13 +155,12 @@ export default function PlanHistoryModal({ show, onClose, history, loading }) {
                 itemRaw._id ||
                 itemRaw.id ||
                 itemRaw.planId ||
-                itemRaw.savedAt; // fallback but unique
+                itemRaw.savedAt;
 
               const item = { ...itemRaw, _id: String(id) };
 
               return (
                 <li key={item._id} className={classes.item}>
-                  {/* Meta dates */}
                   <div className={classes.meta}>
                     <span className={classes.date}>
                       {item.updatedAt
@@ -172,21 +180,29 @@ export default function PlanHistoryModal({ show, onClose, history, loading }) {
                     </span>
                   </div>
 
-                  {/* Summary */}
                   {item.weekSummary && (
                     <p className={classes.summary}>{item.weekSummary}</p>
                   )}
 
-                  {/* Buttons */}
                   <div className={classes.actionsRow}>
                     <button
                       className={classes.restoreButton}
                       onClick={() => {
-                        gaEvent({
-                          event: "weekly_plan_history_preview_click",
-                          params: { plan_id: item._id },
+                        gaEvent("weekly_plan_history_preview_click", {
+                          plan_id: item._id,
                         });
+                        gaEvent("key_weekly_plan_history_preview_click", {
+                          plan_id: item._id,
+                        });
+
                         setPreviewPlan(item);
+
+                        gaEvent("weekly_plan_preview_open", {
+                          plan_id: item._id,
+                        });
+                        gaEvent("key_weekly_plan_preview_open", {
+                          plan_id: item._id,
+                        });
                       }}
                     >
                       Preview Plan
@@ -211,11 +227,18 @@ export default function PlanHistoryModal({ show, onClose, history, loading }) {
           </ul>
         )}
 
-        {/* Preview Modal */}
         {previewPlan && (
           <PlanPreviewModal
             plan={previewPlan}
-            onClose={() => setPreviewPlan(null)}
+            onClose={() => {
+              gaEvent("weekly_plan_preview_close", {
+                plan_id: previewPlan._id,
+              });
+              gaEvent("key_weekly_plan_preview_close", {
+                plan_id: previewPlan._id,
+              });
+              setPreviewPlan(null);
+            }}
             onConfirm={() => handleRestoreFromPreview(previewPlan)}
           />
         )}

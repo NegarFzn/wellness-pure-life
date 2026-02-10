@@ -15,16 +15,26 @@ export default function DailyRoutineCard({ className = "" }) {
   const buttonText = !isAuthenticated
     ? "Sign In to Continue"
     : !isPremium
-    ? "Upgrade to Premium"
-    : "View Today’s Routine";
+      ? "Upgrade to Premium"
+      : "View Today’s Routine";
 
   const handleClick = () => {
+    // normal
     gaEvent("daily_routine_card_click", {
       status: !isAuthenticated
         ? "not_authenticated"
         : !isPremium
-        ? "not_premium"
-        : "premium",
+          ? "not_premium"
+          : "premium",
+    });
+
+    // anomaly
+    gaEvent("key_daily_routine_card_click", {
+      status: !isAuthenticated
+        ? "not_authenticated"
+        : !isPremium
+          ? "not_premium"
+          : "premium",
     });
 
     if (!isAuthenticated) {
@@ -41,7 +51,14 @@ export default function DailyRoutineCard({ className = "" }) {
   };
 
   useEffect(() => {
+    // normal
     gaEvent("daily_routine_card_view", {
+      is_authenticated: !!session,
+      is_premium: session?.user?.isPremium === true,
+    });
+
+    // anomaly
+    gaEvent("key_daily_routine_card_view", {
       is_authenticated: !!session,
       is_premium: session?.user?.isPremium === true,
     });
@@ -54,7 +71,6 @@ export default function DailyRoutineCard({ className = "" }) {
       </div>
 
       <div className={classes.content}>
-        {/* ✅ PURPOSE LABEL */}
         <span className={classes.label}>PERSONALIZED • TODAY</span>
 
         <h3 className={classes.title}>Your Daily Wellness Routine</h3>
@@ -64,26 +80,34 @@ export default function DailyRoutineCard({ className = "" }) {
           your habits, goals, and wellness profile.
         </p>
 
-        {/* ✅ STATUS / TRUST LINE */}
         <p className={classes.meta}>
           • Personalized for today • Morning • Midday • Evening
         </p>
 
-        {/* ✅ CTA */}
         <button
           className={classes.button}
           onClick={(e) => {
-            e.stopPropagation(); // prevents the whole card click from overriding
+            e.stopPropagation();
 
+            // normal
             gaEvent("daily_routine_card_cta_click", {
               status: !isAuthenticated
                 ? "not_authenticated"
                 : !isPremium
-                ? "not_premium"
-                : "premium",
+                  ? "not_premium"
+                  : "premium",
             });
 
-            handleClick(); // continue original flow
+            // anomaly
+            gaEvent("key_daily_routine_card_cta_click", {
+              status: !isAuthenticated
+                ? "not_authenticated"
+                : !isPremium
+                  ? "not_premium"
+                  : "premium",
+            });
+
+            handleClick();
           }}
         >
           <span>{buttonText}</span>

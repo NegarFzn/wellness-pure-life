@@ -34,15 +34,19 @@ export default function DailyList() {
   const containerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // 🔥 INITIAL VIEW EVENT + KEY EVENT
   useEffect(() => {
     gaEvent("daily_list_view");
+    gaEvent("key_daily_list_view");
   }, []);
 
+  // LOAD RANDOM ITEMS
   useEffect(() => {
     const shuffled = shuffle(allItems);
     setTodayItems(shuffled.slice(0, 50));
   }, []);
 
+  // OBSERVER FOR VIEWED CARDS
   useEffect(() => {
     const container = containerRef.current;
     const cards = container?.querySelectorAll(`.${classes.cardWrapper}`);
@@ -65,14 +69,21 @@ export default function DailyList() {
           const index = [...cards].indexOf(maxVisibleEntry.target);
           setActiveIndex(index);
 
+          // 🔥 CARD VIEW TRACKING + KEY EVENT
           gaEvent("daily_list_card_view", {
+            index,
+            type: todayItems[index]?.type,
+            title: todayItems[index]?.title,
+          });
+
+          gaEvent("key_daily_list_card_view", {
             index,
             type: todayItems[index]?.type,
             title: todayItems[index]?.title,
           });
         }
       },
-      { root: container, threshold: 0.6 }
+      { root: container, threshold: 0.6 },
     );
 
     cards.forEach((card) => observer.observe(card));
@@ -80,10 +91,11 @@ export default function DailyList() {
     return () => observer.disconnect();
   }, [todayItems]);
 
+  // ACTIVE DOTS
   useEffect(() => {
     const dots = document.querySelectorAll(`.${classes.dot}`);
     dots.forEach((dot, i) =>
-      dot.classList.toggle(classes.active, i === activeIndex)
+      dot.classList.toggle(classes.active, i === activeIndex),
     );
   }, [activeIndex]);
 
@@ -103,9 +115,6 @@ export default function DailyList() {
   if (todayItems.length === 0) return null;
 
   const visibleDotCount = 7;
-  const half = Math.floor(visibleDotCount / 2);
-  const total = todayItems.length;
-  const current = activeIndex;
 
   const getVisibleDots = () => {
     const maxDots = visibleDotCount;
@@ -140,20 +149,27 @@ export default function DailyList() {
               item.type === "fitness"
                 ? FitnessItem
                 : item.type === "mindfulness"
-                ? MindfulnessItem
-                : NourishItem;
+                  ? MindfulnessItem
+                  : NourishItem;
 
             return (
               <div
                 className={classes.cardWrapper}
                 key={item.id}
-                onClick={() =>
+                onClick={() => {
+                  // 🔥 ITEM CLICK + KEY EVENT
                   gaEvent("daily_list_item_click", {
                     id: item.id,
                     type: item.type,
                     title: item.title,
-                  })
-                }
+                  });
+
+                  gaEvent("key_daily_list_item_click", {
+                    id: item.id,
+                    type: item.type,
+                    title: item.title,
+                  });
+                }}
               >
                 <Component {...item} />
               </div>
@@ -161,6 +177,7 @@ export default function DailyList() {
           })}
         </div>
 
+        {/* DOTS */}
         <div className={classes.progressDots}>
           {getVisibleDots().map((i) => (
             <span
@@ -172,19 +189,23 @@ export default function DailyList() {
           ))}
         </div>
 
+        {/* ARROWS */}
         <div className={classes.arrows}>
           <button
             onClick={() => {
               gaEvent("daily_list_arrow_click", { direction: "left" });
+              gaEvent("key_daily_list_arrow_click", { direction: "left" });
               scrollCards("left");
             }}
             className={classes.arrowBtn}
           >
             ◀
           </button>
+
           <button
             onClick={() => {
               gaEvent("daily_list_arrow_click", { direction: "right" });
+              gaEvent("key_daily_list_arrow_click", { direction: "right" });
               scrollCards("right");
             }}
             className={classes.arrowBtn}

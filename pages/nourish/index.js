@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import nourishHeader from "/public/images/nourish_header.jpg";
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
 import NourishHighlights from "../../components/TopPages/NourishHighlights";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./index.module.css";
 import NourishList from "../../components/nourish/nourish-list";
 import ChallengeCard from "../../components/ChallengeCard/ChallengeCard";
@@ -35,10 +36,16 @@ function NourishPage(props) {
     },
   ];
 
+  // ---- PAGE VIEW ----
+  useEffect(() => {
+    gaEvent("nourish_page_view");
+    gaEvent("key_nourish_page_view");
+  }, []);
+
   // Highlight active sub-nav item while scrolling (IO + sticky offset aware)
   useEffect(() => {
     const links = Array.from(
-      document.querySelectorAll(`.${classes.subnavLink}`)
+      document.querySelectorAll(`.${classes.subnavLink}`),
     );
     const sections = (categories || [])
       .map((c) => document.getElementById(c.key))
@@ -52,8 +59,10 @@ function NourishPage(props) {
 
     const setActive = (id) => {
       links.forEach((a) =>
-        a.classList.toggle(classes.active, a.getAttribute("data-key") === id)
+        a.classList.toggle(classes.active, a.getAttribute("data-key") === id),
       );
+      gaEvent("nourish_section_view", { section: id });
+      gaEvent("key_nourish_section_view", { section: id });
     };
 
     // Pick the section that has most recently crossed the OFFSET line
@@ -80,7 +89,7 @@ function NourishPage(props) {
         root: null,
         rootMargin: `-${OFFSET}px 0px -60% 0px`,
         threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
-      }
+      },
     );
 
     sections.forEach((s) => io.observe(s));
@@ -228,11 +237,18 @@ function NourishPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              onClick={() =>
+              onClick={() => {
+                gaEvent("nourish_quick_card_click", {
+                  target: "superfoodSecrets",
+                });
+                gaEvent("key_nourish_quick_card_click", {
+                  target: "superfoodSecrets",
+                });
+
                 document
                   .getElementById("superfoodSecrets")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               <span>🥗</span>
               <h3>Super Food</h3>
@@ -244,11 +260,18 @@ function NourishPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              onClick={() =>
+              onClick={() => {
+                gaEvent("nourish_quick_card_click", {
+                  target: "nutrientEssentials",
+                });
+                gaEvent("key_nourish_quick_card_click", {
+                  target: "nutrientEssentials",
+                });
+
                 document
                   .getElementById("nutrientEssentials")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               <span>💧</span>
               <h3>nutrient Essentials</h3>
@@ -260,11 +283,16 @@ function NourishPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              onClick={() =>
+              onClick={() => {
+                gaEvent("nourish_quick_card_click", { target: "mindfulMeals" });
+                gaEvent("key_nourish_quick_card_click", {
+                  target: "mindfulMeals",
+                });
+
                 document
                   .getElementById("mindfulMeals")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               <span>🍱</span>
               <h3>mindful Meals</h3>
@@ -276,11 +304,18 @@ function NourishPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              onClick={() =>
+              onClick={() => {
+                gaEvent("nourish_quick_card_click", {
+                  target: "dailySupplements",
+                });
+                gaEvent("key_nourish_quick_card_click", {
+                  target: "dailySupplements",
+                });
+
                 document
                   .getElementById("dailySupplements")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               <span>🦠</span>
               <h3>Supplements</h3>
@@ -343,6 +378,10 @@ function NourishPage(props) {
                     className={classes.subnavLink}
                     href={`#${c.key}`}
                     data-key={c.key}
+                    onClick={() => {
+                      gaEvent("nourish_subnav_click", { section: c.key });
+                      gaEvent("key_nourish_subnav_click", { section: c.key });
+                    }}
                   >
                     {c.title}
                   </a>
@@ -375,7 +414,11 @@ function NourishPage(props) {
 
         {showButton && (
           <button
-            onClick={scrollToTop}
+            onClick={() => {
+              gaEvent("nourish_back_to_top_click");
+              gaEvent("key_nourish_back_to_top_click");
+              scrollToTop();
+            }}
             className={classes.backToTop}
             aria-label="Back to top"
           >

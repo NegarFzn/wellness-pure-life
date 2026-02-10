@@ -27,12 +27,13 @@ export default function MindfulnessChallenge({
   const progressPercent = (currentDay / 21) * 100;
   const isPremium = session?.user?.isPremium;
 
+  // FIXED: analytics dependency added
   useEffect(() => {
     gaEvent("challenge_page_view", {
       category: "challenge",
       label: `day_${currentDay}`,
     });
-  }, []);
+  }, [currentDay]);
 
   return (
     <>
@@ -50,24 +51,29 @@ export default function MindfulnessChallenge({
               : "You have successfully completed the 21 Days of Mindfulness Challenge!"
           }
         />
+
         <meta
           property="og:title"
           content={`Day ${currentDay} – 21 Days of Mindfulness`}
         />
         <meta property="og:description" content={challenge.title} />
+
         <meta
           property="og:url"
           content={`https://wellnesspurelife.com/challenges/21-days-mindfulness/${currentDay}`}
         />
+
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary_large_image" />
+
+        {/* FIXED: OG image anomaly */}
         <meta
           property="og:image"
-          content={`/assets/mindfulness/day-${currentDay}.jpg`}
+          content="/assets/mindfulness/mindfulness-cover.jpg"
         />
         <meta
           property="twitter:image"
-          content={`/assets/mindfulness/day-${currentDay}.jpg`}
+          content="/assets/mindfulness/mindfulness-cover.jpg"
         />
       </Head>
 
@@ -144,15 +150,13 @@ export default function MindfulnessChallenge({
                         email: session?.user?.email,
                         name: session?.user?.name,
                         dayNumber: currentDay,
-                        category: "mindfulness", // IMPORTANT
+                        category: "mindfulness",
                       }),
                     });
 
                     const data = await res.json();
-
                     setSending(false);
                     setSent(true);
-
                     setToast(data.message || "Email sent!");
 
                     setTimeout(() => setSent(false), 2000);
@@ -226,6 +230,7 @@ export default function MindfulnessChallenge({
           </div>
         )}
 
+        {/* Navigation */}
         {currentDay < 21 && (
           <div className={classes.navButtons}>
             {currentDay > 1 && (
@@ -237,46 +242,37 @@ export default function MindfulnessChallenge({
                     label: `from_day_${currentDay}`,
                   });
                   router.push(
-                    `/challenges/21-days-mindfulness/${currentDay - 1}`
+                    `/challenges/21-days-mindfulness/${currentDay - 1}`,
                   );
                 }}
               >
                 ← Previous
               </button>
             )}
+
             {currentDay < 21 && (
               <button
                 className={classes.navLink}
                 onClick={() => {
-                  gaEvent("challenge_next_attempt", {
-                    category: "challenge",
-                    label: `from_day_${currentDay}`,
-                  });
-
                   const nextDay = currentDay + 1;
+
                   const today = new Date();
                   const start = new Date(
                     session?.user?.challenge_21_mindfulness?.startedAt ||
-                      new Date()
+                      new Date(),
                   );
                   const daysSince = Math.floor(
-                    (today - start) / (1000 * 60 * 60 * 24)
+                    (today - start) / (1000 * 60 * 60 * 24),
                   );
                   const allowed = Math.min(daysSince + 1, 21);
 
                   if (!isPremium && nextDay > allowed) {
-                    gaEvent("challenge_next_locked", {
-                      category: "challenge",
-                      label: `blocked_day_${nextDay}`,
-                    });
-
-                    setShowPremium(true);
-
+                    // FIXED: Only one premium modal analytics event
                     gaEvent("challenge_premium_modal_open", {
                       category: "challenge",
                       label: `day_${currentDay}`,
                     });
-
+                    setShowPremium(true);
                     return;
                   }
 
@@ -284,6 +280,7 @@ export default function MindfulnessChallenge({
                     category: "challenge",
                     label: `to_day_${nextDay}`,
                   });
+
                   router.push(`/challenges/21-days-mindfulness/${nextDay}`);
                 }}
               >
@@ -293,6 +290,7 @@ export default function MindfulnessChallenge({
           </div>
         )}
 
+        {/* Premium Modal */}
         {showPremium && (
           <div
             className={classes.modalOverlay}
@@ -324,6 +322,7 @@ export default function MindfulnessChallenge({
         )}
       </main>
 
+      {/* Completion Utilities */}
       {currentDay === 21 && (
         <div className={classes.utilityButtons}>
           <button
@@ -332,9 +331,10 @@ export default function MindfulnessChallenge({
           >
             🖨️ Print This Challenge
           </button>
+
           <ShareButton
             title="I completed the 21 Days of Mindfulness Challenge!"
-            text="I just completed a 21-day mindfulness journey with Wellness Pure Life. Check it out and try it for yourself!"
+            text="I just completed a 21-day mindfulness journey with Wellness Pure Life. Check it out!"
             url={`https://wellnesspurelife.com${router.asPath}`}
           />
         </div>
@@ -342,6 +342,8 @@ export default function MindfulnessChallenge({
     </>
   );
 }
+
+/* --- SERVER SIDE --- */
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
@@ -355,10 +357,12 @@ export async function getServerSideProps(context) {
   const { db } = await connectToDatabase();
 
   let userStartDate = null;
+
   if (session?.user?.email) {
     const userRecord = await db
       .collection("users")
       .findOne({ email: session.user.email });
+
     userStartDate =
       userRecord?.challenge_21_mindfulness?.startedAt || new Date();
 
@@ -371,7 +375,7 @@ export async function getServerSideProps(context) {
             "challenge_21_mindfulness.lastEmailSentDay": 0,
           },
         },
-        { upsert: true }
+        { upsert: true },
       );
     }
   } else {
@@ -380,8 +384,9 @@ export async function getServerSideProps(context) {
 
   const today = new Date();
   const daysSinceStart = Math.floor(
-    (today - new Date(userStartDate)) / (1000 * 60 * 60 * 24)
+    (today - new Date(userStartDate)) / (1000 * 60 * 60 * 24),
   );
+
   const allowedDay = Math.min(daysSinceStart + 1, 21);
   const isInvalidFutureDay = dayNumber > allowedDay;
 

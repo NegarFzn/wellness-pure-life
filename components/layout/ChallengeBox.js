@@ -12,6 +12,23 @@ export default function ChallengeBox({ onLinkClick }) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  // -----------------------------------------------------
+  // VIEW TRACKING (Analytics + Anomaly)
+  // -----------------------------------------------------
+  useEffect(() => {
+    gaEvent("challenge_widget_view");
+    gaEvent("key_challenge_widget_loaded");
+
+    if (session?.user?.isPremium) {
+      gaEvent("challenge_widget_premium_view");
+    } else {
+      gaEvent("challenge_widget_free_view");
+    }
+  }, [session]);
+
+  // -----------------------------------------------------
+  // Calculate day number + load first tip
+  // -----------------------------------------------------
   useEffect(() => {
     if (typeof window === "undefined" || !session?.user?.isPremium) return;
 
@@ -21,16 +38,26 @@ export default function ChallengeBox({ onLinkClick }) {
 
     if (!storedStart) {
       localStorage.setItem("challengeStartDate", today.toISOString());
+      gaEvent("challenge_start_new_cycle");
+      gaEvent("key_challenge_cycle_created");
     }
 
     const diffInDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-    setDayNumber(Math.min(7, diffInDays + 1));
+    const day = Math.min(7, diffInDays + 1);
+    setDayNumber(day);
+
+    gaEvent("challenge_day_loaded", { day_number: day });
+    gaEvent("key_challenge_day_loaded", { day_number: day });
 
     handleNewTip();
   }, [session]);
 
+  // -----------------------------------------------------
+  // Open full challenge
+  // -----------------------------------------------------
   const handleSeeFullChallenge = () => {
     gaEvent("challenge_open_full");
+    gaEvent("key_challenge_open_full");
 
     const dropdown = document.querySelector(`.${classes.megaDropdown}`);
     if (dropdown) dropdown.style.display = "none";
@@ -38,10 +65,14 @@ export default function ChallengeBox({ onLinkClick }) {
     router.push("/challenge");
   };
 
+  // -----------------------------------------------------
+  // Load a new challenge tip
+  // -----------------------------------------------------
   const handleNewTip = async () => {
     if (typeof window === "undefined") return;
 
-    gaEvent("challenge_new_tip");
+    gaEvent("challenge_new_tip_click");
+    gaEvent("key_challenge_new_tip_click");
 
     setChallengeText("Loading...");
 
@@ -55,15 +86,28 @@ export default function ChallengeBox({ onLinkClick }) {
         tips = data.tips || [];
         index = 0;
         localStorage.setItem("cachedTips", JSON.stringify(tips));
+
+        gaEvent("challenge_tip_list_refreshed", { count: tips.length });
+        gaEvent("key_challenge_tip_list_refreshed", { count: tips.length });
       }
 
       const nextTip = tips[index] || "🌟 Stay strong!";
       setChallengeText(nextTip);
       localStorage.setItem("tipIndex", (index + 1).toString());
+
+      gaEvent("challenge_tip_loaded", {
+        tip_index: index,
+        tip_text: nextTip.slice(0, 50),
+      });
+
+      gaEvent("key_challenge_tip_generated", { tip_index: index });
     } catch (err) {
       console.error("Error loading tips:", err);
       setChallengeText("Try something new today!");
       toast.error("⚠️ Could not load a new tip. Please try again.");
+
+      gaEvent("challenge_tip_error", { error: err.message });
+      gaEvent("key_challenge_tip_error");
     }
   };
 
@@ -71,6 +115,9 @@ export default function ChallengeBox({ onLinkClick }) {
 
   const isPremium = session?.user?.isPremium;
 
+  // -----------------------------------------------------
+  // RENDER
+  // -----------------------------------------------------
   return (
     <div className={classes.challengeColumn}>
       <div className={classes.challengeBox}>
@@ -112,9 +159,10 @@ export default function ChallengeBox({ onLinkClick }) {
                 className={classes.challengeLink}
                 onClick={() => {
                   gaEvent("challenge_upgrade_click");
+                  gaEvent("key_challenge_upgrade_click");
 
                   const dropdown = document.querySelector(
-                    `.${classes.megaDropdown}`
+                    `.${classes.megaDropdown}`,
                   );
                   if (dropdown) dropdown.style.display = "none";
                   if (onLinkClick) onLinkClick();

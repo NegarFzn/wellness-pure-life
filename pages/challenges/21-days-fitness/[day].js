@@ -29,7 +29,7 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
       category: "challenge",
       label: `day_${currentDay}`,
     });
-  }, []);
+  }, [currentDay]);
 
   return (
     <>
@@ -60,11 +60,11 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           property="og:image"
-          content={`/assets/fitness/day-${currentDay}.jpg`}
+          content={`/assets/challenges/21days-fitness-banner.jpg`}
         />
         <meta
           property="twitter:image"
-          content={`/assets/fitness/day-${currentDay}.jpg`}
+          content={`/assets/challenges/21days-fitness-banner.jpg`}
         />
       </Head>
 
@@ -107,17 +107,18 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
                 <PremiumButton />
               </div>
             )
-          ) : currentDay === 1 || isPremium ? (
+          ) : (currentDay === 1 && !isInvalidFutureDay) || isPremium ? (
             <>
               <ReactMarkdown className={classes.markdown}>
-                {challenge.content}
+                {challenge.content || "*Content not available.*"}
               </ReactMarkdown>
 
               <blockquote className={classes.tipBox}>
-                <strong>Fitness Tip:</strong> {challenge.tip}
+                <strong>Fitness Tip:</strong>{" "}
+                {challenge.tip ||
+                  "Stay consistent and keep your form controlled."}
               </blockquote>
 
-              {/* Email Button */}
               <button
                 className={`${classes.emailButton} ${
                   sending ? classes.loading : ""
@@ -140,17 +141,14 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
                         email: session?.user?.email,
                         name: session?.user?.name,
                         dayNumber: currentDay,
-                        category: "fitness", // IMPORTANT
+                        category: "fitness",
                       }),
                     });
 
                     const data = await res.json();
-
                     setSending(false);
                     setSent(true);
-
                     setToast(data.message || "Email sent!");
-
                     setTimeout(() => setSent(false), 2000);
                   } catch (err) {
                     console.error(err);
@@ -189,14 +187,16 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
               This isn’t the end — fitness is a lifestyle. Stay active, stay
               strong. 💪
             </p>
+
             <a
               href={`/api/21days-challenge?name=${encodeURIComponent(
-                session?.user?.name || "Participant"
+                session?.user?.name || "Participant",
               )}&email=${encodeURIComponent(session?.user?.email || "")}`}
               className={classes.certificateButton}
             >
               🎓 Email My Certificate
             </a>
+
             <Link href="/" className={classes.navLink}>
               Back to Home →
             </Link>
@@ -219,6 +219,7 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
                 ← Previous
               </button>
             )}
+
             {currentDay < 21 && (
               <button
                 className={classes.navLink}
@@ -227,13 +228,16 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
                     category: "challenge",
                     label: `from_day_${currentDay}`,
                   });
+
                   const nextDay = currentDay + 1;
+
                   const today = new Date();
                   const start = new Date(
-                    session?.user?.challenge_21_fitness?.startedAt || new Date()
+                    session?.user?.challenge_21_fitness?.startedAt ||
+                      new Date(),
                   );
                   const daysSince = Math.floor(
-                    (today - start) / (1000 * 60 * 60 * 24)
+                    (today.getTime() - start.getTime()) / 86400000,
                   );
                   const allowed = Math.min(daysSince + 1, 21);
 
@@ -261,10 +265,14 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
             >
               <button
                 className={classes.modalClose}
-                onClick={() => setShowPremium(false)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowPremium(false);
+                }}
               >
                 ×
               </button>
+
               <h3 className={classes.lockedTitle}>
                 🔒 Premium Access Required
               </h3>
@@ -275,7 +283,10 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
                 </Link>{" "}
                 and upgrade your account.
               </p>
-              <PremiumButton />
+
+              <div onClick={(e) => e.stopPropagation()}>
+                <PremiumButton />
+              </div>
             </div>
           </div>
         )}
@@ -289,9 +300,10 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
           >
             🖨️ Print This Challenge
           </button>
+
           <ShareButton
             title="I completed the 21 Days of Fitness Challenge!"
-            text="I just completed a 21-day fitness journey with Wellness Pure Life. Try it for yourself!"
+            text="I completed the 21-day Fitness Challenge with Wellness Pure Life!"
             url={`https://wellnesspurelife.com${router.asPath}`}
           />
         </div>
@@ -312,10 +324,12 @@ export async function getServerSideProps(context) {
   const { db } = await connectToDatabase();
 
   let userStartDate = null;
+
   if (session?.user?.email) {
     const userRecord = await db
       .collection("users")
       .findOne({ email: session.user.email });
+
     userStartDate = userRecord?.challenge_21_fitness?.startedAt || new Date();
 
     if (!userRecord?.challenge_21_fitness?.startedAt) {
@@ -327,7 +341,7 @@ export async function getServerSideProps(context) {
             "challenge_21_fitness.lastEmailSentDay": 0,
           },
         },
-        { upsert: true }
+        { upsert: true },
       );
     }
   } else {
@@ -336,9 +350,10 @@ export async function getServerSideProps(context) {
 
   const today = new Date();
   const daysSinceStart = Math.floor(
-    (today - new Date(userStartDate)) / (1000 * 60 * 60 * 24)
+    (today.getTime() - new Date(userStartDate).getTime()) / 86400000,
   );
   const allowedDay = Math.min(daysSinceStart + 1, 21);
+
   const isInvalidFutureDay = dayNumber > allowedDay;
 
   const collection = db.collection("challenges_21_fitness");

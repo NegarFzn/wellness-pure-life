@@ -16,6 +16,34 @@ import ChallengeCard from "../../components/ChallengeCard/ChallengeCard.js";
 function FitnessPage(props) {
   const [showButton, setShowButton] = useState(false);
 
+  useEffect(() => {
+    gaEvent("fitness_page_view");
+    gaEvent("key_fitness_page_view");
+  }, []);
+
+  useEffect(() => {
+    const checkpoints = [25, 50, 75, 100];
+    let fired = {};
+
+    const onScroll = () => {
+      const scrolled =
+        (window.scrollY / (document.body.scrollHeight - window.innerHeight)) *
+        100;
+
+      checkpoints.forEach((pct) => {
+        if (scrolled >= pct && !fired[pct]) {
+          fired[pct] = true;
+          gaEvent("fitness_scroll_depth", { percent: pct });
+          gaEvent("key_fitness_scroll_depth", { percent: pct });
+        }
+      });
+    };
+
+    window.addEventListener("scroll", onScroll);
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const categories = [
     { key: "featured", title: "FEATURED", items: props.featured },
     { key: "cardio", title: "CARDIO", items: props.cardio },
@@ -39,30 +67,34 @@ function FitnessPage(props) {
   }, []);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const id = entry.target.getAttribute("id");
-          const link = document.querySelector(`a[data-key="${id}"]`);
-          if (entry.isIntersecting && link) {
-            document
-              .querySelectorAll(`.${classes.subnavLink}`)
-              .forEach((el) => el.classList.remove(classes.active));
-            link.classList.add(classes.active);
-          }
-        });
-      },
-      {
-        threshold: 0.4, // adjust visibility trigger
-      }
-    );
+    const timer = setTimeout(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const id = entry.target.getAttribute("id");
+            const link = document.querySelector(`a[data-key="${id}"]`);
+            if (entry.isIntersecting && link) {
+              document
+                .querySelectorAll(`.${classes.subnavLink}`)
+                .forEach((el) => el.classList.remove(classes.active));
+              link.classList.add(classes.active);
 
-    const sections = categories.map((c) => document.getElementById(c.key));
-    sections.forEach((section) => {
-      if (section) observer.observe(section);
-    });
+              gaEvent("fitness_section_view", { section: id });
+              gaEvent("key_fitness_section_view", { section: id });
+            }
+          });
+        },
+        { threshold: 0.4 },
+      );
 
-    return () => observer.disconnect();
+      const sections = categories.map((c) => document.getElementById(c.key));
+
+      sections.forEach((section) => section && observer.observe(section));
+
+      return () => observer.disconnect();
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [categories]);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });

@@ -11,14 +11,16 @@ export default function UpgradePage() {
   const [loading, setLoading] = useState(false);
   const [plan, setPlan] = useState("monthly");
 
+  // PAGE VIEW
   useEffect(() => {
     gaEvent("upgrade_page_view");
+    gaEvent("key_upgrade_page_view");
   }, []);
 
   const handleUpgrade = async () => {
-    // 1) REQUIRE LOGIN — redirect to your login page
     if (!session) {
       gaEvent("upgrade_require_login");
+      gaEvent("key_upgrade_require_login");
       return router.push(`/login?redirect=upgrade&plan=${plan}`);
     }
 
@@ -26,7 +28,6 @@ export default function UpgradePage() {
     setError("");
 
     try {
-      // 2) STRIPE CHECKOUT for logged-in user
       const res = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -52,12 +53,25 @@ export default function UpgradePage() {
     }
   };
 
-
-
   return (
-    <div className={classes.overlay} onClick={() => router.back()}>
+    <div
+      className={classes.overlay}
+      onClick={() => {
+        gaEvent("upgrade_overlay_back");
+        gaEvent("key_upgrade_overlay_back");
+        router.back();
+      }}
+    >
       <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={classes.closeButton} onClick={() => router.back()}>
+        {/* CLOSE BUTTON */}
+        <button
+          className={classes.closeButton}
+          onClick={() => {
+            gaEvent("upgrade_close_click");
+            gaEvent("key_upgrade_close_click");
+            router.back();
+          }}
+        >
           &times;
         </button>
 
@@ -70,21 +84,27 @@ export default function UpgradePage() {
 
             <p className={classes.description}>
               Stop guessing what to do for your health. This system gives you a
-              clear daily structure for your body, mind, sleep, habits, and
-              energy — built specifically for you.
+              clear daily structure...
             </p>
 
             {/* PRICING SELECT */}
-            <div className={classes.feeWrapper}>
+            <div
+              className={classes.feeWrapper}
+              onMouseEnter={() => {
+                gaEvent("upgrade_pricing_view");
+                gaEvent("key_upgrade_pricing_view");
+              }}
+            >
               <label>
                 <input
                   type="radio"
                   value="monthly"
                   checked={plan === "monthly"}
                   onChange={() => setPlan("monthly")}
-                  onClick={() =>
-                    gaEvent("upgrade_plan_select", { plan: "monthly" })
-                  }
+                  onClick={() => {
+                    gaEvent("upgrade_plan_select", { plan: "monthly" });
+                    gaEvent("key_upgrade_plan_select", { plan: "monthly" });
+                  }}
                 />
                 Monthly – $9.99 / month
               </label>
@@ -95,95 +115,80 @@ export default function UpgradePage() {
                   value="yearly"
                   checked={plan === "yearly"}
                   onChange={() => setPlan("yearly")}
-                  onClick={() =>
-                    gaEvent("upgrade_plan_select", { plan: "yearly" })
-                  }
+                  onClick={() => {
+                    gaEvent("upgrade_plan_select", { plan: "yearly" });
+                    gaEvent("key_upgrade_plan_select", { plan: "yearly" });
+                  }}
                 />
                 Yearly – $79 / year (Save 35%)
               </label>
             </div>
 
-            {/* 30-DAY TRANSFORMATION TIMELINE */}
-            <div className={classes.timelineBox}>
+            {/* TIMELINE */}
+            <div
+              className={classes.timelineBox}
+              onMouseEnter={() => {
+                gaEvent("upgrade_timeline_view");
+                gaEvent("key_upgrade_timeline_view");
+              }}
+            >
               <h3 className={classes.sectionTitle}>
                 What You Will Gain in 30 Days
               </h3>
               <ul className={classes.timelineList}>
                 <li>
-                  <strong>Week 1:</strong> Immediate clarity, structure & lower
-                  stress
+                  <strong>Week 1:</strong> Immediate clarity...
                 </li>
                 <li>
-                  <strong>Week 2:</strong> Better sleep & stronger morning
-                  energy
+                  <strong>Week 2:</strong> Better sleep...
                 </li>
                 <li>
-                  <strong>Week 3:</strong> Consistent habits with AI reminders
+                  <strong>Week 3:</strong> Consistent habits...
                 </li>
                 <li>
-                  <strong>Week 4:</strong> Noticeable improvement in focus &
-                  discipline
+                  <strong>Week 4:</strong> Improvement...
                 </li>
               </ul>
             </div>
 
-            {/* FEATURES */}
-            <ul className={classes.featureList}>
-              <li className={classes.featureItem}>
-                ✔ AI-built daily plan based on your real lifestyle
-              </li>
-              <li className={classes.featureItem}>
-                ✔ Mental clarity and calm focus within days
-              </li>
-              <li className={classes.featureItem}>
-                ✔ Better sleep and stronger morning energy
-              </li>
-              <li className={classes.featureItem}>
-                ✔ Stress control without medication
-              </li>
-              <li className={classes.featureItem}>
-                ✔ A clear structure for your daily life
-              </li>
+            {/* FEATURES LIST */}
+            <ul
+              className={classes.featureList}
+              onMouseEnter={() => {
+                gaEvent("upgrade_features_view");
+                gaEvent("key_upgrade_features_view");
+              }}
+            >
+              <li className={classes.featureItem}>✔ AI-built daily plan</li>
+              <li className={classes.featureItem}>✔ Clarity and calm focus</li>
+              <li className={classes.featureItem}>✔ Better sleep</li>
+              <li className={classes.featureItem}>✔ Stress control</li>
+              <li className={classes.featureItem}>✔ Daily structure</li>
 
-              {/* PREMIUM ADDITIONAL FEATURES */}
-              <li className={classes.featureItem}>
-                ✔ Personalized nutrition and meal guidance
-              </li>
-              <li className={classes.featureItem}>
-                ✔ Mindfulness reminders based on your stress level
-              </li>
-              <li className={classes.featureItem}>
-                ✔ Weekly progress reports tailored to your habits
-              </li>
-              <li className={classes.featureItem}>
-                ✔ AI-generated daily rituals for balance
-              </li>
-              <li className={classes.featureItem}>
-                ✔ Advanced wellness insights and analytics
-              </li>
-              <li className={classes.featureItem}>
-                ✔ Smart recommendations based on your mood & sleep
-              </li>
-              <li className={classes.featureItem}>
-                ✔ Step-by-step guidance to build consistency
-              </li>
-              <li className={classes.featureItem}>
-                ✔ Exclusive premium content and structured plans
-              </li>
-              <li className={classes.featureItem}>
-                ✔ Priority support for premium members
-              </li>
+              <li className={classes.featureItem}>✔ Nutrition guidance</li>
+              <li className={classes.featureItem}>✔ Mindfulness reminders</li>
+              <li className={classes.featureItem}>✔ Weekly progress</li>
+              <li className={classes.featureItem}>✔ Daily rituals</li>
+              <li className={classes.featureItem}>✔ Wellness analytics</li>
+              <li className={classes.featureItem}>✔ Smart recommendations</li>
+              <li className={classes.featureItem}>✔ Consistency guidance</li>
+              <li className={classes.featureItem}>✔ Premium plans</li>
+              <li className={classes.featureItem}>✔ Priority support</li>
             </ul>
 
             {/* SOCIAL PROOF */}
-            <div className={classes.socialProofBox}>
+            <div
+              className={classes.socialProofBox}
+              onMouseEnter={() => {
+                gaEvent("upgrade_social_proof_view");
+                gaEvent("key_upgrade_social_proof_view");
+              }}
+            >
               <h3 className={classes.sectionTitle}>
                 Trusted by People Improving Their Life
               </h3>
               <p className={classes.socialProofText}>
-                Thousands of people use structured AI wellness systems to become
-                calmer, more energized, and more in control — without relying on
-                motivation.
+                Thousands of people use structured AI wellness systems...
               </p>
             </div>
           </div>
@@ -194,12 +199,13 @@ export default function UpgradePage() {
 
             <p className={classes.trustText}>
               Used by people who want real structure, clarity, and long-term
-              control over their health — not short-term motivation.
+              control...
             </p>
 
             <button
               onClick={() => {
                 gaEvent("upgrade_checkout_click", { plan });
+                gaEvent("key_upgrade_checkout_click", { plan });
                 handleUpgrade();
               }}
               className={classes.subscribeButton}
@@ -214,19 +220,21 @@ export default function UpgradePage() {
               Secure payment • Cancel anytime • Instant access
             </p>
 
-            <p className={classes.urgencyText}>
-              ⚠ Limited early user pricing — may increase soon
-            </p>
+            <p className={classes.urgencyText}>⚠ Limited early user pricing</p>
 
-            {/* GUARANTEE SECTION */}
-            <div className={classes.guaranteeBox}>
+            {/* GUARANTEE */}
+            <div
+              className={classes.guaranteeBox}
+              onMouseEnter={() => {
+                gaEvent("upgrade_guarantee_view");
+                gaEvent("key_upgrade_guarantee_view");
+              }}
+            >
               <div className={classes.guaranteeBadge}>
                 ✓ 100% No-Risk Guarantee
               </div>
               <p className={classes.guaranteeText}>
-                If you don’t feel improvement in your clarity, energy, and
-                structure, you can cancel anytime. Your wellness system is fully
-                flexible.
+                If you don’t feel improvement...
               </p>
             </div>
           </div>

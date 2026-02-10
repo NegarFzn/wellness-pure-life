@@ -13,13 +13,16 @@ export default function Subscribe() {
   const { data: session } = useSession();
   const [emailStatus, setEmailStatus] = useState(null);
 
+  // ---- VIEW EVENT ----
   useEffect(() => {
     gaEvent("subscribe_page_view", {
       category: "subscribe",
       label: "static_subscribe_section",
     });
+    gaEvent("key_subscribe_section_view", { section: "static" });
   }, []);
 
+  // Auto-fill from session
   useEffect(() => {
     if (session?.user?.email) {
       setEmail(session.user.email);
@@ -29,30 +32,44 @@ export default function Subscribe() {
     }
   }, [session]);
 
+  // ---- CTA CLICK ----
   const handleInitialClick = () => {
     gaEvent("subscribe_cta_click", {
       category: "subscribe",
       label: "start_7day_plan",
     });
+    gaEvent("key_subscribe_cta_click", { cta: "start_7day_plan" });
+
     setShowForm(true);
   };
 
+  // ---- FORM SUBMIT ----
   const handleSubscribe = async (e) => {
     e.preventDefault();
+
     gaEvent("subscribe_attempt", {
       category: "subscribe",
       label: "form_submit",
     });
+    gaEvent("key_subscribe_attempt", { source: "static_subscribe" });
 
     // Email validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setEmailStatus("error");
+
+      gaEvent("subscribe_invalid_email");
+      gaEvent("key_subscribe_invalid_email");
+
       return;
     }
 
     // Name validation
     if (!name.trim()) {
       setEmailStatus("error");
+
+      gaEvent("subscribe_invalid_name");
+      gaEvent("key_subscribe_invalid_name");
+
       return;
     }
 
@@ -72,32 +89,49 @@ export default function Subscribe() {
 
       const result = await res.json();
 
-      // Already subscribed case
+      // Already subscribed
       if (res.ok && result.message?.toLowerCase().includes("already")) {
         setEmailStatus("already");
         setSubscribed(true);
         setShowForm(false);
+
+        gaEvent("subscribe_submit_already", { email });
+        gaEvent("key_subscribe_submit_already");
+
         toast.success("You are already part of the journey.");
       }
 
-      // New subscriber case
+      // Successful subscription
       else if (res.ok) {
         setEmailStatus("success");
         setSubscribed(true);
         setShowForm(false);
+
+        gaEvent("subscribe_submit_success", { email });
+        gaEvent("key_subscribe_submit_success");
+
         setEmail("");
         setName("");
+
         toast.success("Your premium wellness journey has begun.");
       }
 
-      // Any server error
+      // Server error
       else {
         setEmailStatus("error");
+
+        gaEvent("subscribe_submit_error", { message: result.message });
+        gaEvent("key_subscribe_submit_error");
+
         toast.error(result.message || "Subscription failed.");
       }
     } catch (err) {
       console.error("Subscription error:", err);
       setEmailStatus("error");
+
+      gaEvent("subscribe_submit_error", { message: "network_error" });
+      gaEvent("key_subscribe_submit_error");
+
       toast.error("Server connection error.");
     } finally {
       setLoading(false);
@@ -117,7 +151,7 @@ export default function Subscribe() {
             </p>
           )}
 
-          {/* ========== SUCCESS MESSAGE ========== */}
+          {/* SUCCESS */}
           {subscribed && emailStatus === "success" && (
             <div className={classes.successBox}>
               <div className={classes.checkmark}>✓</div>
@@ -128,7 +162,7 @@ export default function Subscribe() {
             </div>
           )}
 
-          {/* ========== ALREADY SUBSCRIBED MESSAGE ========== */}
+          {/* ALREADY SUBSCRIBED */}
           {subscribed && emailStatus === "already" && (
             <p className={classes.emailStatusInfo}>
               ℹ️ You’re already enrolled in the free 7-day journey. Your next
@@ -137,7 +171,7 @@ export default function Subscribe() {
           )}
         </div>
 
-        {/* ========== SHOW CTA BEFORE FORM ========== */}
+        {/* CTA BUTTON */}
         {!showForm && !subscribed && (
           <button
             onClick={handleInitialClick}
@@ -151,7 +185,7 @@ export default function Subscribe() {
           ✅ Free • No Credit Card Required • Cancel Anytime
         </div>
 
-        {/* ========== FORM ========== */}
+        {/* FORM */}
         {showForm && (
           <form className={classes.newsletterForm} onSubmit={handleSubscribe}>
             <input
@@ -159,9 +193,13 @@ export default function Subscribe() {
               name="name"
               placeholder="Your full name"
               value={name}
-              onChange={(e) => setName(e.target.value)} // ALWAYS EDITABLE
+              onChange={(e) => {
+                setName(e.target.value);
+                gaEvent("subscribe_name_input");
+                gaEvent("key_subscribe_name_input");
+              }}
               required
-              disabled={loading} // NOT locked by session
+              disabled={loading}
             />
 
             <input
@@ -169,7 +207,11 @@ export default function Subscribe() {
               name="email"
               placeholder="Your private email address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                gaEvent("subscribe_email_input");
+                gaEvent("key_subscribe_email_input");
+              }}
               required
               disabled={loading || !!session?.user?.email}
             />
@@ -196,7 +238,7 @@ export default function Subscribe() {
           </form>
         )}
 
-        {/* ========== FINAL DISABLED BUTTON AFTER SUBSCRIBED ========== */}
+        {/* AFTER SUBSCRIBE */}
         {subscribed && !showForm && (
           <div className={classes.subscribedContainer}>
             <button

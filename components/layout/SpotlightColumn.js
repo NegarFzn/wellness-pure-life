@@ -22,6 +22,13 @@ export default function SpotlightColumn({ label, spotlightsMap, onLinkClick }) {
                       title: item.text,
                       index: i,
                     });
+
+                    gaEvent("key_header_spotlight_click", {
+                      label,
+                      title: item.text,
+                      index: i,
+                    });
+
                     onLinkClick?.();
                   }}
                   className={classes.spotlightItem}
@@ -48,7 +55,7 @@ export default function SpotlightColumn({ label, spotlightsMap, onLinkClick }) {
                   </div>
                 </a>
               </Link>
-            ) : null
+            ) : null,
           )}
         </div>
       ) : (

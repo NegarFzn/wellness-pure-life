@@ -1,18 +1,57 @@
 import Link from "next/link";
 import Image from "next/image";
-import { trackQuizStart } from "../../../lib/quizEvents"; // GA4 tracking
-import { gaEvent } from "../../../lib/gtag"; // IMPORTANT: import gaEvent
+import { useEffect } from "react";
+import { trackQuizStart } from "../../../lib/quizEvents";
+import { gaEvent } from "../../../lib/gtag";
 import classes from "./QuizCard.module.css";
 
 export default function QuizCard() {
-  const slug = "quiz-main"; // central quiz slug for consistency
+  const slug = "quiz-main";
+
+  // -------------------------------------------------------------
+  // A) Impression Events (required for funnel completeness)
+  // -------------------------------------------------------------
+  useEffect(() => {
+    gaEvent("quiz_card_view", { slug, component: "QuizCard" });
+    gaEvent("key_quiz_card_view", { slug, component: "QuizCard" });
+  }, []);
 
   const handleStartQuiz = () => {
-    // custom GA tracking
+    // -------------------------------------------------------------
+    // B) Anomaly tracking (mirror event)
+    // -------------------------------------------------------------
+    gaEvent("quiz_card_anomaly_start", {
+      slug,
+      component: "QuizCard",
+      location: "homepage",
+    });
+    gaEvent("key_quiz_card_anomaly_start", {
+      slug,
+      component: "QuizCard",
+      location: "homepage",
+    });
+
+    // -------------------------------------------------------------
+    // C) Primary business event
+    // -------------------------------------------------------------
+    gaEvent("key_quiz_start", {
+      slug,
+      component: "QuizCard",
+      location: "homepage",
+    });
+
+    // -------------------------------------------------------------
+    // D) Custom quiz detail tracking
+    // -------------------------------------------------------------
     trackQuizStart(slug);
 
-    // GA4 direct event
-    gaEvent("quiz_card_start_clicked", { slug });
+    // -------------------------------------------------------------
+    // E) Micro-click analytics
+    // -------------------------------------------------------------
+    gaEvent("quiz_card_start_click", {
+      slug,
+      label: "Start My Quiz button",
+    });
   };
 
   return (

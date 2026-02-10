@@ -23,22 +23,32 @@ export default function Footer() {
     };
     checkMobile();
     window.addEventListener("resize", checkMobile);
+
+    // ANALYTICS: Footer impression
+    gaEvent("footer_view");
+
+    // ANOMALY: Key event for baseline
+    gaEvent("key_footer_loaded");
+
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const toggleSection = (section) => {
-    gaEvent("footer_section_toggle", { section }); // <-- ANALYTIC
+    gaEvent("footer_section_toggle", { section });
+    gaEvent("key_footer_section_toggle", { section }); // <-- ADD
     setActiveSection(activeSection === section ? null : section);
   };
 
   const handleOpenChat = () => {
     gaEvent("footer_ai_click"); // <-- ANALYTIC
+    gaEvent("key_footer_ai_click");
     setIsModalOpen(true);
     openChat();
   };
 
   const handleFooterLinkClick = (label) => {
-    gaEvent("footer_link_click", { label }); // <-- ANALYTIC
+    gaEvent("footer_link_click", { label });
+    gaEvent("key_footer_link_click", { label }); // <-- ADD
   };
 
   return (
@@ -341,6 +351,7 @@ export default function Footer() {
                   <button
                     onClick={() => {
                       gaEvent("footer_ai_click_mobile");
+                      gaEvent("key_footer_ai_click_mobile");
                       openChat();
                     }}
                     className={classes.footerLink}

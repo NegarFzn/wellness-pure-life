@@ -8,6 +8,7 @@ import QuizCard from "../../components/Quiz/QuizCard/QuizCard";
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
 import DailyRitual from "../../components/DailyRitual";
 import WeeklyPlanCard from "../../components/Plan/WeeklyPlanCard";
+import gaEvent from "../../lib/gtag";
 import classes from "./index.module.css";
 
 const planTypes = [
@@ -27,7 +28,15 @@ export default function DashboardPage() {
   const [mainData, setMainData] = useState([]);
   const [planData, setPlanData] = useState(null);
 
+  useEffect(() => {
+    gaEvent("dashboard_view");
+    gaEvent("key_dashboard_view");
+  }, []);
+
   const handleQuizOpen = (type) => {
+    gaEvent("dashboard_plan_quiz_open", { type });
+    gaEvent("key_dashboard_plan_quiz_open", { type });
+
     setActiveQuiz(type); // triggers useEffect
   };
 
@@ -59,18 +68,18 @@ export default function DashboardPage() {
       .then((data) => setDailyData(data.history || []));
 
     fetch(
-      `/api/quiz/quiz-main?mode=saved&email=${encodeURIComponent(user.email)}`
+      `/api/quiz/quiz-main?mode=saved&email=${encodeURIComponent(user.email)}`,
     )
       .then((res) => res.json())
       .then(async (data) => {
         const latest = [...(data.history || [])].sort(
-          (a, b) => new Date(b.savedAt) - new Date(a.savedAt)
+          (a, b) => new Date(b.savedAt) - new Date(a.savedAt),
         )[0];
         if (!latest || !latest.answers || !latest.slug) return;
         const rec = await fetch(
           `/api/quiz/quiz-main?mode=saved&email=${encodeURIComponent(
-            user.email
-          )}`
+            user.email,
+          )}`,
         )
           .then((r) => r.json())
           .catch(() => ({}));
@@ -78,18 +87,18 @@ export default function DashboardPage() {
       });
 
     fetch(
-      `/api/quiz/quiz-plan?mode=history&email=${encodeURIComponent(user.email)}`
+      `/api/quiz/quiz-plan?mode=history&email=${encodeURIComponent(user.email)}`,
     )
       .then((res) => res.json())
       .then((data) => {
         const sorted = [...(data.history || [])].sort(
-          (a, b) => new Date(b.savedAt) - new Date(a.savedAt)
+          (a, b) => new Date(b.savedAt) - new Date(a.savedAt),
         );
         const matched = sorted.find(
           (entry) =>
             (entry.email === user.email || entry.email === null) &&
             entry.matchedPlan &&
-            typeof entry.matchedPlan === "object"
+            typeof entry.matchedPlan === "object",
         );
         setPlanData(matched || null);
       });
@@ -122,7 +131,7 @@ export default function DashboardPage() {
     return {
       count,
       chart: Object.values(map).sort(
-        (a, b) => new Date(a.date) - new Date(b.date)
+        (a, b) => new Date(a.date) - new Date(b.date),
       ),
     };
   };
@@ -173,15 +182,47 @@ export default function DashboardPage() {
 
               <div className={classes.quickActions}>
                 <Link href="/mindfulness">
-                  <button className={classes.actionBtn}>🧠 Mind</button>
+                  <button
+                    className={classes.actionBtn}
+                    onClick={() => {
+                      gaEvent("dashboard_quick_action", {
+                        action: "mindfulness",
+                      });
+                      gaEvent("key_dashboard_quick_action", {
+                        action: "mindfulness",
+                      });
+                    }}
+                  >
+                    🧠 Mind
+                  </button>
                 </Link>
 
                 <Link href="/fitness">
-                  <button className={classes.actionBtn}>💪 Body</button>
+                  <button
+                    className={classes.actionBtn}
+                    onClick={() => {
+                      gaEvent("dashboard_quick_action", { action: "fitness" });
+                      gaEvent("key_dashboard_quick_action", {
+                        action: "fitness",
+                      });
+                    }}
+                  >
+                    💪 Body
+                  </button>
                 </Link>
 
                 <Link href="/nourish">
-                  <button className={classes.actionBtn}>🥗 Nutrition</button>
+                  <button
+                    className={classes.actionBtn}
+                    onClick={() => {
+                      gaEvent("dashboard_quick_action", { action: "nourish" });
+                      gaEvent("key_dashboard_quick_action", {
+                        action: "nourish",
+                      });
+                    }}
+                  >
+                    🥗 Nutrition
+                  </button>
                 </Link>
               </div>
             </div>
@@ -208,9 +249,12 @@ export default function DashboardPage() {
                 .map((s) => (
                   <button
                     key={s}
-                    onClick={() =>
-                      setSection((prev) => (prev === s ? "overview" : s))
-                    }
+                    onClick={() => {
+                      gaEvent("dashboard_section_change", { section: s });
+                      gaEvent("key_dashboard_section_change", { section: s });
+
+                      setSection((prev) => (prev === s ? "overview" : s));
+                    }}
                     className={`${classes.tabButton} ${
                       section === s ? classes.activeTab : ""
                     }`}
@@ -218,12 +262,12 @@ export default function DashboardPage() {
                     {s === "overview"
                       ? "🏠 Overview"
                       : s === "daily"
-                      ? "📅 Mood Check-Ins"
-                      : s === "main"
-                      ? "🧠 General Insights"
-                      : s === "plan"
-                      ? "📋 Your Plan"
-                      : "✨ Premium"}
+                        ? "📅 Mood Check-Ins"
+                        : s === "main"
+                          ? "🧠 General Insights"
+                          : s === "plan"
+                            ? "📋 Your Plan"
+                            : "✨ Premium"}
                   </button>
                 ))}
             </div>
@@ -244,7 +288,15 @@ export default function DashboardPage() {
                     icon="📅"
                     title="Mood Check-Ins"
                     description="Track your emotional trends with daily mood quizzes."
-                    onClick={() => setSection("daily")}
+                    onClick={() => {
+                      gaEvent("dashboard_section_card_click", {
+                        section: "daily",
+                      });
+                      gaEvent("key_dashboard_section_card_click", {
+                        section: "daily",
+                      });
+                      setSection("daily");
+                    }}
                     className={`${classes.sectionCard} ${classes.insight}`}
                     variant="insight"
                   />
@@ -351,7 +403,11 @@ export default function DashboardPage() {
                 <div className={classes.planLinksGrid}>
                   <button
                     className={classes.takePlanLink}
-                    onClick={() => setShowQuiz(true)}
+                    onClick={() => {
+                      gaEvent("dashboard_open_main_quiz");
+                      gaEvent("key_dashboard_open_main_quiz");
+                      setShowQuiz(true);
+                    }}
                   >
                     <span role="img" aria-label="Brain">
                       🧠
@@ -510,7 +566,11 @@ export default function DashboardPage() {
         <footer className={classes.footer}>
           <button
             className={classes.logoutBtn}
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={() => {
+              gaEvent("dashboard_logout_click");
+              gaEvent("key_dashboard_logout_click");
+              signOut({ callbackUrl: "/" });
+            }}
           >
             Logout
           </button>

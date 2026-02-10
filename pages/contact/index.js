@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./index.module.css";
 
 export default function Contact() {
@@ -15,10 +16,19 @@ export default function Contact() {
   const router = useRouter();
 
   const handleChange = (e) => {
+    gaEvent("contact_input_change", { field: e.target.name });
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
+    gaEvent("contact_submit_attempt", {
+      hasName: !!formData.name,
+      hasEmail: !!formData.email,
+      hasMessage: !!formData.message,
+    });
+
+    gaEvent("key_contact_submit_attempt");
+
     e.preventDefault();
     setLoading(true);
     setResponseMessage("");
@@ -33,21 +43,35 @@ export default function Contact() {
       const data = await res.json();
 
       if (res.ok) {
+        gaEvent("contact_submit_success");
+        gaEvent("key_contact_submit_success");
+
         setResponseMessage("Message sent successfully! ✅");
         setFormData({ name: "", email: "", message: "" }); // Clear form
 
         setTimeout(() => {
+          gaEvent("contact_redirect_home_after_success");
           router.push("/"); // ✅ Redirect after 1.5 seconds
         }, 1500);
       } else {
+        gaEvent("contact_submit_failed");
+        gaEvent("key_contact_submit_failed");
+
         setResponseMessage("Failed to send message. ❌");
       }
     } catch (error) {
+      gaEvent("contact_submit_error", { message: error?.message || "unknown" });
+      gaEvent("key_contact_submit_error");
       setResponseMessage("Something went wrong. ❌");
     }
 
     setLoading(false);
   };
+
+  useEffect(() => {
+    gaEvent("contact_page_view");
+    gaEvent("key_contact_page_view");
+  }, []);
 
   return (
     <>

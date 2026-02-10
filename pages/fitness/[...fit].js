@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Content from "../../components/fitness/content";
 import AuthorBox from "../../components/UI/AuthorBox";
 import classes from "./index.module.css";
+import { gaEvent } from "../../lib/gtag";
 
 function fitnessDetailsPage(props) {
   const { fitData } = props;
@@ -20,12 +21,32 @@ function fitnessDetailsPage(props) {
       ? `${fitData.title.slice(0, maxLength - 3)}...`
       : fitData.title;
 
-  const pageTitle = `${conciseTitle} | Fitness`;
-
+  // -------------------------------
+  // GA4: Article View Event
+  // -------------------------------
   useEffect(() => {
+    if (fitData?.id) {
+      gaEvent("fitness_article_view", {
+        id: fitData.id,
+        title: fitData.title,
+      });
+    }
+  }, [fitData]);
+
+  // -------------------------------
+  // Optimized Scroll Listener
+  // -------------------------------
+  useEffect(() => {
+    let timeout = null;
+
     const handleScroll = () => {
-      setShowButton(window.scrollY > 300);
+      if (timeout) return;
+      timeout = setTimeout(() => {
+        setShowButton(window.scrollY > 300);
+        timeout = null;
+      }, 150);
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -113,6 +134,7 @@ function fitnessDetailsPage(props) {
 
       <Content items={fitData} />
       <AuthorBox />
+
       {showButton && (
         <button onClick={scrollToTop} className={classes.backToTop}>
           ↑
@@ -122,6 +144,9 @@ function fitnessDetailsPage(props) {
   );
 }
 
+// ----------------------------------------------------
+// Data Fetch Helpers
+// ----------------------------------------------------
 async function getData() {
   try {
     const filePath = path.join(process.cwd(), "data", "fitness.json");
@@ -130,7 +155,7 @@ async function getData() {
     return data;
   } catch (error) {
     console.error("❌ Error fetching fitness data:", error.message);
-    return null; // ✅ Return `null` instead of crashing the app
+    return null;
   }
 }
 
@@ -141,22 +166,18 @@ export async function getStaticProps(context) {
     }
 
     const { params } = context;
-
     if (!params.fit || params.fit.length === 0) {
       throw new Error("Invalid URL: Fitness ID is missing.");
     }
 
     const fitnessId = params.fit[0];
-
     const data = await getData();
+
     if (!data) {
       return { notFound: true };
     }
 
-    // ✅ Merge all fitness categories into a single array
     const allItems = Object.values(data).flat();
-
-    // ✅ Find the requested fitness item
     const item = allItems.find((item) => item.id === fitnessId);
 
     if (!item) {
@@ -165,7 +186,7 @@ export async function getStaticProps(context) {
 
     return {
       props: { fitData: item },
-      revalidate: 60, // ✅ Revalidates data every 60 seconds
+      revalidate: 60,
     };
   } catch (error) {
     console.error("❌ Error fetching fitness data:", error.message);
@@ -175,6 +196,10 @@ export async function getStaticProps(context) {
 
 export async function getStaticPaths() {
   const data = await getData();
+
+  if (!data) {
+    return { paths: [], fallback: true };
+  }
 
   const paths = [];
   Object.values(data).forEach((category) => {

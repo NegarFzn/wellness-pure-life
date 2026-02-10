@@ -17,11 +17,13 @@ export default function QuizMainPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
+  // VIEW EVENT (NORMAL + ANOMALY)
   useEffect(() => {
     gaEvent("quiz_list_view", { page: "quiz-main" });
+    gaEvent("key_quiz_list_view", { page: "quiz-main" });
   }, []);
 
-  // ✅ MODAL STATE
+  // MODAL STATE
   const [activeQuiz, setActiveQuiz] = useState(null);
   const closeQuizModal = () => setActiveQuiz(null);
 
@@ -88,8 +90,12 @@ export default function QuizMainPage() {
 
   const showClear = searchTerm || activeCategory !== "all";
 
+  // DAILY RITUAL VIEW (NORMAL + ANOMALY)
   useEffect(() => {
     gaEvent("daily_ritual_view", {
+      isPremium: user?.isPremium || false,
+    });
+    gaEvent("key_daily_ritual_view", {
       isPremium: user?.isPremium || false,
     });
   }, [user]);
@@ -109,7 +115,7 @@ export default function QuizMainPage() {
       </Head>
 
       <div className={classes.container}>
-        {/* ✅ BLOCK 1 — PREMIUM ENGINE HERO */}
+        {/* HERO */}
         <section className={classes.premiumHero}>
           <h1>Your Personalized AI Wellness System</h1>
           <p>
@@ -128,7 +134,7 @@ export default function QuizMainPage() {
           </div>
         </section>
 
-        {/* ✅ BLOCK 2 — FREE QUIZ DISCOVERY */}
+        {/* QUIZ DISCOVERY */}
         <h2 className={classes.heading}>Explore Your Wellness Profile</h2>
 
         <div className={classes.stickyBar}>
@@ -141,6 +147,7 @@ export default function QuizMainPage() {
               const term = e.target.value;
 
               gaEvent("quiz_search", { term });
+              gaEvent("key_quiz_search", { term });
 
               setSearchTerm(term);
             }}
@@ -155,6 +162,9 @@ export default function QuizMainPage() {
                 }`}
                 onClick={() => {
                   gaEvent("quiz_filter_category", {
+                    category: cat.value,
+                  });
+                  gaEvent("key_quiz_filter_category", {
                     category: cat.value,
                   });
 
@@ -188,6 +198,9 @@ export default function QuizMainPage() {
                   gaEvent("quiz_filters_cleared", {
                     from: "quiz-main",
                   });
+                  gaEvent("key_quiz_filters_cleared", {
+                    from: "quiz-main",
+                  });
 
                   setSearchTerm("");
                   setActiveCategory("all");
@@ -205,13 +218,18 @@ export default function QuizMainPage() {
                   <Link
                     href={`/quizzes/quiz-main/${quiz.slug}`}
                     className={classes.quizLink}
-                    onClick={() =>
+                    onClick={() => {
                       gaEvent("quiz_select", {
                         slug: quiz.slug,
                         title: quiz.title,
                         category: quiz.category,
-                      })
-                    }
+                      });
+                      gaEvent("key_quiz_select", {
+                        slug: quiz.slug,
+                        title: quiz.title,
+                        category: quiz.category,
+                      });
+                    }}
                   >
                     <span className={classes.icon}>
                       {getIconForSlug(quiz.slug)}
@@ -224,7 +242,7 @@ export default function QuizMainPage() {
           </>
         )}
 
-        {/* ✅ BLOCK 3 — PLAN BRIDGE (MODAL-BASED) */}
+        {/* PLAN BRIDGE */}
         <section className={classes.planBridgePremium}>
           <p className={classes.planBridgeTitle}>
             💡 Want to improve your wellness? Retake any plan quiz below:
@@ -235,6 +253,7 @@ export default function QuizMainPage() {
               className={classes.planButtonFitness}
               onClick={() => {
                 gaEvent("plan_quiz_select", { slug: "fitness-plan" });
+                gaEvent("key_plan_quiz_select", { slug: "fitness-plan" });
 
                 setActiveQuiz("fitness");
               }}
@@ -246,6 +265,9 @@ export default function QuizMainPage() {
               className={classes.planButtonMind}
               onClick={() => {
                 gaEvent("plan_quiz_select", {
+                  slug: "mindfulness-plan",
+                });
+                gaEvent("key_plan_quiz_select", {
                   slug: "mindfulness-plan",
                 });
 
@@ -263,6 +285,9 @@ export default function QuizMainPage() {
                 gaEvent("plan_quiz_select", {
                   slug: "nourish-plan",
                 });
+                gaEvent("key_plan_quiz_select", {
+                  slug: "nourish-plan",
+                });
 
                 setActiveQuiz("nourish");
               }}
@@ -271,31 +296,31 @@ export default function QuizMainPage() {
             </button>
           </div>
         </section>
-        {/* ✅ BLOCK 4 — DAILY RITUAL (REAL COMPONENT, PREMIUM-AWARE) */}
+
+        {/* DAILY RITUAL */}
         <section className={classes.dailyRitualWrapper}>
           <h3 className={classes.dailyRitualTitle}>Your Daily Ritual System</h3>
 
           <DailyRitual isPremium={user?.isPremium} />
         </section>
 
-        {/* ✅ BLOCK 5 — BLOG SUPPORT */}
+        {/* BLOG SUPPORT */}
         <section className={classes.blogSupport}>
           <p>Want to learn while deciding?</p>
 
           <Link
             href="/blog"
             className={classes.textLink}
-            onClick={() =>
-              gaEvent("blog_support_click", {
-                from: "quiz-main",
-              })
-            }
+            onClick={() => {
+              gaEvent("blog_support_click", { from: "quiz-main" });
+              gaEvent("key_blog_support_click", { from: "quiz-main" });
+            }}
           >
             Explore Wellness Guides →
           </Link>
         </section>
 
-        {/* ✅ ✅ PLAN QUIZ MODAL */}
+        {/* MODAL */}
         {activeQuiz && (
           <div
             className={classes.modalOverlay}

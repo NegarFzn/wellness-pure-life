@@ -23,6 +23,22 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
   const isPremium = !!session?.user?.isPremium;
 
   useEffect(() => {
+    const handleScroll = () => {
+      const scrolled =
+        (window.scrollY / (document.body.scrollHeight - window.innerHeight)) *
+        100;
+
+      if (scrolled > 60) {
+        gaEvent("plan_scroll_60_percent", { slug, category });
+        window.removeEventListener("scroll", handleScroll);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
     if (!session?.user?.isPremium) {
       gaEvent("premium_upsell_shown", { slug, category });
     }
@@ -65,6 +81,21 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
         });
 
         const data = await res.json();
+        if (res.ok) {
+          gaEvent("quiz_plan_save_success", { slug, category });
+          gaEvent("key_quiz_plan_save_success", { slug, category });
+        } else {
+          gaEvent("quiz_plan_save_error", {
+            slug,
+            category,
+            error: data?.error,
+          });
+          gaEvent("key_quiz_plan_save_error", {
+            slug,
+            category,
+            error: data?.error,
+          });
+        }
         setSubmitted(true);
         setMatchedPlan(data.result?.matchedPlan || null);
       } catch (err) {
@@ -83,15 +114,19 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
       try {
         const res = await fetch(
           `/api/quiz/quiz-plan?slug=${slug}&email=${encodeURIComponent(
-            session.user.email
-          )}`
+            session.user.email,
+          )}`,
         );
         if (!res.ok) return;
 
         const data = await res.json();
+        gaEvent("quiz_plan_load_success", { slug, category });
+        gaEvent("key_quiz_plan_load_success", { slug, category });
         setLoadedAnswers(data.answers);
         setMatchedPlan(data.matchedPlan || null);
       } catch (err) {
+        gaEvent("quiz_plan_load_error", { slug, category });
+        gaEvent("key_quiz_plan_load_error", { slug, category });
         console.error("❌ Failed to fetch saved plan:", err);
       }
     };
@@ -108,6 +143,14 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
       plan_type: matchedPlan?.type || "default",
       plan_id: matchedPlan?.id || null,
     });
+
+    // ⭐ REQUIRED FOR GA4 ANOMALY DETECTION
+    gaEvent("key_quiz_plan_generated", {
+      slug,
+      category,
+      plan_type: matchedPlan?.type || "default",
+      plan_id: matchedPlan?.id || null,
+    });
   }, [matchedPlan]);
 
   /* -------------------- Premium reminder -------------------- */
@@ -117,9 +160,23 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
         try {
           const res = await fetch(`/api/premium-reminder?category=${category}`);
           const data = await res.json();
+
           setShowPremium(data.show);
+
+          // 👉 REQUIRED ANALYTICS / ANOMALY EVENTS
+          if (data.show) {
+            gaEvent("premium_reminder_shown", { category });
+            gaEvent("key_premium_reminder_shown", { category });
+          } else {
+            gaEvent("premium_reminder_suppressed", { category });
+            gaEvent("key_premium_reminder_suppressed", { category });
+          }
         } catch (err) {
           setShowPremium(false);
+
+          // 👉 OPTIONAL ERROR EVENT (useful for anomaly detection)
+          gaEvent("premium_reminder_fetch_error", { category });
+          gaEvent("key_premium_reminder_fetch_error", { category });
         }
       }
     };
@@ -329,6 +386,12 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
     });
   }, [finalAnswers]);
 
+  useEffect(() => {
+  gaEvent("free_recommendation_impression", { slug, category });
+  gaEvent("key_free_recommendation_impression", { slug, category });
+}, [slug, category]);
+
+
   return (
     <div className={classes.pageBg}>
       <div className={classes.container}>
@@ -348,7 +411,10 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
             <div className={classes.utilityButtons}>
               <button
                 className={`${classes.utilityButton} ${classes.secondaryButton}`}
-                onClick={() => window.print()}
+                onClick={() => {
+                  gaEvent("plan_print_clicked", { slug, category });
+                  window.print();
+                }}
               >
                 🖨️ Print
               </button>
@@ -357,6 +423,9 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
                 title="My Personalized Wellness Plan"
                 text="Check out my personalized wellness plan based on my preferences at Wellness Pure Life."
                 url={`https://wellnesspurelife.com${router.asPath}`}
+                onClick={() =>
+                  gaEvent("plan_share_clicked", { slug, category })
+                }
               />
 
               {session?.user?.email && (
@@ -368,8 +437,8 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
                   {isSending
                     ? "Sending..."
                     : emailSent
-                    ? "✅ Sent"
-                    : "📧 Send to Email"}
+                      ? "✅ Sent"
+                      : "📧 Send to Email"}
                 </button>
               )}
             </div>

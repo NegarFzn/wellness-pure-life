@@ -28,11 +28,12 @@ export default function WeeklyPlanPage() {
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
-    gaEvent({
-      action: "weekly_plan_page_view",
-      params: {
-        isPremium: session?.user?.isPremium || false,
-      },
+    gaEvent("weekly_plan_page_view", {
+      isPremium: session?.user?.isPremium || false,
+    });
+    gaEvent("key_weekly_plan_page_view", {
+      premium: session?.user?.isPremium || false,
+      hasSession: !!session,
     });
   }, [session]);
 
@@ -46,7 +47,7 @@ export default function WeeklyPlanPage() {
     const updatedMid = new Date(
       updated.getFullYear(),
       updated.getMonth(),
-      updated.getDate()
+      updated.getDate(),
     );
     const nowMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
@@ -88,6 +89,8 @@ export default function WeeklyPlanPage() {
       if (!res.ok) throw new Error(data.error || "Failed to load plan");
 
       const p = data.plan || null;
+      if (!p) gaEvent("key_weekly_plan_missing_plan");
+
       const weekId = getWeekId(data.updatedAt);
 
       // FIX: normalize weeklyPlan shape (supports old history & restored plans)
@@ -95,7 +98,10 @@ export default function WeeklyPlanPage() {
       setPlan(normalized);
 
       setWeekSummary(data.weekSummary || "");
+      if (!data.weekSummary) gaEvent("key_weekly_plan_missing_week_summary");
+
       setUpdatedAt(data.updatedAt || null);
+      if (!data.updatedAt) gaEvent("key_weekly_plan_missing_updated_at");
 
       if (typeof window !== "undefined" && p) {
         const stored = loadProgressFromStorage(weekId);
@@ -103,6 +109,10 @@ export default function WeeklyPlanPage() {
       }
     } catch (err) {
       console.error("Load plan error:", err);
+      gaEvent("key_weekly_plan_load_fail", {
+        error: err.message || "unknown",
+      });
+
       setPlan(null);
       setWeekSummary("");
       setUpdatedAt(null);
@@ -126,6 +136,7 @@ export default function WeeklyPlanPage() {
 
       // 🔥 Load updated MongoDB history
       await loadHistory();
+      gaEvent("key_weekly_plan_regenerate_success");
 
       setModalState("success");
 
@@ -136,6 +147,9 @@ export default function WeeklyPlanPage() {
       }
     } catch (err) {
       console.error("Regenerate error:", err);
+      gaEvent("key_weekly_plan_regenerate_fail", {
+        error: err.message || "unknown",
+      });
     } finally {
       setRegenerating(false);
     }
@@ -152,9 +166,19 @@ export default function WeeklyPlanPage() {
         throw new Error(data.error || "Failed to load history");
       }
 
+      // ANOMALY: empty history list
+      if (!data.items || data.items.length === 0) {
+        gaEvent("key_weekly_plan_history_empty");
+      }
+
       setHistory(data.items || []);
     } catch (err) {
       console.error("Load history error:", err);
+
+      gaEvent("key_weekly_plan_history_fail", {
+        error: err.message || "unknown",
+      });
+
       setHistory([]);
     } finally {
       setHistoryLoading(false);
@@ -164,15 +188,17 @@ export default function WeeklyPlanPage() {
   // ---------- progress toggle ----------
 
   const toggleProgress = (day, key) => {
+    if (!day || typeof key !== "string") {
+      gaEvent("key_weekly_plan_toggle_invalid", { day, key });
+    }
+
     // GA4 tracking
-    gaEvent({
-      action: "weekly_plan_item_toggle",
-      params: {
-        day,
-        item: key,
-        new_value: !progress?.[day]?.[key] || false,
-      },
+    gaEvent("weekly_plan_item_toggle", {
+      day,
+      item: key,
+      new_value: !progress?.[day]?.[key] || false,
     });
+
     const weekId = getWeekId(updatedAt);
     setProgress((prev) => {
       const forDay = prev[day] || {};
@@ -180,10 +206,7 @@ export default function WeeklyPlanPage() {
 
       // If all tasks for the day are completed:
       if (Object.values(newForDay).every((v) => v === true)) {
-        gaEvent({
-          action: "weekly_plan_day_completed",
-          params: { day },
-        });
+        gaEvent("weekly_plan_day_completed", { day });
       }
 
       const updated = {
@@ -194,8 +217,13 @@ export default function WeeklyPlanPage() {
         },
       };
       if (typeof window !== "undefined") {
-        saveProgressToStorage(weekId, updated);
+        try {
+          saveProgressToStorage(weekId, updated);
+        } catch {
+          gaEvent("key_weekly_plan_progress_save_fail", { weekId });
+        }
       }
+
       return updated;
     });
   };
@@ -219,6 +247,13 @@ export default function WeeklyPlanPage() {
   }, [loading, plan]);
 
   // ---------- permission gates ----------
+  if (
+    status !== "loading" &&
+    status !== "authenticated" &&
+    status !== "unauthenticated"
+  ) {
+    gaEvent("key_weekly_plan_session_state_invalid", { status });
+  }
 
   if (status === "loading") {
     return <p className={classes.loading}>Checking your session…</p>;
@@ -226,6 +261,8 @@ export default function WeeklyPlanPage() {
 
   // If user is NOT logged in
   if (!session) {
+    gaEvent("key_weekly_plan_invalid_session");
+
     return (
       <div className={classes.lockWrap}>
         <h2 className={classes.lockTitle}>Your Weekly Wellness Plan</h2>
@@ -256,6 +293,10 @@ export default function WeeklyPlanPage() {
   }
 
   if (!session.user?.isPremium) {
+    gaEvent("key_weekly_plan_not_premium", {
+      email: session?.user?.email || "unknown",
+    });
+
     return (
       <div className={classes.lockWrap}>
         <h2 className={classes.lockTitle}>Premium Feature</h2>
@@ -290,11 +331,8 @@ export default function WeeklyPlanPage() {
   async function handleSendEmail() {
     try {
       // 📌 GA TRACKING — must be FIRST line inside try {}
-      gaEvent({
-        action: "weekly_plan_email_click",
-        params: {
-          user_id: session?.user?.email || "unknown",
-        },
+      gaEvent("weekly_plan_email_click", {
+        user_id: session?.user?.email || "unknown",
       });
 
       const res = await fetch("/api/plan/weekly?action=email", {
@@ -305,12 +343,20 @@ export default function WeeklyPlanPage() {
       const data = await res.json();
 
       if (!res.ok) {
+        gaEvent("key_weekly_plan_email_api_fail", {
+          status: res.status,
+          error: data.error,
+        });
+
         toast.error(data.error || "Failed to send weekly plan email.");
         return;
       }
 
       toast.success("📩 Your weekly plan has been sent to your email.");
     } catch (error) {
+      gaEvent("key_weekly_plan_email_fail", {
+        error: error.message || "unknown",
+      });
       toast.error("Network error while sending email.");
     }
   }
@@ -318,6 +364,9 @@ export default function WeeklyPlanPage() {
   const scrollToToday = () => {
     const today = new Date().toLocaleString("en-US", { weekday: "long" });
     const el = document.getElementById(`day-${today}`);
+    if (!el) {
+      gaEvent("key_weekly_plan_scroll_to_today_fail", { today });
+    }
 
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -350,8 +399,14 @@ export default function WeeklyPlanPage() {
 
         {plan && (
           <p className={classes.completion}>
-            {Math.round((Object.values(progress).flat().length / 28) * 100)}%
-            completed this week
+            {Math.round(
+              (Object.values(progress)
+                .flatMap((obj) => Object.values(obj))
+                .filter((v) => v === true).length /
+                28) *
+                100,
+            )}
+            % completed this week
           </p>
         )}
 
@@ -359,27 +414,25 @@ export default function WeeklyPlanPage() {
           <button
             onClick={() => {
               // 🔥 GA4 tracking — must be FIRST LINE
-              gaEvent({
-                action: "weekly_plan_regenerate_click",
-                params: { isFinished: isWeekFinished(updatedAt) },
+              gaEvent("weekly_plan_regenerate_click", {
+                isFinished: isWeekFinished(updatedAt),
               });
 
               if (!isWeekFinished(updatedAt)) {
                 setModalState("warning");
 
                 // 🔥 Track regenerate "warning" result
-                gaEvent({
-                  action: "weekly_plan_regenerate_result",
-                  params: { status: "warning" },
+                gaEvent("weekly_plan_regenerate_result", { status: "warning" });
+                gaEvent("key_weekly_plan_regenerate_blocked", {
+                  updatedAt: updatedAt || "missing",
                 });
               } else {
                 regeneratePlan().then(() => {
                   setModalState("success");
 
                   // 🔥 Track regenerate "success" result
-                  gaEvent({
-                    action: "weekly_plan_regenerate_result",
-                    params: { status: "success" },
+                  gaEvent("weekly_plan_regenerate_result", {
+                    status: "success",
                   });
                 });
               }
@@ -397,11 +450,8 @@ export default function WeeklyPlanPage() {
             className={classes.historyButton}
             onClick={() => {
               if (!showHistory) {
-                gaEvent({
-                  action: "weekly_plan_history_open",
-                  params: {
-                    count: history?.length || 0,
-                  },
+                gaEvent("weekly_plan_history_open", {
+                  count: history?.length || 0,
                 });
 
                 loadHistory();
@@ -437,11 +487,8 @@ export default function WeeklyPlanPage() {
             text="Check out my personalized Weekly plan based on my preferences at Wellness Pure Life."
             url={`https://wellnesspurelife.com${router.asPath}`}
             onShare={() =>
-              gaEvent({
-                action: "weekly_plan_share",
-                params: {
-                  user: session?.user?.email || "anonymous",
-                },
+              gaEvent("weekly_plan_share", {
+                user: session?.user?.email || "anonymous",
               })
             }
           />

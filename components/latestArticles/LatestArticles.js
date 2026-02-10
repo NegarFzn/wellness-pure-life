@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import classes from "./LatestArticles.module.css"; // Import CSS
+import { gaEvent } from "../../lib/gtag"; // <-- ADD THIS
+import classes from "./LatestArticles.module.css";
 
 const LatestArticles = () => {
   const [articles, setArticles] = useState([]);
@@ -22,7 +23,23 @@ const LatestArticles = () => {
         ...nourishData,
       ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-      setArticles(allArticles.slice(0, 4));
+      const latest = allArticles.slice(0, 4);
+      setArticles(latest);
+
+      // -----------------------------
+      // GA4 ANALYTICS: LIST VIEW
+      // -----------------------------
+      gaEvent("latest_articles_view", {
+        total_articles: latest.length,
+        categories: ["fitness", "mindfulness", "nourish"],
+      });
+
+      // -----------------------------
+      // GA4 ANOMALY KEY EVENT
+      // -----------------------------
+      gaEvent("key_latest_articles_loaded", {
+        count: latest.length,
+      });
     };
 
     fetchArticles();
@@ -36,16 +53,31 @@ const LatestArticles = () => {
           <div key={article.id} className={classes.articleCard}>
             <Image
               src={`/images/${article.image}`}
-              alt={`${article.title} – ${article.summary.replace(
-                /[\u{1F600}-\u{1F6FF}]/gu,
-                ""
-              )}`}
+              alt={article.title}
               width={250}
               height={160}
             />
+
             <h3>{article.title}</h3>
             <p>{article.summary}</p>
-            <Link href={`/${article.category}/${article.id}`}>Read More</Link>
+
+            <Link
+              href={`/${article.category}/${article.id}`}
+              onClick={() => {
+                // GA4 card click
+                gaEvent("latest_articles_click", {
+                  id: article.id,
+                  category: article.category,
+                });
+
+                // Anomaly key click
+                gaEvent("key_latest_article_clicked", {
+                  id: article.id,
+                });
+              }}
+            >
+              Read More →
+            </Link>
           </div>
         ))}
       </div>

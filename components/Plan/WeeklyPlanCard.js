@@ -12,37 +12,51 @@ export default function WeeklyPlanCard({ className = "" }) {
   const isAuthenticated = !!session;
   const isPremium = session?.user?.isPremium === true;
 
+  const status = !isAuthenticated
+    ? "not_authenticated"
+    : !isPremium
+      ? "not_premium"
+      : "premium";
+
   const buttonText = !isAuthenticated
     ? "Sign In to Continue"
     : !isPremium
-    ? "Upgrade to Premium"
-    : "View My Weekly Plan";
+      ? "Upgrade to Premium"
+      : "View My Weekly Plan";
 
   const handleClick = () => {
-    gaEvent("weekly_plan_card_click", {
-      status: !isAuthenticated
-        ? "not_authenticated"
-        : !isPremium
-        ? "not_premium"
-        : "premium",
-    });
+    // NORMAL tracking
+    gaEvent("weekly_plan_card_click", { status });
+
+    // ANOMALY tracking
+    gaEvent("key_weekly_plan_card_click", { status });
+
+    // CTA click event
+    gaEvent("weekly_plan_card_cta_click", { status });
+    gaEvent("key_weekly_plan_card_cta_click", { status });
+
     if (!isAuthenticated) {
       router.push("/login");
       return;
     }
-
     if (!isPremium) {
       router.push("/premium");
       return;
     }
-
     router.push("/plan/weekly-plan");
   };
 
   useEffect(() => {
+    // NORMAL view tracking
     gaEvent("weekly_plan_card_view", {
-      is_authenticated: !!session,
-      is_premium: session?.user?.isPremium === true,
+      is_authenticated: isAuthenticated,
+      is_premium: isPremium,
+    });
+
+    // ANOMALY view tracking
+    gaEvent("key_weekly_plan_card_view", {
+      is_authenticated: isAuthenticated,
+      is_premium: isPremium,
     });
   }, [session]);
 
@@ -53,7 +67,6 @@ export default function WeeklyPlanCard({ className = "" }) {
       </div>
 
       <div className={classes.content}>
-        {/* ✅ PURPOSE LABEL */}
         <span className={classes.label}>PERSONALIZED • WEEKLY</span>
 
         <h3 className={classes.title}>Your Weekly Wellness Plan</h3>
@@ -63,12 +76,10 @@ export default function WeeklyPlanCard({ className = "" }) {
           focus tasks—built from your quiz responses.
         </p>
 
-        {/* ✅ STATUS LINE */}
         <p className={classes.meta}>
           • Based on your latest quiz results • Updates once per week
         </p>
 
-        {/* ✅ CTA */}
         <button className={classes.button}>
           <span>{buttonText}</span>
           <FiArrowRightCircle className={classes.buttonIcon} />

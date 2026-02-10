@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
-
+import { gaEvent } from "../../lib/gtag";
 import classes from "./index.module.css";
 
 export default function ChallengePage() {
@@ -11,9 +11,13 @@ export default function ChallengePage() {
   const [completedKey, setCompletedKey] = useState("completedDays_default");
   const [showResetModal, setShowResetModal] = useState(false);
 
-  
-
+  // -------------------------------------
+  // RESET PROGRESS
+  // -------------------------------------
   const handleResetProgress = () => {
+    gaEvent("challenge_reset_confirm");
+    gaEvent("key_challenge_reset_confirm");
+
     const storedStart = localStorage.getItem("challengeStartDate");
     if (storedStart) {
       localStorage.removeItem(`completedDays_${storedStart}`);
@@ -28,8 +32,13 @@ export default function ChallengePage() {
     location.reload();
   };
 
-  // Handle challenge date, reset if expired, setup completed key
+  // -------------------------------------
+  // INITIAL LOAD: DATE + PROGRESS
+  // -------------------------------------
   useEffect(() => {
+    gaEvent("challenge_page_view");
+    gaEvent("key_challenge_page_view");
+
     const getLocalMidnight = (date) =>
       new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
@@ -44,18 +53,23 @@ export default function ChallengePage() {
       localStorage.setItem("challengeStartDate", isoStart);
       storedStart = isoStart;
       startDateMidnight = todayMidnight;
+
+      gaEvent("challenge_new_start");
+      gaEvent("key_challenge_new_start");
     } else {
-      // Returning user
       const parsedStart = new Date(storedStart);
       startDateMidnight = getLocalMidnight(parsedStart);
     }
 
     const diffInDays = Math.floor(
-      (todayMidnight - startDateMidnight) / (1000 * 60 * 60 * 24)
+      (todayMidnight - startDateMidnight) / (1000 * 60 * 60 * 24),
     );
 
     if (diffInDays >= 7) {
-      // Automatic reset
+      // AUTO RESET
+      gaEvent("challenge_auto_reset");
+      gaEvent("key_challenge_auto_reset");
+
       const newStart = todayMidnight.toISOString();
       localStorage.setItem("challengeStartDate", newStart);
       localStorage.removeItem(`completedDays_${storedStart}`);
@@ -76,14 +90,22 @@ export default function ChallengePage() {
     }
   }, []);
 
-  // Load challenges
+  // -------------------------------------
+  // LOAD DAILY CHALLENGES
+  // -------------------------------------
   useEffect(() => {
+    gaEvent("challenge_load_attempt");
+    gaEvent("key_challenge_load_attempt");
+
     const todayKey = new Date().toISOString().split("T")[0];
     const cached = localStorage.getItem("dailyChallenge");
 
     if (cached) {
       const parsed = JSON.parse(cached);
       if (parsed.date === todayKey && Array.isArray(parsed.challenges)) {
+        gaEvent("challenge_load_cached");
+        gaEvent("key_challenge_load_cached");
+
         setChallenges(parsed.challenges);
         setLoading(false);
         return;
@@ -94,23 +116,38 @@ export default function ChallengePage() {
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data.challenges)) {
+          gaEvent("challenge_load_success");
+          gaEvent("key_challenge_load_success");
+
           setChallenges(data.challenges);
           localStorage.setItem(
             "dailyChallenge",
-            JSON.stringify({ date: todayKey, challenges: data.challenges })
+            JSON.stringify({ date: todayKey, challenges: data.challenges }),
           );
         } else {
+          gaEvent("challenge_load_format_error");
+          gaEvent("key_challenge_load_format_error");
+
           setChallenges(["⚠️ Unexpected challenge format."]);
         }
         setLoading(false);
       })
       .catch(() => {
+        gaEvent("challenge_load_failure");
+        gaEvent("key_challenge_load_failure");
+
         setChallenges(["⚠️ Failed to load today's challenge."]);
         setLoading(false);
       });
   }, []);
 
+  // -------------------------------------
+  // TOGGLE COMPLETION
+  // -------------------------------------
   const toggleComplete = (dayIndex) => {
+    gaEvent("challenge_day_toggle", { dayIndex });
+    gaEvent("key_challenge_day_toggle", { dayIndex });
+
     const newCompleted = completedDays.includes(dayIndex)
       ? completedDays.filter((d) => d !== dayIndex)
       : [...completedDays, dayIndex];
@@ -119,6 +156,9 @@ export default function ChallengePage() {
     localStorage.setItem(completedKey, JSON.stringify(newCompleted));
   };
 
+  // -------------------------------------
+  // EMOJI MAPPER
+  // -------------------------------------
   const getEmojiForChallenge = (text) => {
     const lower = text.toLowerCase();
 
@@ -141,22 +181,32 @@ export default function ChallengePage() {
     return "🌟";
   };
 
+  // -------------------------------------
+  // ADSENSE INIT
+  // -------------------------------------
   useEffect(() => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
+      gaEvent("challenge_adsense_loaded");
+      gaEvent("key_challenge_adsense_loaded");
     } catch (e) {
       console.error("Adsbygoogle error:", e);
+      gaEvent("challenge_adsense_error");
+      gaEvent("key_challenge_adsense_error");
     }
   }, []);
 
+  // -------------------------------------
+  // PAGE RENDER
+  // -------------------------------------
   return (
     <>
       <Head>
-        <title>7‑Day Wellness Challenge | Wellness Pure Life</title>
-        {/* Prevent indexing by search engines */}
+        <title>7-Day Wellness Challenge | Wellness Pure Life</title>
         <meta name="robots" content="noindex, nofollow" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>{" "}
+      </Head>
+
       <div className={classes.container}>
         <h1 className={classes.heading}>Your 7-Day Wellness Challenge</h1>
         <p className={classes.subtext}>
@@ -173,7 +223,7 @@ export default function ChallengePage() {
           {completedDays.length}/7 Days Complete
         </p>
 
-        {/* ✅ Google AdSense block here */}
+        {/* ------- AD BLOCK ------- */}
         <div className={classes.adContainer}>
           <ins
             className="adsbygoogle"
@@ -187,7 +237,11 @@ export default function ChallengePage() {
 
         <button
           className={classes.resetButton}
-          onClick={() => setShowResetModal(true)}
+          onClick={() => {
+            gaEvent("challenge_reset_click");
+            gaEvent("key_challenge_reset_click");
+            setShowResetModal(true);
+          }}
         >
           🔄 Reset Progress
         </button>
@@ -224,14 +278,22 @@ export default function ChallengePage() {
           </ol>
         )}
 
-        {/* ✅ Custom Modal */}
+        {/* ------- RESET MODAL ------- */}
         {showResetModal && (
           <div className={classes.modalOverlay}>
             <div className={classes.modalContent}>
               <p>Are you sure you want to reset your challenge progress?</p>
               <div className={classes.modalActions}>
                 <button onClick={handleResetProgress}>Yes, Reset</button>
-                <button onClick={() => setShowResetModal(false)}>Cancel</button>
+                <button
+                  onClick={() => {
+                    gaEvent("challenge_reset_cancel");
+                    gaEvent("key_challenge_reset_cancel");
+                    setShowResetModal(false);
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>

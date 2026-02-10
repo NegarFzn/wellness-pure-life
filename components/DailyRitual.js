@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { gaEvent } from "../lib/gtag";
 import PremiumButton from "../components/PremiumButton/PremiumButton";
 import classes from "./DailyRitual.module.css";
 
@@ -11,6 +12,13 @@ export default function DailyRitual() {
   const [loadingRitual, setLoadingRitual] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
 
+  // ---------- VIEW TRACK ----------
+  useEffect(() => {
+    gaEvent("daily_ritual_view");
+    gaEvent("key_daily_ritual_view");
+  }, []);
+
+  // ---------- LOAD RITUAL ----------
   const loadRitual = async () => {
     try {
       const res = await fetch("/api/daily-ritual");
@@ -20,8 +28,13 @@ export default function DailyRitual() {
       setHasCompleted(data.hasCompleted);
       setStreak(data.streak || 0);
       if (data.message) setMessage(data.message);
+
+      gaEvent("daily_ritual_load_success");
+      gaEvent("key_daily_ritual_load_success");
     } catch (err) {
       console.error("Ritual load error", err);
+      gaEvent("daily_ritual_load_fail");
+      gaEvent("key_daily_ritual_load_fail");
     } finally {
       setLoadingRitual(false);
     }
@@ -35,22 +48,34 @@ export default function DailyRitual() {
     const confetti = document.createElement("div");
     confetti.className = classes.confetti;
     document.body.appendChild(confetti);
-
     setTimeout(() => confetti.remove(), 1200);
   };
 
+  // ---------- COMPLETE RITUAL ----------
   const completeRitual = async () => {
+    gaEvent("daily_ritual_complete_click");
+    gaEvent("key_daily_ritual_complete_click");
+
     setLoading(true);
 
-    const res = await fetch("/api/daily-ritual", { method: "POST" });
-    const data = await res.json();
+    try {
+      const res = await fetch("/api/daily-ritual", { method: "POST" });
+      const data = await res.json();
 
-    setHasCompleted(true);
-    setStreak(data.streak || 0);
-    setShowSuccess(true);
-    triggerConfetti();
+      setHasCompleted(true);
+      setStreak(data.streak || 0);
+      setShowSuccess(true);
+      triggerConfetti();
 
-    setLoading(false);
+      gaEvent("daily_ritual_complete_success", { streak: data.streak });
+      gaEvent("key_daily_ritual_complete_success", { streak: data.streak });
+    } catch (err) {
+      console.error("Ritual complete failed", err);
+      gaEvent("daily_ritual_complete_fail");
+      gaEvent("key_daily_ritual_complete_fail");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const progressPercent = Math.min((streak / 30) * 100, 100);
@@ -64,11 +89,22 @@ export default function DailyRitual() {
 
   /* 🔒 Locked (Non-premium) */
   if (locked && !message) {
+    gaEvent("daily_ritual_locked_view");
+    gaEvent("key_daily_ritual_locked_view");
+
     return (
       <div className={`${classes.container} ${classes.lockedBox}`}>
         <div className={classes.lockedHeader}>
           <p className={classes.title}>🔒 Premium Feature</p>
-          <PremiumButton />
+
+          <div
+            onClick={() => {
+              gaEvent("daily_ritual_upgrade_click");
+              gaEvent("key_daily_ritual_upgrade_click");
+            }}
+          >
+            <PremiumButton />
+          </div>
         </div>
 
         <p className={classes.premiumText}>
@@ -96,7 +132,7 @@ export default function DailyRitual() {
         </p>
       )}
 
-      {/* Action / Passive Completion */}
+      {/* Action Button */}
       {!hasCompleted ? (
         <button
           onClick={completeRitual}

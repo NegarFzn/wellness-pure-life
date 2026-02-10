@@ -15,6 +15,24 @@ export default function ResendVerificationModal({
     gaEvent("auth_verification_modal_view", { message });
   }, []); // fires only once when modal opens
 
+  useEffect(() => {
+    gaEvent("key_verification_modal_opened", { message });
+  }, []);
+
+  useEffect(() => {
+    if (!result) return;
+    if (result === "") return; // prevent firing on empty
+
+    if (result.startsWith("✅")) {
+      gaEvent("auth_verification_resend_success", { email });
+    } else {
+      gaEvent("auth_verification_resend_error", {
+        email,
+        message: result,
+      });
+    }
+  }, [result, email]);
+
   return (
     <div className={classes.modalOverlay}>
       <div className={classes.modalContent}>
@@ -46,6 +64,7 @@ export default function ResendVerificationModal({
               gaEvent("auth_verification_email_input"); // 👉 ADD (fires once per change)
               onEmailChange(e);
             }}
+            onFocus={() => gaEvent("auth_verification_email_focus")}
             className={classes.input}
           />
           <button

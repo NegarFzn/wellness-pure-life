@@ -1,8 +1,17 @@
+import { useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./daily-routine.module.css";
 
 export default function SampleDailyRoutine() {
+
+  // PAGE VIEW + ANOMALY
+  useEffect(() => {
+    gaEvent("daily_routine_sample_view");
+    gaEvent("key_daily_routine_sample_view");
+  }, []);
+
   return (
     <>
       <Head>
@@ -60,16 +69,38 @@ export default function SampleDailyRoutine() {
             and current capacity — not generic advice.
           </p>
           <div className={classes.buttons}>
-            <Link href="/premium" className={classes.primary}>
+            <Link
+              href="/premium"
+              className={classes.primary}
+              onClick={() => {
+                gaEvent("daily_routine_sample_premium_click");
+                gaEvent("key_daily_routine_sample_premium_click");
+              }}
+            >
               Unlock Premium Daily Routines
             </Link>
-            <Link href="/quizzes/quiz-main" className={classes.secondary}>
+
+            <Link
+              href="/quizzes/quiz-main"
+              className={classes.secondary}
+              onClick={() => {
+                gaEvent("daily_routine_sample_quiz_click");
+                gaEvent("key_daily_routine_sample_quiz_click");
+              }}
+            >
               Take the Free Quiz
             </Link>
           </div>
         </section>
 
-        <Link href="/quizzes/quiz-main" className={classes.floatingQuiz}>
+        <Link
+          href="/quizzes/quiz-main"
+          className={classes.floatingQuiz}
+          onClick={() => {
+            gaEvent("daily_routine_sample_floating_quiz_click");
+            gaEvent("key_daily_routine_sample_floating_quiz_click");
+          }}
+        >
           Try the Free Quiz →
         </Link>
       </div>

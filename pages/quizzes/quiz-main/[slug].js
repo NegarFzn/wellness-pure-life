@@ -8,7 +8,6 @@ import { gaEvent } from "../../../lib/gtag";
 import classes from "./QuizPage.module.css";
 import Subscribe from "../../../components/Subscribe/subscribe";
 
-// Optional: key normalization map (only if needed across quizzes)
 const keyMap = {
   time: "timeOfDay",
 };
@@ -17,7 +16,6 @@ export default function QuizPage() {
   const router = useRouter();
   const { slug } = router.query;
 
-  // ✅ LIVE SESSION FROM NEXTAUTH
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -45,19 +43,26 @@ export default function QuizPage() {
       slug,
       count: result?.matchedValues?.length || 0,
     });
+    gaEvent("key_quiz_recommendation_list_view", {
+      slug,
+      count: result?.matchedValues?.length || 0,
+    });
   }, [result, slug]);
 
   const handleQuizOpen = (type) => {
     gaEvent("plan_quiz_modal_open", { slug, plan_type: type });
+    gaEvent("key_plan_quiz_modal_open", { slug, plan_type: type });
 
     setActiveQuiz(type);
   };
 
   const closeQuizModal = () => {
+    gaEvent("plan_quiz_modal_close", { slug });
+    gaEvent("key_plan_quiz_modal_close", { slug });
+
     setActiveQuiz(null);
   };
 
-  // ✅ AUTO SYNC AUTH STATE FROM NEXTAUTH
   useEffect(() => {
     if (session?.user?.email) {
       setEmail(session.user.email);
@@ -67,7 +72,6 @@ export default function QuizPage() {
     }
   }, [session]);
 
-  // 🔹 Load quiz by slug
   useEffect(() => {
     if (!slug) return;
 
@@ -84,7 +88,6 @@ export default function QuizPage() {
       .catch(() => setError("Failed to load quiz."));
   }, [slug]);
 
-  // 🔹 Track when the quiz is fully loaded
   useEffect(() => {
     if (!quiz || !slug) return;
 
@@ -92,11 +95,19 @@ export default function QuizPage() {
       slug,
       number_of_questions: quiz?.questions?.length || 0,
     });
+    gaEvent("key_quiz_main_loaded", {
+      slug,
+      number_of_questions: quiz?.questions?.length || 0,
+    });
   }, [quiz, slug]);
 
-  // 🔹 Track selection
   const handleChange = (key, value) => {
     gaEvent("quiz_question_answered", {
+      slug,
+      question_key: key,
+      answer_value: value,
+    });
+    gaEvent("key_quiz_question_answered", {
       slug,
       question_key: key,
       answer_value: value,
@@ -105,11 +116,9 @@ export default function QuizPage() {
     setAnswers((prev) => ({ ...prev, [key]: value }));
   };
 
-  // 🔹 Email format validator
   const isValidEmail = (email) =>
     !!email?.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
-  // 🔹 Normalize keys before submission
   const normalizeAnswers = (rawAnswers) => {
     const normalized = {};
     for (const key in rawAnswers) {
@@ -119,12 +128,13 @@ export default function QuizPage() {
     return normalized;
   };
 
-  // 🔹 Submit
   const handleSubmit = async () => {
     setInlineError("");
     setError(null);
     setResult(null);
+
     gaEvent("quiz_submit_clicked", { slug });
+    gaEvent("key_quiz_submit_clicked", { slug });
 
     const trimmedEmail = email?.trim();
 
@@ -140,7 +150,6 @@ export default function QuizPage() {
 
     const normalizedAnswers = normalizeAnswers(answers);
 
-    // ✅ SILENT AUTH (UNCHANGED)
     const login = await signIn("credentials", {
       redirect: false,
       email: trimmedEmail,
@@ -163,10 +172,16 @@ export default function QuizPage() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Submission failed.");
+
       if (data.result) {
         setResult(data.result);
 
         gaEvent("quiz_completed", {
+          slug,
+          answers: normalizedAnswers,
+          email: trimmedEmail,
+        });
+        gaEvent("key_quiz_completed", {
           slug,
           answers: normalizedAnswers,
           email: trimmedEmail,
@@ -213,6 +228,7 @@ export default function QuizPage() {
 
       if (res.ok) {
         gaEvent("quiz_email_sent", { slug, email: finalEmail });
+        gaEvent("key_quiz_email_sent", { slug, email: finalEmail });
 
         setIsSending(false);
         setIsSent(true);
@@ -229,13 +245,19 @@ export default function QuizPage() {
 
   useEffect(() => {
     if (!slug || !quiz) return;
+
     gaEvent("quiz_page_loaded", { slug });
+    gaEvent("key_quiz_page_loaded", { slug });
   }, [quiz, slug]);
 
   useEffect(() => {
     if (!result) return;
 
     gaEvent("quiz_recommendation_viewed", {
+      slug,
+      title: result?.matchedTitle || "no_match",
+    });
+    gaEvent("key_quiz_recommendation_viewed", {
       slug,
       title: result?.matchedTitle || "no_match",
     });
@@ -293,7 +315,10 @@ export default function QuizPage() {
                 className={classes.emailInput}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onFocus={() => gaEvent("quiz_email_input_focus", { slug })}
+                onFocus={() => {
+                  gaEvent("quiz_email_input_focus", { slug });
+                  gaEvent("key_quiz_email_input_focus", { slug });
+                }}
               />
             )}
 
@@ -328,7 +353,7 @@ export default function QuizPage() {
                 <p>No matching recommendation found for your responses.</p>
               )}
             </div>
-            {/* ✅ PREMIUM SEND EMAIL BUTTON */}
+
             <button
               className={`${classes.sendEmailButton} ${
                 isSent ? classes.sent : ""
@@ -384,20 +409,14 @@ export default function QuizPage() {
           <a
             href="/blog"
             className={classes.blogCta}
-            onClick={() =>
-              gaEvent({
-                event: "blog_support_click",
-                params: { from: "quiz-page" },
-              })
-            }
+            onClick={() => {
+              gaEvent("blog_support_click", { from: "quiz-page" });
+              gaEvent("key_blog_support_click", { from: "quiz-page" });
+            }}
           >
             Explore More Wellness Guides →
           </a>
         </div>
-
-        {/* =========================
-            EMAIL CAPTURE — FREE QUIZ
-        ========================== */}
 
         {result && <Subscribe />}
 

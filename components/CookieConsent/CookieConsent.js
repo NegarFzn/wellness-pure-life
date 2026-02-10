@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { gaEvent } from "../../lib/gtag";  // ⭐ REQUIRED
 import classes from "./CookieConsent.module.css";
 
 const CookieConsent = () => {
@@ -8,16 +9,25 @@ const CookieConsent = () => {
   useEffect(() => {
     try {
       const consent = localStorage.getItem("cookieConsent");
-      if (!consent) return setVisible(true);
+      if (!consent) {
+        setVisible(true);
+        gaEvent("cookie_banner_shown");
+        gaEvent("key_cookie_banner_shown");
+        return;
+      }
 
       const { timestamp } = JSON.parse(consent);
       const oneYear = 365 * 24 * 60 * 60 * 1000;
 
       if (Date.now() - timestamp > oneYear) {
         setVisible(true);
+        gaEvent("cookie_banner_shown");
+        gaEvent("key_cookie_banner_shown");
       }
     } catch {
       setVisible(true);
+      gaEvent("cookie_banner_shown");
+      gaEvent("key_cookie_banner_shown");
     }
   }, []);
 
@@ -27,6 +37,11 @@ const CookieConsent = () => {
       timestamp: Date.now(),
     };
     localStorage.setItem("cookieConsent", JSON.stringify(data));
+
+    // ⭐ REQUIRED FOR GA4 + ANOMALY DETECTION
+    gaEvent("cookie_consent_given", { type });
+    gaEvent("key_cookie_consent_given", { type });
+
     setVisible(false);
   };
 
@@ -40,14 +55,27 @@ const CookieConsent = () => {
           Learn more
         </Link>
       </p>
+
       <div className={classes.actions}>
         <button
-          onClick={() => setConsent("essential")}
+          onClick={() => {
+            gaEvent("cookie_consent_click_essential");
+            gaEvent("key_cookie_consent_click_essential");
+            setConsent("essential");
+          }}
           className={classes.manage}
         >
           Use Essential Only
         </button>
-        <button onClick={() => setConsent("all")} className={classes.accept}>
+
+        <button
+          onClick={() => {
+            gaEvent("cookie_consent_click_all");
+            gaEvent("key_cookie_consent_click_all");
+            setConsent("all");
+          }}
+          className={classes.accept}
+        >
           Accept All
         </button>
       </div>

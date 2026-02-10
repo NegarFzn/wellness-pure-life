@@ -34,6 +34,7 @@ export default function Home() {
 
   useEffect(() => {
     gaEvent("home_page_view");
+    gaEvent("key_home_page_view");
   }, []);
 
   useEffect(() => {
@@ -87,23 +88,38 @@ export default function Home() {
 
   useEffect(() => {
     const container = newsGridRef.current;
-    const cards = container?.querySelectorAll(`.${classes.newsCard}`);
+    if (!container) return;
+
+    const cards = container.querySelectorAll(`.${classes.newsCard}`);
     const isHorizontalScroll = window.innerWidth < 1024;
-    if (!container || !cards.length || !isHorizontalScroll) return;
+    if (!cards.length || !isHorizontalScroll) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = [...cards].indexOf(entry.target);
+            const item = newsArticles[index];
+
+            // Update slider dot
             setActiveIndex(index);
+
+            // 🔥 Analytics IMPRESSION event
+            if (item) {
+              gaEvent("home_news_card_view", {
+                slug: item.slug,
+                index,
+              });
+
+              gaEvent("key_home_news_card_view", {
+                slug: item.slug,
+                index,
+              });
+            }
           }
         });
       },
-      {
-        root: container,
-        threshold: 0.6,
-      },
+      { threshold: 0.6, root: container },
     );
 
     cards.forEach((card) => observer.observe(card));
@@ -253,16 +269,87 @@ export default function Home() {
       )}
 
       <main className={classes.container}>
-        <DailyList />
-        <KeyFeatures />
-        <WeeklyPlanCard />
-        <DailyRoutineCard />
-        {!loading && !user?.isPremium && <Subscribe />}
-        <QuizCard />
-        <HomeBlogCTA />
+        {/* DAILY LIST */}
+        <div
+          onMouseEnter={() => {
+            gaEvent("home_daily_list_view");
+            gaEvent("key_home_daily_list_view");
+          }}
+        >
+          <DailyList />
+        </div>
+
+        {/* KEY FEATURES */}
+        <div
+          onMouseEnter={() => {
+            gaEvent("home_key_features_view");
+            gaEvent("key_home_key_features_view");
+          }}
+        >
+          <KeyFeatures />
+        </div>
+
+        {/* WEEKLY PLAN */}
+        <div
+          onMouseEnter={() => {
+            gaEvent("home_weekly_plan_view");
+            gaEvent("key_home_weekly_plan_view");
+          }}
+        >
+          <WeeklyPlanCard />
+        </div>
+
+        {/* DAILY ROUTINE */}
+        <div
+          onMouseEnter={() => {
+            gaEvent("home_daily_routine_view");
+            gaEvent("key_home_daily_routine_view");
+          }}
+        >
+          <DailyRoutineCard />
+        </div>
+
+        {/* SUBSCRIBE — ONLY IF NOT PREMIUM */}
+        {!loading && !user?.isPremium && (
+          <div
+            onMouseEnter={() => {
+              gaEvent("home_subscribe_view");
+              gaEvent("key_home_subscribe_view");
+            }}
+          >
+            <Subscribe />
+          </div>
+        )}
+
+        {/* QUIZ CARD */}
+        <div
+          onMouseEnter={() => {
+            gaEvent("home_quiz_card_view");
+            gaEvent("key_home_quiz_card_view");
+          }}
+        >
+          <QuizCard />
+        </div>
+
+        {/* BLOG CTA */}
+        <div
+          onMouseEnter={() => {
+            gaEvent("home_blog_cta_view");
+            gaEvent("key_home_blog_cta_view");
+          }}
+        >
+          <HomeBlogCTA />
+        </div>
+
         {newsArticles.length > 0 && (
           <section className={classes.latestNewsSection}>
-            <h2 className={classes.newsHeading}>
+            <h2
+              className={classes.newsHeading}
+              onMouseEnter={() => {
+                gaEvent("home_news_heading_view");
+                gaEvent("key_home_news_heading_view");
+              }}
+            >
               Latest Research & Wellness Insights
             </h2>
             <div className={classes.newsGrid} ref={newsGridRef}>
@@ -281,12 +368,16 @@ export default function Home() {
                     <Link
                       href={`/news/${item.slug}`}
                       className={classes.readMore}
-                      onClick={() =>
+                      onClick={() => {
                         gaEvent("home_news_read_more_click", {
                           slug: item.slug,
                           title: item.title,
-                        })
-                      }
+                        });
+                        gaEvent("key_home_news_read_more_click", {
+                          slug: item.slug,
+                          title: item.title,
+                        });
+                      }}
                     >
                       Read More →
                     </Link>
@@ -310,6 +401,8 @@ export default function Home() {
               <button
                 onClick={() => {
                   gaEvent("home_news_slider_arrow", { direction: "left" });
+                  gaEvent("key_home_news_slider_arrow", { direction: "left" });
+
                   scrollNews("left");
                 }}
                 className={classes.arrowBtn}
@@ -319,6 +412,8 @@ export default function Home() {
               <button
                 onClick={() => {
                   gaEvent("home_news_slider_arrow", { direction: "right" });
+                  gaEvent("key_home_news_slider_arrow", { direction: "right" });
+
                   scrollNews("right");
                 }}
                 className={classes.arrowBtn}
@@ -333,6 +428,7 @@ export default function Home() {
           <button
             onClick={() => {
               gaEvent("home_scroll_to_top_click");
+              gaEvent("key_home_scroll_to_top_click");
               scrollToTop();
             }}
             className={classes.backToTop}

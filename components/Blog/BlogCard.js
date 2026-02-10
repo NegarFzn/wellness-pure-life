@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { gaEvent } from "../../lib/gtag";
@@ -8,6 +9,20 @@ export default function BlogCard({ post }) {
     post.image && post.image.trim() !== ""
       ? post.image
       : "/images/blog/default.jpg";
+
+  // 🔥 GA4: Impression event (fires when card loads)
+  useEffect(() => {
+    gaEvent("blog_article_impression", {
+      title: post.title,
+      slug: post.slug,
+    });
+
+    // 🔥 Required for GA4 anomaly detection
+    gaEvent("key_blog_article_impression", {
+      title: post.title,
+      slug: post.slug,
+    });
+  }, []);
 
   return (
     <article className={classes.card}>
@@ -29,12 +44,19 @@ export default function BlogCard({ post }) {
         <Link
           href={`/blog/${post.slug}`}
           className={classes.readBtn}
-          onClick={() =>
+          onClick={() => {
+            // 🔥 Normal event
             gaEvent("blog_article_card_click", {
               title: post.title,
               slug: post.slug,
-            })
-          }
+            });
+
+            // 🔥 Anomaly detection event
+            gaEvent("key_blog_article_card_click", {
+              title: post.title,
+              slug: post.slug,
+            });
+          }}
         >
           Read Article →
         </Link>

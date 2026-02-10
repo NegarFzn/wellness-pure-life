@@ -6,16 +6,28 @@ export default function TopicsColumn({ label, topicsMap, onLinkClick }) {
   const topics = topicsMap[label] || [];
 
   const handleClick = (item) => {
+    // NORMAL
     gaEvent("header_topic_click", {
       category: label,
       title: item.text,
       href: item.href,
     });
+    // ANOMALY
+    gaEvent("key_header_topic_click", {
+      category: label,
+      title: item.text,
+      href: item.href,
+    });
+
     onLinkClick?.();
   };
 
   const handleBrowseAll = () => {
+    // NORMAL
     gaEvent("header_browse_all_click", { category: label });
+    // ANOMALY
+    gaEvent("key_header_browse_all_click", { category: label });
+
     onLinkClick?.();
   };
 
@@ -23,11 +35,19 @@ export default function TopicsColumn({ label, topicsMap, onLinkClick }) {
     const all = topics;
     if (all.length > 0) {
       const rand = all[Math.floor(Math.random() * all.length)];
+
+      // NORMAL
       gaEvent("header_surprise_topic", {
         category: label,
         title: rand.text,
         href: rand.href,
       });
+
+      // ANOMALY
+      gaEvent("key_header_surprise_topic", {
+        category: label,
+      });
+
       if (rand?.href) window.location.href = rand.href;
     }
   };
@@ -37,9 +57,12 @@ export default function TopicsColumn({ label, topicsMap, onLinkClick }) {
       <h4>
         <Link
           href={`/${label.toLowerCase()}`}
-          onClick={() =>
-            gaEvent("header_section_title_click", { category: label })
-          }
+          onClick={() => {
+            // NORMAL
+            gaEvent("header_section_title_click", { category: label });
+            // ANOMALY
+            gaEvent("key_header_section_title_click", { category: label });
+          }}
         >
           Some {label} Topics
         </Link>

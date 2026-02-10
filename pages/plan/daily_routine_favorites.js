@@ -11,14 +11,33 @@ export default function DailyFavoritesPage() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // ------------------ PAGE VIEW ------------------
+  useEffect(() => {
+    gaEvent("daily_favorites_page_view");
+    gaEvent("key_daily_favorites_page_view");
+  }, []);
+
   // ------------------ LOAD FAVORITES ------------------
   const loadFavorites = async () => {
     try {
       const res = await fetch("/api/plan/favorites?type=daily");
       const data = await res.json();
-      if (res.ok) setFavorites(data.favorites || []);
+
+      if (res.ok) {
+        setFavorites(data.favorites || []);
+
+        if ((data.favorites || []).length > 0) {
+          gaEvent("daily_favorites_loaded");
+          gaEvent("key_daily_favorites_loaded");
+        } else {
+          gaEvent("daily_favorites_empty");
+          gaEvent("key_daily_favorites_empty");
+        }
+      }
     } catch (err) {
       console.error(err);
+      gaEvent("daily_favorites_load_error", { error: err.message });
+      gaEvent("key_daily_favorites_load_error", { error: err.message });
     } finally {
       setLoading(false);
     }
@@ -26,9 +45,11 @@ export default function DailyFavoritesPage() {
 
   // ------------------ SET AS CURRENT ------------------
   const setAsCurrent = async (fav) => {
-    gaEvent({
-      event: "daily_favorite_set_as_current",
-      params: { favorite_id: fav.favoriteId },
+    gaEvent("daily_favorites_set_as_current_click", {
+      favorite_id: fav.favoriteId,
+    });
+    gaEvent("key_daily_favorites_set_as_current_click", {
+      favorite_id: fav.favoriteId,
     });
 
     try {
@@ -37,18 +58,28 @@ export default function DailyFavoritesPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "daily",
-          favoriteId: fav.favoriteId, // CORRECT
+          favoriteId: fav.favoriteId,
         }),
       });
 
       const data = await res.json();
+
       if (res.ok) {
+        gaEvent("daily_favorites_set_success", { favorite_id: fav.favoriteId });
+        gaEvent("key_daily_favorites_set_success", {
+          favorite_id: fav.favoriteId,
+        });
+
         alert("Routine set as current.");
         router.push("/plan/daily-routine");
       } else {
+        gaEvent("daily_favorites_set_fail", { error: data.error });
+        gaEvent("key_daily_favorites_set_fail", { error: data.error });
         alert(data.error || "Failed to set routine");
       }
     } catch (err) {
+      gaEvent("daily_favorites_set_fail", { error: err.message });
+      gaEvent("key_daily_favorites_set_fail", { error: err.message });
       console.error(err);
       alert("Failed to set routine");
     }
@@ -56,9 +87,9 @@ export default function DailyFavoritesPage() {
 
   // ------------------ REMOVE FAVORITE ------------------
   const removeFavorite = async (fav) => {
-    gaEvent({
-      event: "daily_favorite_removed",
-      params: { favorite_id: fav.favoriteId },
+    gaEvent("daily_favorites_remove_click", { favorite_id: fav.favoriteId });
+    gaEvent("key_daily_favorites_remove_click", {
+      favorite_id: fav.favoriteId,
     });
 
     try {
@@ -73,13 +104,24 @@ export default function DailyFavoritesPage() {
 
       if (res.ok) {
         setFavorites((prev) =>
-          prev.filter((f) => f.favoriteId !== fav.favoriteId)
+          prev.filter((f) => f.favoriteId !== fav.favoriteId),
         );
+
+        gaEvent("daily_favorites_remove_success", {
+          favorite_id: fav.favoriteId,
+        });
+        gaEvent("key_daily_favorites_remove_success", {
+          favorite_id: fav.favoriteId,
+        });
       } else {
         const data = await res.json();
+        gaEvent("daily_favorites_remove_fail", { error: data.error });
+        gaEvent("key_daily_favorites_remove_fail", { error: data.error });
         console.error("Remove error:", data.error);
       }
     } catch (err) {
+      gaEvent("daily_favorites_remove_fail", { error: err.message });
+      gaEvent("key_daily_favorites_remove_fail", { error: err.message });
       console.error(err);
     }
   };
@@ -87,9 +129,11 @@ export default function DailyFavoritesPage() {
   // ------------------ EFFECT: LOAD ON AUTH ------------------
   useEffect(() => {
     if (status === "authenticated" && session?.user?.isPremium) {
-      gaEvent({
-        event: "daily_favorites_view",
-        params: { user: session?.user?.email || "anon" },
+      gaEvent("daily_favorites_view", {
+        user: session?.user?.email || "anon",
+      });
+      gaEvent("key_daily_favorites_view", {
+        user: session?.user?.email || "anon",
       });
       loadFavorites();
     }
@@ -97,10 +141,15 @@ export default function DailyFavoritesPage() {
 
   // ------------------ AUTH GUARDS ------------------
   if (status === "loading") {
+    gaEvent("daily_favorites_checking_auth");
+    gaEvent("key_daily_favorites_checking_auth");
     return <p className={classes.status}>Checking your session…</p>;
   }
 
   if (!session) {
+    gaEvent("daily_favorites_not_logged_in");
+    gaEvent("key_daily_favorites_not_logged_in");
+
     return (
       <div className={classes.lockWrap}>
         <h2 className={classes.lockTitle}>Favorite Daily Routines</h2>
@@ -108,7 +157,11 @@ export default function DailyFavoritesPage() {
           Please sign in to view your favorite daily routines.
         </p>
         <button
-          onClick={() => router.push("/auth")}
+          onClick={() => {
+            gaEvent("daily_favorites_signin_click");
+            gaEvent("key_daily_favorites_signin_click");
+            router.push("/auth");
+          }}
           className={classes.lockButton}
         >
           Sign In
@@ -118,6 +171,9 @@ export default function DailyFavoritesPage() {
   }
 
   if (!session.user?.isPremium) {
+    gaEvent("daily_favorites_non_premium");
+    gaEvent("key_daily_favorites_non_premium");
+
     return (
       <div className={classes.lockWrap}>
         <h2 className={classes.lockTitle}>Premium Feature</h2>
@@ -125,7 +181,11 @@ export default function DailyFavoritesPage() {
           Favorite daily routines are available for Premium members.
         </p>
         <button
-          onClick={() => router.push("/premium")}
+          onClick={() => {
+            gaEvent("daily_favorites_upgrade_click");
+            gaEvent("key_daily_favorites_upgrade_click");
+            router.push("/premium");
+          }}
           className={classes.lockButton}
         >
           Upgrade to Premium
@@ -150,11 +210,11 @@ export default function DailyFavoritesPage() {
         <button
           className={classes.goWeeklyButton}
           onClick={() => {
-            gaEvent({
-              event: "daily_favorites_go_to_routine",
-              params: {
-                user: session?.user?.email || "anonymous",
-              },
+            gaEvent("daily_favorites_go_to_current_click", {
+              user: session?.user?.email || "anonymous",
+            });
+            gaEvent("key_daily_favorites_go_to_current_click", {
+              user: session?.user?.email || "anonymous",
             });
             router.push("/plan/daily-routine");
           }}

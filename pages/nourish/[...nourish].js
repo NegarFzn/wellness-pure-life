@@ -2,6 +2,7 @@ import Head from "next/head";
 import fs from "fs/promises";
 import path from "path";
 import { useState, useEffect } from "react";
+import { gaEvent } from "../../lib/gtag";
 import Content from "../../components/nourish/content";
 import AuthorBox from "../../components/UI/AuthorBox";
 import classes from "./index.module.css";
@@ -9,6 +10,27 @@ import classes from "./index.module.css";
 function NourishDetailPage(props) {
   const { nourishData } = props;
   const [showButton, setShowButton] = useState(false);
+
+  // ---- PAGE VIEW ANALYTICS ----
+  useEffect(() => {
+    if (!nourishData) return;
+
+    gaEvent("nourish_detail_view", {
+      id: nourishData.id,
+      title: nourishData.title,
+    });
+
+    gaEvent("key_nourish_detail_view", {
+      id: nourishData.id,
+    });
+
+    // ---- ANOMALY: empty content ----
+    if (!nourishData.title || !nourishData.summary) {
+      gaEvent("anomaly_nourish_missing_fields", {
+        id: nourishData.id,
+      });
+    }
+  }, [nourishData]);
 
   if (!nourishData) {
     return <p style={{ textAlign: "center" }}>Nourish content not found.</p>;
@@ -22,36 +44,46 @@ function NourishDetailPage(props) {
 
   const pageTitle = `${conciseTitle} | Nourish`;
 
+  // ---- Scroll-to-top button visibility ----
   useEffect(() => {
     const handleScroll = () => {
-      setShowButton(window.scrollY > 300);
+      const show = window.scrollY > 300;
+      setShowButton(show);
+
+      if (show) {
+        gaEvent("nourish_detail_scroll_depth", {
+          depth: window.scrollY,
+          id: nourishData.id,
+        });
+      }
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [nourishData.id]);
 
   const scrollToTop = () => {
+    gaEvent("nourish_detail_scroll_to_top_click", {
+      id: nourishData.id,
+    });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <div>
       <Head>
-        {/* SEO Title & Description */}
         <title>{pageTitle}</title>
         <meta name="description" content={nourishData.summary} />
-         <meta name="robots" content="index, follow" />
+        <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
 
-        {/* Canonical URL */}
         <link
           rel="canonical"
           href={`https://wellnesspurelife.com/nourish/${nourishData.id}`}
         />
         <link rel="icon" href="/favicon.ico" />
 
-        {/* Open Graph Meta Tags */}
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="Wellness Pure Life" />
         <meta property="og:title" content={pageTitle} />
@@ -65,7 +97,6 @@ function NourishDetailPage(props) {
           content={`https://wellnesspurelife.com/nourish/${nourishData.id}`}
         />
 
-        {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={nourishData.summary} />
@@ -74,7 +105,6 @@ function NourishDetailPage(props) {
           content={`https://wellnesspurelife.com/images/nourish/${nourishData.image}`}
         />
 
-        {/* Article Structured Data - JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -99,7 +129,14 @@ function NourishDetailPage(props) {
       </Head>
 
       <Content items={nourishData} />
-      <AuthorBox />
+
+      {/* ---- Author box view event ---- */}
+      <AuthorBox
+        onView={() =>
+          gaEvent("nourish_detail_authorbox_view", { id: nourishData.id })
+        }
+      />
+
       {showButton && (
         <button onClick={scrollToTop} className={classes.backToTop}>
           ↑

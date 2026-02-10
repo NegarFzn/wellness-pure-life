@@ -7,6 +7,7 @@ import classes from "./premium.module.css";
 export default function PremiumPage() {
   useEffect(() => {
     gaEvent("premium_page_view");
+    gaEvent("key_premium_page_view");
   }, []);
 
   const features = [
@@ -57,6 +58,11 @@ export default function PremiumPage() {
     },
   ];
 
+  const recordSection = (name) => {
+    gaEvent(name);
+    gaEvent(`key_${name}`);
+  };
+
   return (
     <>
       <Head>
@@ -68,10 +74,11 @@ export default function PremiumPage() {
       </Head>
 
       <main className={classes.page}>
-        {/* ============================= */}
-        {/* HERO SECTION — STRONGER COPY */}
-        {/* ============================= */}
-        <section className={classes.hero}>
+        {/* HERO SECTION */}
+        <section
+          className={classes.hero}
+          onMouseEnter={() => recordSection("premium_hero_view")}
+        >
           <div className={classes.heroBg} />
 
           <p className={classes.eyebrow}>Premium Membership</p>
@@ -99,26 +106,31 @@ export default function PremiumPage() {
             <Link
               href="#pricing"
               className={classes.primaryButton}
-              onClick={() =>
-                gaEvent("premium_cta_hero_click", { target: "pricing" })
-              }
+              onClick={() => {
+                gaEvent("premium_cta_hero_click", { target: "pricing" });
+                gaEvent("key_premium_cta_hero_click", { target: "pricing" });
+              }}
             >
               Become a Premium Member
             </Link>
             <Link
               href="/quizzes/quiz-main"
               className={classes.secondaryButton}
-              onClick={() => gaEvent("premium_hero_quiz_click")}
+              onClick={() => {
+                gaEvent("premium_hero_quiz_click");
+                gaEvent("key_premium_hero_quiz_click");
+              }}
             >
               Take Free Wellness Quiz
             </Link>
           </div>
         </section>
 
-        {/* ================================= */}
-        {/* PREMIUM FEATURES — CLEANER CARDS */}
-        {/* ================================= */}
-        <section className={classes.section}>
+        {/* FEATURES SECTION */}
+        <section
+          className={classes.section}
+          onMouseEnter={() => recordSection("premium_features_view")}
+        >
           <header className={classes.sectionHeader}>
             <h2 className={classes.sectionTitle}>What’s Inside Premium</h2>
             <p className={classes.sectionSubtitle}>
@@ -137,11 +149,14 @@ export default function PremiumPage() {
                   <Link
                     href="/sample/weekly-plan"
                     className={classes.sampleButton}
-                    onClick={() =>
+                    onClick={() => {
                       gaEvent("premium_feature_sample_click", {
                         sample: "weekly",
-                      })
-                    }
+                      });
+                      gaEvent("key_premium_feature_sample_click", {
+                        sample: "weekly",
+                      });
+                    }}
                   >
                     See Sample Weekly Plan
                   </Link>
@@ -151,11 +166,14 @@ export default function PremiumPage() {
                   <Link
                     href="/sample/daily-routine"
                     className={classes.sampleButton}
-                    onClick={() =>
+                    onClick={() => {
                       gaEvent("premium_feature_sample_click", {
                         sample: "daily",
-                      })
-                    }
+                      });
+                      gaEvent("key_premium_feature_sample_click", {
+                        sample: "daily",
+                      });
+                    }}
                   >
                     See Sample Daily Routine
                   </Link>
@@ -165,10 +183,11 @@ export default function PremiumPage() {
           </div>
         </section>
 
-        {/* ===================================== */}
-        {/* FREE VS PREMIUM — CLEANER COMPARISON */}
-        {/* ===================================== */}
-        <section className={classes.section}>
+        {/* FREE VS PREMIUM SECTION */}
+        <section
+          className={classes.section}
+          onMouseEnter={() => recordSection("premium_compare_view")}
+        >
           <header className={classes.sectionHeader}>
             <h2 className={classes.sectionTitle}>Free vs Premium</h2>
             <p className={classes.sectionSubtitle}>
@@ -210,10 +229,12 @@ export default function PremiumPage() {
           </div>
         </section>
 
-        {/* ================================= */}
-        {/* PRICING — STRONGER MICROCOPY     */}
-        {/* ================================= */}
-        <section id="pricing" className={classes.section}>
+        {/* PRICING SECTION */}
+        <section
+          id="pricing"
+          className={classes.section}
+          onMouseEnter={() => recordSection("premium_pricing_section_view")}
+        >
           <header className={classes.sectionHeader}>
             <h2 className={classes.sectionTitle}>Choose Your Plan</h2>
             <p className={classes.sectionSubtitle}>
@@ -224,7 +245,7 @@ export default function PremiumPage() {
           </header>
 
           <div className={classes.pricingGrid}>
-            {/* MONTHLY PLAN */}
+            {/* MONTHLY */}
             <div className={classes.priceCard}>
               <p className={classes.planTitle}>Monthly</p>
               <p className={classes.price}>
@@ -238,15 +259,16 @@ export default function PremiumPage() {
               <Link
                 href="/upgrade"
                 className={classes.primaryButton}
-                onClick={() =>
-                  gaEvent("premium_pricing_click", { plan: "monthly" })
-                }
+                onClick={() => {
+                  gaEvent("premium_pricing_click", { plan: "monthly" });
+                  gaEvent("key_premium_pricing_click", { plan: "monthly" });
+                }}
               >
                 Start Monthly
               </Link>
             </div>
 
-            {/* YEARLY PLAN */}
+            {/* YEARLY */}
             <div className={`${classes.priceCard} ${classes.popularCard}`}>
               <div className={classes.badge}>Most Popular</div>
               <p className={classes.planTitle}>Yearly</p>
@@ -261,9 +283,10 @@ export default function PremiumPage() {
               <Link
                 href="/upgrade"
                 className={classes.primaryButton}
-                onClick={() =>
-                  gaEvent("premium_pricing_click", { plan: "yearly" })
-                }
+                onClick={() => {
+                  gaEvent("premium_pricing_click", { plan: "yearly" });
+                  gaEvent("key_premium_pricing_click", { plan: "yearly" });
+                }}
               >
                 Start Yearly
               </Link>
@@ -271,10 +294,11 @@ export default function PremiumPage() {
           </div>
         </section>
 
-        {/* ================================= */}
-        {/* GUARANTEE SECTION                 */}
-        {/* ================================= */}
-        <section className={classes.guarantee}>
+        {/* GUARANTEE SECTION */}
+        <section
+          className={classes.guarantee}
+          onMouseEnter={() => recordSection("premium_guarantee_view")}
+        >
           <div className={classes.guaranteeCard}>
             <div className={classes.guaranteeHeader}>
               <span className={classes.guaranteeIcon}>✨</span>
@@ -282,13 +306,11 @@ export default function PremiumPage() {
                 7-Day Satisfaction Guarantee
               </h3>
             </div>
-
             <p className={classes.guaranteeText}>
               Try Premium with complete peace of mind. If within 7 days you feel
               no improvement in your sleep, focus, energy, or emotional balance,
               you can cancel instantly — no questions asked.
             </p>
-
             <p className={classes.guaranteeNote}>
               We offer this because we are confident in the real-world impact of
               this system.
@@ -296,10 +318,11 @@ export default function PremiumPage() {
           </div>
         </section>
 
-        {/* ================================= */}
-        {/* TRANSFORMATION SECTION            */}
-        {/* ================================= */}
-        <section className={classes.section}>
+        {/* TRANSFORMATION SECTION */}
+        <section
+          className={classes.section}
+          onMouseEnter={() => recordSection("premium_transformation_view")}
+        >
           <header className={classes.sectionHeader}>
             <h2 className={classes.sectionTitle}>
               What Changes After You Go Premium
@@ -311,37 +334,40 @@ export default function PremiumPage() {
           </header>
 
           <div className={classes.transformationGrid}>
-            <div className={classes.transformationCard}>
-              <h3>Daily</h3>
-              <p>
-                Your mornings start calm and structured. You avoid emotional
-                overload and gain clarity for the whole day.
-              </p>
-            </div>
-
-            <div className={classes.transformationCard}>
-              <h3>Weekly</h3>
-              <p>
-                You stop improvising your life. You follow an intelligent weekly
-                structure that eliminates decision fatigue.
-              </p>
-            </div>
-
-            <div className={classes.transformationCard}>
-              <h3>Emotional</h3>
-              <p>
-                Stress no longer dictates your reactions. You learn how to
-                regulate your emotions with calm precision.
-              </p>
-            </div>
-
-            <div className={classes.transformationCard}>
-              <h3>Energy</h3>
-              <p>
-                Your energy becomes steady and predictable. You recover deeply
-                instead of burning out.
-              </p>
-            </div>
+            {[
+              [
+                "Daily",
+                "Your mornings start calm and structured. You avoid emotional overload and gain clarity.",
+              ],
+              [
+                "Weekly",
+                "You stop improvising your life. You follow an intelligent weekly structure.",
+              ],
+              [
+                "Emotional",
+                "Stress no longer dictates your reactions. You regulate emotions with precision.",
+              ],
+              [
+                "Energy",
+                "Your energy becomes steady and predictable. You recover deeply instead of burning out.",
+              ],
+            ].map(([title, text], i) => (
+              <div
+                key={i}
+                className={classes.transformationCard}
+                onMouseEnter={() => {
+                  gaEvent("premium_transformation_card_view", {
+                    category: title,
+                  });
+                  gaEvent("key_premium_transformation_card_view", {
+                    category: title,
+                  });
+                }}
+              >
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            ))}
           </div>
         </section>
       </main>

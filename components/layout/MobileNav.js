@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { gaEvent } from "../../lib/gtag";
@@ -17,8 +17,18 @@ export default function MobileNav({
   const [activeMobileSection, setActiveMobileSection] = useState(null);
   const router = useRouter();
 
+  // ⭐ ANOMALY: Mobile Navigation Opened
+  useEffect(() => {
+    gaEvent("key_mobile_nav_open");
+  }, []);
+
   const handleSurprise = () => {
     gaEvent("mobile_nav_surprise_click", {
+      section: activeMobileSection,
+    });
+
+    // ⭐ ANOMALY: Surprise Click
+    gaEvent("key_mobile_surprise_click", {
       section: activeMobileSection,
     });
 
@@ -44,6 +54,10 @@ export default function MobileNav({
                 className={classes.navButton}
                 onClick={() => {
                   gaEvent("mobile_nav_section_open", { label });
+
+                  // ⭐ ANOMALY: Section Open
+                  gaEvent("key_mobile_section_open", { label });
+
                   setActiveMobileSection(label);
                 }}
                 aria-expanded={activeMobileSection === label}
@@ -156,6 +170,13 @@ export default function MobileNav({
                       section: activeMobileSection,
                       topic: item.text,
                     });
+
+                    // ⭐ ANOMALY: Topic Click
+                    gaEvent("key_mobile_topic_click", {
+                      section: activeMobileSection,
+                      topic: item.text,
+                    });
+
                     setActiveMobileSection(null);
                     closeMenu();
                   }}

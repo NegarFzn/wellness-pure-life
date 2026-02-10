@@ -11,7 +11,9 @@ export default function BlogPost() {
   const { slug } = query;
   const [post, setPost] = useState(null);
 
-  // Analytics: Fire when the post is loaded
+  // -------------------------
+  // 1. FIRE ARTICLE VIEW WHEN LOADED
+  // -------------------------
   useEffect(() => {
     if (!post) return;
 
@@ -21,6 +23,26 @@ export default function BlogPost() {
     });
   }, [post]);
 
+  // -------------------------
+  // 2. FIRE ENTRY SOURCE ("referrer")
+  // -------------------------
+  useEffect(() => {
+    if (!slug) return;
+
+    gaEvent("blog_article_entry", {
+      slug,
+      referrer: document.referrer || "direct",
+    });
+
+    gaEvent("key_blog_article_entry", {
+      slug,
+      referrer: document.referrer || "direct",
+    });
+  }, [slug]);
+
+  // -------------------------
+  // 3. FETCH BLOG POST
+  // -------------------------
   useEffect(() => {
     if (!slug) return;
 
@@ -30,26 +52,94 @@ export default function BlogPost() {
       .catch(() => setPost(null));
   }, [slug]);
 
+  // -------------------------
+  // 4. SCROLL DEPTH TRACKING
+  // -------------------------
+  useEffect(() => {
+    if (!post) return;
+
+    let fired = { 25: false, 50: false, 75: false, 100: false };
+
+    const onScroll = () => {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+
+      const marks = [25, 50, 75, 100];
+      marks.forEach((m) => {
+        if (!fired[m] && scrolled >= m) {
+          fired[m] = true;
+
+          gaEvent("blog_scroll", { slug: post.slug, depth: m });
+          gaEvent("key_blog_scroll", { slug: post.slug, depth: m });
+        }
+      });
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [post]);
+
+  // -------------------------
+  // 5. IMAGE VIEW
+  // -------------------------
+  useEffect(() => {
+    if (!post?.image) return;
+
+    gaEvent("blog_image_view", {
+      slug: post.slug,
+      image: post.image,
+    });
+
+    gaEvent("key_blog_image_view", {
+      slug: post.slug,
+      image: post.image,
+    });
+  }, [post]);
+
+  // -------------------------
+  // 6. RECOMMENDED POSTS SECTION VIEW
+  // -------------------------
+  useEffect(() => {
+    if (!post?.recommended || post.recommended.length === 0) return;
+
+    gaEvent("blog_recommended_view", {
+      slug: post.slug,
+      count: post.recommended.length,
+    });
+
+    gaEvent("key_blog_recommended_view", {
+      slug: post.slug,
+      count: post.recommended.length,
+    });
+  }, [post]);
+
+  // -------------------------
+  // 7. CTA VIEW TRACKING
+  // -------------------------
+  useEffect(() => {
+    if (!post) return;
+
+    gaEvent("blog_cta_view", { slug: post.slug });
+    gaEvent("key_blog_cta_view", { slug: post.slug });
+  }, [post]);
+
   if (!post) return null;
 
   const validImage = Boolean(post.image);
 
-  // Remove HTML tags for JSON-LD
   const cleanContent =
     typeof post.content === "string"
       ? post.content.replace(/<[^>]+>/g, "")
       : "";
 
-  // Remove OLD repeated Recommended Reading HTML block
   const cleanedContent =
     typeof post.content === "string"
       ? post.content.replace(
           /<h2>Recommended Reading[\s\S]*?<\/ul><\/div>/gi,
-          ""
+          "",
         )
       : post.content;
 
-  // Build full image URL for SEO
   const fullImageUrl =
     post.image && post.image.startsWith("http")
       ? post.image
@@ -66,12 +156,10 @@ export default function BlogPost() {
         <title>{post.title} | Wellness Pure Life</title>
         <meta name="description" content={post.excerpt} />
 
-        {/* SEO META TAGS */}
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.excerpt} />
         {post.image && <meta property="og:image" content={fullImageUrl} />}
         <meta property="og:type" content="article" />
-
         <meta name="twitter:card" content="summary_large_image" />
 
         {/* JSON-LD SCHEMA */}
@@ -91,7 +179,6 @@ export default function BlogPost() {
                     url: "https://wellnesspurelife.com/images/logo.png",
                   },
                 },
-
                 {
                   "@type": "WebSite",
                   "@id": "https://wellnesspurelife.com/#website",
@@ -107,7 +194,6 @@ export default function BlogPost() {
                     "query-input": "required name=search_term_string",
                   },
                 },
-
                 {
                   "@type": "BreadcrumbList",
                   "@id": `https://wellnesspurelife.com/blog/${post.slug}#breadcrumb`,
@@ -126,7 +212,6 @@ export default function BlogPost() {
                     },
                   ],
                 },
-
                 {
                   "@type": "BlogPosting",
                   "@id": `https://wellnesspurelife.com/blog/${post.slug}#blogposting`,
@@ -134,7 +219,6 @@ export default function BlogPost() {
                   description: post.excerpt,
                   articleBody: cleanContent,
                   url: `https://wellnesspurelife.com/blog/${post.slug}`,
-
                   image: post.image
                     ? {
                         "@type": "ImageObject",
@@ -143,17 +227,14 @@ export default function BlogPost() {
                         height: 630,
                       }
                     : undefined,
-
                   author: {
                     "@type": "Organization",
                     "@id": "https://wellnesspurelife.com/#organization",
                     name: "Wellness Pure Life",
                   },
-
                   publisher: {
                     "@id": "https://wellnesspurelife.com/#organization",
                   },
-
                   datePublished: publishedDate,
                   dateModified: modifiedDate,
                 },
@@ -179,13 +260,11 @@ export default function BlogPost() {
 
         <p className={classes.excerpt}>{post.excerpt}</p>
 
-        {/* Render cleaned content WITHOUT old Recommended Reading list */}
         <div
           className={classes.content}
           dangerouslySetInnerHTML={{ __html: cleanedContent }}
         />
 
-        {/* ⭐ Premium Recommended Reading */}
         {post.recommended && post.recommended.length > 0 && (
           <div className={classes.recommendedSection}>
             <h2 className={classes.recommendedTitle}>Recommended Reading</h2>

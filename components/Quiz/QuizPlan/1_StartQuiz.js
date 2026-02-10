@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-// ✅ GA4 tracking imports
 import { trackQuizStart } from "../../../lib/quizEvents";
 import { gaEvent } from "../../../lib/gtag";
 import classes from "./StartQuiz.module.css";
@@ -13,9 +11,15 @@ export default function MultiStartQuiz({ slug }) {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
+  // ================================
+  // PAGE LOADED
+  // ================================
   useEffect(() => {
     gaEvent("plan_quiz_landing_page_view", { slug });
+    gaEvent("key_plan_quiz_landing_page_view", { slug });
+
+    gaEvent("plan_quiz_start_screen_view", { slug });
+    gaEvent("key_plan_quiz_start_screen_view", { slug });
   }, [slug]);
 
   // ================================
@@ -36,17 +40,30 @@ export default function MultiStartQuiz({ slug }) {
           slug,
           total_questions: quizDoc.questions.length,
         });
+        gaEvent("key_plan_quiz_questions_loaded", {
+          slug,
+          total_questions: quizDoc.questions.length,
+        });
 
         const goalQuestion = quizDoc.questions.find((q) => q.key === "goal");
         if (!goalQuestion?.options) throw new Error("No goal question found.");
+
         setGoals(goalQuestion.options);
+
         gaEvent("plan_quiz_goals_displayed", {
+          slug,
+          number_of_goals: goalQuestion.options.length,
+        });
+        gaEvent("key_plan_quiz_goals_displayed", {
           slug,
           number_of_goals: goalQuestion.options.length,
         });
       } catch (err) {
         console.error("❌ Failed to load quiz:", err);
         setGoals([]);
+
+        gaEvent("plan_quiz_load_error", { slug, error: err.message });
+        gaEvent("key_plan_quiz_load_error", { slug, error: err.message });
       } finally {
         setLoading(false);
       }
@@ -55,9 +72,16 @@ export default function MultiStartQuiz({ slug }) {
     loadQuiz();
   }, [slug]);
 
+  // ================================
+  // GOAL OPTIONS VIEW EVENT
+  // ================================
   useEffect(() => {
     if (goals.length > 0) {
       gaEvent("plan_quiz_goal_options_view", {
+        slug,
+        total_goals: goals.length,
+      });
+      gaEvent("key_plan_quiz_goal_options_view", {
         slug,
         total_goals: goals.length,
       });
@@ -66,43 +90,44 @@ export default function MultiStartQuiz({ slug }) {
 
   useEffect(() => {
     gaEvent("plan_quiz_start_page_loaded", { slug });
+    gaEvent("key_plan_quiz_start_page_loaded", { slug });
   }, [slug]);
 
   // ================================
-  // GOAL SELECT — WITH GA TRACKING
+  // GOAL SELECT
   // ================================
   const handleGoalSelect = (value) => {
     setGoal(value);
 
-    // GA4 — track goal selected
     gaEvent("quiz_goal_selected", { slug, goal: value });
+    gaEvent("key_quiz_goal_selected", { slug, goal: value });
   };
 
   // ================================
-  // START QUIZ — WITH GA TRACKING
+  // START QUIZ
   // ================================
   const handleStart = () => {
     if (!goal) return;
 
-    // GA4 — track quiz start
     trackQuizStart(slug);
+
+    gaEvent("key_quiz_plan_start", {
+      slug,
+      goal,
+      source: "StartQuizComponent",
+    });
+
+    gaEvent("plan_quiz_continue_click", { slug, goal });
+    gaEvent("key_plan_quiz_continue_click", { slug, goal });
 
     sessionStorage.setItem(`${slug}_questions`, JSON.stringify(questions));
     sessionStorage.setItem(`${slug}_goal`, goal);
-
-    gaEvent("plan_quiz_continue_click", {
-      slug,
-      goal,
-    });
 
     router.push(`/quizzes/quiz-plan?slug=${slug}`);
   };
 
   const progress = goal ? 20 : 0;
 
-  // ================================
-  // DYNAMIC HEADING
-  // ================================
   const renderHeading = () => {
     if (slug === "fitness-plan") {
       return (
@@ -158,7 +183,6 @@ export default function MultiStartQuiz({ slug }) {
             lifestyle.
           </p>
 
-          {/* PROGRESS BAR */}
           {goal && (
             <div className={classes.progressWrapper}>
               <div className={classes.progressBar}>
@@ -170,7 +194,6 @@ export default function MultiStartQuiz({ slug }) {
             </div>
           )}
 
-          {/* GOAL SELECT */}
           <div className={classes.quizWrapper}>
             <label className={classes.quizLabel}>What’s your main goal?</label>
 
@@ -180,14 +203,11 @@ export default function MultiStartQuiz({ slug }) {
               <div className={classes.goalGrid}>
                 {goals.map((opt) => {
                   const active = goal === opt.value;
-
                   return (
                     <button
                       key={opt.value}
-                      onClick={() => handleGoalSelect(opt.value)} // <-- FIXED (Correct tracking)
-                      className={`${classes.goalCard} ${
-                        active ? classes.activeGoal : ""
-                      }`}
+                      onClick={() => handleGoalSelect(opt.value)}
+                      className={`${classes.goalCard} ${active ? classes.activeGoal : ""}`}
                     >
                       <div className={classes.goalIcon}>
                         {opt.emoji || "🎯"}
@@ -208,7 +228,6 @@ export default function MultiStartQuiz({ slug }) {
             </div>
           )}
 
-          {/* CTA */}
           <div className={classes.ctaWrapper}>
             <button
               onClick={handleStart}

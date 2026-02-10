@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./nourish-item.module.css";
 
 function stripForCard(text = "") {
@@ -34,15 +35,32 @@ export default function NourishItem({ title, image, summary, intro, id }) {
   const shortSummary = shorten(cleanSummary, 140);
 
   return (
-    <li className={classes.card}>
-      <Link href={`/nourish/${id}`} className={classes.cardLink}>
+    <li
+      className={classes.card}
+      onMouseEnter={() => {
+        gaEvent("nourish_card_hover", { id, title });
+        gaEvent("key_nourish_card_hover", { id, title });
+      }}
+    >
+      <Link
+        href={`/nourish/${id}`}
+        className={classes.cardLink}
+        onClick={() => {
+          gaEvent("nourish_card_click", { id, title });
+          gaEvent("key_nourish_card_click", { id, title });
+        }}
+      >
         <div className={classes.media}>
           <Image
             src={image ? `/images/${image}` : "/images/placeholderNourish.jpg"}
-             alt={title || "Wellness Pure Life - Nourish Guide"}
+            alt={title || "Wellness Pure Life - Nourish Guide"}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             priority
+            onLoad={() => {
+              gaEvent("nourish_card_image_view", { id, image });
+              gaEvent("key_nourish_card_image_view", { id, image });
+            }}
           />
           <span className={classes.mediaOverlay} />
         </div>
@@ -54,7 +72,14 @@ export default function NourishItem({ title, image, summary, intro, id }) {
           <p className={classes.summary} title={cleanSummary}>
             {shortSummary}
           </p>
-          <span className={classes.cta}>
+
+          <span
+            className={classes.cta}
+            onMouseEnter={() => {
+              gaEvent("nourish_card_cta_view", { id, title });
+              gaEvent("key_nourish_card_cta_view", { id, title });
+            }}
+          >
             Read more <span aria-hidden>→</span>
           </span>
         </div>

@@ -13,26 +13,27 @@ export default function ResetPassword({ token, onClose }) {
   const [expired, setExpired] = useState(false);
   const [resendMessage, setResendMessage] = useState("");
 
-  // VIEW
   useEffect(() => {
     gaEvent("auth_reset_view");
+    gaEvent("key_auth_reset_view");
   }, []);
 
   const handleReset = async () => {
     gaEvent("auth_reset_submit");
+    gaEvent("key_auth_reset_submit");
 
     setError("");
 
-    // EMPTY INPUTS
     if (!password || !confirmPassword) {
       gaEvent("auth_reset_empty_fields");
+      gaEvent("key_auth_reset_empty_fields");
       setError("Please fill in both fields.");
       return;
     }
 
-    // PASSWORD MISMATCH
     if (password !== confirmPassword) {
       gaEvent("auth_reset_password_mismatch");
+      gaEvent("key_auth_reset_password_mismatch");
       setError("Passwords do not match.");
       return;
     }
@@ -49,10 +50,12 @@ export default function ResetPassword({ token, onClose }) {
 
       if (data.success) {
         gaEvent("auth_reset_success");
+        gaEvent("key_auth_reset_success");
         setSuccess(true);
         setTimeout(onClose, 2000);
       } else if (data.message === "Token expired") {
         gaEvent("auth_reset_token_expired");
+        gaEvent("key_auth_reset_token_expired");
         setExpired(true);
       } else {
         gaEvent("auth_reset_error", { error: data.message });
@@ -68,6 +71,7 @@ export default function ResetPassword({ token, onClose }) {
 
   const handleResend = async () => {
     gaEvent("auth_reset_resend_attempt");
+    gaEvent("key_auth_reset_resend_attempt");
 
     setResendMessage("");
 
@@ -87,21 +91,33 @@ export default function ResetPassword({ token, onClose }) {
 
       if (data.success) {
         gaEvent("auth_reset_resend_success", { email });
+        gaEvent("key_auth_reset_resend_success", { email });
       } else {
         gaEvent("auth_reset_resend_error", { message: data.message });
+        gaEvent("key_auth_reset_resend_error");
       }
 
       setResendMessage(
-        data.success ? "✅ Reset email sent!" : `❌ ${data.message}`
+        data.success ? "✅ Reset email sent!" : `❌ ${data.message}`,
       );
     } catch {
       gaEvent("auth_reset_resend_error", { message: "Network failure" });
+      gaEvent("key_auth_reset_resend_error");
       setResendMessage("❌ Failed to send reset link.");
     }
   };
 
   return (
-    <div className={classes.backdrop}>
+    <div
+      className={classes.backdrop}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          gaEvent("auth_reset_modal_close");
+          gaEvent("key_auth_reset_modal_close");
+          onClose();
+        }
+      }}
+    >
       <div className={classes.modal}>
         {!expired ? (
           <>
@@ -111,6 +127,7 @@ export default function ResetPassword({ token, onClose }) {
               type="password"
               placeholder="New Password"
               value={password}
+              onFocus={() => gaEvent("auth_reset_new_password_focus")}
               onChange={(e) => {
                 setPassword(e.target.value);
                 gaEvent("auth_reset_new_password_input");
@@ -121,6 +138,7 @@ export default function ResetPassword({ token, onClose }) {
               type="password"
               placeholder="Confirm Password"
               value={confirmPassword}
+              onFocus={() => gaEvent("auth_reset_confirm_password_focus")}
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
                 gaEvent("auth_reset_confirm_password_input");

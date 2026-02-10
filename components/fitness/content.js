@@ -1,29 +1,24 @@
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
+import { useEffect } from "react";
 import FeedbackPrompt from "../../components/UI/FeedbackPrompt";
 import classes from "./content.module.css";
 import FitnessList from "./fitness-list";
-
-
+import { gaEvent } from "../../lib/gtag";
 
 /* ------------------------------------------------------
    Enhanced formatter
-   - Inline markers kept
-   - Lists require ≥ 2 consecutive items
-   - Avoids decimals (e.g., 2.0) and single numbered lines
 ------------------------------------------------------ */
 function formatText(text) {
   if (typeof text !== "string") return "";
 
-  // Inline markers
   let t = text
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>") // **bold**
-    .replace(/__(.+?)__/g, '<strong class="colorful">$1</strong>') // __colorful__
-    .replace(/--(.+?)--/g, '<span class="larger">$1</span>') // --larger--
-    .replace(/\^\^(.+?)\^\^/g, '<span class="smaller">$1</span>'); // ^^smaller^^
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/__(.+?)__/g, '<strong class="colorful">$1</strong>')
+    .replace(/--(.+?)--/g, '<span class="larger">$1</span>')
+    .replace(/\^\^(.+?)\^\^/g, '<span class="smaller">$1</span>');
 
-  // Internal link shorthands
   t = t.replace(/\[\[mind:(\d+)\]\]/g, (_, id) => {
     return `<a href="/mindfulness/${id}" class="internal-link">Explore mindfulness ${id}</a>`;
   });
@@ -31,7 +26,6 @@ function formatText(text) {
     return `<a href="/nourish/${id}" class="internal-link">Explore nutrition ${id}</a>`;
   });
 
-  // Block parsing
   const lines = t.split(/\r?\n/);
   const out = [];
   let i = 0;
@@ -43,7 +37,6 @@ function formatText(text) {
     buf.length = 0;
   };
 
-  // collect consecutive list items that match a regex
   const collectList = (start, regex) => {
     const items = [];
     let j = start;
@@ -56,25 +49,21 @@ function formatText(text) {
     return { items, next: j };
   };
 
-  // previous non-empty line index
   const prevNonEmptyIndex = (idx) => {
     let k = idx - 1;
     while (k >= 0 && !lines[k].trim()) k--;
     return k;
   };
 
-  // Stricter patterns
   const h3Pattern = /^###\s+(.*)$/;
-  // Ordered: number + dot + space, but NOT a decimal like 2.0
   const olPattern = /^\d+\.(?!\d)\s+(.*)$/;
-  // Unordered: -, •, – + space
   const ulPattern = /^[-•–]\s+(.*)$/;
 
   let buf = [];
 
   while (i < lines.length) {
     const raw = lines[i];
-    const line = raw; // keep original spacing for regex
+    const line = raw;
 
     if (!line.trim()) {
       flushParagraph(buf);
@@ -82,7 +71,6 @@ function formatText(text) {
       continue;
     }
 
-    // ### Heading
     const h3 = line.match(h3Pattern);
     if (h3) {
       flushParagraph(buf);
@@ -91,7 +79,6 @@ function formatText(text) {
       continue;
     }
 
-    // Ordered list (require blank line before + ≥ 2 items)
     if (olPattern.test(line)) {
       const prevIdx = prevNonEmptyIndex(i);
       if (prevIdx === -1 || !lines[prevIdx].trim()) {
@@ -103,16 +90,14 @@ function formatText(text) {
           continue;
         }
       }
-      // Not a real list → treat as paragraph text
       buf.push(line.trim());
       i++;
       continue;
     }
 
-    // Unordered list (require blank line before + ≥ 2 items)
     if (ulPattern.test(line)) {
       const prevIdx = prevNonEmptyIndex(i);
-      if (prevIdx === -1 || !lines[prevIdx].trim()) {
+      if (prevIdx === -(-1) || !lines[prevIdx].trim()) {
         const { items, next } = collectList(i, ulPattern);
         if (items.length >= 2) {
           flushParagraph(buf);
@@ -121,13 +106,11 @@ function formatText(text) {
           continue;
         }
       }
-      // Not a real list → treat as paragraph text
       buf.push(line.trim());
       i++;
       continue;
     }
 
-    // Default: accumulate paragraph text
     buf.push(line.trim());
     i++;
   }
@@ -143,6 +126,64 @@ const Content = (props) => {
     items: { title, intro, sections, additionalSections, image },
   } = props;
 
+  /* ------------------------------------------------------
+     GA4 + Anomaly Tracking
+  ------------------------------------------------------ */
+  useEffect(() => {
+    // PAGE VIEW
+    gaEvent("content_page_view", { title, image });
+    gaEvent("key_content_page_view", { title });
+
+    // SCROLL DEPTH TRACKER
+    const onScroll = () => {
+      const scrollPercent =
+        (window.scrollY /
+          (document.documentElement.scrollHeight - window.innerHeight)) *
+        100;
+
+      if (scrollPercent > 60) {
+        gaEvent("content_scroll_60", { title });
+        gaEvent("key_content_scroll_60", { title });
+        window.removeEventListener("scroll", onScroll);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll);
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [title, image]);
+
+  /* ------------------------------------------------------
+     Track SECTION HEADINGS VIEWED
+  ------------------------------------------------------ */
+  useEffect(() => {
+    if (!sections) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const heading = entry.target.getAttribute("data-section");
+
+          gaEvent("content_section_view", { title, heading });
+          gaEvent("key_content_section_view", { heading });
+
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.4 },
+    );
+
+    sections.forEach((s, idx) => {
+      if (!s.heading) return;
+      const el = document.getElementById(`section-${idx}`);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [sections, title]);
+
   return (
     <>
       <Head>
@@ -151,8 +192,6 @@ const Content = (props) => {
           name="description"
           content={intro || "Learn about fitness techniques and exercises."}
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta charSet="UTF-8" />
       </Head>
 
       <div className={classes["fitness-container"]}>
@@ -163,7 +202,6 @@ const Content = (props) => {
             </Link>
           </div>
 
-          {/* Hero image */}
           {image && (
             <div className={classes.topImageWrapper}>
               <Image
@@ -183,11 +221,14 @@ const Content = (props) => {
             <div key={index}>
               {section.heading && (
                 <h2
+                  id={`section-${index}`}
+                  data-section={section.heading}
                   dangerouslySetInnerHTML={{
                     __html: formatText(section.heading),
                   }}
                 />
               )}
+
               {section.content && (
                 <div
                   dangerouslySetInnerHTML={{
@@ -195,6 +236,7 @@ const Content = (props) => {
                   }}
                 />
               )}
+
               {section.image && (
                 <Image
                   src={`/images/${section.image}`}
@@ -210,7 +252,9 @@ const Content = (props) => {
           ))}
         </div>
       </div>
+
       <FeedbackPrompt />
+
       <div className={classes["related-posts-wrapper"]}>
         <h3 className={classes["related-posts-title"]}>RELATED POSTS</h3>
         <div className={classes["related-posts-container"]}>

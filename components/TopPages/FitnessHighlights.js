@@ -1,5 +1,9 @@
+"use client";
+
 import classes from "./FitnessHighlights.module.css";
 import { Sparkles, Dumbbell, Salad, Brain } from "lucide-react";
+import { gaEvent } from "../../lib/gtag";
+import { useEffect } from "react";
 
 const featureIcons = {
   Sparkles,
@@ -32,6 +36,24 @@ const features = [
 ];
 
 export default function FeatureHighlights() {
+
+  // VIEW IMPRESSION EVENT
+  useEffect(() => {
+    gaEvent("fitness_highlights_view");
+    gaEvent("key_fitness_highlights_view");
+  }, []);
+
+  const handleClick = (feature, index) => {
+    gaEvent("fitness_highlight_click", {
+      feature_title: feature.title,
+      feature_index: index,
+    });
+    gaEvent("key_fitness_highlight_click", {
+      feature_title: feature.title,
+      feature_index: index,
+    });
+  };
+
   return (
     <section className={classes.featureSection} aria-label="Platform Benefits">
       <div className={classes.container}>
@@ -42,7 +64,11 @@ export default function FeatureHighlights() {
           {features.map((feature, index) => {
             const IconComponent = featureIcons[feature.icon];
             return (
-              <div className={classes.card} key={index}>
+              <div
+                className={classes.card}
+                key={index}
+                onClick={() => handleClick(feature, index)}
+              >
                 <div className={classes.icon}>
                   <IconComponent size={28} />
                 </div>

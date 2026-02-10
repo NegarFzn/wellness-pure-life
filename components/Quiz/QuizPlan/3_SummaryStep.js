@@ -16,12 +16,18 @@ export default function MultiSummaryStep({
   // ===============================
   useEffect(() => {
     gaEvent("quiz_summary_view", { slug });
+    gaEvent("key_quiz_summary_view", { slug });
   }, [slug]);
 
   useEffect(() => {
     if (!answers) return;
 
     gaEvent("quiz_summary_answers_loaded", {
+      slug,
+      totalAnswers: Object.keys(answers).length,
+    });
+
+    gaEvent("key_quiz_summary_answers_loaded", {
       slug,
       totalAnswers: Object.keys(answers).length,
     });
@@ -37,6 +43,12 @@ export default function MultiSummaryStep({
   const renderAnswerItem = (key, value) => {
     const question = questions.find((q) => q.key === key);
     if (!question) return null;
+
+    // Fire view event for each summary item
+    useEffect(() => {
+      gaEvent("quiz_summary_item_view", { slug, item: key });
+      gaEvent("key_quiz_summary_item_view", { slug, item: key });
+    }, []);
 
     const questionLabel = question.question;
     const isMulti = question.multiSelect;
@@ -61,17 +73,25 @@ export default function MultiSummaryStep({
   // ===============================
   const handleContinueClick = () => {
     gaEvent("quiz_summary_continue", { slug });
+    gaEvent("key_quiz_summary_continue", { slug });
+
+    gaEvent("key_quiz_summary_completed", {
+      slug,
+      totalAnswers: Object.keys(answers || {}).length,
+    });
 
     if (session?.user?.isPremium) {
-      // Premium user → go next
       onNext();
       return;
     }
 
-    // Not premium → show modal
     setShowPremiumModal(true);
 
     gaEvent("quiz_premium_gate_view", { slug });
+    gaEvent("key_quiz_premium_gate_view", { slug });
+
+    gaEvent("quiz_premium_modal_open", { slug });
+    gaEvent("key_quiz_premium_modal_open", { slug });
   };
 
   // ===============================
@@ -79,13 +99,9 @@ export default function MultiSummaryStep({
   // ===============================
   const handleUnlock = () => {
     gaEvent("quiz_premium_upgrade_click", { slug });
+    gaEvent("key_quiz_premium_upgrade_click", { slug });
 
-    if (session && !session.user?.isPremium) {
-      router.push("/premium");
-      return;
-    }
-
-    if (!session) {
+    if (!session || !session.user?.isPremium) {
       router.push("/premium");
       return;
     }
@@ -98,7 +114,7 @@ export default function MultiSummaryStep({
 
       <ul className={classes.summaryList}>
         {Object.entries(answers).map(([key, value]) =>
-          renderAnswerItem(key, value)
+          renderAnswerItem(key, value),
         )}
       </ul>
 
@@ -106,6 +122,7 @@ export default function MultiSummaryStep({
         <button
           onClick={() => {
             gaEvent("quiz_summary_back_click", { slug });
+            gaEvent("key_quiz_summary_back_click", { slug });
             onBack();
           }}
           className={classes.button}
@@ -126,7 +143,11 @@ export default function MultiSummaryStep({
               className={classes.premiumClose}
               onClick={() => {
                 setShowPremiumModal(false);
+                gaEvent("quiz_premium_close", { slug });
+                gaEvent("key_quiz_premium_close", { slug });
+
                 gaEvent("quiz_premium_later_click", { slug });
+                gaEvent("key_quiz_premium_later_click", { slug });
               }}
             >
               ×
@@ -154,7 +175,8 @@ export default function MultiSummaryStep({
               className={classes.premiumButtonSecondary}
               onClick={() => {
                 setShowPremiumModal(false);
-                trackEvent("quiz_premium_later_click", { slug });
+                gaEvent("quiz_premium_later_click", { slug });
+                gaEvent("key_quiz_premium_later_click", { slug });
               }}
             >
               Maybe Later

@@ -8,11 +8,12 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
   const [favoritedIds, setFavoritedIds] = useState({});
 
   /* --------------------------------------------------
-     GA: Modal Open (correct placement — fires ONCE)
+     GA: Modal Open (now includes anomaly event)
   -------------------------------------------------- */
   useEffect(() => {
     if (show) {
       gaEvent("daily_history_open");
+      gaEvent("key_daily_history_open");
     }
   }, [show]);
 
@@ -23,6 +24,9 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
   ----------------------------- */
   const handleRestoreFromPreview = async (item) => {
     gaEvent("daily_routine_restore", {
+      routine_id: item._id,
+    });
+    gaEvent("key_daily_routine_restore", {
       routine_id: item._id,
     });
 
@@ -40,6 +44,11 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
 
       if (res.ok) {
         setPreviewRoutine(null);
+
+        // closing = track event
+        gaEvent("daily_history_close");
+        gaEvent("key_daily_history_close");
+
         onClose();
       } else {
         alert(data.error || "Failed to restore routine");
@@ -85,6 +94,9 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
     };
 
     gaEvent("daily_routine_favorited", {
+      routine_id: id,
+    });
+    gaEvent("key_daily_routine_favorited", {
       routine_id: id,
     });
 
@@ -133,12 +145,21 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
   };
 
   /* -----------------------------
+     HANDLE CLOSE WITH EVENT
+  ----------------------------- */
+  const handleClose = () => {
+    gaEvent("daily_history_close");
+    gaEvent("key_daily_history_close");
+    onClose();
+  };
+
+  /* -----------------------------
      RENDER
   ----------------------------- */
   return (
-    <div className={classes.modalOverlay} onClick={onClose}>
+    <div className={classes.modalOverlay} onClick={handleClose}>
       <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={classes.closeButton} onClick={onClose}>
+        <button className={classes.closeButton} onClick={handleClose}>
           ✕
         </button>
 
@@ -166,7 +187,7 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
 
               return (
                 <li key={item._id} className={classes.item}>
-                  {/* Meta dates */}
+                  {/* Dates */}
                   <div className={classes.meta}>
                     <span className={classes.date}>
                       {item.updatedAt
@@ -186,17 +207,18 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
                     </span>
                   </div>
 
-                  {/* Summary */}
                   {item.daySummary && (
                     <p className={classes.summary}>{item.daySummary}</p>
                   )}
 
-                  {/* Buttons */}
                   <div className={classes.actionsRow}>
                     <button
                       className={classes.restoreButton}
                       onClick={() => {
                         gaEvent("daily_history_preview_click", {
+                          routine_id: item._id,
+                        });
+                        gaEvent("key_daily_history_preview_click", {
                           routine_id: item._id,
                         });
                         setPreviewRoutine(item);
@@ -224,7 +246,6 @@ export default function DailyHistoryModal({ show, onClose, history, loading }) {
           </ul>
         )}
 
-        {/* Preview Modal */}
         {previewRoutine && (
           <DailyPreviewModal
             routine={previewRoutine}

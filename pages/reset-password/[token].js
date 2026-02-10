@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./ResetPassword.module.css";
 
 export default function ResetPasswordPage() {
@@ -12,16 +13,29 @@ export default function ResetPasswordPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // PAGE VIEW EVENTS
+  useEffect(() => {
+    gaEvent("auth_reset_page_view");
+    gaEvent("key_auth_reset_page_view");
+  }, []);
+
   const handleReset = async (e) => {
     e.preventDefault();
     setMessage("");
 
+    gaEvent("auth_reset_page_submit");
+    gaEvent("key_auth_reset_page_submit");
+
     if (!password || !confirm) {
+      gaEvent("auth_reset_page_empty_fields");
+      gaEvent("key_auth_reset_page_empty_fields");
       setMessage("Both fields are required.");
       return;
     }
 
     if (password !== confirm) {
+      gaEvent("auth_reset_page_password_mismatch");
+      gaEvent("key_auth_reset_page_password_mismatch");
       setMessage("Passwords do not match.");
       return;
     }
@@ -35,10 +49,18 @@ export default function ResetPasswordPage() {
       });
 
       if (res.data.success) {
+        gaEvent("auth_reset_page_success");
+        gaEvent("key_auth_reset_page_success");
+
         setMessage("Password updated successfully. Redirecting...");
         setTimeout(() => router.push("/"), 2000);
       }
     } catch (err) {
+      gaEvent("auth_reset_page_error", {
+        message: err.response?.data?.message,
+      });
+      gaEvent("key_auth_reset_page_error");
+
       setMessage(err.response?.data?.message || "Failed to reset password.");
     } finally {
       setLoading(false);
@@ -57,7 +79,11 @@ export default function ResetPasswordPage() {
             type="password"
             placeholder="New password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              gaEvent("auth_reset_page_new_password_input");
+              gaEvent("key_auth_reset_page_new_password_input");
+            }}
             className={classes.input}
           />
 
@@ -65,7 +91,11 @@ export default function ResetPasswordPage() {
             type="password"
             placeholder="Confirm password"
             value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
+            onChange={(e) => {
+              setConfirm(e.target.value);
+              gaEvent("auth_reset_page_confirm_password_input");
+              gaEvent("key_auth_reset_page_confirm_password_input");
+            }}
             className={classes.input}
           />
 

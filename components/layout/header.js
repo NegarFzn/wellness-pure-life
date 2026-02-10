@@ -43,6 +43,11 @@ export default function Header({ weather }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isVerified = !!user?.emailVerified;
 
+  useEffect(() => {
+    gaEvent("header_view");
+    gaEvent("key_header_loaded"); // anomaly baseline
+  }, []);
+
   const handleDropdownToggle = (label) => {
     if (activeDropdown === label) {
       setActiveDropdown(null);
@@ -172,10 +177,18 @@ export default function Header({ weather }) {
               placeholder="Find your personalized wellness plan…"
               className={classes.searchInput}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => gaEvent("header_search_focus")}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                gaEvent("header_search_input");
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && searchQuery.trim()) {
                   gaEvent("header_search", { query: searchQuery.trim() });
+                  gaEvent("key_header_search", {
+                    query_length: searchQuery.length,
+                  });
+
                   router.push(
                     `/search?q=${encodeURIComponent(searchQuery.trim())}`,
                   );
@@ -206,6 +219,8 @@ export default function Header({ weather }) {
                   onMouseEnter={() => {
                     if (window.innerWidth > 768) {
                       setActiveDropdown(label);
+                      gaEvent("header_dropdown_open", { label });
+                      gaEvent("key_header_dropdown_open", { label });
                     }
                   }}
                   onMouseLeave={() => {
@@ -305,6 +320,9 @@ export default function Header({ weather }) {
                     <button
                       className={classes.verifySticker}
                       onClick={async () => {
+                        gaEvent("auth_verification_resend_click");
+                        gaEvent("key_auth_verification_resend_click");
+
                         const userEmail = user?.email;
                         if (!userEmail)
                           return toast.error("User email not available.");
@@ -321,9 +339,12 @@ export default function Header({ weather }) {
 
                           if (!res.ok) throw new Error("Failed");
 
+                          gaEvent("auth_verification_resend_success");
+
                           toast.success("Verification email sent.");
                         } catch (err) {
-                          console.error(err);
+                          gaEvent("auth_verification_resend_error");
+
                           toast.error("Could not resend verification email.");
                         }
                       }}
@@ -414,13 +435,17 @@ export default function Header({ weather }) {
                   <Link
                     href="/dashboard"
                     className={classes.dropdownLink}
-                    onClick={() => gaEvent("header_profile_click")}
+                    onClick={() => {
+                      gaEvent("header_profile_click");
+                      gaEvent("key_header_profile_click");
+                    }}
                   >
                     <FiUser size={16} /> Profile
                   </Link>
                   <button
                     onClick={() => {
                       gaEvent("header_logout_click");
+                      gaEvent("key_header_logout_click");
                       signOut({ callbackUrl: "https://wellnesspurelife.com/" });
                     }}
                     className={classes.logoutLink}
@@ -435,10 +460,24 @@ export default function Header({ weather }) {
           {/* DESKTOP SIGNUP/LOGIN (only when not logged in) */}
           {!user && status !== "loading" && (
             <div className={`${classes.authButtons} ${classes.desktopOnly}`}>
-              <button onClick={openSignup} className={classes.authMiniBtn}>
+              <button
+                onClick={() => {
+                  openSignup();
+                  gaEvent("header_signup_click");
+                  gaEvent("key_header_signup_click");
+                }}
+                className={classes.authMiniBtn}
+              >
                 Sign Up
               </button>
-              <button onClick={openLogin} className={classes.authMiniBtn}>
+              <button
+                onClick={() => {
+                  openLogin();
+                  gaEvent("header_login_click");
+                  gaEvent("key_header_login_click");
+                }}
+                className={classes.authMiniBtn}
+              >
                 Login
               </button>
             </div>
@@ -461,11 +500,13 @@ export default function Header({ weather }) {
             className={`${classes.hamburger} ${classes.mobileOnly}`}
             onClick={() => {
               setMobileMenuOpen(!mobileMenuOpen);
-              gaEvent(
-                mobileMenuOpen
-                  ? "header_mobile_menu_close"
-                  : "header_mobile_menu_open",
-              );
+
+              if (!mobileMenuOpen) {
+                gaEvent("header_mobile_menu_open");
+                gaEvent("key_header_mobile_menu_open");
+              } else {
+                gaEvent("header_mobile_menu_close");
+              }
             }}
             aria-label="Toggle menu"
           >

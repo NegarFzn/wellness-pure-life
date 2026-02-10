@@ -1,22 +1,20 @@
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
+import { gaEvent } from "../../lib/gtag";
 import FeedbackPrompt from "../../components/UI/FeedbackPrompt";
 import classes from "./content.module.css";
 import NourishList from "./nourish-list";
 
-// Enhanced formatter (parity with the attached file)
 function formatText(text) {
   if (typeof text !== "string") return "";
 
-  // Inline markers
   let t = text
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>") // **bold**
-    .replace(/__(.+?)__/g, '<strong class="colorful">$1</strong>') // __colorful__
-    .replace(/--(.+?)--/g, '<span class="larger">$1</span>') // --larger--
-    .replace(/\^\^(.+?)\^\^/g, '<span class="smaller">$1</span>'); // ^^smaller^^
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/__(.+?)__/g, '<strong class="colorful">$1</strong>')
+    .replace(/--(.+?)--/g, '<span class="larger">$1</span>')
+    .replace(/\^\^(.+?)\^\^/g, '<span class="smaller">$1</span>');
 
-  // Internal link shorthands
   t = t.replace(/\[\[mind:(\d+)\]\]/g, (_, id) => {
     return `<a href="/mindfulness/${id}" class="internal-link">Explore mindfulness ${id}</a>`;
   });
@@ -24,17 +22,16 @@ function formatText(text) {
     return `<a href="/nourish/${id}" class="internal-link">Explore nutrition ${id}</a>`;
   });
 
-  // Block parsing (headings, lists, paragraphs)
   const lines = t.split(/\r?\n/);
   const out = [];
   let i = 0;
   let buf = [];
 
-  const flushParagraph = (bufRef) => {
-    if (!bufRef.length) return;
-    const txt = bufRef.join(" ").trim();
+  const flushParagraph = (ref) => {
+    if (!ref.length) return;
+    const txt = ref.join(" ").trim();
     if (txt) out.push(`<p>${txt}</p>`);
-    bufRef.length = 0;
+    ref.length = 0;
   };
 
   const collectList = (start, regex) => {
@@ -58,7 +55,6 @@ function formatText(text) {
       continue;
     }
 
-    // ### Heading
     const h3 = line.match(/^###\s+(.*)$/);
     if (h3) {
       flushParagraph(buf);
@@ -67,7 +63,6 @@ function formatText(text) {
       continue;
     }
 
-    // Ordered list (1. item)
     if (/^\d+\.\s+/.test(line)) {
       flushParagraph(buf);
       const { items, next } = collectList(i, /^\d+\.\s+(.*)$/);
@@ -76,7 +71,6 @@ function formatText(text) {
       continue;
     }
 
-    // Unordered list (-, •, –)
     if (/^[-•–]\s+/.test(line)) {
       flushParagraph(buf);
       const { items, next } = collectList(i, /^[-•–]\s+(.*)$/);
@@ -85,7 +79,6 @@ function formatText(text) {
       continue;
     }
 
-    // Default: accumulate paragraph text
     buf.push(line.trim());
     i++;
   }
@@ -94,12 +87,16 @@ function formatText(text) {
   return out.join("\n");
 }
 
-const adSlots = ["1111111111", "2222222222", "3333333333"];
-
 const Content = (props) => {
   const {
     items: { title, intro, sections, additionalSections, image },
   } = props;
+
+  // PAGE VIEW analytics
+  if (title) {
+    gaEvent("nourish_article_view", { title });
+    gaEvent("key_nourish_article_view", { title });
+  }
 
   return (
     <>
@@ -112,30 +109,36 @@ const Content = (props) => {
             "Discover nutrition insights, healthy eating tips, and nourishing recipes to enhance your well-being."
           }
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta charSet="UTF-8" />
-        {/* ✅ Google AdSense Script (Replace with your client ID) */}
       </Head>
-
-      {/* <AdBlock adSlot="1234567890" className={`${classes.adBlock} ${classes.adTop}`} /> */}
 
       <div className={classes["nourish-container"]}>
         <div className={classes["nourish-content"]}>
           <div className={classes.backButtonWrapper}>
             <Link href="/nourish" legacyBehavior>
-              <a className={classes.backButton}>← Back to Nourish Guide</a>
+              <a
+                className={classes.backButton}
+                onClick={() => {
+                  gaEvent("nourish_back_click", { from: title });
+                  gaEvent("key_nourish_back_click", { from: title });
+                }}
+              >
+                ← Back to Nourish Guide
+              </a>
             </Link>
           </div>
 
-          {/* ✅ Top hero image (matches attached file behavior) */}
           {image && (
             <div className={classes.topImageWrapper}>
               <Image
                 src={`/images/${image}`}
-                alt={title || "Wellness Pure Life - Nourish Guide"}
+                alt={title || "Nourish Hero"}
                 width={1200}
                 height={650}
                 priority
+                onLoad={() => {
+                  gaEvent("nourish_hero_image_view", { title });
+                  gaEvent("key_nourish_hero_image_view", { title });
+                }}
               />
             </div>
           )}
@@ -150,8 +153,19 @@ const Content = (props) => {
                   dangerouslySetInnerHTML={{
                     __html: formatText(section.heading),
                   }}
+                  onMouseEnter={() => {
+                    gaEvent("nourish_section_heading_view", {
+                      heading: section.heading,
+                      index,
+                    });
+                    gaEvent("key_nourish_section_heading_view", {
+                      heading: section.heading,
+                      index,
+                    });
+                  }}
                 />
               )}
+
               {section.content && (
                 <div
                   dangerouslySetInnerHTML={{
@@ -159,32 +173,45 @@ const Content = (props) => {
                   }}
                 />
               )}
+
               {section.image && (
                 <Image
                   src={`/images/${section.image}`}
-                  alt={
-                    section.heading ||
-                    "Wellness Pure Life - Mindfulness Section"
-                  }
+                  alt={section.heading || "Nourish Section Image"}
                   width={700}
                   height={420}
                   loading="lazy"
+                  onLoad={() => {
+                    gaEvent("nourish_section_image_view", {
+                      image: section.image,
+                      index,
+                    });
+                    gaEvent("key_nourish_section_image_view", {
+                      image: section.image,
+                      index,
+                    });
+                  }}
                 />
               )}
             </div>
           ))}
         </div>
-        {/* <AdSidebar adSlots={["1234567890", "2345678901", "3456789012"]} /> */}
       </div>
+
       <FeedbackPrompt />
-      <div className={classes["related-posts-wrapper"]}>
+
+      <div
+        className={classes["related-posts-wrapper"]}
+        onMouseEnter={() => {
+          gaEvent("nourish_related_posts_view", { title });
+          gaEvent("key_nourish_related_posts_view", { title });
+        }}
+      >
         <h3 className={classes["related-posts-title"]}>RELATED POSTS</h3>
         <div className={classes["related-posts-container"]}>
           <NourishList items={additionalSections} />
         </div>
       </div>
-
-      {/* <AdBlock adSlot="2345678901" className={`${classes.adBlock} ${classes.adBottom}`} /> */}
     </>
   );
 };

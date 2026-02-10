@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { gaEvent } from "../../lib/gtag";  // ✅ analytics
+import { gaEvent } from "../../lib/gtag"; // ✅ analytics
 import classes from "./ChallengeCard.module.css";
 
 export default function ChallengeCard({
@@ -12,12 +12,10 @@ export default function ChallengeCard({
     <Link
       href={href}
       className={classes.wrapper}
-      onClick={() =>
-        gaEvent("challenge_card_click", {
-          title,
-          href,
-        })
-      } // ✅ analytics event
+      onClick={() => {
+        gaEvent("challenge_card_click", { title, href });
+        gaEvent("key_challenge_card_click", { title, href });
+      }}
     >
       <div className={classes.card}>
         <span className={classes.badge}>Challenge</span>

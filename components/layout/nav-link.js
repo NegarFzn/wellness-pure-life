@@ -20,6 +20,12 @@ export default function NavLink({ href, children }) {
           href,
           label: children,
         });
+
+        // ⭐ REQUIRED: ANOMALY DETECTION
+        gaEvent("key_header_nav_click", {
+          href,
+          label: children,
+        });
       }}
     >
       {children}

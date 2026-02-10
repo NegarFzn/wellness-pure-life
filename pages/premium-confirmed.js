@@ -7,6 +7,7 @@ import classes from "./premium-confirmed.module.css";
 export default function PremiumConfirmed() {
   useEffect(() => {
     gaEvent("premium_confirm_page_view");
+    gaEvent("key_premium_confirm_page_view");
   }, []);
 
   const { update } = useSession();
@@ -19,14 +20,13 @@ export default function PremiumConfirmed() {
     const confirmUpgrade = async () => {
       const sessionId = router.query.session_id;
       if (!sessionId) return;
-      gaEvent("premium_confirm_start", {
-        session_id: sessionId,
-      });
+
+      gaEvent("premium_confirm_start", { session_id: sessionId });
+      gaEvent("key_premium_confirm_start", { session_id: sessionId });
 
       setStatus("updating");
 
       try {
-        // Call backend to confirm and update user's premium status
         const res = await fetch("/api/confirm-premium", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -35,20 +35,27 @@ export default function PremiumConfirmed() {
 
         if (!res.ok) throw new Error("API confirmation failed");
 
-        await update(); // Refresh the NextAuth session to include isPremium
+        await update();
         setStatus("success");
 
-        gaEvent("premium_confirm_success", {
-          session_id: sessionId,
-        });
+        gaEvent("premium_confirm_success", { session_id: sessionId });
+        gaEvent("key_premium_confirm_success", { session_id: sessionId });
 
         setTimeout(() => {
-          router.push("/dashboard"); // Redirect to premium feature page
+          gaEvent("premium_confirm_redirect", { to: "/dashboard" });
+          gaEvent("key_premium_confirm_redirect", { to: "/dashboard" });
+
+          router.push("/dashboard");
         }, 3000);
       } catch (err) {
         gaEvent("premium_confirm_error", {
           error: err.message,
-          session_id: router.query.session_id || null,
+          session_id: sessionId || null,
+        });
+
+        gaEvent("key_premium_confirm_error", {
+          error: err.message,
+          session_id: sessionId || null,
         });
 
         console.error("❌ Error upgrading to premium:", err.message);

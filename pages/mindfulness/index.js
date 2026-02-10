@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import mindfulnessHeader from "/public/images/mindfulness_header.jpg";
 import MindfulnessHighlights from "../../components/TopPages/MindfulnessHighlights";
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./index.module.css";
 import MindfulnessList from "../../components/mindfulness/mindfulness-list";
 import ChallengeCard from "../../components/ChallengeCard/ChallengeCard";
@@ -16,14 +17,11 @@ function MindfulnessPage(props) {
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
-    const music = new Audio("/audio/mindfulness-background.mp3");
-    music.volume = 0; // start silent
-    music.loop = true; // repeat forever
+    let music;
 
-    // Fade In
     const fadeIn = (target = 0.35, speed = 0.015) => {
       const interval = setInterval(() => {
-        if (music.volume < target) {
+        if (music && music.volume < target) {
           music.volume = Math.min(music.volume + speed, target);
         } else {
           clearInterval(interval);
@@ -31,25 +29,39 @@ function MindfulnessPage(props) {
       }, 150);
     };
 
-    // Fade Out
     const fadeOut = (speed = 0.02) => {
       const interval = setInterval(() => {
-        if (music.volume > 0) {
+        if (music && music.volume > 0) {
           music.volume = Math.max(music.volume - speed, 0);
         } else {
           clearInterval(interval);
-          music.pause();
+          music?.pause();
         }
       }, 120);
     };
 
-    // Auto-play when entering the page
-    music
-      .play()
-      .then(() => fadeIn())
-      .catch(() => {});
+    const createAndPlay = () => {
+      if (!music) {
+        music = new Audio("/audio/mindfulness-background.mp3");
+        music.volume = 0;
+        music.loop = true;
+      }
+      music.play().then(() => fadeIn());
+    };
 
-    // Fade out when leaving the page
+    // Attempt autoplay
+    createAndPlay();
+
+    // Fallback if autoplay blocked
+    const unlock = () => {
+      createAndPlay();
+      window.removeEventListener("click", unlock);
+      window.removeEventListener("touchstart", unlock);
+    };
+
+    window.addEventListener("click", unlock);
+    window.addEventListener("touchstart", unlock);
+
     return () => fadeOut();
   }, []);
 
@@ -75,73 +87,79 @@ function MindfulnessPage(props) {
 
   // Highlight active sub-nav item while scrolling (IO + sticky offset aware)
   useEffect(() => {
-    const links = Array.from(
-      document.querySelectorAll(`.${classes.subnavLink}`)
-    );
-    const sections = (categories || [])
-      .map((c) => document.getElementById(c.key))
-      .filter(Boolean);
-
-    if (!links.length || !sections.length) return;
-
-    // Height of the sticky subnav; fall back if not measurable yet
-    const SUBNAV = document.querySelector(`.${classes.subnav}`);
-    const OFFSET = (SUBNAV?.offsetHeight || 80) + 8; // +8px breathing room
-
-    const setActive = (id) => {
-      links.forEach((a) =>
-        a.classList.toggle(classes.active, a.getAttribute("data-key") === id)
+    const timer = setTimeout(() => {
+      const links = Array.from(
+        document.querySelectorAll(`.${classes.subnavLink}`),
       );
-    };
 
-    // Pick the section that has most recently crossed the OFFSET line
-    const pickCurrent = () => {
-      const cursor = OFFSET + 1; // line just below sticky bar
-      const rects = sections.map((s) => ({
-        id: s.id,
-        top: s.getBoundingClientRect().top,
-      }));
-      const crossed = rects.filter((r) => r.top <= cursor);
-      const current = crossed.length
-        ? crossed.reduce((a, b) => (a.top > b.top ? a : b))
-        : rects[0];
-      setActive(current.id);
-    };
+      const sections = (categories || [])
+        .map((c) => document.getElementById(c.key))
+        .filter(Boolean);
 
-    const io = new IntersectionObserver(
-      () => {
-        // We ignore IO's entries and compute from ALL sections for reliability.
-        pickCurrent();
-      },
-      {
+      if (!links.length || !sections.length) return;
+
+      const SUBNAV = document.querySelector(`.${classes.subnav}`);
+      const OFFSET = (SUBNAV?.offsetHeight || 80) + 8;
+
+      const setActive = (id) => {
+        links.forEach((a) =>
+          a.classList.toggle(classes.active, a.getAttribute("data-key") === id),
+        );
+      };
+      let lastSection = null;
+
+      const pickCurrent = () => {
+        const cursor = OFFSET + 1;
+        const rects = sections.map((s) => ({
+          id: s.id,
+          top: s.getBoundingClientRect().top,
+        }));
+
+        const crossed = rects.filter((r) => r.top <= cursor);
+        const current = crossed.length
+          ? crossed.reduce((a, b) => (a.top > b.top ? a : b))
+          : rects[0];
+
+        const id = current.id; // FIX — define id
+
+        setActive(id);
+
+        if (id !== lastSection) {
+          lastSection = id;
+          gaEvent("mindfulness_section_view", { section: id });
+          gaEvent("key_mindfulness_section_view", { section: id });
+        }
+      };
+
+      const io = new IntersectionObserver(() => pickCurrent(), {
         root: null,
         rootMargin: `-${OFFSET}px 0px -60% 0px`,
-        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
-      }
-    );
+        threshold: 0.2,
+      });
 
-    sections.forEach((s) => io.observe(s));
+      sections.forEach((s) => io.observe(s));
 
-    // Prime state + keep in sync on resize/hash changes
-    pickCurrent();
-    const onResize = () => pickCurrent();
-    window.addEventListener("resize", onResize);
-    window.addEventListener("hashchange", pickCurrent);
+      pickCurrent();
+      const onResize = () => pickCurrent();
+      window.addEventListener("resize", onResize);
+      window.addEventListener("hashchange", pickCurrent);
 
-    // Also update immediately on chip click for instant feedback
-    const clickHandlers = links.map((a) => {
-      const id = a.getAttribute("data-key");
-      const h = () => setActive(id);
-      a.addEventListener("click", h);
-      return { a, h };
-    });
+      const clickHandlers = links.map((a) => {
+        const id = a.getAttribute("data-key");
+        const h = () => setActive(id);
+        a.addEventListener("click", h);
+        return { a, h };
+      });
 
-    return () => {
-      io.disconnect();
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("hashchange", pickCurrent);
-      clickHandlers.forEach(({ a, h }) => a.removeEventListener("click", h));
-    };
+      return () => {
+        io.disconnect();
+        window.removeEventListener("resize", onResize);
+        window.removeEventListener("hashchange", pickCurrent);
+        clickHandlers.forEach(({ a, h }) => a.removeEventListener("click", h));
+      };
+    }, 50);
+
+    return () => clearTimeout(timer);
   }, [categories]);
 
   useEffect(() => {
@@ -290,11 +308,15 @@ function MindfulnessPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              onClick={() =>
-                document
-                  .getElementById("meditation")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+              onClick={() => {
+                const el = document.getElementById("meditation");
+                const offset = 80;
+                if (el) {
+                  const top =
+                    el.getBoundingClientRect().top + window.scrollY - offset;
+                  window.scrollTo({ top, behavior: "smooth" });
+                }
+              }}
             >
               <span>🧘‍♂️</span>
               <h3>meditation</h3>
@@ -306,11 +328,15 @@ function MindfulnessPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              onClick={() =>
-                document
-                  .getElementById("stressReduction")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+              onClick={() => {
+                const el = document.getElementById("stressReduction");
+                const offset = 80;
+                if (el) {
+                  const top =
+                    el.getBoundingClientRect().top + window.scrollY - offset;
+                  window.scrollTo({ top, behavior: "smooth" });
+                }
+              }}
             >
               <span>🌬️</span>
               <h3>stress reduction</h3>
@@ -322,11 +348,15 @@ function MindfulnessPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              onClick={() =>
-                document
-                  .getElementById("productivityAndFocus")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+              onClick={() => {
+                const el = document.getElementById("productivityAndFocus");
+                const offset = 80;
+                if (el) {
+                  const top =
+                    el.getBoundingClientRect().top + window.scrollY - offset;
+                  window.scrollTo({ top, behavior: "smooth" });
+                }
+              }}
             >
               <span>😴</span>
               <h3>Focus</h3>
@@ -338,11 +368,15 @@ function MindfulnessPage(props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              onClick={() =>
-                document
-                  .getElementById("mentalWellness")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+              onClick={() => {
+                const el = document.getElementById("mentalWellness");
+                const offset = 80;
+                if (el) {
+                  const top =
+                    el.getBoundingClientRect().top + window.scrollY - offset;
+                  window.scrollTo({ top, behavior: "smooth" });
+                }
+              }}
             >
               <span>📔</span>
               <h3>mental wellness</h3>
@@ -430,7 +464,6 @@ function MindfulnessPage(props) {
             title="Unlock Calm in 21 Days"
             description="Discover daily micro-practices to ease your mind, reduce stress, and build lasting peace — in just a few mindful minutes each day."
             href="/challenges/21-days-mindfulness/1"
-           
           />
         </section>
 

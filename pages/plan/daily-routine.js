@@ -40,8 +40,8 @@ export default function DailyRoutinePage() {
         last.getUTCDate() + 1,
         0,
         0,
-        0
-      )
+        0,
+      ),
     );
     const now = new Date();
     const nowUTC = new Date(
@@ -50,8 +50,8 @@ export default function DailyRoutinePage() {
         now.getUTCMonth(),
         now.getUTCDate(),
         now.getUTCHours(),
-        now.getUTCMinutes()
-      )
+        now.getUTCMinutes(),
+      ),
     );
 
     const diffMs = nextUTC - nowUTC;
@@ -122,14 +122,12 @@ export default function DailyRoutinePage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to load routine");
 
-      // ✅ FIX: Use dailyRoutine, not routine
       const r = data.dailyRoutine || null;
 
       setRoutine(r);
       setDaySummary(data.daySummary || "");
       setUpdatedAt(data.updatedAt || null);
 
-      // ✅ Daily Quote is separate — correct
       setDailyQuote({
         quote: data.quote || "",
         quoteAuthor: data.quoteAuthor || "",
@@ -141,8 +139,28 @@ export default function DailyRoutinePage() {
         const stored = loadProgressFromStorage(dayId);
         setProgress(stored);
       }
+
+      /* ---------------------------------------------------
+       ✅ SUCCESS ANALYTICS (ADD HERE)
+    --------------------------------------------------- */
+      gaEvent("daily_routine_load_success", {
+        hasRoutine: !!r,
+        updatedAt: data.updatedAt || null,
+      });
+
+      gaEvent("key_daily_routine_load_success");
     } catch (err) {
       console.error("Load routine error:", err);
+
+      /* ---------------------------------------------------
+       ❌ ERROR ANALYTICS (ADD HERE)
+    --------------------------------------------------- */
+      gaEvent("daily_routine_load_error", {
+        message: err.message,
+      });
+
+      gaEvent("key_daily_routine_load_error");
+
       setRoutine(null);
       setDaySummary("");
       setUpdatedAt(null);
@@ -184,14 +202,32 @@ export default function DailyRoutinePage() {
       setHistoryLoading(true);
 
       const res = await fetch(`/api/plan/history?type=daily&page=${page}`);
-
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.error || "Failed to load history");
+
       setHistory(data.items || []);
+
+      /* -----------------------------------------
+       ✅ SUCCESS ANALYTICS (ADD HERE)
+    ----------------------------------------- */
+      gaEvent("daily_routine_history_load_success", {
+        count: data.items?.length || 0,
+      });
+
+      gaEvent("key_daily_routine_history_load_success");
     } catch (err) {
       console.error("Load history error:", err);
       setHistory([]);
+
+      /* -----------------------------------------
+       ❌ ERROR ANALYTICS (ADD HERE)
+    ----------------------------------------- */
+      gaEvent("daily_routine_history_load_error", {
+        message: err.message,
+      });
+
+      gaEvent("key_daily_routine_history_load_error");
     } finally {
       setHistoryLoading(false);
     }
@@ -221,7 +257,12 @@ export default function DailyRoutinePage() {
   useEffect(() => {
     if (status === "authenticated" && session?.user?.isPremium) {
       loadDailyRoutine();
+
       gaEvent("daily_routine_page_view", {
+        user: session?.user?.email || "anonymous",
+      });
+
+      gaEvent("key_daily_routine_page_view", {
         user: session?.user?.email || "anonymous",
       });
     }
@@ -415,14 +456,17 @@ export default function DailyRoutinePage() {
             title="My Personalized Daily Plan"
             text="Check out my personalized Daily plan based on my preferences at Wellness Pure Life."
             url={`https://wellnesspurelife.com${router.asPath}`}
-            onShare={() =>
+            onShare={() => {
               gaEvent({
                 action: "daily_plan_share",
                 params: {
                   user: session?.user?.email || "anonymous",
                 },
-              })
-            }
+              });
+
+              // ✅ ADD THIS
+              gaEvent("key_daily_plan_share");
+            }}
           />
         </div>
         {dailyQuote?.quote && (

@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { gaEvent } from "../../../lib/gtag";
 import classes from "./DailyQuiz.module.css";
 
 export default function DailyQuiz({ onClose }) {
-  // quiz state 
+  // quiz state
   const [answer, setAnswer] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [savedLocally, setSavedLocally] = useState(false);
@@ -19,20 +20,34 @@ export default function DailyQuiz({ onClose }) {
   const router = useRouter();
   const mountedRef = useRef(false);
 
+  // ---- VIEW EVENT ----
+  useEffect(() => {
+    gaEvent("daily_quiz_view");
+    gaEvent("key_daily_quiz_view");
+  }, []);
+
   // Decide initial step
   useEffect(() => {
     if (!mountedRef.current) {
       mountedRef.current = true;
+
       if (isLoggedIn) {
+        gaEvent("daily_quiz_start");
+        gaEvent("key_daily_quiz_start");
         setShowQuiz(true);
       } else {
+        gaEvent("daily_quiz_prompt_shown");
+        gaEvent("key_daily_quiz_prompt_shown");
         setShowPrompt(true);
       }
       return;
     }
+
     if (visible && isLoggedIn) {
       setShowPrompt(false);
       setShowQuiz(true);
+      gaEvent("daily_quiz_start");
+      gaEvent("key_daily_quiz_start");
     }
   }, [isLoggedIn, visible]);
 
@@ -50,6 +65,9 @@ export default function DailyQuiz({ onClose }) {
   const handleSubmit = async () => {
     if (!answer) return;
 
+    gaEvent("daily_quiz_submit");
+    gaEvent("key_daily_quiz_submit");
+
     if (isLoggedIn) {
       try {
         const res = await fetch("/api/quiz/quiz-daily", {
@@ -61,7 +79,6 @@ export default function DailyQuiz({ onClose }) {
             isDaily: true,
             result: answer,
             answers: [answer],
-            // Always send something, even if email missing from session
             email: session?.user?.email || "",
           }),
         });
@@ -72,17 +89,25 @@ export default function DailyQuiz({ onClose }) {
           throw new Error(`Save failed: ${res.status}`);
         }
 
+        gaEvent("daily_quiz_submit_saved_server");
+        gaEvent("key_daily_quiz_submit_saved_server");
+
         setSubmitted(true);
         setTimeout(() => handleClose(), 2000);
       } catch (e) {
         console.warn("Falling back to local save:", e.message);
+
         const today = new Date().toISOString().split("T")[0];
         try {
           localStorage.setItem(
             `daily-checkin:${today}`,
-            JSON.stringify({ answer, at: Date.now() })
+            JSON.stringify({ answer, at: Date.now() }),
           );
         } catch {}
+
+        gaEvent("daily_quiz_submit_saved_local");
+        gaEvent("key_daily_quiz_submit_saved_local");
+
         setSavedLocally(true);
         setSubmitted(true);
       }
@@ -91,10 +116,14 @@ export default function DailyQuiz({ onClose }) {
       try {
         localStorage.setItem(
           `daily-checkin:${today}`,
-          JSON.stringify({ answer, at: Date.now() })
+          JSON.stringify({ answer, at: Date.now() }),
         );
         localStorage.removeItem("openDailyQuizAfterLogin");
       } catch {}
+
+      gaEvent("daily_quiz_submit_saved_local");
+      gaEvent("key_daily_quiz_submit_saved_local");
+
       setSavedLocally(true);
       setSubmitted(true);
     }
@@ -106,6 +135,9 @@ export default function DailyQuiz({ onClose }) {
 
     const syncLocalIfExists = async () => {
       if (typeof window === "undefined") return;
+
+      gaEvent("daily_quiz_sync_attempt");
+      gaEvent("key_daily_quiz_sync_attempt");
 
       const keys = [];
       for (let i = 0; i < localStorage.length; i++) {
@@ -136,14 +168,20 @@ export default function DailyQuiz({ onClose }) {
 
           if (res.ok) {
             localStorage.removeItem(key);
+            gaEvent("daily_quiz_sync_success");
+            gaEvent("key_daily_quiz_sync_success");
           } else {
             const txt = await res.text();
             console.error("DailyQuiz sync failed:", res.status, txt);
+            gaEvent("daily_quiz_sync_fail");
+            gaEvent("key_daily_quiz_sync_fail");
           }
         }
         handleClose();
       } catch (err) {
         console.error("DailyQuiz sync error:", err);
+        gaEvent("daily_quiz_sync_fail");
+        gaEvent("key_daily_quiz_sync_fail");
       }
     };
 
@@ -152,6 +190,9 @@ export default function DailyQuiz({ onClose }) {
 
   // ---- Helpers ----
   const handleClose = () => {
+    gaEvent("daily_quiz_close");
+    gaEvent("key_daily_quiz_close");
+
     setVisible(false);
     setShowPrompt(false);
     setShowQuiz(false);
@@ -159,15 +200,19 @@ export default function DailyQuiz({ onClose }) {
   };
 
   const gotoLogin = () => {
+    gaEvent("daily_quiz_login_click");
+    gaEvent("key_daily_quiz_login_click");
+
     try {
       const today = new Date().toISOString().split("T")[0];
       const hasGuestSubmission = !!localStorage.getItem(
-        `daily-checkin:${today}`
+        `daily-checkin:${today}`,
       );
       if (!hasGuestSubmission && !submitted) {
         localStorage.setItem("openDailyQuizAfterLogin", "true");
       }
     } catch {}
+
     handleClose();
     setTimeout(() => router.push("/login"), 250);
   };
@@ -197,12 +242,23 @@ export default function DailyQuiz({ onClose }) {
               guest.
             </p>
             <div className={classes.actionsRow}>
-              <button className={classes.secondaryBtn} onClick={handleClose}>
+              <button
+                className={classes.secondaryBtn}
+                onClick={() => {
+                  gaEvent("daily_quiz_not_now_click");
+                  gaEvent("key_daily_quiz_not_now_click");
+                  handleClose();
+                }}
+              >
                 Not now
               </button>
               <button
                 className={classes.secondaryBtn}
-                onClick={() => setShowQuiz(true)}
+                onClick={() => {
+                  gaEvent("daily_quiz_continue_as_guest");
+                  gaEvent("key_daily_quiz_continue_as_guest");
+                  setShowQuiz(true);
+                }}
               >
                 Continue as guest
               </button>
@@ -222,7 +278,15 @@ export default function DailyQuiz({ onClose }) {
               <select
                 className={classes.select}
                 value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
+                onChange={(e) => {
+                  setAnswer(e.target.value);
+                  gaEvent("daily_quiz_answer_select", {
+                    answer: e.target.value,
+                  });
+                  gaEvent("key_daily_quiz_answer_select", {
+                    answer: e.target.value,
+                  });
+                }}
               >
                 <option value="">Select your mood</option>
                 <option value="High Stress">😣 High Stress</option>

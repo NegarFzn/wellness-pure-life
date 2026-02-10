@@ -80,9 +80,7 @@ export default function Login({
       router.push("/dashboard");
     } else {
       // 👉 TRACK FAILURE
-      gaEvent("auth_login_failed", {
-        email,
-      });
+      gaEvent("auth_login_failed");
 
       setError(
         <>
@@ -98,7 +96,7 @@ export default function Login({
           >
             Sign up here
           </button>
-        </>
+        </>,
       );
     }
   };
@@ -137,13 +135,20 @@ export default function Login({
       } else {
         setError(
           err?.response?.data?.message ||
-            "Could not send reset email. Please try again."
+            "Could not send reset email. Please try again.",
         );
       }
     }
   };
 
   if (!isOpen) return null;
+
+  // ⭐ TRACK WHEN LOGIN FORM ACTUALLY VISIBLE TO USER
+  useEffect(() => {
+    if (isOpen) {
+      gaEvent("auth_login_form_view");
+    }
+  }, [isOpen]);
 
   return (
     <div
@@ -178,10 +183,8 @@ export default function Login({
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              gaEvent("auth_login_email_input"); // 👉 ADDED
-            }}
+            onChange={(e) => setEmail(e.target.value)}
+            onFocus={() => gaEvent("auth_login_email_focus")}
             required
             className={classes.input}
           />
@@ -190,10 +193,8 @@ export default function Login({
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              gaEvent("auth_login_password_input"); // 👉 ADDED
-            }}
+            onChange={(e) => setPassword(e.target.value)}
+            onFocus={() => gaEvent("auth_login_password_focus")}
             required
             className={classes.input}
           />

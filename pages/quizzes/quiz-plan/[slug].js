@@ -19,23 +19,21 @@ export default function MultiPlanPage() {
   useEffect(() => {
     if (!slug || status === "loading") return;
 
-    // GA4 tracking — plan page loaded
-    gaEvent({
-      event: "plan_page_loaded",
-      params: { slug },
-    });
+    // PAGE LOAD EVENT + ANOMALY
+    gaEvent("plan_page_loaded", { slug });
+    gaEvent("key_plan_page_loaded", { slug });
 
     const fetchPlanData = async () => {
       try {
         let parsed = null;
         const userEmail = session?.user?.email || null;
 
-        // 1. Try MongoDB if logged in
+        // 1. Logged-in → fetch from MongoDB
         if (userEmail) {
           const res = await fetch(
             `/api/quiz/quiz-plan?slug=${slug}&email=${encodeURIComponent(
-              userEmail
-            )}`
+              userEmail,
+            )}`,
           );
           if (res.ok) {
             const data = await res.json();
@@ -43,13 +41,16 @@ export default function MultiPlanPage() {
           }
         }
 
-        // 2. Fallback to sessionStorage (not localStorage, since QuizEngine saves here:contentReference[oaicite:1]{index=1})
+        // 2. Fallback to sessionStorage
         if (!parsed && typeof window !== "undefined") {
           const stored = sessionStorage.getItem(`${slug}_plan_answers`);
           if (stored) {
             try {
               parsed = JSON.parse(stored);
             } catch {
+              gaEvent("plan_page_corrupted_answers", { slug });
+              gaEvent("key_plan_page_corrupted_answers", { slug });
+
               setErrMsg("Saved answers are corrupted. Please retake the quiz.");
               setLoading(false);
               return;
@@ -58,6 +59,9 @@ export default function MultiPlanPage() {
         }
 
         if (!parsed) {
+          gaEvent("plan_page_no_answers_found", { slug });
+          gaEvent("key_plan_page_no_answers_found", { slug });
+
           setErrMsg("No saved answers found. Please take the quiz first.");
           setLoading(false);
           return;
@@ -77,9 +81,24 @@ export default function MultiPlanPage() {
         } else if (qData?.questions) {
           normalized = qData.questions;
         }
+
         setQuestions(normalized);
+
+        // QUESTIONS LOADED EVENT
+        gaEvent("plan_page_questions_loaded", {
+          slug,
+          questionCount: normalized.length,
+        });
+        gaEvent("key_plan_page_questions_loaded", {
+          slug,
+          questionCount: normalized.length,
+        });
       } catch (error) {
         console.error("Error loading plan page:", error);
+
+        gaEvent("plan_page_error", { slug, error: error.message });
+        gaEvent("key_plan_page_error", { slug, error: error.message });
+
         setErrMsg("Something went wrong while loading your plan.");
       } finally {
         setLoading(false);
@@ -103,13 +122,30 @@ export default function MultiPlanPage() {
         <p className={classes.errorText}>{errMsg}</p>
         <button
           className={classes.retryButton}
-          onClick={() => router.push(`/quizzes/quiz-plan?slug=${slug}`)}
+          onClick={() => {
+            gaEvent("plan_page_retry_click", { slug });
+            gaEvent("key_plan_page_retry_click", { slug });
+
+            router.push(`/quizzes/quiz-plan?slug=${slug}`);
+          }}
         >
           ← Take the Quiz Again
         </button>
       </div>
     );
   }
+
+  // FINAL RENDER EVENT
+  gaEvent("plan_page_final_render", {
+    slug,
+    hasAnswers: !!answers,
+    questionCount: questions.length,
+  });
+  gaEvent("key_plan_page_final_render", {
+    slug,
+    hasAnswers: !!answers,
+    questionCount: questions.length,
+  });
 
   return (
     <>
@@ -124,7 +160,7 @@ export default function MultiPlanPage() {
           content="Explore your personalized wellness plan crafted from your quiz responses. Start your journey to a healthier you."
         />
 
-        {/* Open Graph (for social sharing) */}
+        {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Wellness Pure Life" />
         <meta
@@ -150,7 +186,7 @@ export default function MultiPlanPage() {
           }`}
         />
 
-        {/* Twitter Card */}
+        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
@@ -169,24 +205,19 @@ export default function MultiPlanPage() {
           content="https://wellnesspurelife.com/images/social-card.jpg"
         />
 
-        {/* Canonical & Favicon */}
         <link
           rel="canonical"
           href={`https://wellnesspurelife.com/quizzes/quiz-plan/${slug || ""}`}
         />
         <link rel="icon" href="/favicon.ico" />
+
+        {/* JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Article",
-              mainEntityOfPage: {
-                "@type": "WebPage",
-                "@id": `https://wellnesspurelife.com/quizzes/quiz-plan/${
-                  slug || ""
-                }`,
-              },
               headline: slug
                 ? `${slug} Wellness Plan`
                 : "Wellness Plan | Wellness Pure Life",
@@ -196,7 +227,6 @@ export default function MultiPlanPage() {
               author: {
                 "@type": "Organization",
                 name: "Wellness Pure Life",
-                url: "https://wellnesspurelife.com",
               },
               publisher: {
                 "@type": "Organization",
@@ -211,7 +241,8 @@ export default function MultiPlanPage() {
             }),
           }}
         />
-      </Head>{" "}
+      </Head>
+
       <div className={classes.planContainer}>
         <MultiPlanSummary slug={slug} answers={answers} questions={questions} />
       </div>

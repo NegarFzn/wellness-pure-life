@@ -24,12 +24,28 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
   const progressPercent = (currentDay / 21) * 100;
   const isPremium = session?.user?.isPremium;
 
+  /* ------------------------------- */
+  /* PAGE VIEW ANALYTICS            */
+  /* ------------------------------- */
   useEffect(() => {
     gaEvent("challenge_page_view", {
       category: "challenge",
       label: `day_${currentDay}`,
     });
+    gaEvent("key_challenge_page_view", { day: currentDay });
+    gaEvent("challenge_content_view", { day: currentDay });
+    gaEvent("key_challenge_content_view", { day: currentDay });
   }, []);
+
+  /* ------------------------------- */
+  /* PREMIUM MODAL VIEW ANALYTICS   */
+  /* ------------------------------- */
+  useEffect(() => {
+    if (showPremium) {
+      gaEvent("challenge_premium_modal_view", { day: currentDay });
+      gaEvent("key_challenge_premium_modal_view", { day: currentDay });
+    }
+  }, [showPremium]);
 
   return (
     <>
@@ -117,7 +133,7 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
                 <strong>Nourish Tip:</strong> {challenge.tip}
               </blockquote>
 
-              {/* Email Button */}
+              {/* EMAIL BUTTON */}
               <button
                 className={`${classes.emailButton} ${
                   sending ? classes.loading : ""
@@ -140,7 +156,7 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
                         email: session?.user?.email,
                         name: session?.user?.name,
                         dayNumber: currentDay,
-                        category: "nourish", // ↓ IMPORTANT
+                        category: "nourish",
                       }),
                     });
 
@@ -148,14 +164,18 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
 
                     setSending(false);
                     setSent(true);
-
                     setToast(data.message || "Email sent!");
+
+                    gaEvent("challenge_email_success", { day: currentDay });
+                    gaEvent("key_challenge_email_success", { day: currentDay });
 
                     setTimeout(() => setSent(false), 2000);
                   } catch (err) {
-                    console.error(err);
                     setSending(false);
                     setToast("Error sending email.");
+
+                    gaEvent("challenge_email_error", { day: currentDay });
+                    gaEvent("key_challenge_email_error", { day: currentDay });
                   }
                 }}
               >
@@ -178,30 +198,38 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
             </div>
           )
         ) : (
-          <div className={classes.congratsBox}>
-            <h2>🎉 You did it!</h2>
-            <p>
-              You’ve completed the 21 Days of Nourish Challenge! Take a moment
-              to appreciate how your body and mind feel after nourishing
-              yourself consistently for three weeks.
-            </p>
-            <p>
-              Remember: Nourishment isn’t just about food — it’s about balance,
-              energy, and mindful choices. Continue fueling your body with care
-              and intention. 🥗
-            </p>
-            <a
-              href={`/api/21days-challenge?name=${encodeURIComponent(
-                session?.user?.name || "Participant"
-              )}&email=${encodeURIComponent(session?.user?.email || "")}`}
-              className={classes.certificateButton}
-            >
-              🎓 Email My Certificate
-            </a>
-            <Link href="/" className={classes.navLink}>
-              Back to Home →
-            </Link>
-          </div>
+          <>
+            {/* COMPLETION ANALYTICS */}
+            {(() => {
+              gaEvent("challenge_completed_view", { category: "nourish" });
+              gaEvent("key_challenge_completed_view");
+            })()}
+
+            <div className={classes.congratsBox}>
+              <h2>🎉 You did it!</h2>
+              <p>
+                You’ve completed the 21 Days of Nourish Challenge! Take a moment
+                to appreciate how your body and mind feel.
+              </p>
+
+              <a
+                href={`/api/21days-challenge?name=${encodeURIComponent(
+                  session?.user?.name || "Participant",
+                )}&email=${encodeURIComponent(session?.user?.email || "")}`}
+                className={classes.certificateButton}
+                onClick={() => {
+                  gaEvent("challenge_certificate_request");
+                  gaEvent("key_challenge_certificate_request");
+                }}
+              >
+                🎓 Email My Certificate
+              </a>
+
+              <Link href="/" className={classes.navLink}>
+                Back to Home →
+              </Link>
+            </div>
+          </>
         )}
 
         {currentDay < 21 && (
@@ -214,6 +242,7 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
                     category: "challenge",
                     label: `from_day_${currentDay}`,
                   });
+                  gaEvent("key_challenge_previous_day", { day: currentDay });
 
                   router.push(`/challenges/21-days-nourish/${currentDay - 1}`);
                 }}
@@ -221,6 +250,7 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
                 ← Previous
               </button>
             )}
+
             {currentDay < 21 && (
               <button
                 className={classes.navLink}
@@ -229,20 +259,36 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
                     category: "challenge",
                     label: `from_day_${currentDay}`,
                   });
+                  gaEvent("key_challenge_next_attempt", { day: currentDay });
+
                   const nextDay = currentDay + 1;
                   const today = new Date();
                   const start = new Date(
-                    session?.user?.challenge_21_nourish?.startedAt || new Date()
+                    session?.user?.challenge_21_nourish?.startedAt ||
+                      new Date(),
                   );
                   const daysSince = Math.floor(
-                    (today - start) / (1000 * 60 * 60 * 24)
+                    (today - start) / (1000 * 60 * 60 * 24),
                   );
                   const allowed = Math.min(daysSince + 1, 21);
 
                   if (!isPremium && nextDay > allowed) {
+                    gaEvent("challenge_next_locked", { day: currentDay });
+                    gaEvent("key_challenge_next_locked", { day: currentDay });
+
                     setShowPremium(true);
                     return;
                   }
+
+                  gaEvent("challenge_next_day_success", {
+                    from: currentDay,
+                    to: nextDay,
+                  });
+                  gaEvent("key_challenge_next_day_success", {
+                    from: currentDay,
+                    to: nextDay,
+                  });
+
                   router.push(`/challenges/21-days-nourish/${nextDay}`);
                 }}
               >
@@ -287,13 +333,18 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
         <div className={classes.utilityButtons}>
           <button
             className={`${classes.utilityButton} ${classes.secondaryButton}`}
-            onClick={() => window.print()}
+            onClick={() => {
+              window.print();
+              gaEvent("challenge_print_certificate");
+              gaEvent("key_challenge_print_certificate");
+            }}
           >
             🖨️ Print This Challenge
           </button>
+
           <ShareButton
             title="I completed the 21 Days of Nourish Challenge!"
-            text="I just completed a 21-day nourishment journey with Wellness Pure Life. Try it yourself to feel more balanced and energized!"
+            text="I just completed a 21-day nourishment journey with Wellness Pure Life."
             url={`https://wellnesspurelife.com${router.asPath}`}
           />
         </div>
@@ -318,6 +369,7 @@ export async function getServerSideProps(context) {
     const userRecord = await db
       .collection("users")
       .findOne({ email: session.user.email });
+
     userStartDate = userRecord?.challenge_21_nourish?.startedAt || new Date();
 
     if (!userRecord?.challenge_21_nourish?.startedAt) {
@@ -329,7 +381,7 @@ export async function getServerSideProps(context) {
             "challenge_21_nourish.lastEmailSentDay": 0,
           },
         },
-        { upsert: true }
+        { upsert: true },
       );
     }
   } else {
@@ -338,7 +390,7 @@ export async function getServerSideProps(context) {
 
   const today = new Date();
   const daysSinceStart = Math.floor(
-    (today - new Date(userStartDate)) / (1000 * 60 * 60 * 24)
+    (today - new Date(userStartDate)) / (1000 * 60 * 60 * 24),
   );
   const allowedDay = Math.min(daysSinceStart + 1, 21);
   const isInvalidFutureDay = dayNumber > allowedDay;

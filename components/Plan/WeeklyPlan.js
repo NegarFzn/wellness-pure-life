@@ -11,9 +11,6 @@ export default function WeeklyPlan({
 }) {
   if (!data) return null;
 
-  /* ---------------------------------------------------
-     WEEK DATE HANDLING
-  --------------------------------------------------- */
   const DAY_ORDER = [
     "Monday",
     "Tuesday",
@@ -58,11 +55,32 @@ export default function WeeklyPlan({
     ? classes["mood_" + data.moodColor.toLowerCase()]
     : "";
 
+  /* ---------------------------------------------------
+     PAGE LOAD — DAY VIEW ANALYTICS + ANOMALY
+  --------------------------------------------------- */
   useEffect(() => {
     gaEvent("weekly_plan_day_view", {
       day,
       mood_color: data?.moodColor || "none",
     });
+
+    gaEvent("key_weekly_plan_day_view", {
+      day,
+      mood_color: data?.moodColor || "none",
+    });
+
+    // Section views
+    ["theme", "focus", "fitness", "mindfulness", "nourish", "evening"].forEach(
+      (section) => {
+        gaEvent("weekly_plan_section_view", { day, section });
+        gaEvent("key_weekly_plan_section_view", { day, section });
+      },
+    );
+
+    if (data.quote || data.quoteAuthor) {
+      gaEvent("weekly_plan_quote_view", { day });
+      gaEvent("key_weekly_plan_quote_view", { day });
+    }
   }, [day]);
 
   return (
@@ -81,6 +99,11 @@ export default function WeeklyPlan({
             day,
             is_open: e.target.open,
           });
+
+          gaEvent("key_weekly_plan_day_toggle", {
+            day,
+            is_open: e.target.open,
+          });
         }}
       >
         <summary className={classes.dayHeader}>
@@ -94,29 +117,27 @@ export default function WeeklyPlan({
           </div>
         </summary>
 
-        {/* --------------------- COACH TIP --------------------- */}
         {data.mentorTip && (
           <div className={classes.mentorBox}>
             <strong>Coach tip:</strong> {data.mentorTip}
           </div>
         )}
 
-        {/* --------------------- THEME --------------------- */}
         <div className={classes.section}>
           <h4 className={classes.sectionTitle}>✨ Theme</h4>
           <p className={classes.sectionText}>{data.theme}</p>
         </div>
 
-        {/* --------------------- FOCUS --------------------- */}
         <div className={classes.section}>
           <h4 className={classes.sectionTitle}>🎯 Focus</h4>
           <p className={classes.sectionText}>{data.focus}</p>
         </div>
 
-        {/* --------------------- FITNESS --------------------- */}
+        {/* ---------------- FITNESS ---------------- */}
         <div className={`${classes.section} ${classes.fitness}`}>
           <div className={classes.sectionHeader}>
             <h4 className={classes.sectionTitle}>💪 Fitness</h4>
+
             <button
               type="button"
               className={`${classes.checkButton} ${
@@ -124,6 +145,12 @@ export default function WeeklyPlan({
               }`}
               onClick={() => {
                 gaEvent("weekly_plan_progress_toggle", {
+                  day,
+                  section: "fitness",
+                  new_state: !dayProgress?.fitness,
+                });
+
+                gaEvent("key_weekly_plan_progress_toggle", {
                   day,
                   section: "fitness",
                   new_state: !dayProgress?.fitness,
@@ -137,7 +164,6 @@ export default function WeeklyPlan({
           </div>
 
           <h5 className={classes.itemTitle}>{data.fitness?.title}</h5>
-
           <p className={classes.sectionText}>{data.fitness?.description}</p>
 
           <div className={classes.badges}>
@@ -154,23 +180,27 @@ export default function WeeklyPlan({
           </div>
         </div>
 
-        {/* --------------------- MINDFULNESS --------------------- */}
+        {/* --------------- MINDFULNESS ---------------- */}
         <div className={`${classes.section} ${classes.mindfulness}`}>
           <div className={classes.sectionHeader}>
             <h4 className={classes.sectionTitle}>🧘 Mindfulness</h4>
+
             <button
               type="button"
               className={`${classes.checkButton} ${
                 dayProgress?.mindfulness ? classes.checkOn : ""
               }`}
               onClick={() => {
-                gaEvent({
-                  action: "weekly_plan_progress_toggle",
-                  params: {
-                    day,
-                    section: "mindfulness",
-                    new_state: !dayProgress?.mindfulness,
-                  },
+                gaEvent("weekly_plan_progress_toggle", {
+                  day,
+                  section: "mindfulness",
+                  new_state: !dayProgress?.mindfulness,
+                });
+
+                gaEvent("key_weekly_plan_progress_toggle", {
+                  day,
+                  section: "mindfulness",
+                  new_state: !dayProgress?.mindfulness,
                 });
 
                 toggleProgress(day, "mindfulness");
@@ -181,7 +211,6 @@ export default function WeeklyPlan({
           </div>
 
           <h5 className={classes.itemTitle}>{data.mindfulness?.title}</h5>
-
           <p className={classes.sectionText}>{data.mindfulness?.description}</p>
 
           <span className={classes.durationBadge}>
@@ -189,23 +218,27 @@ export default function WeeklyPlan({
           </span>
         </div>
 
-        {/* --------------------- NOURISH --------------------- */}
+        {/* ---------------- NOURISH ---------------- */}
         <div className={`${classes.section} ${classes.nourish}`}>
           <div className={classes.sectionHeader}>
             <h4 className={classes.sectionTitle}>🥗 Nourish</h4>
+
             <button
               type="button"
               className={`${classes.checkButton} ${
                 dayProgress?.nourish ? classes.checkOn : ""
               }`}
               onClick={() => {
-                gaEvent({
-                  action: "weekly_plan_progress_toggle",
-                  params: {
-                    day,
-                    section: "nourish",
-                    new_state: !dayProgress?.nourish,
-                  },
+                gaEvent("weekly_plan_progress_toggle", {
+                  day,
+                  section: "nourish",
+                  new_state: !dayProgress?.nourish,
+                });
+
+                gaEvent("key_weekly_plan_progress_toggle", {
+                  day,
+                  section: "nourish",
+                  new_state: !dayProgress?.nourish,
                 });
 
                 toggleProgress(day, "nourish");
@@ -216,7 +249,6 @@ export default function WeeklyPlan({
           </div>
 
           <h5 className={classes.itemTitle}>{data.nourish?.title}</h5>
-
           <p className={classes.sectionText}>{data.nourish?.description}</p>
 
           {data.nourish?.reminders?.length > 0 && (
@@ -228,23 +260,27 @@ export default function WeeklyPlan({
           )}
         </div>
 
-        {/* --------------------- EVENING --------------------- */}
+        {/* ---------------- EVENING ---------------- */}
         <div className={`${classes.section} ${classes.evening}`}>
           <div className={classes.sectionHeader}>
             <h4 className={classes.sectionTitle}>🌙 Evening</h4>
+
             <button
               type="button"
               className={`${classes.checkButton} ${
                 dayProgress?.evening ? classes.checkOn : ""
               }`}
               onClick={() => {
-                gaEvent({
-                  action: "weekly_plan_progress_toggle",
-                  params: {
-                    day,
-                    section: "evening",
-                    new_state: !dayProgress?.evening,
-                  },
+                gaEvent("weekly_plan_progress_toggle", {
+                  day,
+                  section: "evening",
+                  new_state: !dayProgress?.evening,
+                });
+
+                gaEvent("key_weekly_plan_progress_toggle", {
+                  day,
+                  section: "evening",
+                  new_state: !dayProgress?.evening,
                 });
 
                 toggleProgress(day, "evening");
@@ -255,11 +291,9 @@ export default function WeeklyPlan({
           </div>
 
           <h5 className={classes.itemTitle}>{data.evening?.title}</h5>
-
           <p className={classes.sectionText}>{data.evening?.description}</p>
         </div>
 
-        {/* --------------------- QUOTE --------------------- */}
         {(data.quote || data.quoteAuthor) && (
           <div className={classes.quoteBox}>
             {data.quote && <p className={classes.quoteText}>“{data.quote}”</p>}

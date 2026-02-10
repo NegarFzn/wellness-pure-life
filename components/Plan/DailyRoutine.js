@@ -19,10 +19,21 @@ export default function DailyRoutine({
         className={classes.details}
         open
         onToggle={(e) => {
+          const isOpen = e.target.open;
+
           gaEvent("daily_routine_toggle", {
             block,
-            is_open: e.target.open,
+            is_open: isOpen,
           });
+          gaEvent("key_daily_routine_toggle", {
+            block,
+            is_open: isOpen,
+          });
+
+          if (isOpen) {
+            gaEvent("daily_routine_block_view", { block });
+            gaEvent("key_daily_routine_block_view", { block });
+          }
         }}
       >
         <summary className={classes.dayHeader}>
@@ -42,7 +53,13 @@ export default function DailyRoutine({
 
         {/* --------------------- THEME --------------------- */}
         {data.theme && (
-          <div className={classes.section}>
+          <div
+            className={classes.section}
+            onMouseEnter={() => {
+              gaEvent("daily_routine_theme_view", { block });
+              gaEvent("key_daily_routine_theme_view", { block });
+            }}
+          >
             <h4 className={classes.sectionTitle}>✨ Theme</h4>
             <p className={classes.sectionText}>{data.theme}</p>
           </div>
@@ -50,7 +67,13 @@ export default function DailyRoutine({
 
         {/* --------------------- FOCUS --------------------- */}
         {data.focus && (
-          <div className={classes.section}>
+          <div
+            className={classes.section}
+            onMouseEnter={() => {
+              gaEvent("daily_routine_focus_view", { block });
+              gaEvent("key_daily_routine_focus_view", { block });
+            }}
+          >
             <h4 className={classes.sectionTitle}>🎯 Focus</h4>
             <p className={classes.sectionText}>{data.focus}</p>
           </div>
@@ -60,6 +83,7 @@ export default function DailyRoutine({
         <div className={`${classes.section} ${classes[block?.toLowerCase()]}`}>
           <div className={classes.sectionHeader}>
             <h4 className={classes.sectionTitle}>{block}</h4>
+
             <button
               type="button"
               className={`${classes.checkButton} ${
@@ -67,6 +91,10 @@ export default function DailyRoutine({
               }`}
               onClick={() => {
                 gaEvent("daily_routine_mark_done", {
+                  block,
+                  new_value: !blockProgress?.done,
+                });
+                gaEvent("key_daily_routine_mark_done", {
                   block,
                   new_value: !blockProgress?.done,
                 });
@@ -85,12 +113,16 @@ export default function DailyRoutine({
           {data.durationMinutes && (
             <span
               className={classes.durationBadge}
-              onClick={() =>
+              onClick={() => {
                 gaEvent("daily_routine_duration_view", {
                   block,
                   minutes: data.durationMinutes,
-                })
-              }
+                });
+                gaEvent("key_daily_routine_duration_view", {
+                  block,
+                  minutes: data.durationMinutes,
+                });
+              }}
             >
               ⏱ {data.durationMinutes} min
             </span>
@@ -99,7 +131,13 @@ export default function DailyRoutine({
 
         {/* --------------------- POEM --------------------- */}
         {data.poem && (
-          <div className={classes.quoteBox}>
+          <div
+            className={classes.quoteBox}
+            onMouseEnter={() => {
+              gaEvent("daily_routine_poem_view", { block });
+              gaEvent("key_daily_routine_poem_view", { block });
+            }}
+          >
             <p className={classes.quoteText}>{data.poem}</p>
           </div>
         )}

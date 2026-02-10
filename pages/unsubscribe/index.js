@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./unsubscribe.module.css";
 
 export default function UnsubscribePage() {
@@ -6,10 +7,20 @@ export default function UnsubscribePage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // PAGE VIEW ANALYTICS + ANOMALY
+  useEffect(() => {
+    gaEvent("unsubscribe_page_view");
+    gaEvent("key_unsubscribe_page_view");
+  }, []);
+
   async function handleUnsubscribe(e) {
     e.preventDefault();
     setLoading(true);
     setStatus(null);
+
+    // BUTTON CLICK EVENT
+    gaEvent("unsubscribe_click", { email });
+    gaEvent("key_unsubscribe_click", { email });
 
     try {
       const res = await fetch("/api/unsubscribe", {
@@ -20,8 +31,16 @@ export default function UnsubscribePage() {
 
       const data = await res.json();
       setStatus(data.message || "You have been unsubscribed.");
+
+      // SUCCESS EVENT
+      gaEvent("unsubscribe_success", { email });
+      gaEvent("key_unsubscribe_success", { email });
     } catch (err) {
       setStatus("Something went wrong. Please try again.");
+
+      // ERROR EVENT
+      gaEvent("unsubscribe_error", { email });
+      gaEvent("key_unsubscribe_error", { email });
     } finally {
       setLoading(false);
     }
@@ -41,7 +60,15 @@ export default function UnsubscribePage() {
             type="email"
             required
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+
+              // EMAIL TYPING EVENT
+              gaEvent("unsubscribe_email_typing", { value: e.target.value });
+              gaEvent("key_unsubscribe_email_typing", {
+                value: e.target.value,
+              });
+            }}
             placeholder="Enter your email"
             className={classes.input}
           />

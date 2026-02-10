@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { signIn, useSession } from "next-auth/react"; // 👉 UPDATED
+import { signIn, useSession } from "next-auth/react";
 import { gaEvent } from "../lib/gtag";
 import "react-toastify/dist/ReactToastify.css";
 import classes from "./login.module.css";
@@ -17,20 +17,23 @@ export default function LoginPage() {
   const [success, setSuccess] = useState(false);
   const router = useRouter();
 
-  const { redirect, plan } = router.query; // 👉 ADDED
-  const { data: session } = useSession(); // 👉 ADDED
+  const { redirect, plan } = router.query;
+  const { data: session } = useSession();
 
   // PAGE VIEW
   useEffect(() => {
     gaEvent("auth_login_page_view");
+    gaEvent("key_auth_login_page_view");
   }, []);
 
+  // EMAIL VERIFIED TOAST
   useEffect(() => {
     const hasToastFired = sessionStorage.getItem("verifiedToastShown");
 
     if (router.query.verified === "true" && !hasToastFired) {
       toast.success("Email verified successfully. Please log in.");
       sessionStorage.setItem("verifiedToastShown", "true");
+
       const { verified, ...rest } = router.query;
       router.replace({ pathname: router.pathname, query: rest }, undefined, {
         shallow: true,
@@ -38,18 +41,24 @@ export default function LoginPage() {
     }
   }, [router]);
 
- useEffect(() => {
-  if (session && redirect === "upgrade") {
-    startStripeCheckout(plan || "monthly"); // direct checkout, no UpgradePage
-  }
-}, [session, redirect, plan]);
+  // DIRECT UPGRADE FLOW
+  useEffect(() => {
+    if (session && redirect === "upgrade") {
+      gaEvent("auth_login_upgrade_checkout_start", { plan: plan || "monthly" });
+      gaEvent("key_auth_login_upgrade_checkout_start", {
+        plan: plan || "monthly",
+      });
 
+      startStripeCheckout(plan || "monthly");
+    }
+  }, [session, redirect, plan]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
 
     gaEvent("auth_login_submit", { email });
+    gaEvent("key_auth_login_submit", { email });
 
     const res = await signIn("credentials", {
       redirect: false,
@@ -59,22 +68,26 @@ export default function LoginPage() {
 
     if (res.ok) {
       gaEvent("auth_login_success", { email });
+      gaEvent("key_auth_login_success", { email });
 
       localStorage.removeItem("justSignedUp");
       setSuccess(true);
 
-      // 👉 If upgrade flow, we DO NOT push to dashboard here.
       if (redirect === "upgrade") return;
 
       router.push("/dashboard");
     } else {
       gaEvent("auth_login_error", { email });
+      gaEvent("key_auth_login_error", { email });
+
       setError("Invalid email or password.");
     }
   };
 
   const handleResetPassword = async () => {
     gaEvent("auth_login_reset_password_click");
+    gaEvent("key_auth_login_reset_password_click");
+
     setError(null);
 
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
@@ -87,34 +100,36 @@ export default function LoginPage() {
       toast.success("📬 Reset email sent. Check your inbox.");
 
       gaEvent("auth_login_reset_password_success", { email });
+      gaEvent("key_auth_login_reset_password_success", { email });
     } catch (err) {
       setError(
-        err?.response?.data?.message || "Could not send reset email. Try again."
+        err?.response?.data?.message ||
+          "Could not send reset email. Try again.",
       );
 
       gaEvent("auth_login_reset_password_error", { email });
+      gaEvent("key_auth_login_reset_password_error", { email });
     }
   };
 
   const startStripeCheckout = async (plan) => {
-  try {
-    const res = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: session.user.email,
-        uid: session.user.uid,
-        plan,
-      }),
-    });
+    try {
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: session.user.email,
+          uid: session.user.uid,
+          plan,
+        }),
+      });
 
-    const data = await res.json();
-    if (data.url) window.location.href = data.url;
-  } catch (err) {
-    toast.error("Could not start checkout.");
-  }
-};
-
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch (err) {
+      toast.error("Could not start checkout.");
+    }
+  };
 
   return (
     <div className={classes.container}>
@@ -130,6 +145,7 @@ export default function LoginPage() {
             onChange={(e) => {
               setEmail(e.target.value);
               gaEvent("auth_login_email_input");
+              gaEvent("key_auth_login_email_input");
             }}
             required
           />
@@ -142,6 +158,7 @@ export default function LoginPage() {
             onChange={(e) => {
               setPassword(e.target.value);
               gaEvent("auth_login_password_input");
+              gaEvent("key_auth_login_password_input");
             }}
             required
           />
@@ -151,7 +168,15 @@ export default function LoginPage() {
               type="checkbox"
               id="rememberMe"
               checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
+              onChange={(e) => {
+                setRememberMe(e.target.checked);
+                gaEvent("auth_login_remember_me_toggle", {
+                  checked: e.target.checked,
+                });
+                gaEvent("key_auth_login_remember_me_toggle", {
+                  checked: e.target.checked,
+                });
+              }}
             />
             <label htmlFor="rememberMe">Remember Me</label>
           </div>
@@ -173,7 +198,10 @@ export default function LoginPage() {
             <Link
               href="/signup"
               className={classes.signupLink}
-              onClick={() => gaEvent("auth_login_switch_to_signup")}
+              onClick={() => {
+                gaEvent("auth_login_switch_to_signup");
+                gaEvent("key_auth_login_switch_to_signup");
+              }}
             >
               Sign up here
             </Link>

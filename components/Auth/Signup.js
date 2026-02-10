@@ -15,7 +15,6 @@ export default function Signup({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // Reset state on modal close
   useEffect(() => {
     if (!isOpen) {
       setName("");
@@ -25,7 +24,8 @@ export default function Signup({
       setError("");
       setSuccess(false);
     } else {
-      gaEvent("auth_signup_view"); // TRACK SIGNUP VIEW
+      gaEvent("auth_signup_view");
+      gaEvent("key_auth_signup_view");
     }
   }, [isOpen]);
 
@@ -33,13 +33,16 @@ export default function Signup({
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    gaEvent("auth_signup_submit", { email }); // TRACK SUBMIT
+
+    gaEvent("auth_signup_submit", { email });
+    gaEvent("key_auth_signup_submit", { email });
 
     setError("");
     setSuccess(false);
 
     if (password !== confirmPassword) {
-      gaEvent("auth_signup_password_mismatch"); // 👉 ADDED
+      gaEvent("auth_signup_password_mismatch");
+      gaEvent("key_auth_signup_password_mismatch");
       setError("Passwords do not match");
       return;
     }
@@ -63,7 +66,9 @@ export default function Signup({
       if (!res.ok) throw new Error(data.message || "Signup failed");
 
       setSuccess(true);
-      gaEvent("auth_signup_success", { email }); // TRACK SUCCESS
+
+      gaEvent("auth_signup_success", { email });
+      gaEvent("key_auth_signup_success", { email });
 
       setTimeout(() => {
         const successMsg = document.querySelector(`.${classes.success}`);
@@ -72,10 +77,8 @@ export default function Signup({
 
       if (onSignupComplete) onSignupComplete();
     } catch (err) {
-      gaEvent("auth_signup_error", {
-        email,
-        error: err.message,
-      }); // TRACK ERROR
+      gaEvent("auth_signup_error", { email, error: err.message });
+      gaEvent("key_auth_signup_error", { email, error: err.message });
 
       if (err.message.includes("Email already in use")) {
         setError(
@@ -85,7 +88,8 @@ export default function Signup({
               type="button"
               className={classes.linkButton}
               onClick={() => {
-                gaEvent("auth_signup_switch_to_login"); // 👉 ADDED
+                gaEvent("auth_signup_switch_to_login");
+                gaEvent("key_auth_signup_switch_to_login");
                 onClose();
                 if (switchToLogin) switchToLogin();
               }}
@@ -93,7 +97,7 @@ export default function Signup({
               Log in instead
             </button>{" "}
             or enter a new email.
-          </>
+          </>,
         );
       } else {
         setError(err.message);
@@ -106,7 +110,8 @@ export default function Signup({
       className={classes.overlay}
       onClick={(e) => {
         if (e.target === e.currentTarget) {
-          gaEvent("auth_signup_modal_close"); // 👉 ADDED
+          gaEvent("auth_signup_modal_close");
+          gaEvent("key_auth_signup_modal_close");
           onClose();
         }
       }}
@@ -115,7 +120,8 @@ export default function Signup({
         <button
           className={classes.close}
           onClick={() => {
-            gaEvent("auth_signup_modal_close"); // 👉 ADDED
+            gaEvent("auth_signup_modal_close");
+            gaEvent("key_auth_signup_modal_close");
             onClose();
           }}
         >
@@ -134,7 +140,12 @@ export default function Signup({
             value={name}
             onChange={(e) => {
               setName(e.target.value);
-              gaEvent("auth_signup_name_input"); // 👉 ADDED
+              gaEvent("auth_signup_name_input");
+              gaEvent("key_auth_signup_name_input");
+            }}
+            onFocus={() => {
+              gaEvent("auth_signup_name_focus");
+              gaEvent("key_auth_signup_name_focus");
             }}
             required
             className={classes.input}
@@ -146,7 +157,12 @@ export default function Signup({
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
-              gaEvent("auth_signup_email_input"); // 👉 ADDED
+              gaEvent("auth_signup_email_input");
+              gaEvent("key_auth_signup_email_input");
+            }}
+            onFocus={() => {
+              gaEvent("auth_signup_email_focus");
+              gaEvent("key_auth_signup_email_focus");
             }}
             required
             className={classes.input}
@@ -158,7 +174,12 @@ export default function Signup({
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
-              gaEvent("auth_signup_password_input"); // 👉 ADDED
+              gaEvent("auth_signup_password_input");
+              gaEvent("key_auth_signup_password_input");
+            }}
+            onFocus={() => {
+              gaEvent("auth_signup_password_focus");
+              gaEvent("key_auth_signup_password_focus");
             }}
             required
             className={classes.input}
@@ -170,7 +191,12 @@ export default function Signup({
             value={confirmPassword}
             onChange={(e) => {
               setConfirmPassword(e.target.value);
-              gaEvent("auth_signup_confirm_password_input"); // 👉 ADDED
+              gaEvent("auth_signup_confirm_password_input");
+              gaEvent("key_auth_signup_confirm_password_input");
+            }}
+            onFocus={() => {
+              gaEvent("auth_signup_confirm_password_focus");
+              gaEvent("key_auth_signup_confirm_password_focus");
             }}
             required
             className={classes.input}

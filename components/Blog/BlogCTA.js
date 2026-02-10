@@ -15,18 +15,21 @@ export default function BlogCTA() {
           truly need. Explore at your own pace — no pressure.
         </p>
 
-      <Link
-  href="/quizzes/quiz-main"
-  className={classes.button}
-  onClick={() =>
-    gaEvent("blog_cta_quiz_click", {
-      location: "blog_bottom_cta",
-    })
-  }
->
-  Take Free Quiz
-</Link>
+        <Link
+          href="/quizzes/quiz-main"
+          className={classes.button}
+          onClick={() => {
+            gaEvent("blog_cta_quiz_click", {
+              location: "blog_bottom_cta",
+            });
 
+            gaEvent("key_blog_cta_quiz_click", {
+              location: "blog_bottom_cta",
+            });
+          }}
+        >
+          Take Free Quiz
+        </Link>
       </div>
     </section>
   );

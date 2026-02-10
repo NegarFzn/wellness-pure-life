@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./mindfulness-item.module.css";
 
 function stripForCard(text = "") {
@@ -34,15 +35,32 @@ export default function MindfulnessItem({ title, image, summary, intro, id }) {
   const shortSummary = shorten(cleanSummary, 140);
 
   return (
-    <li className={classes.card}>
-      <Link href={`/mindfulness/${id}`} className={classes.cardLink}>
+    <li
+      className={classes.card}
+      onMouseEnter={() => {
+        gaEvent("mindfulness_card_hover", { id, title });
+        gaEvent("key_mindfulness_card_hover", { id, title });
+      }}
+    >
+      <Link
+        href={`/mindfulness/${id}`}
+        className={classes.cardLink}
+        onClick={() => {
+          gaEvent("mindfulness_card_click", { id, title });
+          gaEvent("key_mindfulness_card_click", { id, title });
+        }}
+      >
         <div className={classes.media}>
           <Image
             src={image ? `/images/${image}` : "/images/placeholderMind.jpg"}
-             alt={title || "Wellness Pure Life - Mindfulness Guide"}
+            alt={title || "Wellness Pure Life - Mindfulness Guide"}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             priority
+            onLoadingComplete={() => {
+              gaEvent("mindfulness_card_image_view", { id, image });
+              gaEvent("key_mindfulness_card_image_view", { id, image });
+            }}
           />
           <span className={classes.mediaOverlay} />
         </div>

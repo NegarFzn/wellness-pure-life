@@ -6,16 +6,14 @@ import PremiumButton from "./PremiumButton.js";
 export default function PremiumCallout({ category, onDismiss }) {
   const [showModal, setShowModal] = useState(false);
 
-  // 👉 Fire impression event when shown
+  // VIEW EVENT + ANOMALY
   useEffect(() => {
-    gaEvent("premium_callout_view", {
-      category,
-    });
+    gaEvent("premium_callout_view", { category });
+    gaEvent("key_premium_callout_view", { category });
   }, []);
 
   return (
     <div className={classes.premiumWrapper}>
-      {/* Header Block */}
       <div className={classes.premiumHeader}>
         <span className={classes.premiumBadge}>✨ Premium Access</span>
 
@@ -32,6 +30,11 @@ export default function PremiumCallout({ category, onDismiss }) {
           <button
             onClick={() => {
               gaEvent("premium_callout_learn_more_click", { category });
+              gaEvent("key_premium_callout_learn_more_click", { category });
+
+              gaEvent("premium_callout_modal_open", { category });
+              gaEvent("key_premium_callout_modal_open", { category });
+
               setShowModal(true);
             }}
             className={classes.learnMoreButton}
@@ -43,6 +46,8 @@ export default function PremiumCallout({ category, onDismiss }) {
             <button
               onClick={() => {
                 gaEvent("premium_callout_dismiss", { category });
+                gaEvent("key_premium_callout_dismiss", { category });
+
                 onDismiss();
               }}
               className={classes.dismissButton}
@@ -62,6 +67,8 @@ export default function PremiumCallout({ category, onDismiss }) {
           className={classes.modalOverlay}
           onClick={() => {
             gaEvent("premium_callout_modal_close", { category });
+            gaEvent("key_premium_callout_modal_close", { category });
+
             setShowModal(false);
           }}
         >
@@ -84,6 +91,8 @@ export default function PremiumCallout({ category, onDismiss }) {
               className={classes.modalClose}
               onClick={() => {
                 gaEvent("premium_callout_modal_close", { category });
+                gaEvent("key_premium_callout_modal_close", { category });
+
                 setShowModal(false);
               }}
             >

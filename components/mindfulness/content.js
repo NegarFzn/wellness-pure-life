@@ -1,22 +1,20 @@
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
+import { gaEvent } from "../../lib/gtag";
 import FeedbackPrompt from "../../components/UI/FeedbackPrompt";
 import classes from "./content.module.css";
 import MindfulnessList from "./mindfulness-list";
 
-// Enhanced formatter (same behavior as Fitness)
 function formatText(text) {
   if (typeof text !== "string") return "";
 
-  // Inline markers (keep your classes)
   let t = text
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>") // **bold**
-    .replace(/__(.+?)__/g, '<strong class="colorful">$1</strong>') // __colorful__
-    .replace(/--(.+?)--/g, '<span class="larger">$1</span>') // --larger--
-    .replace(/\^\^(.+?)\^\^/g, '<span class="smaller">$1</span>'); // ^^smaller^^
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/__(.+?)__/g, '<strong class="colorful">$1</strong>')
+    .replace(/--(.+?)--/g, '<span class="larger">$1</span>')
+    .replace(/\^\^(.+?)\^\^/g, '<span class="smaller">$1</span>');
 
-  // Internal link shorthands
   t = t.replace(/\[\[mind:(\d+)\]\]/g, (_, id) => {
     return `<a href="/mindfulness/${id}" class="internal-link">Explore mindfulness ${id}</a>`;
   });
@@ -24,7 +22,6 @@ function formatText(text) {
     return `<a href="/nourish/${id}" class="internal-link">Explore nutrition ${id}</a>`;
   });
 
-  // Block parsing (headings, lists, paragraphs)
   const lines = t.split(/\r?\n/);
   const out = [];
   let i = 0;
@@ -59,7 +56,6 @@ function formatText(text) {
       continue;
     }
 
-    // ### Heading
     const h3 = line.match(/^###\s+(.*)$/);
     if (h3) {
       flushParagraph(buf);
@@ -68,7 +64,6 @@ function formatText(text) {
       continue;
     }
 
-    // Ordered list (1. item)
     if (/^\d+\.\s+/.test(line)) {
       flushParagraph(buf);
       const { items, next } = collectList(i, /^\d+\.\s+(.*)$/);
@@ -77,7 +72,6 @@ function formatText(text) {
       continue;
     }
 
-    // Unordered list (-, •, –)
     if (/^[-•–]\s+/.test(line)) {
       flushParagraph(buf);
       const { items, next } = collectList(i, /^[-•–]\s+(.*)$/);
@@ -86,7 +80,6 @@ function formatText(text) {
       continue;
     }
 
-    // Default: accumulate paragraph text
     buf.push(line.trim());
     i++;
   }
@@ -95,12 +88,16 @@ function formatText(text) {
   return out.join("\n");
 }
 
-const adSlots = ["1111111111", "2222222222", "3333333333"];
-
 const Content = (props) => {
   const {
     items: { title, intro, sections, additionalSections, image },
   } = props;
+
+  // PAGE VIEW analytics + anomaly
+  if (title) {
+    gaEvent("mindfulness_article_view", { title });
+    gaEvent("key_mindfulness_article_view", { title });
+  }
 
   return (
     <>
@@ -112,27 +109,36 @@ const Content = (props) => {
           name="description"
           content={intro || "Learn about mindfulness techniques and exercises."}
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta charSet="UTF-8" />
       </Head>
 
       <div className={classes["mindfulness-container"]}>
         <div className={classes["mindfulness-content"]}>
           <div className={classes.backButtonWrapper}>
             <Link href="/mindfulness" legacyBehavior>
-              <a className={classes.backButton}>← Back to Mindfulness Guide</a>
+              <a
+                className={classes.backButton}
+                onClick={() => {
+                  gaEvent("mindfulness_back_click", { from: title });
+                  gaEvent("key_mindfulness_back_click", { from: title });
+                }}
+              >
+                ← Back to Mindfulness Guide
+              </a>
             </Link>
           </div>
 
-          {/* ✅ Top hero image restored */}
           {image && (
             <div className={classes.topImageWrapper}>
               <Image
                 src={`/images/${image}`}
-                alt={title || "Wellness Pure Life - Mindfulness Guide"}
+                alt={title}
                 width={1200}
                 height={650}
                 priority
+                onLoad={() => {
+                  gaEvent("mindfulness_hero_image_view", { title });
+                  gaEvent("key_mindfulness_hero_image_view", { title });
+                }}
               />
             </div>
           )}
@@ -147,8 +153,19 @@ const Content = (props) => {
                   dangerouslySetInnerHTML={{
                     __html: formatText(section.heading),
                   }}
+                  onMouseEnter={() => {
+                    gaEvent("mindfulness_section_heading_view", {
+                      heading: section.heading,
+                      index,
+                    });
+                    gaEvent("key_mindfulness_section_heading_view", {
+                      heading: section.heading,
+                      index,
+                    });
+                  }}
                 />
               )}
+
               {section.content && (
                 <div
                   dangerouslySetInnerHTML={{
@@ -156,21 +173,40 @@ const Content = (props) => {
                   }}
                 />
               )}
+
               {section.image && (
                 <Image
                   src={`/images/${section.image}`}
-                  alt={section.heading || "Wellness Pure Life - Mindfulness Section"}
+                  alt={section.heading || "Mindfulness section image"}
                   width={700}
                   height={420}
                   loading="lazy"
+                  onLoad={() => {
+                    gaEvent("mindfulness_section_image_view", {
+                      image: section.image,
+                      index,
+                    });
+                    gaEvent("key_mindfulness_section_image_view", {
+                      image: section.image,
+                      index,
+                    });
+                  }}
                 />
               )}
             </div>
           ))}
         </div>
       </div>
+
       <FeedbackPrompt />
-      <div className={classes["related-posts-wrapper"]}>
+
+      <div
+        className={classes["related-posts-wrapper"]}
+        onMouseEnter={() => {
+          gaEvent("mindfulness_related_posts_view", { title });
+          gaEvent("key_mindfulness_related_posts_view", { title });
+        }}
+      >
         <h3 className={classes["related-posts-title"]}>RELATED POSTS</h3>
         <div className={classes["related-posts-container"]}>
           <MindfulnessList items={additionalSections} />

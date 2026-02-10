@@ -10,16 +10,19 @@ export default function PremiumButton() {
   const router = useRouter();
   const { closeChat } = useUI();
 
-  // 👉 Track CTA impression
+  // CTA impression tracking + anomaly
   useEffect(() => {
-    gaEvent("premium_cta_view", {
-      page: router.pathname,
-    });
+    gaEvent("premium_cta_view", { page: router.pathname });
+    gaEvent("key_premium_cta_view", { page: router.pathname });
   }, []);
 
   const handleUpgrade = () => {
-    // 👉 Track CTA click
+    // CTA click tracking + anomaly
     gaEvent("premium_cta_click", {
+      page: router.pathname,
+      userPremium: session?.user?.isPremium === true,
+    });
+    gaEvent("key_premium_cta_click", {
       page: router.pathname,
       userPremium: session?.user?.isPremium === true,
     });
@@ -28,9 +31,25 @@ export default function PremiumButton() {
     router.push("/upgrade");
   };
 
+  const benefits = [
+    "Guided meditations",
+    "Personalized meal plans",
+    "AI Wellness Assistant access",
+    "Weekly health progress reports",
+    "Sleep improvement tracker",
+    "1-on-1 coaching sessions",
+  ];
+
   return (
     <div className={classes.premiumWrapper}>
-      <button onClick={handleUpgrade} className={classes.premiumBtn}>
+      <button
+        onClick={handleUpgrade}
+        className={classes.premiumBtn}
+        onMouseEnter={() => {
+          gaEvent("premium_cta_hover", { page: router.pathname });
+          gaEvent("key_premium_cta_hover", { page: router.pathname });
+        }}
+      >
         Unlock Your Wellness System
       </button>
 
@@ -39,12 +58,23 @@ export default function PremiumButton() {
           ✨ What You Unlock with Premium
         </li>
 
-        <li>🧘 Guided meditations</li>
-        <li>🥗 Personalized meal plans</li>
-        <li>🤖 AI Wellness Assistant access</li>
-        <li>📊 Weekly health progress reports</li>
-        <li>🛌 Sleep improvement tracker</li>
-        <li>💬 1-on-1 coaching sessions</li>
+        {benefits.map((b, i) => (
+          <li
+            key={i}
+            onMouseEnter={() => {
+              gaEvent("premium_benefit_view", { benefit: b, index: i });
+              gaEvent("key_premium_benefit_view", { benefit: b, index: i });
+            }}
+          >
+            {b === "Guided meditations" && "🧘 "}
+            {b === "Personalized meal plans" && "🥗 "}
+            {b === "AI Wellness Assistant access" && "🤖 "}
+            {b === "Weekly health progress reports" && "📊 "}
+            {b === "Sleep improvement tracker" && "🛌 "}
+            {b === "1-on-1 coaching sessions" && "💬 "}
+            {b}
+          </li>
+        ))}
       </ul>
     </div>
   );

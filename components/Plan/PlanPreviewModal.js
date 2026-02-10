@@ -4,18 +4,39 @@ import classes from "./PlanPreviewModal.module.css";
 export default function PlanPreviewModal({ plan, onClose, onConfirm }) {
   if (!plan) return null;
 
-  // 🔥 Track modal opened (correct format)
+  // OPEN EVENT (normal + anomaly)
   gaEvent("weekly_plan_preview_open", {
+    has_summary: !!plan.weekSummary,
+  });
+  gaEvent("key_weekly_plan_preview_open", {
     has_summary: !!plan.weekSummary,
   });
 
   const weekSummary = plan.weekSummary || "";
   const days = plan.weeklyPlan?.days ? plan.weeklyPlan.days : plan.weeklyPlan;
 
+  const handleClose = () => {
+    gaEvent("weekly_plan_preview_close");
+    gaEvent("key_weekly_plan_preview_close");
+    onClose();
+  };
+
+  const handleConfirm = () => {
+    gaEvent("weekly_plan_preview_confirm", {
+      action: "set_as_current",
+    });
+
+    gaEvent("key_weekly_plan_preview_confirm", {
+      action: "set_as_current",
+    });
+
+    onConfirm();
+  };
+
   return (
-    <div className={classes.overlay} onClick={onClose}>
+    <div className={classes.overlay} onClick={handleClose}>
       <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={classes.closeButton} onClick={onClose}>
+        <button className={classes.closeButton} onClick={handleClose}>
           ✕
         </button>
 
@@ -26,7 +47,14 @@ export default function PlanPreviewModal({ plan, onClose, onConfirm }) {
         <div className={classes.daysScroll}>
           {days &&
             Object.entries(days).map(([dayKey, dayData]) => (
-              <div key={dayKey} className={classes.dayCard}>
+              <div
+                key={dayKey}
+                className={classes.dayCard}
+                onMouseEnter={() => {
+                  gaEvent("weekly_plan_preview_day_view", { day: dayKey });
+                  gaEvent("key_weekly_plan_preview_day_view", { day: dayKey });
+                }}
+              >
                 <div className={classes.dayHeader}>{dayKey}</div>
 
                 {dayData.theme && (
@@ -68,21 +96,11 @@ export default function PlanPreviewModal({ plan, onClose, onConfirm }) {
         </div>
 
         <div className={classes.actionsRow}>
-          <button className={classes.cancelButton} onClick={onClose}>
+          <button className={classes.cancelButton} onClick={handleClose}>
             Cancel
           </button>
 
-          <button
-            className={classes.confirmButton}
-            onClick={() => {
-              // 🔥 Correct confirm event
-              gaEvent("weekly_plan_preview_confirm", {
-                action: "set_as_current",
-              });
-
-              onConfirm();
-            }}
-          >
+          <button className={classes.confirmButton} onClick={handleConfirm}>
             Set as Current Plan
           </button>
         </div>

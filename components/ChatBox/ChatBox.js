@@ -6,6 +6,7 @@ import { useUI } from "../../context/UIContext";
 import PremiumButton from "../PremiumButton/PremiumButton";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./ChatBox.module.css";
 
 export default function ChatBox() {
@@ -15,54 +16,55 @@ export default function ChatBox() {
   const isAuthenticated = !!user;
   const isPremium = user?.isPremium || false;
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
+
   const [chat, setChat] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
+
   const { isChatOpen, openChat, closeChat } = useUI();
 
-
-  // ✅ Load chat for logged-in user
+  /* -------------------------------------- */
+  /* LOAD CHAT FOR USER                     */
+  /* -------------------------------------- */
   useEffect(() => {
     if (user?.email) {
       const storedChat = localStorage.getItem(`wellnessChat-${user.email}`);
-      if (storedChat) {
-        setChat(JSON.parse(storedChat));
-      } else {
-        setChat([]);
-      }
+      if (storedChat) setChat(JSON.parse(storedChat));
     }
   }, [user?.email]);
 
-  // ✅ Save chat per user
+  /* SAVE CHAT */
   useEffect(() => {
     if (user?.email) {
       localStorage.setItem(`wellnessChat-${user.email}`, JSON.stringify(chat));
     }
   }, [chat, user?.email]);
 
-  // ✅ Clear chat on logout
+  /* CLEAR CHAT ON LOGOUT */
   useEffect(() => {
     if (!isAuthenticated && status !== "loading") {
       Object.keys(localStorage).forEach((key) => {
-        if (key.startsWith("wellnessChat-")) {
-          localStorage.removeItem(key);
-        }
+        if (key.startsWith("wellnessChat-")) localStorage.removeItem(key);
       });
       setChat([]);
     }
   }, [isAuthenticated, status]);
 
-  // ✅ Auto scroll to latest message
+  /* AUTO SCROLL */
   useEffect(() => {
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat]);
 
+  /* -------------------------------------- */
+  /* SEND MESSAGE                           */
+  /* -------------------------------------- */
   const sendMessage = async () => {
     if (!input.trim()) return;
+
+    // GA – User sends message
+    gaEvent("chat_send_message");
+    gaEvent("key_chat_send_message");
 
     const userMessage = { role: "user", content: input };
     const updatedChat = [...chat, userMessage];
@@ -89,27 +91,48 @@ export default function ChatBox() {
         ...prev,
         { role: "assistant", content: data.reply || "No reply." },
       ]);
+
+      // GA – AI reply received
+      gaEvent("chat_ai_reply", { length: data.reply?.length || 0 });
+      gaEvent("key_chat_ai_reply");
     } catch (error) {
-      console.error("❌ GPT Error:", error);
+      console.error("GPT Error:", error);
+
       setChat((prev) => [
         ...prev,
         { role: "assistant", content: "⚠️ Failed to fetch response." },
       ]);
+
+      // GA – AI error
+      gaEvent("chat_ai_error", { error: error.toString() });
+      gaEvent("key_chat_ai_error");
     } finally {
       setLoading(false);
     }
   };
 
-
+  /* -------------------------------------- */
+  /* RENDER CHAT BOX                        */
+  /* -------------------------------------- */
   return (
-    <div id="chat-box"  className={classes.launcher}>
+    <div id="chat-box" className={classes.launcher}>
       {isChatOpen ? (
         <div className={classes.box}>
-          <button onClick={closeChat} className={classes.closeBtn}>
+          {/* CLOSE CHAT */}
+          <button
+            onClick={() => {
+              gaEvent("chat_close_widget");
+              gaEvent("key_chat_close_widget");
+              closeChat();
+            }}
+            className={classes.closeBtn}
+          >
             ×
           </button>
+
           <h4 className={classes.title}>🌿 Wellness Assistant</h4>
 
+          {/* PREMIUM LOCK */}
           {!isAuthenticated && (
             <p className={`${classes.notice} ${classes.loginPrompt}`}>
               💎 This is a premium feature.
@@ -126,8 +149,7 @@ export default function ChatBox() {
 
           {isAuthenticated && !isPremium && (
             <p className={`${classes.notice} ${classes.loginPrompt}`}>
-              <span className={classes.icon}>💎</span>
-              <strong>This is a premium feature.</strong>
+              💎 <strong>This is a premium feature.</strong>
               <br />
               <span className={classes.buttonWrap}>
                 <PremiumButton />
@@ -136,6 +158,7 @@ export default function ChatBox() {
             </p>
           )}
 
+          {/* CHAT LOG */}
           <div className={classes.log}>
             {chat.map((msg, i) => (
               <div
@@ -152,23 +175,39 @@ export default function ChatBox() {
             <div ref={chatEndRef} />
           </div>
 
+          {/* INPUT AREA */}
           <div className={classes.inputRow}>
             <textarea
               className={classes.input}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+              onChange={(e) => {
+                setInput(e.target.value);
+                gaEvent("chat_input_typing");
+              }}
+              onFocus={() => gaEvent("chat_input_focus")}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  gaEvent("chat_send_enter");
+                  gaEvent("key_chat_send_enter");
+                  sendMessage();
+                }
+              }}
               placeholder={
                 !isAuthenticated
                   ? "Login required..."
                   : !isPremium
-                  ? "Upgrade to use..."
-                  : "Ask me anything..."
+                    ? "Upgrade to use..."
+                    : "Ask me anything..."
               }
               disabled={!isAuthenticated || !isPremium}
             />
+
             <button
-              onClick={sendMessage}
+              onClick={() => {
+                gaEvent("chat_send_click");
+                gaEvent("key_chat_send_click");
+                sendMessage();
+              }}
               className={classes.send}
               disabled={!isAuthenticated || !isPremium || loading}
             >
@@ -179,7 +218,14 @@ export default function ChatBox() {
           {loading && <p className={classes.loading}>Thinking...</p>}
         </div>
       ) : (
-        <button onClick={openChat} className={classes.askAssistantBtn}>
+        <button
+          onClick={() => {
+            gaEvent("chat_open_widget");
+            gaEvent("key_chat_open_widget");
+            openChat();
+          }}
+          className={classes.askAssistantBtn}
+        >
           💬 Ask Wellness Assistant
         </button>
       )}

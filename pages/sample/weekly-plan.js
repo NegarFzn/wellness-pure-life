@@ -13,7 +13,8 @@ const WEEK_VARIANTS = {
       {
         day: "Monday",
         theme: "Gentle Activation",
-        focus: "Start the week softly and remind your body that it is safe to move slowly.",
+        focus:
+          "Start the week softly and remind your body that it is safe to move slowly.",
         fitness: "10–20 min light mobility or stretching.",
         mindfulness: "5 min breathing pause with longer exhales.",
         nourish: "Hydrating breakfast plus simple protein and fruit.",
@@ -201,6 +202,8 @@ const WEEK_VARIANTS = {
 export default function SampleWeeklyPlan() {
   const [variantKey, setVariantKey] = useState("calm");
   const variant = WEEK_VARIANTS[variantKey];
+  gaEvent("weekly_plan_sample_view", { variant: variantKey });
+  gaEvent("key_weekly_plan_sample_view", { variant: variantKey });
 
   return (
     <>
@@ -213,8 +216,8 @@ export default function SampleWeeklyPlan() {
           <h1 className={classes.title}>Sample Weekly Wellness Plan</h1>
           <p className={classes.subtitle}>
             This is an example of how your weekly plan could look inside{" "}
-            <span>Wellness Pure Life Pro</span>. The real version adapts to your quiz answers
-            and personal goals.
+            <span>Wellness Pure Life Pro</span>. The real version adapts to your
+            quiz answers and personal goals.
           </p>
 
           <div className={classes.variantSwitch}>
@@ -223,7 +226,11 @@ export default function SampleWeeklyPlan() {
               className={`${classes.variantButton} ${
                 variantKey === "calm" ? classes.variantActive : ""
               }`}
-              onClick={() => setVariantKey("calm")}
+              onClick={() => {
+                gaEvent("weekly_plan_variant_select", { variant: "calm" });
+                gaEvent("key_weekly_plan_variant_select", { variant: "calm" });
+                setVariantKey("calm");
+              }}
             >
               Calm Week
             </button>
@@ -258,7 +265,20 @@ export default function SampleWeeklyPlan() {
 
         <section className={classes.daysGrid}>
           {variant.days.map((d, idx) => (
-            <article key={d.day} className={classes.dayCard}>
+            <article
+              key={d.day}
+              className={classes.dayCard}
+              onMouseEnter={() => {
+                gaEvent("weekly_plan_day_view", {
+                  day: d.day,
+                  variant: variantKey,
+                });
+                gaEvent("key_weekly_plan_day_view", {
+                  day: d.day,
+                  variant: variantKey,
+                });
+              }}
+            >
               <div className={classes.dayHeader}>
                 <span className={classes.dayBadge}>{d.day}</span>
                 <span className={classes.themeLabel}>{d.theme}</span>
@@ -284,21 +304,42 @@ export default function SampleWeeklyPlan() {
         <section className={classes.bottomCta}>
           <h2>Ready for your own personalized weekly plan?</h2>
           <p>
-            Premium members receive a plan built from their quiz answers, lifestyle, and goals —
-            not a generic template.
+            Premium members receive a plan built from their quiz answers,
+            lifestyle, and goals — not a generic template.
           </p>
           <div className={classes.bottomButtons}>
-            <Link href="/premium" className={classes.primaryCta}>
+            <Link
+              href="/premium"
+              className={classes.primaryCta}
+              onClick={() => {
+                gaEvent("weekly_plan_upgrade_click");
+                gaEvent("key_weekly_plan_upgrade_click");
+              }}
+            >
               Upgrade to Premium
             </Link>
-            <Link href="/quizzes/quiz-main" className={classes.secondaryCta}>
+            <Link
+              href="/quizzes/quiz-main"
+              className={classes.secondaryCta}
+              onClick={() => {
+                gaEvent("weekly_plan_start_quiz_click");
+                gaEvent("key_weekly_plan_start_quiz_click");
+              }}
+            >
               Start With Free Quiz
             </Link>
           </div>
         </section>
 
         {/* Floating quiz button */}
-        <Link href="/quizzes/quiz-main" className={classes.floatingQuiz}>
+        <Link
+          href="/quizzes/quiz-main"
+          className={classes.floatingQuiz}
+          onClick={() => {
+            gaEvent("weekly_plan_floating_quiz_click");
+            gaEvent("key_weekly_plan_floating_quiz_click");
+          }}
+        >
           Try the Free Quiz →
         </Link>
       </div>

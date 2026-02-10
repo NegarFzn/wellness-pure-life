@@ -26,15 +26,10 @@ export default function FavoritesPage() {
 
   // ------------------ SET AS CURRENT ------------------
   const setAsCurrent = async (fav) => {
-    gaEvent({
-      event: "favorite_set_as_current",
-      params: {
-        favorite_id: fav.favoriteId,
-      },
-    });
+    gaEvent("favorite_set_as_current", { favorite_id: fav.favoriteId });
+    gaEvent("key_favorite_set_as_current", { favorite_id: fav.favoriteId });
 
     try {
-      // Use the full stored snapshot
       const res = await fetch("/api/plan/restore", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -56,12 +51,8 @@ export default function FavoritesPage() {
 
   // ------------------ REMOVE FAVORITE ------------------
   const removeFavorite = async (fav) => {
-    gaEvent({
-      event: "favorite_removed",
-      params: {
-        favorite_id: fav.favoriteId,
-      },
-    });
+    gaEvent("favorite_removed", { favorite_id: fav.favoriteId });
+    gaEvent("key_favorite_removed", { favorite_id: fav.favoriteId });
 
     try {
       const res = await fetch("/api/plan/favorites", {
@@ -88,12 +79,13 @@ export default function FavoritesPage() {
     if (status === "authenticated" && session?.user?.isPremium) {
       loadFavorites();
 
-      gaEvent({
-        event: "favorites_page_view",
-        params: {
-          user_id: session.user.id,
-          is_premium: true,
-        },
+      gaEvent("favorites_page_view", {
+        user_id: session.user.id,
+        is_premium: true,
+      });
+      gaEvent("key_favorites_page_view", {
+        user_id: session.user.id,
+        is_premium: true,
       });
     }
   }, [status, session]);
@@ -104,9 +96,8 @@ export default function FavoritesPage() {
   }
 
   if (!session) {
-    gaEvent({
-      event: "favorites_page_locked_not_authenticated",
-    });
+    gaEvent("favorites_page_locked_not_authenticated");
+    gaEvent("key_favorites_page_locked_not_authenticated");
 
     return (
       <div className={classes.lockWrap}>
@@ -115,7 +106,11 @@ export default function FavoritesPage() {
           Please sign in to view your favorite weekly plans.
         </p>
         <button
-          onClick={() => router.push("/auth")}
+          onClick={() => {
+            gaEvent("favorites_signin_click");
+            gaEvent("key_favorites_signin_click");
+            router.push("/auth");
+          }}
           className={classes.lockButton}
         >
           Sign In
@@ -125,9 +120,9 @@ export default function FavoritesPage() {
   }
 
   if (!session.user?.isPremium) {
-    gaEvent({
-      event: "favorites_page_locked_not_premium",
-    });
+    gaEvent("favorites_page_locked_not_premium");
+    gaEvent("key_favorites_page_locked_not_premium");
+
     return (
       <div className={classes.lockWrap}>
         <h2 className={classes.lockTitle}>Premium Feature</h2>
@@ -135,7 +130,11 @@ export default function FavoritesPage() {
           Favorite weekly plans are available for Premium members.
         </p>
         <button
-          onClick={() => router.push("/premium")}
+          onClick={() => {
+            gaEvent("favorites_upgrade_click");
+            gaEvent("key_favorites_upgrade_click");
+            router.push("/premium");
+          }}
           className={classes.lockButton}
         >
           Upgrade to Premium
@@ -156,15 +155,18 @@ export default function FavoritesPage() {
         <p className={classes.subtitle}>
           Quickly reuse your most-loved wellness weeks.
         </p>
+
         <button
           className={classes.goWeeklyButton}
           onClick={() => {
-            gaEvent({ event: "go_to_weekly_plan_from_favorites" });
+            gaEvent("go_to_weekly_plan_from_favorites");
+            gaEvent("key_go_to_weekly_plan_from_favorites");
             router.push("/plan/weekly-plan");
           }}
         >
           Go to Your Current Weekly Plan
         </button>
+
         {loading ? (
           <p className={classes.status}>Loading favorites…</p>
         ) : favorites.length === 0 ? (
@@ -202,6 +204,7 @@ export default function FavoritesPage() {
                   {monday && (
                     <div className={classes.cardPreview}>
                       <strong>{monday.day || "Monday"}</strong>
+
                       {monday.fitness?.title && (
                         <p>🟣 {monday.fitness.title}</p>
                       )}
@@ -222,6 +225,7 @@ export default function FavoritesPage() {
                     >
                       Set as Current Plan
                     </button>
+
                     <button
                       className={classes.secondaryButton}
                       onClick={() => removeFavorite(fav)}

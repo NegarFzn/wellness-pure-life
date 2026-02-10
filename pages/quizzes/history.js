@@ -35,18 +35,29 @@ export default function QuizHistory() {
       gaEvent("quiz_daily_history_page_loaded", {
         user: session?.user?.email || "anonymous",
       });
+      gaEvent("key_quiz_daily_history_page_loaded", {
+        user: session?.user?.email || "anonymous",
+      });
     }
+
     const fetchDailyHistory = async () => {
       try {
         const res = await fetch("/api/quiz/quiz-daily?mode=history");
         const data = await res.json();
+
         const dailyHistory = Array.isArray(data.history) ? data.history : [];
         setHistory(dailyHistory);
-        gaEvent("quiz_daily_history_fetched", {
+
+        gaEvent("quiz_daily_history_fetched", { count: dailyHistory.length });
+        gaEvent("key_quiz_daily_history_fetched", {
           count: dailyHistory.length,
         });
       } catch (err) {
         console.error("Failed to fetch daily history:", err);
+
+        gaEvent("quiz_daily_history_fetch_error");
+        gaEvent("key_quiz_daily_history_fetch_error");
+
         setHistory([]);
       } finally {
         setLoading(false);
@@ -81,7 +92,7 @@ export default function QuizHistory() {
     );
   }
 
-  // Apply filters first
+  // Apply filters
   const filtered = history.filter((q) => {
     const result = Array.isArray(q.answers) ? q.answers[0] : q.answers;
 
@@ -102,7 +113,7 @@ export default function QuizHistory() {
     return matchesType && matchesSearch;
   });
 
-  // Count result types based on filtered results
+  // Count result types
   const countByType = {
     "High Stress": 0,
     Balanced: 0,
@@ -134,7 +145,7 @@ export default function QuizHistory() {
   });
 
   const chartData = Object.values(dailyMap).sort(
-    (a, b) => new Date(a.date) - new Date(b.date)
+    (a, b) => new Date(a.date) - new Date(b.date),
   );
 
   const pieData = Object.entries(countByType).map(([name, value]) => ({
@@ -144,11 +155,12 @@ export default function QuizHistory() {
 
   const COLORS = ["#dc2626", "#16a34a", "#ca8a04", "#6b7280"];
 
+  // Filter button click tracking + anomaly
   const handleTypeClick = (type) => {
     setSelectedType((prev) => (prev === type ? null : type));
-    gaEvent("quiz_daily_filter_type", {
-      type: type || "all",
-    });
+
+    gaEvent("quiz_daily_filter_type", { type: type || "all" });
+    gaEvent("key_quiz_daily_filter_type", { type: type || "all" });
   };
 
   return (
@@ -157,7 +169,8 @@ export default function QuizHistory() {
         <title> Quizzes History | Wellness Pure Life</title>
         <meta name="robots" content="noindex, nofollow" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>{" "}
+      </Head>
+
       <div className={classes.container}>
         <h1 className={classes.heading}>🧘‍♀️ Daily Mood & Stress Check-ins</h1>
 
@@ -168,6 +181,7 @@ export default function QuizHistory() {
           onChange={(e) => {
             setFilter(e.target.value);
             gaEvent("quiz_daily_history_search", { query: e.target.value });
+            gaEvent("key_quiz_daily_history_search", { query: e.target.value });
           }}
           className={classes.filterInput}
         />
@@ -190,10 +204,10 @@ export default function QuizHistory() {
               {type === "Balanced"
                 ? "🧘"
                 : type === "High Stress"
-                ? "⚠️"
-                : type === "Low Stress"
-                ? "🌤️"
-                : "❓"}{" "}
+                  ? "⚠️"
+                  : type === "Low Stress"
+                    ? "🌤️"
+                    : "❓"}{" "}
               {type} ({countByType[type]})
             </button>
           ))}
@@ -201,7 +215,11 @@ export default function QuizHistory() {
           {selectedType && (
             <button
               className={classes.clearFilter}
-              onClick={() => setSelectedType(null)}
+              onClick={() => {
+                setSelectedType(null);
+                gaEvent("quiz_daily_filter_clear");
+                gaEvent("key_quiz_daily_filter_clear");
+              }}
             >
               ✖️ Clear Filter
             </button>
@@ -274,8 +292,22 @@ export default function QuizHistory() {
                 const result = Array.isArray(entry.answers)
                   ? entry.answers[0]
                   : entry.answers;
+
                 return (
-                  <li key={idx} className={classes.quizItem}>
+                  <li
+                    key={idx}
+                    className={classes.quizItem}
+                    onClick={() => {
+                      gaEvent("quiz_daily_item_view", {
+                        result,
+                        date: entry.savedAt,
+                      });
+                      gaEvent("key_quiz_daily_item_view", {
+                        result,
+                        date: entry.savedAt,
+                      });
+                    }}
+                  >
                     <strong>Result: {result || "N/A"}</strong> <br />
                     <small>
                       {new Date(entry.savedAt).toLocaleString("en-US", {
