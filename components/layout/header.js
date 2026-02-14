@@ -43,9 +43,20 @@ export default function Header({ weather }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isVerified = !!user?.emailVerified;
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   useEffect(() => {
     gaEvent("header_view");
-    gaEvent("key_header_loaded"); // anomaly baseline
+    gaEvent("key_header_view_loaded");
   }, []);
 
   const handleDropdownToggle = (label) => {
@@ -153,6 +164,32 @@ export default function Header({ weather }) {
     }
   };
 
+  // =========================
+  // PREMIUM GATEKEEPER LOGIC
+  // =========================
+  const handleProtectedNavigation = (path) => {
+    // 1) NOT LOGGED IN → redirect to signup
+    if (!user) {
+      gaEvent("header_cta_click", { target: "signup_redirect" });
+      gaEvent("key_header_cta_click", { target: "signup_redirect" });
+
+      router.push(`/login?next=${encodeURIComponent(path)}`);
+      return;
+    }
+
+    // 2) LOGGED IN BUT NOT PREMIUM → redirect to premium
+    if (user && !user.isPremium) {
+      gaEvent("header_cta_click", { target: "premium_redirect" });
+      gaEvent("key_header_cta_click", { target: "premium_redirect" });
+
+      router.push(`/premium?from=${encodeURIComponent(path)}`);
+      return;
+    }
+
+    // 3) PREMIUM USER → open page
+    router.push(path);
+  };
+
   return (
     <>
       <header className={classes.header}>
@@ -167,27 +204,97 @@ export default function Header({ weather }) {
             <span className={classes.shortName}>WPL</span>
           </span>
         </Link>
+        {/* =========================
+    PREMIUM CTA GROUP (NEW)
+    ========================= */}
+        <div className={classes.ctaGroup}>
+          {/* Start Quiz – Always Visible */}
+          <button
+            className={`${classes.ctaButton} ${classes.ctaPrimary}`}
+            onClick={() => {
+              gaEvent("header_cta_click", { target: "start_quiz" });
+              gaEvent("key_header_cta_click", { target: "start_quiz" });
+
+              router.push("/quizzes/quiz-main");
+            }}
+          >
+            Start Quiz →
+          </button>
+
+          <button
+            className={classes.ctaButton}
+            onClick={() => {
+              openLogin();
+              gaEvent("header_cta_click", { target: "weekly_plan" });
+              gaEvent("key_header_cta_click", { target: "weekly_plan" });
+
+              handleProtectedNavigation("/plan/weekly-plan");
+            }}
+          >
+            Weekly Plan
+          </button>
+
+          <button
+            className={classes.ctaButton}
+            onClick={() => {
+              openLogin();
+              gaEvent("header_cta_click", { target: "daily_routine" });
+              gaEvent("key_header_cta_click", { target: "daily_routine" });
+
+              handleProtectedNavigation("/plan/daily-routine");
+            }}
+          >
+            Daily Routine
+          </button>
+
+          <Link
+            href="/challenges"
+            className={classes.ctaButton}
+            onClick={() => {
+              gaEvent("header_challenges_click");
+              gaEvent("key_header_challenges_click");
+            }}
+          >
+            Challenges
+          </Link>
+
+          {/* Premium – Always visible (Upgraded UI) */}
+          <button
+            className={`${classes.ctaButton} ${classes.premiumButton}`}
+            onClick={() => {
+              gaEvent("header_cta_click", { target: "premium" });
+              gaEvent("key_header_cta_click", { target: "premium" });
+
+              router.push("/premium");
+            }}
+          >
+            Premium
+          </button>
+        </div>
 
         <nav
           className={`${classes.nav} ${mobileMenuOpen ? classes.showNav : ""}`}
         >
+          {/* ====== SEARCH BAR (2nd row) ====== */}
           <div className={classes.searchContainer}>
             <input
               type="text"
               placeholder="Find your personalized wellness plan…"
               className={classes.searchInput}
               value={searchQuery}
-              onFocus={() => gaEvent("header_search_focus")}
+              onFocus={() => {
+                gaEvent("header_search_focus");
+                gaEvent("key_header_search_focus"); // anomaly signal
+              }}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
                 gaEvent("header_search_input");
+                gaEvent("key_header_search_input");
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && searchQuery.trim()) {
                   gaEvent("header_search", { query: searchQuery.trim() });
-                  gaEvent("key_header_search", {
-                    query_length: searchQuery.length,
-                  });
+                  gaEvent("key_header_search", { query: searchQuery.trim() });
 
                   router.push(
                     `/search?q=${encodeURIComponent(searchQuery.trim())}`,
@@ -210,8 +317,10 @@ export default function Header({ weather }) {
             </button>
           </div>
 
+          {/* ====== NAV ROW 3 (Categories + Blog + News + Contact + Weather + Profile) ====== */}
           {!mobileMenuOpen && (
-            <ul className={classes.desktopNavList}>
+            <ul className={classes.navSecondRow}>
+              {/* FITNESS / MINDFULNESS / NOURISH */}
               {["Fitness", "Mindfulness", "Nourish"].map((label) => (
                 <li
                   key={label}
@@ -224,9 +333,7 @@ export default function Header({ weather }) {
                     }
                   }}
                   onMouseLeave={() => {
-                    if (window.innerWidth > 768) {
-                      setActiveDropdown(null);
-                    }
+                    if (window.innerWidth > 768) setActiveDropdown(null);
                   }}
                 >
                   <Link
@@ -235,10 +342,12 @@ export default function Header({ weather }) {
                     onClick={() => {
                       handleDropdownToggle(label);
                       gaEvent("header_nav_click", { label });
+                      gaEvent("key_header_nav_click", { label });
                     }}
                   >
                     {label}
                   </Link>
+
                   <div
                     className={`${classes.megaDropdown} ${
                       activeDropdown === label ? classes.show : ""
@@ -251,6 +360,7 @@ export default function Header({ weather }) {
                         onLinkClick={() => setActiveDropdown(null)}
                       />
                     </div>
+
                     <div className={classes.megaRightColumn}>
                       <div className={classes.spotlightWrapper}>
                         <SpotlightColumn
@@ -259,6 +369,7 @@ export default function Header({ weather }) {
                           onLinkClick={() => setActiveDropdown(null)}
                         />
                       </div>
+
                       <div className={classes.challengeWrapper}>
                         <ChallengeBox
                           onLinkClick={() => setActiveDropdown(null)}
@@ -269,6 +380,7 @@ export default function Header({ weather }) {
                 </li>
               ))}
 
+              {/* BLOG / NEWS / CONTACT */}
               <li>
                 <NavLink href="/blog">Blog</NavLink>
               </li>
@@ -278,11 +390,8 @@ export default function Header({ weather }) {
               <li>
                 <NavLink href="/contact">Contact</NavLink>
               </li>
-              <li className={classes.premiumNavItem}>
-                <NavLink href="/premium">Premium</NavLink>
-              </li>
 
-              {/* weather + auth/profile part stays the same */}
+              {/* WEATHER */}
               <li
                 className={classes.weatherDropdownParent}
                 onMouseEnter={() => setActiveDropdown("Weather")}
@@ -314,6 +423,8 @@ export default function Header({ weather }) {
                   <Weather />
                 </div>
               </li>
+
+              {/* PROFILE */}
               <li className={classes.profileNavItem}>
                 {user && !isVerified && (
                   <div className={classes.verifyStickerWrapper}>
@@ -321,7 +432,7 @@ export default function Header({ weather }) {
                       className={classes.verifySticker}
                       onClick={async () => {
                         gaEvent("auth_verification_resend_click");
-                        gaEvent("key_auth_verification_resend_click");
+                        gaEvent("key_auth_verification_resend_click"); // ← anomaly event
 
                         const userEmail = user?.email;
                         if (!userEmail)
@@ -338,13 +449,8 @@ export default function Header({ weather }) {
                           );
 
                           if (!res.ok) throw new Error("Failed");
-
-                          gaEvent("auth_verification_resend_success");
-
                           toast.success("Verification email sent.");
                         } catch (err) {
-                          gaEvent("auth_verification_resend_error");
-
                           toast.error("Could not resend verification email.");
                         }
                       }}
@@ -356,6 +462,7 @@ export default function Header({ weather }) {
                     </button>
                   </div>
                 )}
+
                 {user ? (
                   <div className={classes.profileWrapper}>
                     <button className={classes.profileButton}>
@@ -383,12 +490,10 @@ export default function Header({ weather }) {
                   </div>
                 ) : null}
               </li>
-
-              {/* existing auth/profile <li> block stays exactly as it is */}
-              {/* ... your signup/login/profile li from before ... */}
             </ul>
           )}
         </nav>
+
         <div className={classes.rightControls}>
           {/* MOBILE VERIFY ICON – identical to desktop */}
           {user && !isVerified && (
@@ -495,6 +600,37 @@ export default function Header({ weather }) {
             </div>
           )}
 
+          {/* MOBILE QUICK CTA ICONS */}
+          {isMobile && (
+            <div className={classes.mobileQuickCtas}>
+              {/* Start Quiz */}
+              <button
+                className={classes.mobileCtaIcon}
+                onClick={() => {
+                  gaEvent("mobile_header_cta", { target: "start_quiz" });
+                  router.push("/quiz/start");
+                }}
+                aria-label="Start Quiz"
+              >
+                🧭
+              </button>
+
+              {/* Dashboard (only logged in) */}
+              {user && (
+                <button
+                  className={classes.mobileCtaIcon}
+                  onClick={() => {
+                    gaEvent("mobile_header_cta", { target: "dashboard" });
+                    router.push("/dashboard");
+                  }}
+                  aria-label="Dashboard"
+                >
+                  📊
+                </button>
+              )}
+            </div>
+          )}
+
           {/* MOBILE MENU ICON */}
           <button
             className={`${classes.hamburger} ${classes.mobileOnly}`}
@@ -506,6 +642,7 @@ export default function Header({ weather }) {
                 gaEvent("key_header_mobile_menu_open");
               } else {
                 gaEvent("header_mobile_menu_close");
+                gaEvent("key_header_mobile_menu_close");
               }
             }}
             aria-label="Toggle menu"

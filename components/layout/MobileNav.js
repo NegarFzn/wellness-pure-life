@@ -13,129 +13,193 @@ export default function MobileNav({
   weather,
   nyTime,
   user,
+  isVerified,
 }) {
   const [activeMobileSection, setActiveMobileSection] = useState(null);
   const router = useRouter();
 
-  // ⭐ ANOMALY: Mobile Navigation Opened
+  // ⭐ Track mobile navigation open
   useEffect(() => {
+    gaEvent("mobile_nav_open");
     gaEvent("key_mobile_nav_open");
   }, []);
 
+  const normalize = (label) =>
+    label?.charAt(0).toUpperCase() + label?.slice(1).toLowerCase();
+
   const handleSurprise = () => {
-    gaEvent("mobile_nav_surprise_click", {
-      section: activeMobileSection,
-    });
+    const key = normalize(activeMobileSection);
+    const topics = topicsMap[key] || [];
 
-    // ⭐ ANOMALY: Surprise Click
-    gaEvent("key_mobile_surprise_click", {
-      section: activeMobileSection,
-    });
+    gaEvent("mobile_nav_surprise_click", { section: key });
+    gaEvent("key_mobile_nav_surprise_click", { section: key });
 
-    const topics = topicsMap[activeMobileSection] || [];
-    if (topics.length > 0) {
+    if (topics.length) {
       const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-      if (randomTopic?.href) {
-        router.push(randomTopic.href);
-      }
+      if (randomTopic?.href) router.push(randomTopic.href);
     }
-    setActiveMobileSection(null);
+
     closeMenu();
+    setActiveMobileSection(null);
   };
 
   return (
     <nav className={classes.mobileNav} aria-label="Mobile navigation">
       {!activeMobileSection ? (
-        <ul className={classes.topLevelNav}>
-          {navItems.map((label) => (
-            <li key={label}>
-              <button
-                type="button"
-                className={classes.navButton}
-                onClick={() => {
-                  gaEvent("mobile_nav_section_open", { label });
-
-                  // ⭐ ANOMALY: Section Open
-                  gaEvent("key_mobile_section_open", { label });
-
-                  setActiveMobileSection(label);
-                }}
-                aria-expanded={activeMobileSection === label}
-              >
-                {label}
-                <span className={classes.arrow}>›</span>
-              </button>
-            </li>
-          ))}
-
-          {["blog", "news", "contact"].map((item) => (
-            <li key={item}>
+        <>
+          {/* ===========================
+              PRIMARY CTA BUTTON GROUP
+          ============================== */}
+          <ul className={classes.ctaGroupMobile}>
+            <li>
               <Link
-                href={`/${item}`}
-                className={classes.mobileNavLink}
+                href="/quizzes/quiz-main"
+                className={classes.mobileCtaButton}
                 onClick={() => {
-                  gaEvent("mobile_nav_link_click", { item });
+                  gaEvent("mobile_nav_start_quiz_click");
+                       gaEvent("key_mobile_nav_start_quiz_click");
                   closeMenu();
                 }}
               >
-                {item.charAt(0).toUpperCase() + item.slice(1)}
+                Start Quiz →
               </Link>
             </li>
-          ))}
 
-          <li>
-            <Link
-              href="/premium"
-              className={classes.mobileNavLink}
-              onClick={() => {
-                gaEvent("mobile_nav_premium_click");
-                closeMenu();
-              }}
-            >
-              Premium
-            </Link>
-          </li>
+            <li>
+              <Link
+                href="/plan/weekly-plan"
+                className={classes.mobileCtaButtonSecondary}
+                onClick={() => {
+                  gaEvent("mobile_nav_weekly_plan_click");
+                  gaEvent("key_mobile_nav_weekly_plan_click");
+                  closeMenu();
+                }}
+              >
+                Weekly Plan
+              </Link>
+            </li>
 
-          <li className={classes.mobileWeather}>
-            {weather ? (
-              <>
-                <img
-                  src={weather.current.condition.icon}
-                  alt={weather.current.condition.text}
-                  className={classes.weatherIcon}
-                  onClick={() =>
-                    gaEvent("mobile_nav_weather_click", {
-                      temp: weather.current.temp_c,
-                    })
-                  }
-                />
-                <div
-                  className={classes.weatherText}
-                  onClick={() =>
-                    gaEvent("mobile_nav_weather_click", {
-                      temp: weather.current.temp_c,
-                    })
-                  }
+            <li>
+              <Link
+                href="/plan/daily-routine"
+                className={classes.mobileCtaButtonSecondary}
+                onClick={() => {
+                  gaEvent("mobile_nav_daily_routine_click");
+                  gaEvent("key_mobile_nav_daily_routine_click");
+                  closeMenu();
+                }}
+              >
+                Daily Routine
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                href="/challenges"
+                className={classes.mobileCtaButtonSecondary}
+                onClick={() => {
+                  gaEvent("mobile_nav_challenges_click");
+                  gaEvent("key_mobile_nav_challenges_click");
+                  closeMenu();
+                }}
+              >
+                Challenges
+              </Link>
+            </li>
+
+            {/* PREMIUM IN CTA GROUP (not nav list) */}
+            <li>
+              <Link
+                href="/premium"
+                className={classes.mobileCtaButtonPremium}
+                onClick={() => {
+                  gaEvent("mobile_nav_premium_click");
+                  gaEvent("key_mobile_nav_premium_click");
+                  closeMenu();
+                }}
+              >
+                Premium
+              </Link>
+            </li>
+          </ul>
+
+          {/* ===========================
+              MAIN NAVIGATION LIST
+          ============================== */}
+          <ul className={classes.topLevelNav}>
+            {navItems.map((label) => (
+              <li key={label}>
+                <button
+                  type="button"
+                  className={classes.navButton}
+                  onClick={() => {
+                    const normalized = normalize(label);
+                    gaEvent("mobile_nav_section_open", { label: normalized });
+                    gaEvent("key_mobile_nav_section_open", {
+                      label: normalized,
+                    });
+                    setActiveMobileSection(label);
+                  }}
                 >
-                  <div className={classes.weatherTemp}>
-                    {weather.current.temp_c}°C
+                  {label}
+                  <span className={classes.arrow}>›</span>
+                </button>
+              </li>
+            ))}
+
+            {/* Blog, News, Contact */}
+            {["blog", "news", "contact"].map((item) => (
+              <li key={item}>
+                <Link
+                  href={`/${item}`}
+                  className={classes.mobileNavLink}
+                  onClick={() => {
+                    gaEvent("mobile_nav_link_click", { item });
+                    gaEvent("key_mobile_nav_link_click", { item });
+                    closeMenu();
+                  }}
+                >
+                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                </Link>
+              </li>
+            ))}
+
+            {/* WEATHER */}
+            <li className={classes.mobileWeather}>
+              {weather ? (
+                <>
+                  <img
+                    src={weather.current.condition.icon}
+                    alt={weather.current.condition.text}
+                    className={classes.weatherIcon}
+                  />
+                  <div className={classes.weatherText}>
+                    <div className={classes.weatherTemp}>
+                      {weather.current.temp_c}°C
+                    </div>
+                    <div className={classes.weatherTime}>{nyTime} (NY)</div>
                   </div>
-                  <div className={classes.weatherTime}>{nyTime} (NY)</div>
-                </div>
-              </>
-            ) : (
-              <div className={classes.weatherText}>Loading weather…</div>
-            )}
-          </li>
-        </ul>
+                </>
+              ) : (
+                <div className={classes.weatherText}>Loading weather…</div>
+              )}
+            </li>
+          </ul>
+        </>
       ) : (
+        /* ===========================
+           SUB-MENU SECTION
+        ============================== */
         <div className={classes.mobileSublist}>
           <button
             type="button"
             className={classes.backButton}
             onClick={() => {
               gaEvent("mobile_nav_back_click", {
-                from: activeMobileSection,
+                from: normalize(activeMobileSection),
+              });
+              gaEvent("key_mobile_nav_back_click", {
+                from: normalize(activeMobileSection),
               });
               setActiveMobileSection(null);
             }}
@@ -144,48 +208,53 @@ export default function MobileNav({
           </button>
 
           <ul>
+            {/* Main link */}
             <li>
               <Link
-                href={`/${activeMobileSection.toLowerCase()}`}
+                href={`/${normalize(activeMobileSection).toLowerCase()}`}
                 className={classes.mainSectionLink}
                 onClick={() => {
                   gaEvent("mobile_nav_section_main_click", {
-                    section: activeMobileSection,
+                    section: normalize(activeMobileSection),
+                  });
+                  gaEvent("key_mobile_nav_section_main_click", {
+                    section: normalize(activeMobileSection),
                   });
                   setActiveMobileSection(null);
                   closeMenu();
                 }}
               >
-                {activeMobileSection}
+                {normalize(activeMobileSection)}
               </Link>
             </li>
 
-            {(topicsMap[activeMobileSection] || []).map((item, i) => (
-              <li key={i}>
-                <Link
-                  href={item.href}
-                  className={classes.mobileNavLink}
-                  onClick={() => {
-                    gaEvent("mobile_nav_topic_click", {
-                      section: activeMobileSection,
-                      topic: item.text,
-                    });
+            {/* Topics list */}
+            {(topicsMap[normalize(activeMobileSection)] || []).map(
+              (item, i) => (
+                <li key={i}>
+                  <Link
+                    href={item.href}
+                    className={classes.mobileNavLink}
+                    onClick={() => {
+                      gaEvent("mobile_nav_topic_click", {
+                        section: normalize(activeMobileSection),
+                        topic: item.text,
+                      });
+                      gaEvent("key_mobile_nav_topic_click", {
+                        section: normalize(activeMobileSection),
+                        topic: item.text,
+                      });
+                      setActiveMobileSection(null);
+                      closeMenu();
+                    }}
+                  >
+                    {item.text}
+                  </Link>
+                </li>
+              ),
+            )}
 
-                    // ⭐ ANOMALY: Topic Click
-                    gaEvent("key_mobile_topic_click", {
-                      section: activeMobileSection,
-                      topic: item.text,
-                    });
-
-                    setActiveMobileSection(null);
-                    closeMenu();
-                  }}
-                >
-                  {item.text}
-                </Link>
-              </li>
-            ))}
-
+            {/* Surprise Me */}
             <li>
               <button
                 type="button"
@@ -196,6 +265,7 @@ export default function MobileNav({
               </button>
             </li>
 
+            {/* Premium Challenge Box */}
             <li className={classes.premiumBox}>
               <div className={classes.premiumInner}>
                 <div>
@@ -208,6 +278,7 @@ export default function MobileNav({
                     className={classes.premiumActiveLink}
                     onClick={() => {
                       gaEvent("mobile_nav_challenge_click");
+                      gaEvent("key_mobile_nav_challenge_click");
                       closeMenu();
                     }}
                   >
@@ -221,6 +292,7 @@ export default function MobileNav({
                       className={classes.premiumLink}
                       onClick={() => {
                         gaEvent("mobile_nav_challenge_upgrade_click");
+                        gaEvent("key_mobile_nav_challenge_upgrade_click");
                         closeMenu();
                       }}
                     >

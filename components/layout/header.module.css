@@ -1,4 +1,3 @@
-
 /* Default = Desktop */
 .desktopOnly {
   display: flex !important;
@@ -20,8 +19,8 @@
 /* === Header Layout === */
 .header {
   display: flex;
- align-items: center;
-  justify-content: space-between; 
+  align-items: center;
+  justify-content: space-between;
   padding: 1rem 1.25rem;
   background: linear-gradient(90deg, #1c192c, #3c394d);
   position: fixed;
@@ -30,7 +29,7 @@
   width: 100%;
   z-index: 3000;
   gap: 0.5rem;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   overflow: visible;
   box-sizing: border-box;
   min-height: 75px;
@@ -42,13 +41,15 @@
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 0.85rem; /* better spacing */
+  gap: 1rem; /* ideal spacing */
   white-space: nowrap;
   text-decoration: none !important;
-  transform: translateY(1px); /* optical balance */
+  transform: translateY(1px); /* optical baseline fix */
 }
 
-/* === LOGO IMAGE === */
+/* ===========================
+   LOGO IMAGE (Flower)
+=========================== */
 .logo img {
   height: 46px;
   width: 46px;
@@ -56,67 +57,94 @@
   object-fit: cover;
   object-position: center;
 
-  /* Premium soft glow */
-  box-shadow: 0 0 14px rgba(175, 124, 255, 0.55);
+  /* Premium soft lavender glow */
+  box-shadow: 0 0 16px rgba(170, 120, 255, 0.55);
 
-  /* Smooth appearance */
+  /* Entry animation */
   opacity: 0;
-  animation: logoEntry 0.7s ease forwards;
+  animation: logoEntry 0.6s ease forwards;
 
   transition:
     transform 0.35s ease,
     box-shadow 0.35s ease;
 }
 
-/* Subtle premium hover */
+/* Hover interaction */
 .logo img:hover {
-  transform: scale(1.08) rotate(3deg);
+  transform: scale(1.08);
   box-shadow: 0 0 22px rgba(185, 135, 255, 0.75);
 }
 
-/* === BRAND NAME TEXT === */
+/* ===========================
+   BRAND NAME TEXT
+=========================== */
 .brandName {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-
+  gap: 0.45rem;
+ transform: translateY(2px);
   font-family: "Poppins", sans-serif;
-  font-size: 2rem;
   font-weight: 700;
-  color: white;
+  font-size: 1.9rem;
 
-  letter-spacing: 0.4px; /* premium readability */
+  /* Gentle luxury gradient */
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #f9f6ff 40%,
+    #e7ddff 100%
+  );
+  -webkit-background-clip: text;
+  color: transparent;
+
+  letter-spacing: 0.4px;
   white-space: nowrap;
 
   opacity: 0;
-  animation: brandFadeUp 0.6s ease forwards 0.15s;
+  animation: brandFadeIn 0.55s ease forwards 0.15s;
 
-  transition: transform 0.25s ease;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
+/* Hover effect */
 .brandName:hover {
-  transform: scale(1.05);
+  transform: scale(1.045);
 }
 
-/* === ANIMATIONS === */
-@keyframes logoEntry {
-  0% { opacity: 0; transform: scale(0.8) translateY(6px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-@keyframes brandFadeUp {
-  0% { opacity: 0; transform: translateY(6px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-
+/* Full brand text */
 .fullName {
   display: inline;
   font-size: 28px;
 }
 
+/* Short brand for mobile */
 .shortName {
   display: none;
+}
+
+/* ===========================
+   ENTRY ANIMATIONS
+=========================== */
+@keyframes logoEntry {
+  0% {
+    opacity: 0;
+    transform: scale(0.82) translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes brandFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .nav {
@@ -126,11 +154,10 @@
   overflow-x: auto;
   overflow: visible !important;
   min-width: 0;
-  flex-grow: 0;           /* ❗ stop taking entire space */
+  flex-grow: 0; /* ❗ stop taking entire space */
   flex-shrink: 1;
-  margin-left: 2rem;      /* optional spacing */
+  margin-left: 2rem; /* optional spacing */
 }
-
 
 .nav ul {
   list-style: none;
@@ -303,10 +330,11 @@
 }
 
 /* === Weather === */
-
 .weatherDropdownParent {
   position: relative;
-  display: inline-block;
+  padding: 0.25rem 0;
+  display: flex;
+  align-items: center;
 }
 
 .weatherButton {
@@ -473,6 +501,7 @@
 .dropdownParent {
   position: relative;
   z-index: 3000;
+  padding: 0.25rem 0;
 }
 
 .dropdownToggle {
@@ -683,12 +712,14 @@
 .searchContainer {
   display: flex;
   align-items: center;
+  gap: 0.4rem;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 9999px;
   padding: 0 6px;
   height: 34px;
-  max-width: 240px;
+  width: 100%;
+  max-width: 360px;
 }
 
 .searchInput {
@@ -739,7 +770,7 @@
   gap: 0.6rem;
   white-space: nowrap; /* 🔑 prevents Login / Sign Up breaking lines */
   flex-shrink: 0;
-  margin-left: auto; 
+  margin-left: auto;
 }
 
 .authButtons {
@@ -865,7 +896,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-   margin-right: 8px; 
+  margin-right: 8px;
 }
 
 .verifySticker {
@@ -882,7 +913,9 @@
   cursor: pointer;
   position: relative;
   z-index: 2;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 
   /* NEW — attention animation */
   animation: verifyShake 1.2s ease-in-out infinite;
@@ -896,14 +929,25 @@
 }
 
 @keyframes verifyShake {
-  0% { transform: rotate(0deg); }
-  20% { transform: rotate(-8deg); }
-  40% { transform: rotate(8deg); }
-  60% { transform: rotate(-6deg); }
-  80% { transform: rotate(6deg); }
-  100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  40% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-6deg);
+  }
+  80% {
+    transform: rotate(6deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
-
 
 /* FIXED TOOLTIP */
 .verifyTooltip {
@@ -942,7 +986,234 @@
   opacity: 1;
 }
 
+/* CTA Group Container */
+.ctaGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: 2rem;
+}
 
+/* Base CTA Button */
+.ctaButton {
+  padding: 0.45rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.ctaButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Primary CTA – Start Quiz */
+.ctaPrimary {
+  background: linear-gradient(135deg, #00f5a0, #00d9f5);
+  color: #0d0d0d;
+  border: none;
+  box-shadow: 0px 0px 12px rgba(0, 230, 180, 0.45);
+}
+.ctaPrimary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+/* Premium CTA */
+.premiumButton {
+  background: linear-gradient(135deg, #4b6cfb, #2dd3ff);
+  border: none;
+  box-shadow: 0px 0px 15px rgba(80, 150, 255, 0.35);
+  font-weight: 700;
+}
+.premiumButton:hover {
+  filter: brightness(1.09);
+  transform: translateY(-2px);
+}
+
+.navTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 0.8rem; /* spacing between CTA and search bar */
+  margin-top: 0.3rem;
+  width: 100%;
+}
+
+/* Mobile quick CTA wrapper */
+.mobileQuickCtas {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  margin-right: 0.5rem;
+}
+
+/* CTA icon buttons */
+.mobileCtaIcon {
+  background: linear-gradient(135deg, #00f5a0, #00d9f5);
+  border: none;
+  color: #0d0d0d;
+  font-size: 1.1rem;
+  font-weight: 700;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 10px rgba(0, 230, 180, 0.35);
+  transition: all 0.2s ease;
+}
+
+.mobileCtaIcon:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.navSecondRow {
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+
+  /* ensures perfect alignment under CTA row */
+  margin-left: 0;
+  margin-right: auto;
+
+  /* prevents shrinking on desktop */
+  white-space: nowrap;
+}
+
+/* ================================
+   MOBILE CTA BUTTON GROUP
+=================================*/
+.ctaGroupMobile {
+  padding: 1.2rem 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mobileCtaButton {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #ffffff;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.mobileCtaButton:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+}
+
+.mobileCtaButtonSecondary {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.mobileCtaButtonSecondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.mobileCtaButtonPremium {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  color: #ffffff;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.mobileCtaButtonPremium:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+}
+
+/* ================================
+   AUTH BUTTONS FOR MOBILE
+=================================*/
+.authButtonsMobile {
+  margin-top: 1.2rem;
+  padding: 1rem 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.authButtonsMobile a {
+  display: block;
+  text-align: center;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+/* Sign Up button (highlighted) */
+.authButtonsMobile a[href="/signup"] {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+.authButtonsMobile a[href="/signup"]:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+/* Login button (neutral) */
+.authButtonsMobile a[href="/login"] {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.authButtonsMobile a[href="/login"]:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+
+/* Mobile: hide CTA group */
+@media (max-width: 768px) {
+  .ctaGroup {
+    display: none;
+  }
+}
 
 /* === Responsive === */
 @media (max-width: 768px) {
@@ -1468,6 +1739,12 @@
   .searchContainer {
     max-width: 340px;
   }
+
+  .mobileQuickCtas {
+    display: flex;
+  }
+
+  
 }
 
 @media (max-width: 1024px) {
@@ -1529,6 +1806,11 @@
   .searchButton {
     font-size: 1rem;
   }
+
+  .navTopRow {
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+  }
 }
 
 @media (max-width: 431px) {
@@ -1549,6 +1831,43 @@
 @media (min-width: 769px) {
   .pendingVerify:hover {
     background: #fde68a;
+  }
+
+  .mobileQuickCtas {
+    display: none !important;
+  }
+  .nav {
+    order: 2; /* second row */
+    width: 100%; /* takes full width below CTA */
+    margin-left: 0 !important;
+    justify-content: center;
+    flex-grow: 0; /* stop stealing space */
+    flex-shrink: 1;
+    overflow: visible !important;
+  }
+  .desktopNavList {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* enables wrapping if needed */
+    gap: 1rem;
+  }
+
+  .header {
+    flex-wrap: wrap; /* allows two rows */
+  }
+
+  .ctaGroup {
+    order: 1; /* first row */
+  }
+
+  .logo {
+    order: 0; /* far left first row */
+  }
+
+  .rightControls {
+    order: 1; /* stay on first row */
+    margin-left: auto;
   }
 }
 

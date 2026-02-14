@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { signIn, useSession } from "next-auth/react";
-import MultiStartQuiz from "../../../components/Quiz/QuizPlan/1_StartQuiz";
 import { gaEvent } from "../../../lib/gtag";
-
 import classes from "./QuizPage.module.css";
 import Subscribe from "../../../components/Subscribe/subscribe";
+import QuizCTA from "../../../components/Quiz/QuizCTA";
 
 const keyMap = {
   time: "timeOfDay",
@@ -36,19 +35,9 @@ export default function QuizPage() {
     { type: "nourish", label: "🥗 Nourish Plan" },
   ];
 
-  useEffect(() => {
-    if (!result) return;
-
-    gaEvent("quiz_recommendation_list_view", {
-      slug,
-      count: result?.matchedValues?.length || 0,
-    });
-    gaEvent("key_quiz_recommendation_list_view", {
-      slug,
-      count: result?.matchedValues?.length || 0,
-    });
-  }, [result, slug]);
-
+  // ----------------------
+  // EVENTS & ACTIONS
+  // ----------------------
   const handleQuizOpen = (type) => {
     gaEvent("plan_quiz_modal_open", { slug, plan_type: type });
     gaEvent("key_plan_quiz_modal_open", { slug, plan_type: type });
@@ -63,6 +52,11 @@ export default function QuizPage() {
     setActiveQuiz(null);
   };
 
+  // ----------------------
+  // ALL HOOKS MUST STAY HERE
+  // ----------------------
+
+  // 1. Set email from session
   useEffect(() => {
     if (session?.user?.email) {
       setEmail(session.user.email);
@@ -72,6 +66,7 @@ export default function QuizPage() {
     }
   }, [session]);
 
+  // 2. Load quiz data
   useEffect(() => {
     if (!slug) return;
 
@@ -79,15 +74,13 @@ export default function QuizPage() {
       .then((res) => res.json())
       .then((all) => {
         const matched = all.find((q) => q.slug === slug);
-        if (matched) {
-          setQuiz(matched);
-        } else {
-          setError("❌ Quiz not found.");
-        }
+        if (matched) setQuiz(matched);
+        else setError("❌ Quiz not found.");
       })
       .catch(() => setError("Failed to load quiz."));
   }, [slug]);
 
+  // 3. Quiz loaded event
   useEffect(() => {
     if (!quiz || !slug) return;
 
@@ -101,6 +94,45 @@ export default function QuizPage() {
     });
   }, [quiz, slug]);
 
+  // 4. Quiz page loaded
+  useEffect(() => {
+    if (!slug || !quiz) return;
+
+    gaEvent("quiz_page_loaded", { slug });
+    gaEvent("key_quiz_page_loaded", { slug });
+  }, [quiz, slug]);
+
+  // 5. Recommendation viewed
+  useEffect(() => {
+    if (!result) return;
+
+    gaEvent("quiz_recommendation_viewed", {
+      slug,
+      title: result?.matchedTitle || "no_match",
+    });
+    gaEvent("key_quiz_recommendation_viewed", {
+      slug,
+      title: result?.matchedTitle || "no_match",
+    });
+  }, [result]);
+
+  // 6. Recommendation list view
+  useEffect(() => {
+    if (!result) return;
+
+    gaEvent("quiz_recommendation_list_view", {
+      slug,
+      count: result?.matchedValues?.length || 0,
+    });
+    gaEvent("key_quiz_recommendation_list_view", {
+      slug,
+      count: result?.matchedValues?.length || 0,
+    });
+  }, [result, slug]);
+
+  // ----------------------
+  // HELPERS
+  // ----------------------
   const handleChange = (key, value) => {
     gaEvent("quiz_question_answered", {
       slug,
@@ -128,6 +160,9 @@ export default function QuizPage() {
     return normalized;
   };
 
+  // ----------------------
+  // SUBMIT HANDLER
+  // ----------------------
   const handleSubmit = async () => {
     setInlineError("");
     setError(null);
@@ -155,9 +190,7 @@ export default function QuizPage() {
       email: trimmedEmail,
     });
 
-    if (!login?.error) {
-      setIsAuthenticated(true);
-    }
+    if (!login?.error) setIsAuthenticated(true);
 
     try {
       const res = await fetch("/api/quiz/quiz-main", {
@@ -192,14 +225,10 @@ export default function QuizPage() {
     }
   };
 
-  if (error) {
-    return <div className={classes.error}>{error}</div>;
-  }
-
-  if (!quiz) {
-    return <div className={classes.loading}>⏳ Loading quiz...</div>;
-  }
-
+  // ----------------------
+  // EMAIL SEND FUNCTION
+  // MUST stay under hooks (safe)
+  // ----------------------
   async function handleSendEmail() {
     setIsSending(true);
     setIsSent(false);
@@ -215,13 +244,8 @@ export default function QuizPage() {
     try {
       const res = await fetch("/api/quiz/quiz-main?mode=send-email", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: finalEmail,
-          slug,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: finalEmail, slug }),
       });
 
       const data = await res.json();
@@ -243,26 +267,6 @@ export default function QuizPage() {
     }
   }
 
-  useEffect(() => {
-    if (!slug || !quiz) return;
-
-    gaEvent("quiz_page_loaded", { slug });
-    gaEvent("key_quiz_page_loaded", { slug });
-  }, [quiz, slug]);
-
-  useEffect(() => {
-    if (!result) return;
-
-    gaEvent("quiz_recommendation_viewed", {
-      slug,
-      title: result?.matchedTitle || "no_match",
-    });
-    gaEvent("key_quiz_recommendation_viewed", {
-      slug,
-      title: result?.matchedTitle || "no_match",
-    });
-  }, [result]);
-
   return (
     <>
       <Head>
@@ -281,11 +285,11 @@ export default function QuizPage() {
       </Head>
 
       <div className={classes.container}>
-        <h1 className={classes.title}>{quiz.title || slug}</h1>
+        <h1 className={classes.title}>{quiz?.title || slug}</h1>
 
         {!result ? (
           <>
-            {quiz.questions.map((q, index) => (
+            {quiz?.questions.map((q, index) => (
               <div
                 key={q.key}
                 className={`${classes.questionBlock} ${
@@ -405,60 +409,12 @@ export default function QuizPage() {
           </div>
         )}
 
-        <div className={classes.blogCtaWrap}>
-          <a
-            href="/blog"
-            className={classes.blogCta}
-            onClick={() => {
-              gaEvent("blog_support_click", { from: "quiz-page" });
-              gaEvent("key_blog_support_click", { from: "quiz-page" });
-            }}
-          >
-            Explore More Wellness Guides →
-          </a>
-        </div>
+        
 
         {result && <Subscribe />}
-
-        <div className={classes.softPremiumBox}>
-          <h4 className={classes.softPremiumTitle}>
-            ✨ Turn your results into a structured plan
-          </h4>
-
-          <div className={classes.noPlan}>
-            <div className={classes.planLinksGrid}>
-              {planTypes.map(({ type, label }) => (
-                <button
-                  key={type}
-                  onClick={() => handleQuizOpen(type)}
-                  className={classes.takePlanLink}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {activeQuiz && (
-            <div
-              className={classes.modalOverlay}
-              onClick={() => closeQuizModal()}
-            >
-              <div
-                className={classes.modalContent}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  className={classes.closeModal}
-                  onClick={() => closeQuizModal()}
-                >
-                  ❌
-                </button>
-                <MultiStartQuiz slug={`${activeQuiz}-plan`} />
-              </div>
-            </div>
-          )}
-        </div>
+     
+        <QuizCTA planTypes={planTypes} />
+       
       </div>
     </>
   );

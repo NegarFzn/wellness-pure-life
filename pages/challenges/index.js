@@ -1,304 +1,72 @@
-import { useEffect, useState } from "react";
-import Head from "next/head";
-import { gaEvent } from "../../lib/gtag";
+import Link from "next/link";
 import classes from "./index.module.css";
+import { gaEvent } from "../../lib/gtag";
 
-export default function ChallengePage() {
-  const [challenges, setChallenges] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [dayNumber, setDayNumber] = useState(1);
-  const [completedDays, setCompletedDays] = useState([]);
-  const [completedKey, setCompletedKey] = useState("completedDays_default");
-  const [showResetModal, setShowResetModal] = useState(false);
-
-  // -------------------------------------
-  // RESET PROGRESS
-  // -------------------------------------
-  const handleResetProgress = () => {
-    gaEvent("challenge_reset_confirm");
-    gaEvent("key_challenge_reset_confirm");
-
-    const storedStart = localStorage.getItem("challengeStartDate");
-    if (storedStart) {
-      localStorage.removeItem(`completedDays_${storedStart}`);
-    }
-    localStorage.removeItem("challengeStartDate");
-    localStorage.removeItem("dailyChallenge");
-
-    setCompletedDays([]);
-    setDayNumber(1);
-    setChallenges([]);
-    setLoading(true);
-    location.reload();
-  };
-
-  // -------------------------------------
-  // INITIAL LOAD: DATE + PROGRESS
-  // -------------------------------------
-  useEffect(() => {
-    gaEvent("challenge_page_view");
-    gaEvent("key_challenge_page_view");
-
-    const getLocalMidnight = (date) =>
-      new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-    const todayMidnight = getLocalMidnight(new Date());
-
-    let storedStart = localStorage.getItem("challengeStartDate");
-    let startDateMidnight;
-
-    if (!storedStart) {
-      // First-time user
-      const isoStart = todayMidnight.toISOString();
-      localStorage.setItem("challengeStartDate", isoStart);
-      storedStart = isoStart;
-      startDateMidnight = todayMidnight;
-
-      gaEvent("challenge_new_start");
-      gaEvent("key_challenge_new_start");
-    } else {
-      const parsedStart = new Date(storedStart);
-      startDateMidnight = getLocalMidnight(parsedStart);
-    }
-
-    const diffInDays = Math.floor(
-      (todayMidnight - startDateMidnight) / (1000 * 60 * 60 * 24),
-    );
-
-    if (diffInDays >= 7) {
-      // AUTO RESET
-      gaEvent("challenge_auto_reset");
-      gaEvent("key_challenge_auto_reset");
-
-      const newStart = todayMidnight.toISOString();
-      localStorage.setItem("challengeStartDate", newStart);
-      localStorage.removeItem(`completedDays_${storedStart}`);
-      localStorage.removeItem("dailyChallenge");
-
-      setCompletedDays([]);
-      setDayNumber(1);
-      setCompletedKey(`completedDays_${newStart}`);
-    } else {
-      setDayNumber(Math.min(7, diffInDays + 1));
-      const key = `completedDays_${storedStart}`;
-      setCompletedKey(key);
-
-      const storedCompleted = localStorage.getItem(key);
-      if (storedCompleted) {
-        setCompletedDays(JSON.parse(storedCompleted));
-      }
-    }
-  }, []);
-
-  // -------------------------------------
-  // LOAD DAILY CHALLENGES
-  // -------------------------------------
-  useEffect(() => {
-    gaEvent("challenge_load_attempt");
-    gaEvent("key_challenge_load_attempt");
-
-    const todayKey = new Date().toISOString().split("T")[0];
-    const cached = localStorage.getItem("dailyChallenge");
-
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (parsed.date === todayKey && Array.isArray(parsed.challenges)) {
-        gaEvent("challenge_load_cached");
-        gaEvent("key_challenge_load_cached");
-
-        setChallenges(parsed.challenges);
-        setLoading(false);
-        return;
-      }
-    }
-
-    fetch("/api/challenge")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data.challenges)) {
-          gaEvent("challenge_load_success");
-          gaEvent("key_challenge_load_success");
-
-          setChallenges(data.challenges);
-          localStorage.setItem(
-            "dailyChallenge",
-            JSON.stringify({ date: todayKey, challenges: data.challenges }),
-          );
-        } else {
-          gaEvent("challenge_load_format_error");
-          gaEvent("key_challenge_load_format_error");
-
-          setChallenges(["⚠️ Unexpected challenge format."]);
-        }
-        setLoading(false);
-      })
-      .catch(() => {
-        gaEvent("challenge_load_failure");
-        gaEvent("key_challenge_load_failure");
-
-        setChallenges(["⚠️ Failed to load today's challenge."]);
-        setLoading(false);
-      });
-  }, []);
-
-  // -------------------------------------
-  // TOGGLE COMPLETION
-  // -------------------------------------
-  const toggleComplete = (dayIndex) => {
-    gaEvent("challenge_day_toggle", { dayIndex });
-    gaEvent("key_challenge_day_toggle", { dayIndex });
-
-    const newCompleted = completedDays.includes(dayIndex)
-      ? completedDays.filter((d) => d !== dayIndex)
-      : [...completedDays, dayIndex];
-
-    setCompletedDays(newCompleted);
-    localStorage.setItem(completedKey, JSON.stringify(newCompleted));
-  };
-
-  // -------------------------------------
-  // EMOJI MAPPER
-  // -------------------------------------
-  const getEmojiForChallenge = (text) => {
-    const lower = text.toLowerCase();
-
-    if (lower.includes("water")) return "💧";
-    if (lower.includes("meditate") || lower.includes("mindful")) return "🧘";
-    if (
-      lower.includes("walk") ||
-      lower.includes("outdoor") ||
-      lower.includes("step")
-    )
-      return "🚶‍♂️";
-    if (lower.includes("sleep") || lower.includes("bed")) return "🛌";
-    if (lower.includes("breathe") || lower.includes("breathing")) return "🌬️";
-    if (lower.includes("journal") || lower.includes("write")) return "📓";
-    if (lower.includes("stretch")) return "🧘‍♂️";
-    if (lower.includes("exercise") || lower.includes("workout")) return "🏋️";
-    if (lower.includes("grateful") || lower.includes("gratitude")) return "🙏";
-    if (lower.includes("fruit") || lower.includes("vegetable")) return "🍎";
-
-    return "🌟";
-  };
-
-  // -------------------------------------
-  // ADSENSE INIT
-  // -------------------------------------
-  useEffect(() => {
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-      gaEvent("challenge_adsense_loaded");
-      gaEvent("key_challenge_adsense_loaded");
-    } catch (e) {
-      console.error("Adsbygoogle error:", e);
-      gaEvent("challenge_adsense_error");
-      gaEvent("key_challenge_adsense_error");
-    }
-  }, []);
-
-  // -------------------------------------
-  // PAGE RENDER
-  // -------------------------------------
+export default function ChallengesPage() {
   return (
-    <>
-      <Head>
-        <title>7-Day Wellness Challenge | Wellness Pure Life</title>
-        <meta name="robots" content="noindex, nofollow" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className={classes.wrapper}>
+      <h1 className={classes.title}>21-Day Wellness Challenges</h1>
+      <p className={classes.subtitle}>
+        Build strength, find calm, and nourish your body — one day at a time.
+      </p>
 
-      <div className={classes.container}>
-        <h1 className={classes.heading}>Your 7-Day Wellness Challenge</h1>
-        <p className={classes.subtext}>
-          These challenges are generated just for you by ChatGPT:
-        </p>
-
-        <div className={classes.progressBar}>
-          <div
-            className={classes.progressFill}
-            style={{ width: `${(completedDays.length / 7) * 100}%` }}
-          />
-        </div>
-        <p className={classes.progressText}>
-          {completedDays.length}/7 Days Complete
-        </p>
-
-        {/* ------- AD BLOCK ------- */}
-        <div className={classes.adContainer}>
-          <ins
-            className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-6324625824043093"
-            data-ad-slot="YOUR_AD_SLOT_TOP"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          ></ins>
+      <div className={classes.grid}>
+        
+        {/* FITNESS */}
+        <div className={classes.card}>
+          <h2>Get Strong in 21 Days</h2>
+          <p>
+            Build lean muscle and boost your daily energy with short, 
+            effective workouts you can easily follow.
+          </p>
+          <Link
+            href="/challenges/21-days-fitness/1"
+            className={classes.cardBtn}
+            onClick={() =>
+              gaEvent("challenge_start_click", { challenge: "fitness" })
+            }
+          >
+            Start Fitness Challenge →
+          </Link>
         </div>
 
-        <button
-          className={classes.resetButton}
-          onClick={() => {
-            gaEvent("challenge_reset_click");
-            gaEvent("key_challenge_reset_click");
-            setShowResetModal(true);
-          }}
-        >
-          🔄 Reset Progress
-        </button>
+        {/* MINDFULNESS */}
+        <div className={classes.card}>
+          <h2>Find Calm in 21 Days</h2>
+          <p>
+            Reduce stress, improve focus, and build emotional balance 
+            through daily mindfulness practices.
+          </p>
+          <Link
+            href="/challenges/21-days-mindfulness/1"
+            className={classes.cardBtn}
+            onClick={() =>
+              gaEvent("challenge_start_click", { challenge: "mindfulness" })
+            }
+          >
+            Start Mindfulness Challenge →
+          </Link>
+        </div>
 
-        {loading ? (
-          <p className={classes.loading}>Loading your challenges...</p>
-        ) : (
-          <ol className={classes.challengeList}>
-            {challenges.map((item, index) => {
-              const isToday = index + 1 === dayNumber;
-              const isComplete = completedDays.includes(index);
-              const emoji = getEmojiForChallenge(item);
+        {/* NOURISH */}
+        <div className={classes.card}>
+          <h2>Eat Clean in 21 Days</h2>
+          <p>
+            Reset your eating habits, improve digestion, and boost your 
+            natural energy with simple nourishing steps.
+          </p>
+          <Link
+            href="/challenges/21-days-nourish/1"
+            className={classes.cardBtn}
+            onClick={() =>
+              gaEvent("challenge_start_click", { challenge: "nourish" })
+            }
+          >
+            Start Nourish Challenge →
+          </Link>
+        </div>
 
-              return (
-                <li
-                  key={index}
-                  className={`${classes.challengeItem} ${
-                    isToday ? classes.currentDay : ""
-                  } ${isComplete ? classes.completed : ""}`}
-                >
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={isComplete}
-                      onChange={() => toggleComplete(index)}
-                    />
-                    <span className={classes.checkboxLabel}>
-                      {emoji} <strong>Day {index + 1}:</strong> {item}
-                    </span>
-                  </label>
-                </li>
-              );
-            })}
-          </ol>
-        )}
-
-        {/* ------- RESET MODAL ------- */}
-        {showResetModal && (
-          <div className={classes.modalOverlay}>
-            <div className={classes.modalContent}>
-              <p>Are you sure you want to reset your challenge progress?</p>
-              <div className={classes.modalActions}>
-                <button onClick={handleResetProgress}>Yes, Reset</button>
-                <button
-                  onClick={() => {
-                    gaEvent("challenge_reset_cancel");
-                    gaEvent("key_challenge_reset_cancel");
-                    setShowResetModal(false);
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
-    </>
+    </div>
   );
 }

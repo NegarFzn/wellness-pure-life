@@ -117,7 +117,7 @@ export default function Login({
     try {
       const res = await axios.post("/api/auth/reset-password", { email });
 
-      // 👉 TRACK RESET SENT
+      // 👉 TRACK RESET SENTf
       gaEvent("auth_reset_password_sent", {
         email,
       });
@@ -141,7 +141,7 @@ export default function Login({
     }
   };
 
-  if (!isOpen) return null;
+
 
   // ⭐ TRACK WHEN LOGIN FORM ACTUALLY VISIBLE TO USER
   useEffect(() => {
@@ -149,6 +149,8 @@ export default function Login({
       gaEvent("auth_login_form_view");
     }
   }, [isOpen]);
+
+    if (!isOpen) return null;
 
   return (
     <div

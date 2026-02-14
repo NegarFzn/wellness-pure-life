@@ -18,11 +18,14 @@
 }
 
 .textBlock {
-  background: linear-gradient(145deg, #ffffff, #f0fdfa, #ecfdf5);
-  border-radius: 20px;
-  padding: 28px 20px 26px;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border-radius: 28px;
+  padding: 36px 28px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.06);
 }
+
 
 /* Typography */
 .heading {

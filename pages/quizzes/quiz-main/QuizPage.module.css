@@ -289,29 +289,8 @@
   transform: rotate(90deg);
 }
 
-/* ================= BLOG CTA ================= */
-.blogCtaWrap {
-  margin-top: 2.8rem;
-  text-align: center;
-}
 
-.blogCta {
-  display: inline-block;
-  padding: 1rem 2.4rem;
-  background: #0f172a;
-  color: #ffffff;
-  font-weight: 700;
-  border-radius: 999px;
-  text-decoration: none;
-  font-size: 1.05rem;
-  transition: 0.25s ease;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
-}
 
-.blogCta:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-}
 
 /* ================= ANIMATION ================= */
 .animateOnScroll {

@@ -8,7 +8,7 @@ import QuizCard from "../../components/Quiz/QuizCard/QuizCard";
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
 import DailyRitual from "../../components/DailyRitual";
 import WeeklyPlanCard from "../../components/Plan/WeeklyPlanCard";
-import gaEvent from "../../lib/gtag";
+import {gaEvent} from "../../lib/gtag";
 import classes from "./index.module.css";
 
 const planTypes = [
