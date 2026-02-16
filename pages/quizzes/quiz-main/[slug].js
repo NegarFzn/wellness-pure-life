@@ -5,7 +5,7 @@ import { signIn, useSession } from "next-auth/react";
 import { gaEvent } from "../../../lib/gtag";
 import classes from "./QuizPage.module.css";
 import Subscribe from "../../../components/Subscribe/subscribe";
-import QuizCTA from "../../../components/Quiz/QuizCTA";
+import ResultCTA from "../../../components/UI/ResultCTA";
 
 const keyMap = {
   time: "timeOfDay",
@@ -413,7 +413,7 @@ export default function QuizPage() {
 
         {result && <Subscribe />}
      
-        <QuizCTA planTypes={planTypes} />
+        <ResultCTA planTypes={planTypes} />
        
       </div>
     </>

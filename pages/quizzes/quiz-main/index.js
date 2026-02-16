@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import DailyRitual from "../../../components/DailyRitual";
 import MultiStartQuiz from "../../../components/Quiz/QuizPlan/1_StartQuiz";
 import { gaEvent } from "../../../lib/gtag";
+import ResultCTA from "../../../components/UI/ResultCTA";
 import classes from "./index.module.css";
 
 export default function QuizMainPage() {
@@ -16,6 +17,12 @@ export default function QuizMainPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+
+  const planTypes = [
+    { type: "fitness", label: "💪 Fitness Plan" },
+    { type: "mindfulness", label: "🧘 Mindfulness Plan" },
+    { type: "nourish", label: "🥗 Nourish Plan" },
+  ];
 
   // VIEW EVENT (NORMAL + ANOMALY)
   useEffect(() => {
@@ -242,60 +249,7 @@ export default function QuizMainPage() {
           </>
         )}
 
-        {/* PLAN BRIDGE */}
-        <section className={classes.planBridgePremium}>
-          <p className={classes.planBridgeTitle}>
-            💡 Want to improve your wellness? Retake any plan quiz below:
-          </p>
-
-          <div className={classes.planButtonsRow}>
-            <button
-              className={classes.planButtonFitness}
-              onClick={() => {
-                gaEvent("plan_quiz_select", { slug: "fitness-plan" });
-                gaEvent("key_plan_quiz_select", { slug: "fitness-plan" });
-
-                setActiveQuiz("fitness");
-              }}
-            >
-              💪 Fitness Plan
-            </button>
-
-            <button
-              className={classes.planButtonMind}
-              onClick={() => {
-                gaEvent("plan_quiz_select", {
-                  slug: "mindfulness-plan",
-                });
-                gaEvent("key_plan_quiz_select", {
-                  slug: "mindfulness-plan",
-                });
-
-                setActiveQuiz("mindfulness");
-              }}
-            >
-              🧘 Mindfulness Plan
-            </button>
-          </div>
-
-          <div className={classes.planButtonsRowSingle}>
-            <button
-              className={classes.planButtonNourish}
-              onClick={() => {
-                gaEvent("plan_quiz_select", {
-                  slug: "nourish-plan",
-                });
-                gaEvent("key_plan_quiz_select", {
-                  slug: "nourish-plan",
-                });
-
-                setActiveQuiz("nourish");
-              }}
-            >
-              🥗 Nourish Plan
-            </button>
-          </div>
-        </section>
+        <ResultCTA planTypes={planTypes} />
 
         {/* DAILY RITUAL */}
         <section className={classes.dailyRitualWrapper}>
@@ -304,21 +258,7 @@ export default function QuizMainPage() {
           <DailyRitual isPremium={user?.isPremium} />
         </section>
 
-        {/* BLOG SUPPORT */}
-        <section className={classes.blogSupport}>
-          <p>Want to learn while deciding?</p>
-
-          <Link
-            href="/blog"
-            className={classes.textLink}
-            onClick={() => {
-              gaEvent("blog_support_click", { from: "quiz-main" });
-              gaEvent("key_blog_support_click", { from: "quiz-main" });
-            }}
-          >
-            Explore Wellness Guides →
-          </Link>
-        </section>
+       
 
         {/* MODAL */}
         {activeQuiz && (

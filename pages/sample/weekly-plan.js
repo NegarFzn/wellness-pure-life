@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { gaEvent } from "../../lib/gtag";
 import classes from "./weekly-plan.module.css";
 
 const WEEK_VARIANTS = {

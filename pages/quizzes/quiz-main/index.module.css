@@ -314,23 +314,7 @@
   color: #111;
 }
 
-/* =====================
-  Blog Support
-===================== */
-.blogSupport {
-  margin-top: 3.5rem;
-  color: #666;
-}
 
-.textLink {
-  font-weight: 800;
-  color: #111;
-  text-decoration: none;
-}
-
-.textLink:hover {
-  text-decoration: underline;
-}
 
 /* =====================
   ✅ PLAN MODAL STYLES
