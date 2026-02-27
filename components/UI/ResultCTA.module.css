@@ -7,13 +7,7 @@
   padding: 6rem 3.5rem;
   border-radius: 40px;
 
-  /* Soft luxury pastel background (reduced brightness for visibility) */
-  background: linear-gradient(
-    145deg,
-    #fff5fb 0%,
-    #f9f2ff 45%,
-    #eef4ff 100%
-  );
+  background: linear-gradient(145deg, #fff5fb 0%, #f9f2ff 45%, #eef4ff 100%);
 
   border: 1px solid rgba(255, 255, 255, 0.45);
 
@@ -28,49 +22,67 @@
 }
 
 @keyframes fadeInHero {
-  to { opacity: 1; transform: translateY(0); }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ============================================================
-   DECORATIVE BACKGROUND — FIXED VISIBILITY
+   DECORATIVE BACKGROUND
 ============================================================ */
 .decorativeBg {
   position: absolute;
   inset: 0;
 
   background:
-    radial-gradient(circle at 20% 25%, rgba(255, 210, 230, 0.55), transparent 55%),
-    radial-gradient(circle at 80% 70%, rgba(200, 230, 255, 0.55), transparent 60%),
-    radial-gradient(circle at 50% 90%, rgba(232, 217, 255, 0.45), transparent 70%);
+    radial-gradient(
+      circle at 20% 25%,
+      rgba(255, 210, 230, 0.55),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(200, 230, 255, 0.55),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      rgba(232, 217, 255, 0.45),
+      transparent 70%
+    );
 
   filter: blur(75px);
   opacity: 0.55;
-
-  /* IMPORTANT FIX */
   z-index: 0 !important;
 
   animation: floatBg 16s ease-in-out infinite alternate;
 }
 
 @keyframes floatBg {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(22px, -28px) scale(1.05); }
-  100% { transform: translate(-18px, 25px) scale(1); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(22px, -28px) scale(1.05);
+  }
+  100% {
+    transform: translate(-18px, 25px) scale(1);
+  }
 }
 
-/* All content stays above background shapes */
 .ctaContainer * {
   position: relative;
   z-index: 5 !important;
 }
 
 /* ============================================================
-   TYPOGRAPHY — Premium & Visible
+   TYPOGRAPHY
 ============================================================ */
 .heroTitle {
   font-size: 3rem;
   font-weight: 800;
-  color: #3c2d45 !important;  /* deep plum for visibility */
+  color: #3c2d45 !important;
   letter-spacing: -0.8px;
   margin-bottom: 1.6rem;
   text-shadow: 0 2px 5px rgba(255, 255, 255, 0.4);
@@ -81,7 +93,7 @@
 .heroSubtitle {
   font-size: 1.32rem;
   font-weight: 500;
-  color: #6d5874 !important;  /* readable plum */
+  color: #6d5874 !important;
   max-width: 700px;
   margin: 0 auto 3.4rem;
   line-height: 1.75;
@@ -90,12 +102,18 @@
 }
 
 @keyframes fadeSlideUp {
-  0% { transform: translateY(12px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* ============================================================
-   CTA BUTTONS — Premium Pastel Candy
+   CTA BUTTON GROUP
 ============================================================ */
 .ctaButtonGroup {
   display: flex;
@@ -103,9 +121,10 @@
   gap: 1.2rem;
   animation: fadeSlideUp 1.7s ease forwards;
   opacity: 0;
+  
 }
 
-/* PRIMARY BUTTON — Baby Blue Luxury Gradient */
+/* PRIMARY BUTTON */
 .primaryBtn {
   width: 100%;
   padding: 1.35rem;
@@ -115,7 +134,7 @@
   cursor: pointer;
 
   background: linear-gradient(135deg, #cfeaff 0%, #bcdcff 40%, #a9ccff 100%);
-  color: #2e3950 !important; /* dark enough for visibility */
+  color: #2e3950 !important;
 
   border: none;
   box-shadow:
@@ -127,12 +146,9 @@
 
 .primaryBtn:hover {
   transform: translateY(-5px) scale(1.03);
-  box-shadow:
-    0 20px 38px rgba(180, 205, 255, 0.55),
-    0 0 25px rgba(200, 230, 255, 0.85);
 }
 
-/* SECONDARY BUTTON — Frosted Pink Glass */
+/* SECONDARY BUTTON */
 .secondaryBtn {
   width: 100%;
   padding: 1.25rem;
@@ -144,8 +160,7 @@
   background: rgba(255, 210, 232, 0.55);
   backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 180, 210, 0.45);
-
-  color: #6d3f56 !important; /* readable pink plum */
+  color: #6d3f56 !important;
 
   box-shadow:
     0 8px 18px rgba(255, 190, 220, 0.35),
@@ -156,7 +171,6 @@
 
 .secondaryBtn:hover {
   transform: translateY(-4px) scale(1.03);
-  background: rgba(255, 210, 232, 0.85);
 }
 
 /* ============================================================
@@ -167,31 +181,24 @@
   height: 1px;
   background: rgba(60, 45, 69, 0.18);
   margin: 4rem auto;
-  animation: fadeSlideUp 2s ease forwards;
-  opacity: 0;
 }
 
 /* ============================================================
-   PLAN SECTION — Visible Lavender Premium
+   PLAN SECTION
 ============================================================ */
 .planTitle {
   font-size: 1.9rem;
   font-weight: 700;
   color: #3c2d45 !important;
   margin-bottom: 2.5rem;
-  animation: fadeSlideUp 2.2s ease forwards;
-  opacity: 0;
 }
 
 .planLinksGrid {
   display: grid;
   gap: 1.3rem;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  animation: fadeSlideUp 2.3s ease forwards;
-  opacity: 0;
 }
 
-/* PLAN CARD — Lavender Glow */
 .planCard {
   background: #ffffff;
   padding: 1.75rem;
@@ -207,20 +214,32 @@
 
   cursor: pointer;
   transition: all 0.25s ease;
+  animation: fadePop 1s ease forwards;
+  opacity: 0;
 }
 
 .planCard:hover {
   transform: translateY(-6px) scale(1.03);
-  background: #f3eaff; /* lavender */
-  box-shadow:
-    0 18px 38px rgba(120, 90, 200, 0.18),
-    0 0 28px rgba(185, 175, 240, 0.45);
+}
+
+@keyframes fadePop {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* ============================================================
    BLOG CTA
 ============================================================ */
-.blogCtaWrap { text-align: center; margin-top: 3.5rem; }
+.blogCtaWrap {
+  text-align: center;
+  margin-top: 3.5rem;
+}
 
 .blogCta {
   font-size: 1.1rem;
@@ -229,13 +248,10 @@
   text-decoration: none;
   padding-bottom: 3px;
   border-bottom: 2px solid #d07ea1;
-  transition: 0.2s ease;
 }
 
-.blogCta:hover { opacity: 0.65; }
-
 /* ============================================================
-   MODAL — Premium Glass
+   MODAL — PREMIUM GLASS
 ============================================================ */
 .modalOverlay {
   position: fixed;
@@ -246,61 +262,41 @@
   justify-content: center;
   align-items: center;
   z-index: 200;
-  animation: fadeModal 0.35s ease forwards;
-  opacity: 0;
 }
 
-@keyframes fadeModal { to { opacity: 1; } }
-
-/* ============================================================
-   HORIZONTAL PREMIUM MODAL (NEW)
-============================================================ */
 .modalContent {
   background: #ffffff;
   padding: 2.6rem;
   border-radius: 28px;
-
-  /* NEW — Horizontal Layout */
-  max-width: 1100px;     /* wider modal */
+  position: relative;
+  max-width: 1100px;
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
 
   display: flex;
-  flex-direction: row;   /* horizontal layout */
+  flex-direction: row;
 
   border: 3px solid #ffd9e8;
   box-shadow:
     0 25px 55px rgba(0, 0, 0, 0.25),
     0 0 55px rgba(255, 210, 240, 0.4);
-
-  animation: popModal 0.35s ease forwards;
-  transform: translateY(0) scale(0.92);
-  opacity: 0;
-
-  position: relative;
 }
 
-/* Close button stays visible */
-.closeModal {
+.modalContent::before {
+  content: "";
   position: absolute;
-  top: 16px;
-  right: 18px;
-  z-index: 10;
+  inset: -12px;
+  border-radius: 32px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 210, 240, 0.55),
+    rgba(200, 230, 255, 0.55)
+  );
+  filter: blur(28px);
+  z-index: -1;
+  opacity: 0.6;
 }
-
-/* MOBILE FALLBACK — vertical only on phones */
-@media (max-width: 780px) {
-  .modalContent {
-    flex-direction: column;
-    max-width: 95%;
-    width: 95%;
-    height: 90vh;
-  }
-}
-
-
-@keyframes popModal { to { transform: scale(1); opacity: 1; } }
 
 .closeModal {
   position: absolute;
@@ -311,17 +307,95 @@
   cursor: pointer;
   font-size: 1.6rem;
   color: #6e4a71 !important;
-  opacity: 0.65;
 }
 
-.closeModal:hover { opacity: 1; }
+.primaryBtn:hover,
+.secondaryBtn:hover {
+  box-shadow:
+    0 0 22px rgba(180, 205, 255, 0.55),
+    0 0 38px rgba(200, 230, 255, 0.45),
+    0 0 54px rgba(255, 210, 240, 0.35);
+}
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE BREAKPOINTS (FULL)
 ============================================================ */
+
+/* TABLET LANDSCAPE */
+@media (max-width: 1024px) {
+  .ctaContainer {
+    padding: 4.5rem 2.5rem;
+  }
+  .heroTitle {
+    font-size: 2.6rem;
+  }
+  .heroSubtitle {
+    font-size: 1.2rem;
+    max-width: 550px;
+  }
+}
+
+/* TABLET PORTRAIT */
+@media (max-width: 768px) {
+  .ctaContainer {
+    padding: 3.8rem 2rem;
+    border-radius: 32px;
+  }
+  .heroTitle {
+    font-size: 2.3rem;
+  }
+  .heroSubtitle {
+    font-size: 1.15rem;
+  }
+  .modalContent {
+    flex-direction: column;
+    width: 95%;
+    height: 90vh;
+  }
+}
+
+/* MOBILE LARGE */
 @media (max-width: 640px) {
-  .ctaContainer { padding: 3.2rem 1.6rem; border-radius: 28px; }
-  .heroTitle { font-size: 2.2rem; }
-  .heroSubtitle { font-size: 1.1rem; }
-  .planCard { padding: 1.45rem; }
+  .ctaContainer {
+    padding: 3rem 1.6rem;
+  }
+  .heroTitle {
+    font-size: 2rem;
+  }
+  .heroSubtitle {
+    font-size: 1.05rem;
+  }
+  .planCard {
+    padding: 1.45rem;
+  }
+}
+
+/* MOBILE MEDIUM */
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.8rem;
+  }
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+  .primaryBtn,
+  .secondaryBtn {
+    padding: 1.1rem;
+    font-size: 1rem;
+  }
+}
+
+/* MOBILE SMALL */
+@media (max-width: 380px) {
+  .heroTitle {
+    font-size: 1.6rem;
+  }
+  .ctaContainer {
+    padding: 2.2rem 1.2rem;
+    border-radius: 22px;
+  }
+  .planCard {
+    font-size: 1rem;
+    padding: 1.2rem;
+  }
 }

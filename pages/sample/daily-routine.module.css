@@ -1,5 +1,5 @@
 .page {
-  max-width: 820px;
+  max-width: 980px;
   margin: auto;
   padding: 3rem 1.5rem 6rem;
   position: relative;
@@ -99,7 +99,10 @@
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
 }
 
 .primary {
@@ -138,7 +141,10 @@
   text-decoration: none;
   box-shadow: 0 12px 30px rgba(190, 24, 93, 0.5);
   z-index: 50;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
 }
 
 .floatingQuiz:hover {
@@ -147,11 +153,231 @@
   box-shadow: 0 14px 34px rgba(190, 24, 93, 0.65);
 }
 
+/* ===== Top Bridge (Daily Routine) ===== */
+.topBridge {
+  margin-top: 1.6rem;
+  padding: 1.4rem 1.6rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f6f0ff, #f2f7ff);
+  border: 1px solid rgba(120, 90, 255, 0.18);
+  text-align: center;
+}
+
+.topBridge h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.topBridge p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 0.9rem;
+}
+
+.topBridgeButtons {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+    margin-top: 6rem;
+}
+
+.modalContent {
+  background: #ffffff;
+  padding: 2.6rem;
+  border-radius: 28px;
+  position: relative;
+  max-width: 1100px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: row;
+
+  border: 3px solid #ffd9e8;
+  box-shadow:
+    0 25px 55px rgba(0, 0, 0, 0.25),
+    0 0 55px rgba(255, 210, 240, 0.4);
+}
+
+.modalContent::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 32px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 210, 240, 0.55),
+    rgba(200, 230, 255, 0.55)
+  );
+  filter: blur(28px);
+  z-index: -1;
+  opacity: 0.6;
+}
+
+.closeModal {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.6rem;
+  color: #6e4a71 !important;
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 2.5rem 1.2rem 5rem;
+  }
+
+  .title {
+    font-size: 2.05rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .blocks {
+    gap: 1.4rem;
+    margin-top: 1.9rem;
+  }
+
+  .block {
+    padding: 1.4rem 1.45rem;
+  }
+
+  .blockTitle {
+    font-size: 1.2rem;
+  }
+
+  .blockTag {
+    font-size: 0.9rem;
+  }
+
+  .list li {
+    font-size: 0.92rem;
+  }
+
+  .bottomCta {
+    margin-top: 2.5rem;
+  }
+
+  .bottomCta h2 {
+    font-size: 1.35rem;
+  }
+
+  .topBridge {
+    padding: 1.2rem 1.25rem;
+  }
+
+  .topBridge h2 {
+    font-size: 1.15rem;
+  }
+}
+
 @media (max-width: 640px) {
+  .page {
+    padding: 2rem 1rem 4.5rem;
+  }
+
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    line-height: 1.25;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .blocks {
+    gap: 1.15rem;
+    margin-top: 1.6rem;
+  }
+
+  .block {
+    padding: 1.15rem 1.15rem;
+    border-radius: 16px;
+  }
+
+  .blockTitle {
+    font-size: 1.08rem;
+  }
+
+  .blockTag {
+    font-size: 0.85rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .list li {
+    font-size: 0.88rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .bottomCta h2 {
+    font-size: 1.2rem;
+  }
+
+  .bottomCta p {
+    font-size: 0.92rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .primary,
+  .secondary {
+    width: 100%;
+    max-width: 280px;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .topBridge {
+    padding: 1rem 1rem;
+    border-radius: 16px;
+  }
+
+  .topBridge h2 {
+    font-size: 1.05rem;
+  }
+
+  .topBridge p {
+    font-size: 0.9rem;
+  }
+
+  .topBridgeButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+
   .floatingQuiz {
     left: 50%;
     right: auto;
     transform: translateX(-50%);
-    bottom: 1rem;
+    bottom: 0.9rem;
+    font-size: 0.85rem;
+    padding: 0.6rem 1.1rem;
   }
 }

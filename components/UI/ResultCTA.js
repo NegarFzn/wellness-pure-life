@@ -4,21 +4,51 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { gaEvent } from "../../lib/gtag";
 import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
+import { useSession } from "next-auth/react";
 import classes from "./ResultCTA.module.css";
 
-export default function QuizCTA({ planTypes }) {
+export default function ResultCTA({ planTypes, onOpenModal }) {
   const router = useRouter();
+  const { data: session } = useSession();
+  const user = session?.user || null;
+  const isPremium = !!user?.isPremium;
+
   const [activeQuiz, setActiveQuiz] = useState(null);
 
+  // ============================================
+  // SMART NAVIGATION LOGIC (unchanged)
+  // ============================================
   const goWeeklyPlan = () => {
     gaEvent("quiz_cta_weekly_plan_click");
     gaEvent("key_quiz_cta_weekly_plan_click");
+
+    if (!user) {
+      router.push("/sample/weekly-plan");
+      return;
+    }
+
+    if (!isPremium) {
+      router.push("/sample/weekly-plan");
+      return;
+    }
+
     router.push("/plan/weekly-plan");
   };
 
   const goDailyRoutine = () => {
     gaEvent("quiz_cta_daily_routine_click");
     gaEvent("key_quiz_cta_daily_routine_click");
+
+    if (!user) {
+      router.push("/sample/daily-routine");
+      return;
+    }
+
+    if (!isPremium) {
+      router.push("/sample/daily-routine");
+      return;
+    }
+
     router.push("/plan/daily-routine");
   };
 
@@ -40,47 +70,67 @@ export default function QuizCTA({ planTypes }) {
     <section className={classes.ctaContainer}>
       <div className={classes.decorativeBg} />
 
+      {/* =========================
+          TOP FUNNEL HERO (UPDATED)
+      ========================== */}
       <section className={classes.hero}>
-        <h1 className={classes.heroTitle}>✨ Ready to turn insights into action?</h1>
+        <h1 className={classes.heroTitle}>
+          ✨ Your personalized wellness plan is ready
+        </h1>
+
         <p className={classes.heroSubtitle}>
-          Your personalized wellness journey begins now. Choose your next step
-          and turn your results into real progress.
+          Based on your quiz results, your tailored weekly plan and daily
+          routine are prepared. Start now and turn your insights into lasting
+          progress.
         </p>
 
         <div className={classes.ctaButtonGroup}>
           <button className={classes.primaryBtn} onClick={goWeeklyPlan}>
-            <span>See Your Weekly Plan</span>
+            <span>View My Weekly Plan</span>
           </button>
 
           <button className={classes.primaryBtn} onClick={goDailyRoutine}>
-            <span>View Your Daily Routine</span>
+            <span>View My Daily Routine</span>
           </button>
 
-          <button className={classes.secondaryBtn} onClick={goPremium}>
-            <span>Improve Your Results with Premium</span>
-          </button>
+          {!isPremium && (
+            <button className={classes.secondaryBtn} onClick={goPremium}>
+              <span>
+                Unlock Long-Term Plans & Progress Tracking with Premium
+              </span>
+            </button>
+          )}
         </div>
       </section>
 
       <div className={classes.sectionDivider} />
 
+      {/* =========================
+          STRUCTURED PLAN SECTION
+      ========================== */}
       <section className={classes.planSection}>
-        <h2 className={classes.planTitle}>✨ Turn your results into a structured plan</h2>
+        <h2 className={classes.planTitle}>
+          ✨ Build your structured wellness plan
+        </h2>
 
         <div className={classes.planLinksGrid}>
-          {Array.isArray(planTypes) && planTypes.map((item) => (
-            <button
-              key={item.type}
-              className={classes.planCard}
-              aria-label={`Open ${item.label} plan`}
-              onClick={() => openQuizModal(item.type)}
-            >
-              <span>{item.label}</span>
-            </button>
-          ))}
+          {Array.isArray(planTypes) &&
+            planTypes.map((item) => (
+              <button
+                key={item.type}
+                className={classes.planCard}
+                aria-label={`Open ${item.label} plan`}
+                onClick={() => onOpenModal(item.type)}
+              >
+                <span>{item.label}</span>
+              </button>
+            ))}
         </div>
       </section>
 
+      {/* =========================
+          BLOG SUPPORT CTA
+      ========================== */}
       <section className={classes.blogCtaWrap}>
         <a
           href="/blog"
@@ -94,6 +144,9 @@ export default function QuizCTA({ planTypes }) {
         </a>
       </section>
 
+      {/* =========================
+          QUIZ MODAL
+      ========================== */}
       {activeQuiz && (
         <div className={classes.modalOverlay} onClick={closeQuizModal}>
           <div
@@ -102,7 +155,11 @@ export default function QuizCTA({ planTypes }) {
             role="dialog"
             aria-modal="true"
           >
-            <button className={classes.closeModal} aria-label="Close modal"   onClick={closeQuizModal}>
+            <button
+              className={classes.closeModal}
+              aria-label="Close modal"
+              onClick={closeQuizModal}
+            >
               ×
             </button>
 

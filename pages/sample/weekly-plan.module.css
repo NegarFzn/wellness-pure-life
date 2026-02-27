@@ -48,7 +48,10 @@
   background: transparent;
   color: #6b21a8;
   font-weight: 600;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.1s ease;
 }
 
 .variantButton:hover {
@@ -149,7 +152,7 @@
 }
 
 .bottomCta h2 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
   color: #111827;
@@ -161,45 +164,48 @@
   margin-bottom: 1.4rem;
 }
 
-.bottomButtons {
+.buttons {
   display: flex;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 0.8rem;
   flex-wrap: wrap;
 }
 
-.primaryCta,
-.secondaryCta {
-  border-radius: 999px;
+.primary,
+.secondary {
   padding: 0.75rem 1.5rem;
+  border-radius: 999px;
   font-size: 0.95rem;
   font-weight: 600;
   text-decoration: none;
-  border: none;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
 }
 
-.primaryCta {
+.primary {
   background: #7c3aed;
   color: white;
   box-shadow: 0 8px 20px rgba(124, 58, 237, 0.35);
 }
 
-.primaryCta:hover {
+.primary:hover {
   background: #6d28d9;
   transform: translateY(-1px);
 }
 
-.secondaryCta {
+.secondary {
   background: white;
   color: #4b2fcf;
   border: 1px solid #c4b5fd;
 }
 
-.secondaryCta:hover {
+.secondary:hover {
   background: #f5f3ff;
 }
+
 
 /* FLOATING QUIZ BUTTON */
 
@@ -216,7 +222,10 @@
   text-decoration: none;
   box-shadow: 0 12px 30px rgba(190, 24, 93, 0.5);
   z-index: 50;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
 }
 
 .floatingQuiz:hover {
@@ -225,11 +234,249 @@
   box-shadow: 0 14px 34px rgba(190, 24, 93, 0.65);
 }
 
+/* ===== Funnel Bridge (Top CTA) ===== */
+.topBridge {
+  margin-top: 1.8rem;
+  margin-bottom: 1.5rem;
+  padding: 1.4rem 1.6rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f6f0ff, #f2f7ff);
+  border: 1px solid rgba(120, 90, 255, 0.18);
+  text-align: center;
+}
+
+.topBridge h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.topBridge p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 0.9rem;
+}
+
+.topBridgeButtons {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  margin-top: 3rem;
+}
+
+.modalContent {
+  background: #ffffff;
+  padding: 2.6rem;
+  border-radius: 28px;
+  position: relative;
+  max-width: 1100px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: row;
+
+  border: 3px solid #ffd9e8;
+  box-shadow:
+    0 25px 55px rgba(0, 0, 0, 0.25),
+    0 0 55px rgba(255, 210, 240, 0.4);
+}
+
+.modalContent::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 32px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 210, 240, 0.55),
+    rgba(200, 230, 255, 0.55)
+  );
+  filter: blur(28px);
+  z-index: -1;
+  opacity: 0.6;
+}
+
+.closeModal {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.6rem;
+  color: #6e4a71 !important;
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 2.5rem 1.2rem 5rem;
+  }
+
+  .title {
+    font-size: 2.1rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .variantSwitch {
+    gap: 0.2rem;
+    padding: 0.2rem;
+  }
+
+  .variantButton {
+    padding: 0.5rem 0.95rem;
+    font-size: 0.85rem;
+  }
+
+  .variantDescription {
+    font-size: 0.95rem;
+  }
+
+  .dayCard {
+    padding: 1.2rem 1.2rem 1.35rem;
+  }
+
+  .bottomCta {
+    margin-top: 2.5rem;
+  }
+
+  .bottomCta h2 {
+    font-size: 1.45rem;
+  }
+
+  .topBridge {
+    padding: 1.2rem 1.25rem;
+  }
+
+  .topBridge h2 {
+    font-size: 1.15rem;
+  }
+}
+
 @media (max-width: 640px) {
+  .page {
+    padding: 2rem 1rem 4.5rem;
+  }
+
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  .title {
+    font-size: 1.85rem;
+    line-height: 1.25;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .variantSwitch {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .variantButton {
+    font-size: 0.82rem;
+    padding: 0.45rem 0.8rem;
+  }
+
+  .variantDescription {
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+  }
+
+  .daysGrid {
+    gap: 1.1rem;
+    margin-top: 1.6rem;
+  }
+
+  .dayCard {
+    padding: 1rem 1rem 1.15rem;
+    border-radius: 16px;
+  }
+
+  .dayBadge {
+    font-size: 0.75rem;
+    padding: 0.22rem 0.7rem;
+  }
+
+  .themeLabel {
+    font-size: 0.82rem;
+  }
+
+  .focusText {
+    font-size: 0.88rem;
+  }
+
+  .itemRow p {
+    font-size: 0.88rem;
+  }
+
+  .bottomCta h2 {
+    font-size: 1.25rem;
+  }
+
+  .bottomCta p {
+    font-size: 0.92rem;
+  }
+
+  .bottomButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .primaryCta,
+  .secondaryCta {
+    width: 100%;
+    max-width: 280px;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .topBridge {
+    padding: 1rem 1rem;
+    border-radius: 16px;
+  }
+
+  .topBridge h2 {
+    font-size: 1.05rem;
+  }
+
+  .topBridge p {
+    font-size: 0.9rem;
+  }
+
+  .topBridgeButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+
   .floatingQuiz {
     left: 50%;
     right: auto;
     transform: translateX(-50%);
-    bottom: 1rem;
+    bottom: 0.9rem;
+    font-size: 0.85rem;
+    padding: 0.6rem 1.1rem;
   }
 }

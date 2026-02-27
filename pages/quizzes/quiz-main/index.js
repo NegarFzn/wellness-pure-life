@@ -249,7 +249,10 @@ export default function QuizMainPage() {
           </>
         )}
 
-        <ResultCTA planTypes={planTypes} />
+        <ResultCTA
+          planTypes={planTypes}
+          onOpenModal={(type) => setActiveQuiz(type)}
+        />
 
         {/* DAILY RITUAL */}
         <section className={classes.dailyRitualWrapper}>
@@ -258,9 +261,7 @@ export default function QuizMainPage() {
           <DailyRitual isPremium={user?.isPremium} />
         </section>
 
-       
-
-        {/* MODAL */}
+        {/* QUIZ MODAL */}
         {activeQuiz && (
           <div
             className={classes.modalOverlay}
@@ -269,12 +270,14 @@ export default function QuizMainPage() {
             <div
               className={classes.modalContent}
               onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
             >
               <button
                 className={classes.closeModal}
                 onClick={() => closeQuizModal()}
               >
-                ❌
+                ×
               </button>
 
               <MultiStartQuiz slug={`${activeQuiz}-plan`} />

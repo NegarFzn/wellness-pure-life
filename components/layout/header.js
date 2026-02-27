@@ -168,26 +168,35 @@ export default function Header({ weather }) {
   // PREMIUM GATEKEEPER LOGIC
   // =========================
   const handleProtectedNavigation = (path) => {
-    // 1) NOT LOGGED IN → redirect to signup
+    // path will be "/weekly-plan" or "/daily-routine"
+
+    const samplePath = `/sample${path}`;
+    const premiumPath = `/plan${path}`;
+
+    // 1) NOT LOGGED IN → open login modal + remember target
     if (!user) {
-      gaEvent("header_cta_click", { target: "signup_redirect" });
-      gaEvent("key_header_cta_click", { target: "signup_redirect" });
+      gaEvent("header_cta_click", { target: "login_modal_open" });
+      gaEvent("key_header_cta_click", { target: "login_modal_open" });
 
-      router.push(`/login?next=${encodeURIComponent(path)}`);
+      openLogin();
+      localStorage.setItem("nextAfterLogin", samplePath);
       return;
     }
 
-    // 2) LOGGED IN BUT NOT PREMIUM → redirect to premium
-    if (user && !user.isPremium) {
-      gaEvent("header_cta_click", { target: "premium_redirect" });
-      gaEvent("key_header_cta_click", { target: "premium_redirect" });
+    // 2) LOGGED IN BUT NOT PREMIUM → open SAMPLE page
+    if (!user.isPremium) {
+      gaEvent("header_cta_click", { target: "sample_open" });
+      gaEvent("key_header_cta_click", { target: "sample_open" });
 
-      router.push(`/premium?from=${encodeURIComponent(path)}`);
+      router.push(samplePath);
       return;
     }
 
-    // 3) PREMIUM USER → open page
-    router.push(path);
+    // 3) PREMIUM USER → open REAL plan page
+    gaEvent("header_cta_click", { target: "premium_open" });
+    gaEvent("key_header_cta_click", { target: "premium_open" });
+
+    router.push(premiumPath);
   };
 
   return (
@@ -224,11 +233,10 @@ export default function Header({ weather }) {
           <button
             className={classes.ctaButton}
             onClick={() => {
-              openLogin();
               gaEvent("header_cta_click", { target: "weekly_plan" });
               gaEvent("key_header_cta_click", { target: "weekly_plan" });
 
-              handleProtectedNavigation("/plan/weekly-plan");
+              handleProtectedNavigation("/weekly-plan");
             }}
           >
             Weekly Plan
@@ -237,11 +245,10 @@ export default function Header({ weather }) {
           <button
             className={classes.ctaButton}
             onClick={() => {
-              openLogin();
               gaEvent("header_cta_click", { target: "daily_routine" });
               gaEvent("key_header_cta_click", { target: "daily_routine" });
 
-              handleProtectedNavigation("/plan/daily-routine");
+              handleProtectedNavigation("/daily-routine");
             }}
           >
             Daily Routine

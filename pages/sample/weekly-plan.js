@@ -1,7 +1,11 @@
+"use client";
+
 import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { gaEvent } from "../../lib/gtag";
+import MultiStartQuiz from "../../components/Quiz/QuizPlan/1_StartQuiz";
+
 import classes from "./weekly-plan.module.css";
 
 const WEEK_VARIANTS = {
@@ -203,6 +207,27 @@ const WEEK_VARIANTS = {
 export default function SampleWeeklyPlan() {
   const [variantKey, setVariantKey] = useState("calm");
   const variant = WEEK_VARIANTS[variantKey];
+
+  // ADD — modal quiz state
+  const [activeQuiz, setActiveQuiz] = useState(null);
+
+  // ADD — safe quiz modal opener
+  const openQuizModal = (type) => {
+    setActiveQuiz(type);
+    gaEvent("weekly_plan_quiz_modal_open", { quiz: type });
+    gaEvent("key_weekly_plan_quiz_modal_open", { quiz: type });
+  };
+
+  const closeQuizModal = () => setActiveQuiz(null);
+
+  // ADD — 3 quiz types list
+  const planTypes = [
+    { type: "fitness", label: "Try Fitness Quiz" },
+    { type: "mindfulness", label: "Try Mindfulness Quiz" },
+    { type: "nourish", label: "Try Nourish Quiz" },
+  ];
+
+  // ORIGINAL tracking — untouched
   gaEvent("weekly_plan_sample_view", { variant: variantKey });
   gaEvent("key_weekly_plan_sample_view", { variant: variantKey });
 
@@ -220,6 +245,39 @@ export default function SampleWeeklyPlan() {
             <span>Wellness Pure Life Pro</span>. The real version adapts to your
             quiz answers and personal goals.
           </p>
+
+          <div className={classes.topBridge}>
+            <h2>Your personalized weekly plan is ready</h2>
+            <p>
+              Based on your quiz insights, your full adaptive plan is prepared.
+              This preview shows the structure — Premium unlocks your real plan
+              tailored to your goals and lifestyle.
+            </p>
+
+            <div className={classes.topBridgeButtons}>
+              <Link
+                href="/premium"
+                className={classes.primary}
+                onClick={() => {
+                  gaEvent("weekly_plan_top_upgrade_click");
+                  gaEvent("key_weekly_plan_top_upgrade_click");
+                }}
+              >
+                Unlock My Full Plan
+              </Link>
+
+              <Link
+                href="/quizzes/quiz-main"
+                className={classes.secondary}
+                onClick={() => {
+                  gaEvent("weekly_plan_top_quiz_click");
+                  gaEvent("key_weekly_plan_top_quiz_click");
+                }}
+              >
+                Take Free Quiz
+              </Link>
+            </div>
+          </div>
 
           <div className={classes.variantSwitch}>
             <button
@@ -302,47 +360,61 @@ export default function SampleWeeklyPlan() {
           ))}
         </section>
 
+        {/* NEW — Replace floating button with 3 quiz CTA */}
         <section className={classes.bottomCta}>
-          <h2>Ready for your own personalized weekly plan?</h2>
+          <h2>Ready to explore your personalized wellness insights?</h2>
+
           <p>
-            Premium members receive a plan built from their quiz answers,
-            lifestyle, and goals — not a generic template.
+            Choose a wellness quiz and start receiving personalized insights
+            based on your fitness, mindfulness, and nutrition profile.
           </p>
-          <div className={classes.bottomButtons}>
+
+          <div className={classes.buttons}>
             <Link
               href="/premium"
-              className={classes.primaryCta}
+              className={classes.primary}
               onClick={() => {
-                gaEvent("weekly_plan_upgrade_click");
-                gaEvent("key_weekly_plan_upgrade_click");
+                gaEvent("daily_routine_sample_premium_click");
+                gaEvent("key_daily_routine_sample_premium_click");
               }}
             >
-              Upgrade to Premium
+              Unlock My Daily Routine
             </Link>
-            <Link
-              href="/quizzes/quiz-main"
-              className={classes.secondaryCta}
-              onClick={() => {
-                gaEvent("weekly_plan_start_quiz_click");
-                gaEvent("key_weekly_plan_start_quiz_click");
-              }}
-            >
-              Start With Free Quiz
-            </Link>
+
+            {planTypes.map((item) => (
+              <button
+                key={item.type}
+                className={classes.secondary}
+                aria-label={`Open ${item.label} quiz`}
+                onClick={() => openQuizModal(item.type)}
+              >
+                <span>{item.label}</span>
+              </button>
+            ))}
           </div>
         </section>
 
-        {/* Floating quiz button */}
-        <Link
-          href="/quizzes/quiz-main"
-          className={classes.floatingQuiz}
-          onClick={() => {
-            gaEvent("weekly_plan_floating_quiz_click");
-            gaEvent("key_weekly_plan_floating_quiz_click");
-          }}
-        >
-          Try the Free Quiz →
-        </Link>
+        {/* NEW — Quiz Modal */}
+        {activeQuiz && (
+          <div className={classes.modalOverlay} onClick={closeQuizModal}>
+            <div
+              className={classes.modalContent}
+              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+            >
+              <button
+                className={classes.closeModal}
+                aria-label="Close modal"
+                onClick={closeQuizModal}
+              >
+                ×
+              </button>
+
+              <MultiStartQuiz slug={`${activeQuiz}-plan`} />
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
