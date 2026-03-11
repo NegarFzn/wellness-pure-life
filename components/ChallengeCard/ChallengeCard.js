@@ -25,7 +25,7 @@ export default function ChallengeCard({
         <p className={classes.description}>{description}</p>
 
         <div className={classes.cta} style={{ color }}>
-          Try It Todayy →
+          Try It Today →
         </div>
       </div>
     </Link>

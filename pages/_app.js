@@ -63,6 +63,12 @@ function AppInner({ Component, pageProps }) {
 
   return (
     <>
+      <Script
+        async
+        strategy="afterInteractive"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6324625824043093"
+        crossOrigin="anonymous"
+      />
       {/* Always mounted: posts guest results after login */}
       <DailyQuizSync />
 
