@@ -1,4 +1,4 @@
-// pages/_document.js 
+// pages/_document.js
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
@@ -20,8 +20,8 @@ class MyDocument extends Document {
           {/* ======================== */}
           <script
             async
-            src="https://www.googletagmanager.com/gtag/js?id=G-BW68Y2E49W"
-          ></script>
+            src={`https://www.googletagmanager.com/gtag/js?id=G-BW68Y2E49W`}
+          />
 
           <script
             dangerouslySetInnerHTML={{
