@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { gaEvent } from "../../lib/gtag";
+import { gaEvent } from "../lib/gtag";
 
 export default function VerifyPage() {
   const router = useRouter();
