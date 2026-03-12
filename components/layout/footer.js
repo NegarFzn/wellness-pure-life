@@ -6,6 +6,7 @@ import {
   FaLock,
   FaCookieBite,
   FaQuestionCircle,
+  FaFileContract,
 } from "react-icons/fa";
 import { useUI } from "../../context/UIContext";
 import { gaEvent } from "../../lib/gtag"; // <-- ADDED
@@ -62,10 +63,27 @@ export default function Footer() {
             }`}
           >
             <h3 onClick={() => toggleSection("about")}>About</h3>
-            <p className={classes.description}>
-              WellnessPureLife helps you thrive through balance in body and mind
-              using personalized tools.
-            </p>
+            <li>
+              <Link
+                href="/about"
+                className={classes.link}
+                onClick={() => handleFooterLinkClick("about")}
+              >
+                About Us
+              </Link>
+            </li>
+
+            <li>
+    
+              <Link
+                href="/blog"
+                className={classes.link}
+                onClick={() => handleFooterLinkClick("blog")}
+              >
+                Blog
+              </Link>
+            </li>
+
             <div className={classes.contactRow}>
               <a
                 href="mailto:info@wellnesspurelife.com"
@@ -302,6 +320,16 @@ export default function Footer() {
                   Cookie Policy
                 </Link>
               </li>
+              <li>
+                <FaFileContract className={classes.icon} />
+                <Link
+                  href="/terms"
+                  className={classes.link}
+                  onClick={() => handleFooterLinkClick("terms")}
+                >
+                  Terms of Service
+                </Link>
+              </li>
 
               <li>
                 <FaQuestionCircle className={classes.icon} />
@@ -311,17 +339,6 @@ export default function Footer() {
                   onClick={() => handleFooterLinkClick("faq")}
                 >
                   FAQs
-                </Link>
-              </li>
-
-              <li>
-                <FaQuestionCircle className={classes.icon} />
-                <Link
-                  href="/blog"
-                  className={classes.link}
-                  onClick={() => handleFooterLinkClick("blog")}
-                >
-                  Blog
                 </Link>
               </li>
 
