@@ -5,9 +5,9 @@ import BlogCTA from "../../components/Blog/BlogCTA";
 import { gaEvent } from "../../lib/gtag";
 import classes from "./index.module.css";
 
-export default function BlogPage() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function BlogPage({ initialPosts = [] }) {
+  const [posts] = useState(initialPosts || []);
+  const [loading] = useState(false);
 
   // ---------------------------
   // PAGE VIEW
@@ -31,11 +31,13 @@ export default function BlogPage() {
 
     const onScroll = () => {
       const h = document.documentElement;
-      const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      const scrolled =
+        (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
 
       [25, 50, 75, 100].forEach((d) => {
         if (!fired[d] && scrolled >= d) {
           fired[d] = true;
+
           gaEvent("blog_page_scroll", { depth: d });
           gaEvent("key_blog_page_scroll", { depth: d });
         }
@@ -46,49 +48,20 @@ export default function BlogPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // ---------------------------
-  // FETCH ALL BLOG POSTS
-  // ---------------------------
-  useEffect(() => {
-    fetch("/api/blog")
-      .then((res) => res.json())
-      .then((data) => {
-        const list = Array.isArray(data) ? data : [];
-        setPosts(list);
-        setLoading(false);
-
-        gaEvent("blog_page_load_success", {
-          count: list.length,
-        });
-
-        gaEvent("key_blog_page_load_success", {
-          count: list.length,
-        });
-
-        gaEvent("blog_page_posts_count", {
-          count: list.length,
-        });
-      })
-      .catch((err) => {
-        setLoading(false);
-
-        gaEvent("blog_page_load_error", {
-          message: err?.message || "fetch_error",
-        });
-
-        gaEvent("key_blog_page_load_error", {
-          message: err?.message || "fetch_error",
-        });
-      });
-  }, []);
-
   return (
     <>
       <Head>
         <title>Wellness Blog | Wellness Pure Life</title>
+
         <meta
           name="description"
           content="Expert wellness articles to help you calm your nervous system, improve energy, and build high-performance habits."
+        />
+
+        <meta property="og:title" content="Wellness Blog | Wellness Pure Life" />
+        <meta
+          property="og:description"
+          content="Science-backed wellness articles for energy, stress reduction, sleep, nutrition, and mental clarity."
         />
       </Head>
 
@@ -96,6 +69,7 @@ export default function BlogPage() {
         {/* Top Intro */}
         <header className={classes.header}>
           <h1 className={classes.heading}>Wellness Blog</h1>
+
           <p className={classes.subheading}>
             Practical science-backed insights for body, mind, and energy.
           </p>
@@ -109,14 +83,16 @@ export default function BlogPage() {
         )}
 
         {/* Empty */}
-        {!loading && posts.length === 0 && (
+        {!loading && posts?.length === 0 && (
           <div className={classes.statusWrap}>
-            <p className={classes.statusText}>No articles published yet.</p>
+            <p className={classes.statusText}>
+              No articles published yet.
+            </p>
           </div>
         )}
 
         {/* Articles Grid */}
-        {!loading && posts.length > 0 && (
+        {!loading && posts?.length > 0 && (
           <section className={classes.gridWrapper}>
             <div className={classes.grid}>
               {posts.map((post) => (
@@ -131,4 +107,29 @@ export default function BlogPage() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  try {
+    const res = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_SITE_URL ||
+        "https://wellnesspurelife.com"
+      }/api/blog`
+    );
+
+    const data = await res.json();
+
+    return {
+      props: {
+        initialPosts: Array.isArray(data) ? data : [],
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        initialPosts: [],
+      },
+    };
+  }
 }

@@ -23,7 +23,7 @@ function MindfulnessDetailPage(props) {
       ? `${mindData.title.slice(0, maxLength - 3)}...`
       : mindData.title;
 
-  const pageTitle = `${conciseTitle} | Mindfulness`;
+  const pageTitle = `${conciseTitle} | Mindfulness Meditation Guide | Wellness Pure Life`;
 
   // -------------------------
   // ANALYTICS: PAGE VIEW
@@ -114,7 +114,7 @@ function MindfulnessDetailPage(props) {
     <div>
       <Head>
         <title>{pageTitle}</title>
-        <meta name="description" content={mindData.summary} />
+        <meta name="description" content={mindData.summary?.slice(0, 160)} />
         <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
@@ -158,11 +158,17 @@ function MindfulnessDetailPage(props) {
               "@type": "Article",
               headline: mindData.title,
               description: mindData.summary,
+
+              datePublished: mindData.date || "2025-01-01",
+              dateModified: mindData.date || "2025-01-01",
+
               image: [`https://wellnesspurelife.com/${mindData.image}`],
+
               author: {
                 "@type": "Person",
                 name: "Bayan Negar Fozooni",
               },
+
               publisher: {
                 "@type": "Organization",
                 name: "Wellness Pure Life",
@@ -171,6 +177,7 @@ function MindfulnessDetailPage(props) {
                   url: "https://wellnesspurelife.com/logo.png",
                 },
               },
+
               mainEntityOfPage: {
                 "@type": "WebPage",
                 "@id": `https://wellnesspurelife.com/mindfulness/${mindData.id}`,

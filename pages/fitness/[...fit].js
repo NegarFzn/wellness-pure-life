@@ -110,14 +110,18 @@ function fitnessDetailsPage(props) {
               "@type": "Article",
               headline: fitData.title,
               description: fitData.description,
+
+              datePublished: fitData.date || "2025-01-01",
+              dateModified: fitData.date || "2025-01-01",
+
               url: `https://wellnesspurelife.com/fitness/${fitData.id}`,
-              image: `https://wellnesspurelife.com${
-                fitData.image || "/images/social-card.jpg"
-              }`,
+              image: `https://wellnesspurelife.com${fitData.image || "/images/social-card.jpg"}`,
+
               author: {
                 "@type": "Organization",
                 name: "Wellness Pure Life",
               },
+
               publisher: {
                 "@type": "Organization",
                 name: "Wellness Pure Life",
@@ -126,6 +130,7 @@ function fitnessDetailsPage(props) {
                   url: "https://wellnesspurelife.com/images/social-card.jpg",
                 },
               },
+
               mainEntityOfPage: `https://wellnesspurelife.com/fitness/${fitData.id}`,
             }),
           }}

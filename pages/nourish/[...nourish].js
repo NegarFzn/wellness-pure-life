@@ -42,7 +42,7 @@ function NourishDetailPage(props) {
       ? `${nourishData.title.slice(0, maxLength - 3)}...`
       : nourishData.title;
 
-  const pageTitle = `${conciseTitle} | Nourish`;
+  const pageTitle = `${conciseTitle} | Healthy Nutrition Guide | Wellness Pure Life`;
 
   // ---- Scroll-to-top button visibility ----
   useEffect(() => {
@@ -73,7 +73,7 @@ function NourishDetailPage(props) {
     <div>
       <Head>
         <title>{pageTitle}</title>
-        <meta name="description" content={nourishData.summary} />
+        <meta name="description" content={nourishData.summary?.slice(0, 160)} />
         <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
@@ -114,8 +114,16 @@ function NourishDetailPage(props) {
               headline: nourishData.title,
               description: nourishData.summary,
               author: {
-                "@type": "Person",
-                name: "Wellness Pure Life Team",
+                "@type": "Organization",
+                name: "Wellness Pure Life",
+              },
+              publisher: {
+                "@type": "Organization",
+                name: "Wellness Pure Life",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://wellnesspurelife.com/logo.png",
+                },
               },
               datePublished: nourishData.date || "2025-01-01",
               image: `https://wellnesspurelife.com/images/nourish/${nourishData.image}`,

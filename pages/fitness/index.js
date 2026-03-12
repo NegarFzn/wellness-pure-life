@@ -99,29 +99,13 @@ function FitnessPage(props) {
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
-  const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://wellnesspurelife.com/",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Fitness",
-        item: "https://wellnesspurelife.com/fitness",
-      },
-    ],
-  };
-
   return (
     <>
       <Head>
-        <title>Fitness | Workouts, Training Plans, and Recovery Guides</title>
+        <title>
+          Fitness Workouts, Training Plans & Recovery Guides | Wellness Pure
+          Life
+        </title>
         <meta
           name="description"
           content="Build strength, improve cardio, and recover smarter. Expert-backed workouts, step-by-step technique guides, and practical tips for all fitness levels."
@@ -194,15 +178,13 @@ function FitnessPage(props) {
       </Head>
 
       <header className={classes.header}>
-        <nav>
-          <Image
-            src={fitnessHeader}
-            alt="Banner showing fitness training, strength exercises, and yoga — Wellness Pure Life"
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 100vw"
-          />
-        </nav>
+        <Image
+          src={fitnessHeader}
+          alt="Banner showing fitness training, strength exercises, and yoga — Wellness Pure Life"
+          fill
+          priority
+          sizes="(max-width: 768px) 100vw, 100vw"
+        />
       </header>
 
       <main className={classes["main-content"]}>

@@ -49,9 +49,6 @@ function MindfulnessPage(props) {
       music.play().then(() => fadeIn());
     };
 
-    // Attempt autoplay
-    createAndPlay();
-
     // Fallback if autoplay blocked
     const unlock = () => {
       createAndPlay();
@@ -204,7 +201,10 @@ function MindfulnessPage(props) {
   return (
     <>
       <Head>
-        <title>Mindfulness | Meditation, Stress Relief & Wellness</title>
+        <title>
+          Mindfulness Meditation, Stress Relief & Mental Wellness | Wellness
+          Pure Life
+        </title>
         <meta
           name="description"
           content="Reduce stress, improve focus, and build emotional resilience with practical mindfulness. Step-by-step meditations, breathing techniques, and science-backed habits for everyday calm."
@@ -252,21 +252,26 @@ function MindfulnessPage(props) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([breadcrumbLd, itemListLd]),
+            __html: JSON.stringify(breadcrumbLd),
+          }}
+        />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(itemListLd),
           }}
         />
       </Head>
 
       <header className={classes.header}>
-        <nav>
-          <Image
-            src={mindfulnessHeader}
-            alt="Banner showing meditation, breathing practices, and mindful living — Wellness Pure Life"
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 100vw"
-          />
-        </nav>
+        <Image
+          src={mindfulnessHeader}
+          alt="Banner showing meditation, breathing practices, and mindful living — Wellness Pure Life"
+          fill
+          priority
+          sizes="(max-width: 768px) 100vw, 100vw"
+        />
       </header>
 
       <main className={classes["main-content"]}>

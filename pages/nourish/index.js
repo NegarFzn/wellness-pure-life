@@ -158,10 +158,13 @@ function NourishPage(props) {
   return (
     <>
       <Head>
-        <title>Nourish | Healthy Eating, Superfoods & Balanced Meals</title>
+        <title>
+          Healthy Nutrition, Superfoods & Balanced Meals | Wellness Pure Life
+        </title>
+
         <meta
           name="description"
-          content="Healthy eating made simple: practical nutrition guides, superfood explainers, mindful meals, and supplement basics—backed by clear steps and realistic tips."
+          content="Learn healthy nutrition, superfoods, balanced meals, and practical eating habits. Evidence-based guides to nourish your body and improve long-term wellness."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
@@ -206,7 +209,14 @@ function NourishPage(props) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([breadcrumbLd, itemListLd]),
+            __html: JSON.stringify(breadcrumbLd),
+          }}
+        />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(itemListLd),
           }}
         />
       </Head>
