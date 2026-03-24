@@ -143,7 +143,7 @@ export default function ChatBox() {
                   <PremiumButton />
                 </Link>
               )}
-              to unlock
+              to unlock.
             </p>
           )}
 
