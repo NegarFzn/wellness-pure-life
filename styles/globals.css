@@ -13,7 +13,7 @@ html {
 body {
   height: 100%;
   margin: 0;
-  background: linear-gradient(180deg, #ffffff, #ffffff);
+  background: #ffffff;
   padding: 0;
 }
 
@@ -21,8 +21,6 @@ main {
   margin: auto;
   padding-top: 120px;
 }
-
-
 
 h2 {
   font-size: 2rem;
@@ -55,19 +53,42 @@ p a:active {
 }
 
 .smaller {
-  font-size: 0.8em; /* Make text 80% of the size of its container */
+  font-size: 0.8em;
 }
 
 :root {
+  /* Theme */
   --bg-color: #f9f9f9;
   --text-color: #000;
-}
-[data-theme="dark"] {
-  --bg-color: #1a1a1a;
-  --text-color: #f0f0f0;
-}
 
-:root {
+  /* Layout */
+  --container-max: 1200px;
+  --content-max: 800px;
+
+  /* Accents */
+  --accent: rgb(32, 200, 140);
+  --accent-2: rgb(255, 102, 102);
+  --ink: #0f172a;
+  --ink-soft: #334155;
+  --paper: #ffffff;
+  --muted: #f1f5f9;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+  /* Brand */
+  --wpl-primary: #6d28d9;
+  --wpl-primary-mid: #7c3aed;
+  --wpl-primary-light: #818cf8;
+
+  /* Persian colors */
+  --persian-green: #009688;
+  --persian-blue: #1c39bb;
+
+  /* Wellness */
+  --wellness-cream: #fdfcf9;
+  --wellness-gray: #f3f4f6;
+  --wellness-dark: #1f2937;
+
+  /* App */
   --primary-bg: #1c192c;
   --primary-accent: #a8d5ba;
   --primary-text: #ffffff;
@@ -76,49 +97,20 @@ p a:active {
   --input-bg: #ffffff;
   --input-text: #111827;
   --hover-bg: rgba(255, 255, 255, 0.1);
-}
-
-/* styles/globals.css */
-:root {
-  --container-max: 1200px;
-  --content-max: 800px;
-  --accent: rgb(32, 200, 140);
-  --accent-2: rgb(255, 102, 102);
-  --ink: #0f172a;
-  --ink-soft: #334155;
-  --paper: #ffffff;
-  --muted: #f1f5f9;
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-}
-
-/************************************
- * BRAND COLOR PALETTE (PREMIUM)
- ************************************/
-:root {
-  /* Wellness Primary Gradient */
-  --wpl-primary: #6D28D9;
-  --wpl-primary-mid: #7C3AED;
-  --wpl-primary-light: #818CF8;
-
-  /* Persian Green + Persian Blue */
-  --persian-green: #009688;
-  --persian-blue: #1C39BB;
-
-  /* Soft Wellness Colors */
-  --wellness-cream: #FDFCF9;
-  --wellness-gray: #F3F4F6;
-  --wellness-dark: #1F2937;
 
   /* Shadows */
-  --shadow-sm: 0 2px 6px rgba(0,0,0,0.12);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.14);
-  --shadow-lg: 0 8px 22px rgba(0,0,0,0.18);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.14);
+  --shadow-lg: 0 8px 22px rgba(0, 0, 0, 0.18);
 
   /* Transitions */
   --transition: 0.25s ease;
 }
 
-
+[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #f0f0f0;
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -133,6 +125,6 @@ p a:active {
 
 @media (max-width: 768px) {
   main {
-    padding-top: 0; /* or whatever height your mobile header is */
+    padding-top: 0;
   }
 }

@@ -14,28 +14,6 @@ class MyDocument extends Document {
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6324625824043093"
             crossOrigin="anonymous"
           ></script>
-
-          {/* ======================== */}
-          {/* ✅ Google Analytics (GA4) */}
-          {/* ======================== */}
-          <script
-            async
-            src={`https://www.googletagmanager.com/gtag/js?id=G-BW68Y2E49W`}
-          />
-
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-BW68Y2E49W', {
-                page_path: window.location.pathname,
-              });
-            `,
-            }}
-          />
-
           {/* ======================== */}
           {/* ✅ SEO Meta Tags */}
           {/* ======================== */}

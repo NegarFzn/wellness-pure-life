@@ -1,4 +1,4 @@
-/** @type {import('next').NextConfig'} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -6,13 +6,21 @@ const nextConfig = {
     domains: [
       "localhost",
       "127.0.0.1",
-
-      // ✅ ADD YOUR VPS DOMAIN HERE:
       "wellnesspurelife.com",
-
-      // Optional, if you use CDN too
       "cdn.wellnesspurelife.com",
     ],
+  },
+
+  async redirects() {
+    return [
+      // Fix any known broken URLs here once you find them in GA4
+      // Example:
+      // {
+      //   source: "/old-page",
+      //   destination: "/new-page",
+      //   permanent: true,
+      // },
+    ];
   },
 };
 

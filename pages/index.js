@@ -101,10 +101,8 @@ export default function Home() {
             const index = [...cards].indexOf(entry.target);
             const item = newsArticles[index];
 
-            // Update slider dot
             setActiveIndex(index);
 
-            // 🔥 Analytics IMPRESSION event
             if (item) {
               gaEvent("home_news_card_view", {
                 slug: item.slug,
@@ -180,7 +178,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
 
-        {/* Open Graph (Facebook/LinkedIn) */}
+        {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Wellness Pure Life" />
         <meta
@@ -216,7 +214,7 @@ export default function Home() {
         <link rel="canonical" href="https://wellnesspurelife.com/" />
         <link rel="icon" href="/favicon.ico" />
 
-        {/* Structured Data (JSON-LD for Home Page) */}
+        {/* Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -269,6 +267,26 @@ export default function Home() {
       )}
 
       <main className={classes.container}>
+        {/* ===== HERO SECTION ===== */}
+        <section className={classes.hero}>
+          <h1 className={classes.heroTitle}>Your Daily Wellness Companion</h1>
+          <p className={classes.heroSubtitle}>
+            Fitness, mindfulness, and nutrition — personalised for how you want
+            to live.
+          </p>
+          <Link
+            href="/quizzes/quiz-main"
+            className={classes.heroBtn}
+            onClick={() => {
+              gaEvent("home_hero_cta_click");
+              gaEvent("key_home_hero_cta_click");
+            }}
+          >
+            Start Your Wellness Quiz →
+          </Link>
+        </section>
+        {/* ===== END HERO ===== */}
+
         {/* DAILY LIST */}
         <div
           onMouseEnter={() => {
@@ -402,7 +420,6 @@ export default function Home() {
                 onClick={() => {
                   gaEvent("home_news_slider_arrow", { direction: "left" });
                   gaEvent("key_home_news_slider_arrow", { direction: "left" });
-
                   scrollNews("left");
                 }}
                 className={classes.arrowBtn}
@@ -413,7 +430,6 @@ export default function Home() {
                 onClick={() => {
                   gaEvent("home_news_slider_arrow", { direction: "right" });
                   gaEvent("key_home_news_slider_arrow", { direction: "right" });
-
                   scrollNews("right");
                 }}
                 className={classes.arrowBtn}
