@@ -15,6 +15,9 @@ export default async function handler(req, res) {
 
     /* ================= EMAIL MODE ================= */
     if (req.query.mode === "emails") {
+      if (req.headers["x-internal-secret"] !== process.env.NEXTAUTH_SECRET) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
       const users = await db
         .collection("users")
         .find({
@@ -64,9 +67,7 @@ export default async function handler(req, res) {
 
     const email = session.user.email.toLowerCase().trim();
 
-    const user = await db.collection("users").findOne({
-      email: { $regex: new RegExp(`^${email}$`, "i") },
-    });
+    const user = await db.collection("users").findOne({ email });
 
     if (!user?.isPremium) {
       return res.json({ locked: true });

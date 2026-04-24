@@ -33,6 +33,11 @@ export default function ResetPasswordPage() {
       return;
     }
 
+    if (password.length < 8) {
+      setMessage("Password must be at least 8 characters.");
+      return;
+    }
+
     if (password !== confirm) {
       gaEvent("auth_reset_page_password_mismatch");
       gaEvent("key_auth_reset_page_password_mismatch");

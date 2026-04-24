@@ -6,19 +6,20 @@ import { gaEvent } from "../../../lib/gtag";
 import classes from "./QuizPage.module.css";
 import Subscribe from "../../../components/Subscribe/subscribe";
 import ResultCTA from "../../../components/UI/ResultCTA";
+import { connectToDatabase } from "../../../utils/mongodb";
 
 const keyMap = {
   time: "timeOfDay",
 };
 
-export default function QuizPage() {
+export default function QuizPage({ initialQuiz = null }) {
   const router = useRouter();
   const { slug } = router.query;
 
   const { data: session } = useSession();
   const user = session?.user;
 
-  const [quiz, setQuiz] = useState(null);
+  const [quiz, setQuiz] = useState(initialQuiz);
   const [activeQuiz, setActiveQuiz] = useState(null);
   const [answers, setAnswers] = useState({});
   const [email, setEmail] = useState("");
@@ -66,19 +67,6 @@ export default function QuizPage() {
     }
   }, [session]);
 
-  // 2. Load quiz data
-  useEffect(() => {
-    if (!slug) return;
-
-    fetch("/api/quiz/quiz-main?mode=questions")
-      .then((res) => res.json())
-      .then((all) => {
-        const matched = all.find((q) => q.slug === slug);
-        if (matched) setQuiz(matched);
-        else setError("❌ Quiz not found.");
-      })
-      .catch(() => setError("Failed to load quiz."));
-  }, [slug]);
 
   // 3. Quiz loaded event
   useEffect(() => {
@@ -285,7 +273,7 @@ export default function QuizPage() {
       </Head>
 
       <div className={classes.container}>
-        <h1 className={classes.title}>{quiz?.title || slug}</h1>
+        <h1 className={classes.title}>{quiz?.title || slug || ""}</h1>
 
         {!result ? (
           <>
@@ -418,4 +406,25 @@ export default function QuizPage() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps({ params }) {
+  try {
+    const { db } = await connectToDatabase();
+    const slug = params?.slug;
+
+    const quiz = await db
+      .collection("quiz_main_questions")
+      .findOne({ slug }, { projection: { _id: 0 } });
+
+    if (!quiz) return { notFound: true };
+
+    return {
+      props: {
+        initialQuiz: JSON.parse(JSON.stringify(quiz)),
+      },
+    };
+  } catch {
+    return { notFound: true };
+  }
 }

@@ -56,6 +56,10 @@ export default async function handler(req, res) {
      CASE 2 — RESET PASSWORD USING TOKEN
   ------------------------------------------------------- */
   if (token && password) {
+    if (password.length < 8) {
+      return res.status(400).json({ success: false, message: "Password must be at least 8 characters" });
+    }
+
     const user = await users.findOne({ resetToken: token });
 
     if (!user) {

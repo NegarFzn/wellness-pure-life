@@ -2,7 +2,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { connectToDatabase } from "../../../utils/mongodb";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_default_secret"; // ideally store in .env
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error("JWT_SECRET environment variable is not set");
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {

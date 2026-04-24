@@ -17,6 +17,9 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
   const [isSending, setIsSending] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
+  const [guestEmail, setGuestEmail] = useState("");
+  const [guestEmailSending, setGuestEmailSending] = useState(false);
+  const [guestEmailSent, setGuestEmailSent] = useState(false);
   const saveCalled = useRef(false);
   const category = slug?.replace("-plan", "");
   const finalAnswers = loadedAnswers || answers;
@@ -58,6 +61,19 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
   }, [questions]);
 
   const formatLabel = (val) => labelMap[val] || val;
+
+  /* -------------------- Fetch plan for non-auth users -------------------- */
+  useEffect(() => {
+    if (status === "loading" || status === "authenticated" || !answers || !slug) return;
+    const params = new URLSearchParams({ slug, ...answers });
+    fetch(`/api/quiz/quiz-plan?${params.toString()}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!data || data.error) return;
+        setMatchedPlan(data?.plan || data);
+      })
+      .catch(() => {});
+  }, [status, slug]);
 
   /* -------------------- Save answers -------------------- */
   useEffect(() => {
@@ -225,6 +241,33 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
     }
   };
 
+  /* -------------------- Guest email send -------------------- */
+  const sendGuestPlanEmail = async () => {
+    const trimmed = guestEmail.trim();
+    if (!trimmed) return;
+    setGuestEmailSending(true);
+    try {
+      const res = await fetch("/api/quiz/quiz-plan?mode=email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: trimmed,
+          answers: finalAnswers,
+          category,
+          matchedPlan,
+        }),
+      });
+      if (res.ok) {
+        setGuestEmailSent(true);
+        gaEvent("quiz_plan_guest_email_sent", { slug, category });
+        gaEvent("key_quiz_plan_guest_email_sent", { slug, category });
+      }
+    } catch {}
+    finally {
+      setGuestEmailSending(false);
+    }
+  };
+
   // ---------------------------------------------------------
   // DYNAMIC FREE RECOMMENDATION ENGINE (QUIZ-MAIN)
   // ---------------------------------------------------------
@@ -384,7 +427,7 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
         answer_value: value,
       });
     });
-  }, [finalAnswers]);
+  }, [finalAnswers, slug, category]);
 
   useEffect(() => {
   gaEvent("free_recommendation_impression", { slug, category });
@@ -473,6 +516,59 @@ export default function MultiPlanSummary({ answers, questions = [], slug }) {
               </div>
             )}
           </>
+        )}
+
+        {/* TEASER — non-premium users with a matched plan */}
+        {!isPremium && matchedPlan && (
+          <div className={classes.teaserCard}>
+            {matchedPlan.summary && (
+              <p className={classes.teaserSummary}>{matchedPlan.summary}</p>
+            )}
+            {matchedPlan.structure?.length > 0 && (
+              <>
+                <h3 className={classes.teaserTitle}>Your Plan Includes</h3>
+                <ul className={classes.teaserList}>
+                  {matchedPlan.structure.slice(0, 2).map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
+                  {matchedPlan.structure.length > 2 && (
+                    <li className={classes.teaserLocked}>
+                      🔒 {matchedPlan.structure.length - 2} more steps — unlock with Premium
+                    </li>
+                  )}
+                </ul>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* EMAIL CAPTURE — non-authenticated users */}
+        {status !== "authenticated" && matchedPlan && (
+          <div className={classes.emailCapture}>
+            {!guestEmailSent ? (
+              <>
+                <p className={classes.emailCaptureTitle}>Get your full plan by email</p>
+                <div className={classes.emailCaptureRow}>
+                  <input
+                    type="email"
+                    className={classes.emailInput}
+                    placeholder="your@email.com"
+                    value={guestEmail}
+                    onChange={(e) => setGuestEmail(e.target.value)}
+                  />
+                  <button
+                    className={classes.emailCaptureBtn}
+                    onClick={sendGuestPlanEmail}
+                    disabled={guestEmailSending || !guestEmail.trim()}
+                  >
+                    {guestEmailSending ? "Sending..." : "📧 Send My Plan"}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <p className={classes.emailCaptureSuccess}>✅ Plan sent! Check your inbox.</p>
+            )}
+          </div>
         )}
 
         {/* PREMIUM SOFT TRIGGER */}

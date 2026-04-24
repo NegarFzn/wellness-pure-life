@@ -53,7 +53,7 @@ async function updateMongoPremium({
   const { db } = await connectToDatabase();
   const users = db.collection("users");
 
-  await users.updateOne(
+  const result = await users.updateOne(
     { email },
     {
       $set: {
@@ -67,12 +67,13 @@ async function updateMongoPremium({
           updatedAt: new Date(),
         },
       },
-      $setOnInsert: {
-        createdAt: new Date(),
-      },
-    },
-    { upsert: true }
+    }
   );
+
+  if (result.matchedCount === 0) {
+    console.warn(`⚠️ Stripe webhook: no user found for email ${email} — skipping update`);
+    return;
+  }
 
   console.log(`⭐ Premium updated for ${email} → isPremium=${isPremium}`);
 }

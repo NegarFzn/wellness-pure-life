@@ -156,7 +156,7 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
                         email: session?.user?.email,
                         name: session?.user?.name,
                         dayNumber: currentDay,
-                        category: "nourish",
+                        type: "nourish",
                       }),
                     });
 
@@ -354,6 +354,7 @@ export default function NourishChallenge({ challenge, isInvalidFutureDay }) {
 }
 
 export async function getServerSideProps(context) {
+  try {
   const session = await getSession(context);
   const { day } = context.params;
   const dayNumber = Number.isInteger(Number(day)) ? parseInt(day) : null;
@@ -416,4 +417,7 @@ export async function getServerSideProps(context) {
       isInvalidFutureDay,
     },
   };
+  } catch {
+    return { notFound: true };
+  }
 }

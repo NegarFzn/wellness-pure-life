@@ -1,16 +1,12 @@
-import { useRouter } from "next/router";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import BlogCTA from "../../components/Blog/BlogCTA";
 import { gaEvent } from "../../lib/gtag";
 import classes from "./BlogPost.module.css";
+import { connectToDatabase } from "../../utils/mongodb";
 
-export default function BlogPost() {
-  const { query } = useRouter();
-  const { slug } = query;
-  const [post, setPost] = useState(null);
-
+export default function BlogPost({ post }) {
   // -------------------------
   // 1. FIRE ARTICLE VIEW WHEN LOADED
   // -------------------------
@@ -27,33 +23,21 @@ export default function BlogPost() {
   // 2. FIRE ENTRY SOURCE ("referrer")
   // -------------------------
   useEffect(() => {
-    if (!slug) return;
+    if (!post?.slug) return;
 
     gaEvent("blog_article_entry", {
-      slug,
+      slug: post.slug,
       referrer: document.referrer || "direct",
     });
 
     gaEvent("key_blog_article_entry", {
-      slug,
+      slug: post.slug,
       referrer: document.referrer || "direct",
     });
-  }, [slug]);
+  }, [post?.slug]);
 
   // -------------------------
-  // 3. FETCH BLOG POST
-  // -------------------------
-  useEffect(() => {
-    if (!slug) return;
-
-    fetch(`/api/blog?slug=${slug}`)
-      .then((res) => res.json())
-      .then(setPost)
-      .catch(() => setPost(null));
-  }, [slug]);
-
-  // -------------------------
-  // 4. SCROLL DEPTH TRACKING
+  // 3. SCROLL DEPTH TRACKING
   // -------------------------
   useEffect(() => {
     if (!post) return;
@@ -80,7 +64,7 @@ export default function BlogPost() {
   }, [post]);
 
   // -------------------------
-  // 5. IMAGE VIEW
+  // 4. IMAGE VIEW
   // -------------------------
   useEffect(() => {
     if (!post?.image) return;
@@ -97,7 +81,7 @@ export default function BlogPost() {
   }, [post]);
 
   // -------------------------
-  // 6. RECOMMENDED POSTS SECTION VIEW
+  // 5. RECOMMENDED POSTS SECTION VIEW
   // -------------------------
   useEffect(() => {
     if (!post?.recommended || post.recommended.length === 0) return;
@@ -114,7 +98,7 @@ export default function BlogPost() {
   }, [post]);
 
   // -------------------------
-  // 7. CTA VIEW TRACKING
+  // 6. CTA VIEW TRACKING
   // -------------------------
   useEffect(() => {
     if (!post) return;
@@ -123,7 +107,7 @@ export default function BlogPost() {
     gaEvent("key_blog_cta_view", { slug: post.slug });
   }, [post]);
 
-  if (!post) return null;
+  if (!post) return <p style={{ textAlign: "center", padding: "4rem" }}>Post not found.</p>;
 
   const validImage = Boolean(post.image);
 
@@ -305,4 +289,36 @@ export default function BlogPost() {
       </article>
     </>
   );
+}
+
+export async function getServerSideProps({ params }) {
+  try {
+    const { db } = await connectToDatabase();
+    const slug = params?.slug;
+
+    const post = await db.collection("blog_posts").findOne(
+      { slug, type: "blog" },
+      { projection: { type: 0 } }
+    );
+
+    if (!post) return { notFound: true };
+
+    const others = await db
+      .collection("blog_posts")
+      .find({ type: "blog", slug: { $ne: slug } })
+      .sort({ createdAt: -1 })
+      .limit(14)
+      .project({ slug: 1, title: 1, image: 1, excerpt: 1 })
+      .toArray();
+
+    post.recommended = others || [];
+
+    return {
+      props: {
+        post: JSON.parse(JSON.stringify(post)),
+      },
+    };
+  } catch {
+    return { notFound: true };
+  }
 }

@@ -40,15 +40,18 @@ export default function MultiSummaryStep({
     return option ? option.label : value;
   };
 
+  // Fire view event for each answer item when answers load
+  useEffect(() => {
+    if (!answers) return;
+    Object.keys(answers).forEach((key) => {
+      gaEvent("quiz_summary_item_view", { slug, item: key });
+      gaEvent("key_quiz_summary_item_view", { slug, item: key });
+    });
+  }, [answers, slug]);
+
   const renderAnswerItem = (key, value) => {
     const question = questions.find((q) => q.key === key);
     if (!question) return null;
-
-    // Fire view event for each summary item
-    useEffect(() => {
-      gaEvent("quiz_summary_item_view", { slug, item: key });
-      gaEvent("key_quiz_summary_item_view", { slug, item: key });
-    }, []);
 
     const questionLabel = question.question;
     const isMulti = question.multiSelect;
@@ -177,9 +180,12 @@ export default function MultiSummaryStep({
                 setShowPremiumModal(false);
                 gaEvent("quiz_premium_later_click", { slug });
                 gaEvent("key_quiz_premium_later_click", { slug });
+                gaEvent("quiz_free_preview_click", { slug });
+                gaEvent("key_quiz_free_preview_click", { slug });
+                onNext();
               }}
             >
-              Maybe Later
+              Continue with free preview →
             </button>
           </div>
         </div>

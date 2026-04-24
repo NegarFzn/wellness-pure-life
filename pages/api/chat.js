@@ -23,8 +23,7 @@ export default async function handler(req, res) {
     });
 
     res.status(500).json({
-      message: "GPT API Error",
-      details: error.message,
+      message: "Something went wrong. Please try again later.",
     });
   }
 }

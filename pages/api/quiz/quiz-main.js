@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 import { generateMainQuizEmail } from "../../../emails/contentGenerator";
 import { sendEmail } from "../../../utils/email";
+import { getToken } from "next-auth/jwt";
 
 const uri = process.env.MONGODB_URI;
 const dbName = "wellnesspurelife";
@@ -32,10 +33,12 @@ export default async function handler(req, res) {
     // GET → Saved history by email
     // ────────────────────────────────────────────────
     if (method === "GET" && req.query.mode === "saved") {
-      const email = req.query.email?.trim();
-      if (!email) {
-        return res.status(400).json({ error: "Missing or invalid email." });
+      const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+      if (!token?.email) {
+        return res.status(401).json({ error: "Unauthorized" });
       }
+
+      const email = token.email.toLowerCase().trim();
 
       const history = await db
         .collection(savedCollection)
@@ -94,19 +97,33 @@ export default async function handler(req, res) {
     // POST → Send Email with Last Saved Result
     // ────────────────────────────────────────────────
     if (method === "POST" && req.query.mode === "send-email") {
-      const { email, slug } = req.body;
+      const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+      const { slug } = req.body;
+
+      // Use session email if logged in, otherwise fall back to body email
+      const email = token?.email?.toLowerCase().trim() || req.body.email;
 
       if (!email || !slug) {
         return res.status(400).json({ error: "Missing email or slug." });
       }
 
-      // Fetch last entry for this slug
+      // Fetch last entry for this slug belonging to this user
       let lastEntry = await db
         .collection(savedCollection)
-        .find({ slug })
+        .find({ slug, email })
         .sort({ savedAt: -1 })
         .limit(1)
         .toArray();
+
+      // Fallback: find by slug only (for anonymous users who took quiz without login)
+      if (!lastEntry.length) {
+        lastEntry = await db
+          .collection(savedCollection)
+          .find({ slug, email: null })
+          .sort({ savedAt: -1 })
+          .limit(1)
+          .toArray();
+      }
 
       if (!lastEntry.length) {
         return res.status(404).json({
@@ -214,10 +231,36 @@ export default async function handler(req, res) {
 
       const savedDoc = await db.collection(savedCollection).insertOne(saveDoc);
 
+      // Auto-send results email on completion
+      if (email?.trim()) {
+        try {
+          const emailContent = generateMainQuizEmail({
+            slug: baseQuery.slug,
+            matchedTitle: rec.title,
+            matchedDescription: rec.description,
+            matchedValues: rec.values,
+            answers,
+            name: email.split("@")[0] || "Wellness Member",
+            updatedAt: new Date().toLocaleString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            resultId: savedDoc.insertedId.toString(),
+          });
+          await sendEmail(email.trim(), emailContent.subject, emailContent.body);
+        } catch (emailErr) {
+          console.error("Auto-email send failed:", emailErr);
+          // non-fatal — result is still saved
+        }
+      }
+
       return res.status(200).json({
         message: "Saved",
         result: saveDoc,
-        resultId: savedDoc.insertedId.toString(), // <<< IMPORTANT
+        resultId: savedDoc.insertedId.toString(),
       });
     }
 

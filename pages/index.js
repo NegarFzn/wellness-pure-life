@@ -267,25 +267,81 @@ export default function Home() {
       )}
 
       <main className={classes.container}>
+
         {/* ===== HERO SECTION ===== */}
         <section className={classes.hero}>
-          <h1 className={classes.heroTitle}>Your Daily Wellness Companion</h1>
+          <span className={classes.heroBadge}>✦ AI-Powered Wellness</span>
+
+          <h1 className={classes.heroTitle}>
+            Your Personalized{" "}
+            <span className={classes.heroTitleAccent}>Wellness Plan</span>
+            <br />
+            Starts With One Quiz
+          </h1>
+
           <p className={classes.heroSubtitle}>
-            Fitness, mindfulness, and nutrition — personalised for how you want
-            to live.
+            Answer a few questions and get a custom fitness, mindfulness, and
+            nutrition plan — built by AI, tailored to your real life.
           </p>
-          <Link
-            href="/quizzes/quiz-main"
-            className={classes.heroBtn}
-            onClick={() => {
-              gaEvent("home_hero_cta_click");
-              gaEvent("key_home_hero_cta_click");
-            }}
-          >
-            Start Your Wellness Quiz →
-          </Link>
+
+          <div className={classes.heroCTAs}>
+            <Link
+              href="/quizzes/quiz-main"
+              className={classes.heroBtn}
+              onClick={() => {
+                gaEvent("home_hero_cta_click");
+                gaEvent("key_home_hero_cta_click");
+              }}
+            >
+              Take the Free Quiz →
+            </Link>
+            <Link
+              href="/sample/weekly-plan"
+              className={classes.heroBtnSecondary}
+              onClick={() => gaEvent("home_hero_sample_click")}
+            >
+              See Sample Plan
+            </Link>
+          </div>
+
+          <div className={classes.heroStats}>
+            <div className={classes.heroStat}>
+              <span className={classes.heroStatNum}>687+</span>
+              <span className={classes.heroStatLabel}>Users this month</span>
+            </div>
+            <div className={classes.heroStatDivider} />
+            <Link
+              href="/challenges"
+              className={classes.heroStat}
+              style={{ textDecoration: "none" }}
+              onClick={() => gaEvent("home_hero_challenges_click")}
+            >
+              <span className={classes.heroStatNum}>21-Day</span>
+              <span className={classes.heroStatLabel}>Challenges</span>
+            </Link>
+            <div className={classes.heroStatDivider} />
+            <Link
+              href="/plan/weekly-plan"
+              className={classes.heroStat}
+              style={{ textDecoration: "none" }}
+              onClick={() => gaEvent("home_hero_plans_stat_click")}
+            >
+              <span className={classes.heroStatNum}>AI</span>
+              <span className={classes.heroStatLabel}>Personalised Plans</span>
+            </Link>
+          </div>
         </section>
         {/* ===== END HERO ===== */}
+
+        {/* QUIZ CARD — moved up, your best conversion feature */}
+        <div
+          onMouseEnter={() => {
+            gaEvent("home_quiz_card_view");
+            gaEvent("key_home_quiz_card_view");
+          }}
+        >
+          <QuizCard />
+        </div>
 
         {/* DAILY LIST */}
         <div
@@ -338,16 +394,6 @@ export default function Home() {
             <Subscribe />
           </div>
         )}
-
-        {/* QUIZ CARD */}
-        <div
-          onMouseEnter={() => {
-            gaEvent("home_quiz_card_view");
-            gaEvent("key_home_quiz_card_view");
-          }}
-        >
-          <QuizCard />
-        </div>
 
         {/* BLOG CTA */}
         <div

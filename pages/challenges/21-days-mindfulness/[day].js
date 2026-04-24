@@ -150,7 +150,7 @@ export default function MindfulnessChallenge({
                         email: session?.user?.email,
                         name: session?.user?.name,
                         dayNumber: currentDay,
-                        category: "mindfulness",
+                        type: "mindfulness",
                       }),
                     });
 

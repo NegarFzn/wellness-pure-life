@@ -19,6 +19,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
+  if (password.length < 8) {
+    return res.status(400).json({ message: "Password must be at least 8 characters" });
+  }
+
   try {
     const { db } = await connectToDatabase();
     const users = db.collection("users");
@@ -46,11 +50,17 @@ export default async function handler(req, res) {
       name,
       email,
       password: hashedPassword,
-      isPremium: false, // Default for NextAuth premium lookup
-      isVerified: false, // Email verification flag
+      isPremium: false,
+      isVerified: false,
       verificationToken,
       verificationExpiresAt,
       createdAt: new Date(),
+      funnel_7day: {
+        status: "active",
+        day: 0,
+        startedAt: new Date(),
+        lastSentAt: null,
+      },
     });
 
     /* ------------------------------------------
@@ -62,7 +72,13 @@ export default async function handler(req, res) {
       verificationToken,
     );
 
-    await sendEmail(email, subject, body);
+    try {
+      await sendEmail(email, subject, body);
+    } catch (emailErr) {
+      console.error("Signup email error:", emailErr);
+      await users.deleteOne({ email });
+      return res.status(500).json({ message: "Failed to send verification email. Please try again." });
+    }
 
     return res.status(201).json({
       message: "Signup successful. Please verify your email.",

@@ -141,7 +141,7 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
                         email: session?.user?.email,
                         name: session?.user?.name,
                         dayNumber: currentDay,
-                        category: "fitness",
+                        type: "fitness",
                       }),
                     });
 
@@ -313,68 +313,72 @@ export default function FitnessChallenge({ challenge, isInvalidFutureDay }) {
 }
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  const { day } = context.params;
-  const dayNumber = Number.isInteger(Number(day)) ? parseInt(day) : null;
+  try {
+    const session = await getSession(context);
+    const { day } = context.params;
+    const dayNumber = Number.isInteger(Number(day)) ? parseInt(day) : null;
 
-  if (!dayNumber || dayNumber < 1 || dayNumber > 21) {
-    return { notFound: true };
-  }
-
-  const { db } = await connectToDatabase();
-
-  let userStartDate = null;
-
-  if (session?.user?.email) {
-    const userRecord = await db
-      .collection("users")
-      .findOne({ email: session.user.email });
-
-    userStartDate = userRecord?.challenge_21_fitness?.startedAt || new Date();
-
-    if (!userRecord?.challenge_21_fitness?.startedAt) {
-      await db.collection("users").updateOne(
-        { email: session.user.email },
-        {
-          $set: {
-            "challenge_21_fitness.startedAt": new Date(),
-            "challenge_21_fitness.lastEmailSentDay": 0,
-          },
-        },
-        { upsert: true },
-      );
+    if (!dayNumber || dayNumber < 1 || dayNumber > 21) {
+      return { notFound: true };
     }
-  } else {
-    userStartDate = new Date();
-  }
 
-  const today = new Date();
-  const daysSinceStart = Math.floor(
-    (today.getTime() - new Date(userStartDate).getTime()) / 86400000,
-  );
-  const allowedDay = Math.min(daysSinceStart + 1, 21);
+    const { db } = await connectToDatabase();
 
-  const isInvalidFutureDay = dayNumber > allowedDay;
+    let userStartDate = null;
 
-  const collection = db.collection("challenges_21_fitness");
-  const challenge = await collection.findOne({ day: dayNumber });
+    if (session?.user?.email) {
+      const userRecord = await db
+        .collection("users")
+        .findOne({ email: session.user.email });
 
-  if (!challenge && dayNumber <= 21) {
+      userStartDate = userRecord?.challenge_21_fitness?.startedAt || new Date();
+
+      if (!userRecord?.challenge_21_fitness?.startedAt) {
+        await db.collection("users").updateOne(
+          { email: session.user.email },
+          {
+            $set: {
+              "challenge_21_fitness.startedAt": new Date(),
+              "challenge_21_fitness.lastEmailSentDay": 0,
+            },
+          },
+          { upsert: true },
+        );
+      }
+    } else {
+      userStartDate = new Date();
+    }
+
+    const today = new Date();
+    const daysSinceStart = Math.floor(
+      (today.getTime() - new Date(userStartDate).getTime()) / 86400000,
+    );
+    const allowedDay = Math.min(daysSinceStart + 1, 21);
+
+    const isInvalidFutureDay = dayNumber > allowedDay;
+
+    const collection = db.collection("challenges_21_fitness");
+    const challenge = await collection.findOne({ day: dayNumber });
+
+    if (!challenge && dayNumber <= 21) {
+      return { notFound: true };
+    }
+
+    return {
+      props: {
+        session,
+        challenge: challenge
+          ? {
+              day: challenge.day,
+              title: challenge.title,
+              content: challenge.content,
+              tip: challenge.tip,
+            }
+          : { day: 21, title: "Challenge Completed", content: "", tip: "" },
+        isInvalidFutureDay,
+      },
+    };
+  } catch {
     return { notFound: true };
   }
-
-  return {
-    props: {
-      session,
-      challenge: challenge
-        ? {
-            day: challenge.day,
-            title: challenge.title,
-            content: challenge.content,
-            tip: challenge.tip,
-          }
-        : { day: 21, title: "Challenge Completed", content: "", tip: "" },
-      isInvalidFutureDay,
-    },
-  };
 }

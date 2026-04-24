@@ -7,6 +7,7 @@ import {
   FaCookieBite,
   FaQuestionCircle,
   FaFileContract,
+  FaInstagram,
 } from "react-icons/fa";
 import { useUI } from "../../context/UIContext";
 import { gaEvent } from "../../lib/gtag"; // <-- ADDED
@@ -382,7 +383,20 @@ export default function Footer() {
         </div>
 
         <div className={classes.footerBottom}>
-          © {new Date().getFullYear()} WellnessPureLife. All rights reserved.
+          <a
+            href="https://www.instagram.com/wellness.pure.life"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.instagramLink}
+            onClick={() => gaEvent("footer_instagram_click")}
+            aria-label="Follow us on Instagram"
+          >
+            <FaInstagram className={classes.instagramIcon} />
+            <span>@wellness.pure.life</span>
+          </a>
+          <div className={classes.copyright}>
+            © {new Date().getFullYear()} WellnessPureLife. All rights reserved.
+          </div>
         </div>
       </footer>
     </>

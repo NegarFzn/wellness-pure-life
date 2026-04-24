@@ -8,12 +8,13 @@ import MultiStartQuiz from "../../../components/Quiz/QuizPlan/1_StartQuiz";
 import { gaEvent } from "../../../lib/gtag";
 import ResultCTA from "../../../components/UI/ResultCTA";
 import classes from "./index.module.css";
+import { connectToDatabase } from "../../../utils/mongodb";
 
-export default function QuizMainPage() {
+export default function QuizMainPage({ initialQuizzes = [] }) {
   const { data: session } = useSession();
   const user = session?.user;
-  const [quizzes, setQuizzes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [quizzes] = useState(initialQuizzes);
+  const [loading] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
@@ -43,32 +44,6 @@ export default function QuizMainPage() {
     { label: "Balance", value: "life-balance", icon: "⚖️" },
   ];
 
-  useEffect(() => {
-    fetch("/api/quiz/quiz-main?mode=questions")
-      .then((res) => res.json())
-      .then((data) => {
-        const normalizeCategory = (cat) => {
-          if (!cat) return "";
-          if (cat === "nourish") return "nutrition";
-          return cat.toLowerCase();
-        };
-
-        const quizzes = Array.isArray(data)
-          ? data.map((q) => ({
-              title: q.title || q.slug,
-              slug: q.slug,
-              category: normalizeCategory(q.category),
-            }))
-          : [];
-
-        setQuizzes(quizzes);
-      })
-      .catch((err) => {
-        console.error("❌ Failed to load quizzes:", err);
-        setQuizzes([]);
-      })
-      .finally(() => setLoading(false));
-  }, []);
 
   const getIconForSlug = (slug) => {
     const lower = slug.toLowerCase();
@@ -287,4 +262,30 @@ export default function QuizMainPage() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  try {
+    const { db } = await connectToDatabase();
+    const data = await db
+      .collection("quiz_main_questions")
+      .find({}, { projection: { _id: 0, slug: 1, title: 1, category: 1 } })
+      .toArray();
+
+    const normalizeCategory = (cat) => {
+      if (!cat) return "";
+      if (cat === "nourish") return "nutrition";
+      return cat.toLowerCase();
+    };
+
+    const quizzes = data.map((q) => ({
+      title: q.title || q.slug,
+      slug: q.slug,
+      category: normalizeCategory(q.category),
+    }));
+
+    return { props: { initialQuizzes: quizzes } };
+  } catch {
+    return { props: { initialQuizzes: [] } };
+  }
 }
